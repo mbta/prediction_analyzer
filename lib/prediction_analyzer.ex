@@ -7,7 +7,6 @@ defmodule PredictionAnalyzer do
   alias Predictions.Utilities.Config
 
   def start(_type, _args) do
-    IO.inspect("SUPERVIsE")
     import Supervisor.Spec
 
     set_runtime_config()

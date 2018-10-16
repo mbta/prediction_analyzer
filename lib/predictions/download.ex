@@ -4,12 +4,10 @@ defmodule Predictions.Download do
   require Logger
 
   def start_link(opts \\ []) do
-    IO.inspect("star link")
     GenServer.start_link(__MODULE__, %{}, opts)
   end
 
   def init(args) do
-    IO.inspect("INIT")
     schedule_fetch(self(), 1_000)
     {:ok, args}
   end
@@ -32,7 +30,6 @@ defmodule Predictions.Download do
 
   def handle_info(:get_predictions, _state) do
     schedule_fetch(self(), 60_000)
-    IO.inspect("DOWNLOADIGN")
     predictions = get_predictions()
     {:noreply, predictions}
   end
