@@ -25,7 +25,7 @@ defmodule PredictionAnalyzer do
   end
 
   defp set_runtime_config do
-    Config.update_env(:aws_predictions_bucket, System.get_env("AWS_SIGNS_BUCKET"))
-    Config.update_env(:aws_predictions_path, System.get_env("AWS_SIGNS_PATH"))
+    Config.update_env(:aws_predictions_bucket, System.get_env("AWS_PREDICTIONS_BUCKET"))
+    Config.update_env(:aws_predictions_path, System.get_env("AWS_PREDICTIONS_PATH"))
   end
 end

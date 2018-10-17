@@ -39,27 +39,28 @@ defmodule Predictions.Download do
   end
 
   defp store_predictions(predictions) do
-    Enum.each(predictions["entity"], fn prediction ->
-      trip_prediction = %PredictionAnalyzer.Prediction{
-        trip_id: prediction["id"],
-        is_deleted: prediction["is_deleted"]
-      }
+    predictions =
+      Enum.flat_map(predictions["entity"], fn prediction ->
+        trip_prediction = %{
+          trip_id: prediction["id"],
+          is_deleted: prediction["is_deleted"]
+        }
 
-      if prediction["trip_update"]["stop_time_update"] != nil do
-        Enum.each(prediction["trip_update"]["stop_time_update"], fn update ->
-          %PredictionAnalyzer.Prediction{
-            trip_prediction
-            | arrival_time: update["arrival"]["time"],
+        if prediction["trip_update"]["stop_time_update"] != nil do
+          Enum.map(prediction["trip_update"]["stop_time_update"], fn update ->
+            Map.merge(trip_prediction, %{
+              arrival_time: update["arrival"]["time"],
               departure_time: update["departure"]["time"],
               boarding_status: update["boarding_status"],
               schedule_relationship: update["schedule_relationship"],
               stop_id: update["stop_id"],
               stop_sequence: update["stop_sequence"],
               stops_away: update["stops_away"]
-          }
-          |> Predictions.Repo.insert()
-        end)
-      end
-    end)
+            })
+          end)
+        end
+      end)
+
+    Predictions.Repo.insert_all(PredictionAnalyzer.Prediction, predictions)
   end
 end

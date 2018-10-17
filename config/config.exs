@@ -29,10 +29,7 @@ config :logger, :console,
 
 config :prediction_analyzer, Predictions.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: "prediction_analyzer_repo",
-  username: "user",
-  password: "pass",
-  hostname: "localhost"
+  database: "prediction_analyzer_repo"
 
 config :prediction_analyzer, ecto_repos: [Predictions.Repo]
 config :prediction_analyzer, aws_requestor: ExAws

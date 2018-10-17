@@ -10,6 +10,18 @@ To start your Phoenix server:
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+An app for aggregating and analyzing the accuracy of gtfs predictions using TripUpdates and VehiclePositions over time.
+
+## Running the app
+
+In order to run this app locally you will need to set several ENV variables.
+For downloading the Trip updates, you will need an `AWS_ACCESS_KEY_ID` and a `AWS_SECRET_ACCESS_KEY`, as well as `AWS_PREDICTIONS_BUCKET`, and `AWS_PREDICTIONS_PATH`
+
+In order to store them you will need a local postgres database, run the migrations, and set `DB_USERNAME`, `DB_PASSWORD`
+to credentials that work, and `DB_HOSTNAME` to localhost (or wherever your database may be).
+
+Example run command:
+`AWS_PREDICTIONS_BUCKET=<bucket> AWS_PREDICTIONS_PATH=<path> AWS_ACCESS_KEY_ID=<access_id> AWS_SECRET_ACCESS_KEY=<secret_access_id> DB_USERNAME=<username> DB_PASSWORD=<password> DB_HOSTNAME=<hostname> iex -S mix`
 
 ## Learn more
 
