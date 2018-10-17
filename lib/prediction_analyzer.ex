@@ -14,7 +14,8 @@ defmodule PredictionAnalyzer do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
-      worker(Predictions.Download, [[name: Predictions.Download]])
+      worker(Predictions.Download, [[name: Predictions.Download]]),
+      supervisor(Predictions.Repo, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

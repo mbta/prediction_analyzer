@@ -14,7 +14,11 @@ defmodule Predictions.Download do
 
   def get_predictions() do
     {aws_requestor, bucket_name, path_name} = get_aws_vars()
-    ExAws.S3.get_object(bucket_name, path_name) |> aws_requestor.request()
+    {:ok, object} = ExAws.S3.get_object(bucket_name, path_name) |> aws_requestor.request()
+
+    object[:body]
+    |> Jason.decode!()
+    |> store_predictions()
   end
 
   defp get_aws_vars() do
@@ -32,5 +36,30 @@ defmodule Predictions.Download do
     schedule_fetch(self(), 60_000)
     predictions = get_predictions()
     {:noreply, predictions}
+  end
+
+  defp store_predictions(predictions) do
+    Enum.each(predictions["entity"], fn prediction ->
+      trip_prediction = %PredictionAnalyzer.Prediction{
+        trip_id: prediction["id"],
+        is_deleted: prediction["is_deleted"]
+      }
+
+      if prediction["trip_update"]["stop_time_update"] != nil do
+        Enum.each(prediction["trip_update"]["stop_time_update"], fn update ->
+          %PredictionAnalyzer.Prediction{
+            trip_prediction
+            | arrival_time: update["arrival"]["time"],
+              departure_time: update["departure"]["time"],
+              boarding_status: update["boarding_status"],
+              schedule_relationship: update["schedule_relationship"],
+              stop_id: update["stop_id"],
+              stop_sequence: update["stop_sequence"],
+              stops_away: update["stops_away"]
+          }
+          |> Predictions.Repo.insert()
+        end)
+      end
+    end)
   end
 end
