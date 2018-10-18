@@ -1,4 +1,4 @@
-defmodule PredictionAnalyzer.Prediction do
+defmodule Predictions.Prediction do
   use Ecto.Schema
 
   schema "predictions" do

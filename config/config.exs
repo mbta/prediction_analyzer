@@ -5,9 +5,6 @@
 # is restricted to this project.
 use Mix.Config
 
-# General application configuration
-config :prediction_analyzer, ecto_repos: [PredictionAnalyzer.Repo]
-
 # Configures the endpoint
 config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
   url: [host: "localhost"],
@@ -27,12 +24,12 @@ config :logger, :console,
 # here (which is why it is important to import them last).
 #
 
+config :prediction_analyzer, ecto_repos: [Predictions.Repo]
+config :prediction_analyzer, aws_requestor: ExAws
+
 config :prediction_analyzer, Predictions.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: "prediction_analyzer_repo"
-
-config :prediction_analyzer, ecto_repos: [Predictions.Repo]
-config :prediction_analyzer, aws_requestor: ExAws
 
 config :ex_aws,
   access_key_id: [{:system, "AWS_ACCESS_KEY_ID"}, :instance_role],

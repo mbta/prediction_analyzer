@@ -11,8 +11,14 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
-                    cd: Path.expand("../assets", __DIR__)]]
+  watchers: [
+    node: [
+      "node_modules/brunch/bin/brunch",
+      "watch",
+      "--stdin",
+      cd: Path.expand("../assets", __DIR__)
+    ]
+  ]
 
 # ## SSL Support
 #
@@ -51,8 +57,5 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "prediction_analyzer_dev",
-  hostname: "localhost",
+  database: "prediction_analyzer_repo",
   pool_size: 10

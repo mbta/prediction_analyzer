@@ -61,6 +61,6 @@ defmodule Predictions.Download do
         end
       end)
 
-    Predictions.Repo.insert_all(PredictionAnalyzer.Prediction, predictions)
+    Predictions.Repo.insert_all(Predictions.Prediction, predictions)
   end
 end
