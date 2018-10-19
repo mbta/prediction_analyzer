@@ -21,6 +21,10 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :prediction_analyzer, Predictions.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  pool_size: 15
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

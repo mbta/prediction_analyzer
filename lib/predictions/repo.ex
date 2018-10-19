@@ -6,7 +6,7 @@ defmodule Predictions.Repo do
       Keyword.put(
         opts,
         :url,
-        System.get_env("DB_URL")
+        System.get_env("DATABASE_URL")
       )
 
     {:ok, opts}

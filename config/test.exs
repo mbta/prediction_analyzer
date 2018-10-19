@@ -10,8 +10,7 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
-config :prediction_analyzer, PredictionAnalyzer.Repo,
-  adapter: Ecto.Adapters.Postgres,
+config :prediction_analyzer, Predictions.Repo,
   username: "postgres",
   password: "postgres",
   database: "prediction_analyzer_test",

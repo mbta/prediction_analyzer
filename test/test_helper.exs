@@ -1,4 +1,4 @@
 ExUnit.start()
 
-Ecto.Adapters.SQL.Sandbox.mode(PredictionAnalyzer.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(Predictions.Repo, :manual)
 

@@ -10,9 +10,9 @@ defmodule PredictionAnalyzer.Application do
     set_runtime_config()
     # Define workers and child supervisors to be supervised
     children = [
-      worker(Predictions.Download, [[name: Predictions.Download]]),
       # Start the Ecto repository
       supervisor(Predictions.Repo, []),
+      worker(Predictions.Download, [[name: Predictions.Download]]),
       # Start the endpoint when the application starts
       supervisor(PredictionAnalyzerWeb.Endpoint, [])
       # Start your own worker by calling: PredictionAnalyzer.Worker.start_link(arg1, arg2, arg3)
