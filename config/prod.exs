@@ -16,7 +16,9 @@ use Mix.Config
 config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
   load_from_system_env: true,
   url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
+  server: true
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -62,7 +64,3 @@ config :prediction_analyzer, Predictions.Repo,
 #
 #     config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint, server: true
 #
-
-# Finally import the config/prod.secret.exs
-# which should be versioned separately.
-import_config "prod.secret.exs"

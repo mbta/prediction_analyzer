@@ -39,6 +39,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:hackney, "~> 1.0"},
       {:jason, "~> 1.0"},
       {:poison, "~> 2.0"},
+      {:distillery, "~> 2.0", runtime: false},
       {:phoenix, "~> 1.3.4"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
