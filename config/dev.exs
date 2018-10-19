@@ -57,5 +57,4 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: "prediction_analyzer_repo",
   pool_size: 10

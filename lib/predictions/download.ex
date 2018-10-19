@@ -14,6 +14,7 @@ defmodule Predictions.Download do
 
   def get_predictions() do
     {aws_requestor, bucket_name, path_name} = get_aws_vars()
+    Logger.info("Downloading predictions from #{bucket_name}")
     {:ok, object} = ExAws.S3.get_object(bucket_name, path_name) |> aws_requestor.request()
 
     object[:body]
