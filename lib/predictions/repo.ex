@@ -3,18 +3,10 @@ defmodule Predictions.Repo do
 
   def init(_, opts) do
     opts =
-      opts
-      |> Keyword.put(
-        :username,
-        System.get_env("DB_USERNAME")
-      )
-      |> Keyword.put(
-        :password,
-        System.get_env("DB_PASSWORD")
-      )
-      |> Keyword.put(
-        :hostname,
-        System.get_env("DB_HOSTNAME")
+      Keyword.put(
+        opts,
+        :url,
+        System.get_env("DB_URL")
       )
 
     {:ok, opts}
