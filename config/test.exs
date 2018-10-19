@@ -10,10 +10,9 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
-config :prediction_analyzer, PredictionAnalyzer.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+config :prediction_analyzer, Predictions.Repo,
+  username: System.get_env("DATABASE_POSTGRESQL_USERNAME") || "postgres",
+  password: System.get_env("DATABASE_POSTGRESQL_PASSWORD") || "postgres",
   database: "prediction_analyzer_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

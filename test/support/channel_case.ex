@@ -27,9 +27,9 @@ defmodule PredictionAnalyzerWeb.ChannelCase do
 
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Predictions.Repo)
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(PredictionAnalyzer.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Predictions.Repo, {:shared, self()})
     end
     :ok
   end

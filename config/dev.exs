@@ -55,6 +55,6 @@ config :logger, :console, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
-config :prediction_analyzer, PredictionAnalyzer.Repo,
+config :prediction_analyzer, Predictions.Repo,
   adapter: Ecto.Adapters.Postgres,
   pool_size: 10
