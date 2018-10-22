@@ -13,6 +13,7 @@ config :logger, level: :warn
 config :prediction_analyzer, Predictions.Repo,
   username: System.get_env("DATABASE_POSTGRESQL_USERNAME") || "postgres",
   password: System.get_env("DATABASE_POSTGRESQL_PASSWORD") || "postgres",
+  adapter: Ecto.Adapters.Postgres,
   database: "prediction_analyzer_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
