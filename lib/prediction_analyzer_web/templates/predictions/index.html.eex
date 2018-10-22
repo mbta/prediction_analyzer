@@ -1,5 +1,7 @@
 <div>
-  HI THERE
+  <h1>
+    Recent Predictions
+  </h1>
   <table>
     <tr>
       <td>trip_id</td>
