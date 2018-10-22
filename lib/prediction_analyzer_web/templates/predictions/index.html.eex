@@ -1,0 +1,34 @@
+<div>
+  <h1>
+    Recent Predictions
+  </h1>
+  <table>
+    <tr>
+      <td>trip_id</td>
+      <td>is_deleted</td>
+      <td>delay</td>
+      <td>arrival_time</td>
+      <td>boarding_status</td>
+      <td>departure_time</td>
+      <td>schedule_relationship</td>
+      <td>stop_id</td>
+      <td>stop_sequence</td>
+      <td>stops_away</td>
+    </tr>
+
+    <%= for p <- @predictions do %>
+    <tr>
+      <td><%= p.trip_id %></td>
+      <td><%= p.is_deleted %></td>
+      <td><%= p.delay %></td>
+      <td><%= p.arrival_time %></td>
+      <td><%= p.boarding_status %></td>
+      <td><%= p.departure_time %></td>
+      <td><%= p.schedule_relationship %></td>
+      <td><%= p.stop_id %></td>
+      <td><%= p.stop_sequence %></td>
+      <td><%= p.stops_away %></td>
+    </tr>
+    <% end %>
+  </table>
+</div>
