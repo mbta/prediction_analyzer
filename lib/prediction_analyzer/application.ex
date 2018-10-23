@@ -1,6 +1,7 @@
 defmodule PredictionAnalyzer.Application do
   use Application
   alias Predictions.Utilities.Config
+  require Logger
 
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
@@ -22,7 +23,15 @@ defmodule PredictionAnalyzer.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: PredictionAnalyzer.Supervisor]
-    Supervisor.start_link(children, opts)
+    case Supervisor.start_link(children, opts) do
+      {:ok, _} = success ->
+        Logger.info("Started application, running migrations")
+        Application.get_env(:prediction_analyzer, :migration_task).migrate()
+        success
+
+      error ->
+        error
+    end
   end
 
   # Tell Phoenix to update the endpoint configuration

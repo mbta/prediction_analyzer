@@ -26,6 +26,7 @@ config :logger, :console,
 
 config :prediction_analyzer, ecto_repos: [Predictions.Repo]
 config :prediction_analyzer, aws_requestor: ExAws
+config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks.NoOp
 
 config :prediction_analyzer, Predictions.Repo,
   adapter: Ecto.Adapters.Postgres,

@@ -27,6 +27,8 @@ config :prediction_analyzer, Predictions.Repo,
   adapter: Ecto.Adapters.Postgres,
   pool_size: 15
 
+config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
