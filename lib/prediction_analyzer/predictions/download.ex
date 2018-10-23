@@ -1,7 +1,8 @@
-defmodule Predictions.Download do
+defmodule PredictionAnalyzer.Predictions.Download do
   use GenServer
 
   require Logger
+  alias PredictionAnalyzer.Predictions.Prediction
 
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, %{}, opts)
@@ -62,6 +63,6 @@ defmodule Predictions.Download do
         end
       end)
 
-    PredictionAnalyzer.Repo.insert_all(Predictions.Prediction, predictions)
+    PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
   end
 end

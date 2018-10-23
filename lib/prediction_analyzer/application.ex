@@ -13,7 +13,7 @@ defmodule PredictionAnalyzer.Application do
     children = [
       # Start the Ecto repository
       supervisor(PredictionAnalyzer.Repo, []),
-      worker(Predictions.Download, [[name: Predictions.Download]]),
+      worker(PredictionAnalyzer.Predictions.Download, [[name: PredictionAnalyzer.Predictions.Download]]),
       # Start the endpoint when the application starts
       supervisor(PredictionAnalyzerWeb.Endpoint, [])
       # Start your own worker by calling: PredictionAnalyzer.Worker.start_link(arg1, arg2, arg3)

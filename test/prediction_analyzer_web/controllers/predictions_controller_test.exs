@@ -4,7 +4,7 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
   test "GET /", %{conn: conn} do
     conn = get(conn, "/predictions")
 
-    prediction = %Predictions.Prediction{
+    prediction = %PredictionAnalyzer.Predictions.Prediction{
       trip_id: "TEST_TRIP",
       is_deleted: false,
       delay: 0,
