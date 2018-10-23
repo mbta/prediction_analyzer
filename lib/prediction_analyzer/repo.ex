@@ -1,4 +1,4 @@
-defmodule Predictions.Repo do
+defmodule PredictionAnalyzer.Repo do
   use Ecto.Repo, otp_app: :prediction_analyzer
 
   def init(_, opts) do

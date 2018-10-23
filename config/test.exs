@@ -10,7 +10,7 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
-config :prediction_analyzer, Predictions.Repo,
+config :prediction_analyzer, PredictionAnalyzer.Repo,
   username: System.get_env("DATABASE_POSTGRESQL_USERNAME") || "postgres",
   password: System.get_env("DATABASE_POSTGRESQL_PASSWORD") || "postgres",
   database: "prediction_analyzer_test",

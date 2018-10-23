@@ -1,4 +1,4 @@
-defmodule Predictions.Repo.Migrations.AddVehicleEventsTable do
+defmodule PredictionAnalyzer.Repo.Migrations.AddVehicleEventsTable do
   use Ecto.Migration
 
   def change do

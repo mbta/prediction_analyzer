@@ -1,7 +1,7 @@
 defmodule Predictions.ReleaseTasks do
   @moduledoc "Tasks that need to be run on app startup"
 
-  alias Predictions.Repo
+  alias PredictionAnalyzer.Repo
   alias Ecto.Migrator
 
   def migrate do

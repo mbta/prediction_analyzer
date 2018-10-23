@@ -1,4 +1,4 @@
-defmodule Predictions.Repo.Migrations.CreatePredictions do
+defmodule PredictionAnalyzer.Repo.Migrations.CreatePredictions do
   use Ecto.Migration
 
   def change do

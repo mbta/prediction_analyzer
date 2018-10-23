@@ -17,7 +17,7 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
       stops_away: 0
     }
 
-    Predictions.Repo.insert(prediction)
+    PredictionAnalyzer.Repo.insert(prediction)
 
     response = html_response(conn, 200)
     assert response =~ "trip_id"

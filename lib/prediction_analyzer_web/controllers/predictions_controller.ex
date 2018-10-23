@@ -6,7 +6,7 @@ defmodule PredictionAnalyzerWeb.PredictionsController do
     query =
       from(p in Predictions.Prediction, order_by: [:arrival_time, :departure_time], limit: 100)
 
-    predictions = Predictions.Repo.all(query)
+    predictions = PredictionAnalyzer.Repo.all(query)
     render(conn, "index.html", predictions: predictions)
   end
 end
