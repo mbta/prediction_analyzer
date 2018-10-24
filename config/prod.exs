@@ -23,7 +23,7 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
-config :prediction_analyzer, Predictions.Repo,
+config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
   pool_size: 15
 

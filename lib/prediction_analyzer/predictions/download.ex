@@ -1,7 +1,8 @@
-defmodule Predictions.Download do
+defmodule PredictionAnalyzer.Predictions.Download do
   use GenServer
 
   require Logger
+  alias PredictionAnalyzer.Predictions.Prediction
 
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, %{}, opts)
@@ -23,7 +24,7 @@ defmodule Predictions.Download do
   end
 
   defp get_aws_vars() do
-    bucket_name = Application.get_env(:prediction_analyzer, :aws_predictions_bucket)
+    bucket_name = Application.get_env(:prediction_analyzer, :aws_gtfs_rt_bucket)
     path_name = Application.get_env(:prediction_analyzer, :aws_predictions_path)
     aws_requestor = Application.get_env(:prediction_analyzer, :aws_requestor)
     {aws_requestor, bucket_name, path_name}
@@ -62,6 +63,6 @@ defmodule Predictions.Download do
         end
       end)
 
-    Predictions.Repo.insert_all(Predictions.Prediction, predictions)
+    PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
   end
 end

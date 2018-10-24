@@ -24,11 +24,11 @@ config :logger, :console,
 # here (which is why it is important to import them last).
 #
 
-config :prediction_analyzer, ecto_repos: [Predictions.Repo]
+config :prediction_analyzer, ecto_repos: [PredictionAnalyzer.Repo]
 config :prediction_analyzer, aws_requestor: ExAws
 config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks.NoOp
 
-config :prediction_analyzer, Predictions.Repo,
+config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: "prediction_analyzer_repo"
 

@@ -12,8 +12,8 @@ defmodule PredictionAnalyzer.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
-      supervisor(Predictions.Repo, []),
-      worker(Predictions.Download, [[name: Predictions.Download]]),
+      supervisor(PredictionAnalyzer.Repo, []),
+      worker(PredictionAnalyzer.Predictions.Download, [[name: PredictionAnalyzer.Predictions.Download]]),
       # Start the endpoint when the application starts
       supervisor(PredictionAnalyzerWeb.Endpoint, [])
       # Start your own worker by calling: PredictionAnalyzer.Worker.start_link(arg1, arg2, arg3)
@@ -42,7 +42,7 @@ defmodule PredictionAnalyzer.Application do
   end
 
   defp set_runtime_config do
-    Config.update_env(:aws_predictions_bucket, System.get_env("AWS_PREDICTIONS_BUCKET"))
+    Config.update_env(:aws_gtfs_rt_bucket, System.get_env("AWS_GTFS_RT_BUCKET"))
     Config.update_env(:aws_predictions_path, System.get_env("AWS_PREDICTIONS_PATH"))
   end
 end
