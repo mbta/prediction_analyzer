@@ -14,20 +14,19 @@ defmodule PredictionAnalyzer.Predictions.Download do
   end
 
   def get_predictions() do
-    {aws_requestor, bucket_name, path_name} = get_aws_vars()
-    Logger.info("Downloading predictions from #{bucket_name}")
-    {:ok, object} = ExAws.S3.get_object(bucket_name, path_name) |> aws_requestor.request()
+    {aws_predictions_url, http_fetcher} = get_vars()
+    Logger.info("Downloading predictions from #{aws_predictions_url}")
+    %{body: body} = http_fetcher.get!(aws_predictions_url)
 
-    object[:body]
+    body
     |> Jason.decode!()
     |> store_predictions()
   end
 
-  defp get_aws_vars() do
-    bucket_name = Application.get_env(:prediction_analyzer, :aws_gtfs_rt_bucket)
-    path_name = Application.get_env(:prediction_analyzer, :aws_predictions_path)
-    aws_requestor = Application.get_env(:prediction_analyzer, :aws_requestor)
-    {aws_requestor, bucket_name, path_name}
+  defp get_vars() do
+    aws_predictions_url = Application.get_env(:prediction_analyzer, :aws_predictions_url)
+    http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
+    {aws_predictions_url, http_fetcher}
   end
 
   defp schedule_fetch(pid, ms) do
@@ -40,9 +39,9 @@ defmodule PredictionAnalyzer.Predictions.Download do
     {:noreply, predictions}
   end
 
-  defp store_predictions(predictions) do
+  defp store_predictions(%{"entity" => entities}) do
     predictions =
-      Enum.flat_map(predictions["entity"], fn prediction ->
+      Enum.flat_map(entities, fn prediction ->
         trip_prediction = %{
           trip_id: prediction["id"],
           is_deleted: prediction["is_deleted"]
@@ -64,5 +63,9 @@ defmodule PredictionAnalyzer.Predictions.Download do
       end)
 
     PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
+  end
+
+  defp store_predictions(_) do
+    nil
   end
 end
