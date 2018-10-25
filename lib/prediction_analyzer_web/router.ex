@@ -19,6 +19,7 @@ defmodule PredictionAnalyzerWeb.Router do
 
     get("/", PageController, :index)
     get("/predictions", PredictionsController, :index)
+    get("/vehicle_events", VehicleEventsController, :index)
   end
 
   # Other scopes may use custom stacks.
