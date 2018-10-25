@@ -3,7 +3,7 @@ defmodule PredictionAnalyzer.Repo.Migrations.AddVehicleEventIdToPredictions do
 
   def change do
     alter table("predictions") do
-      add(:vehicle_event_id, :id)
+      add(:vehicle_event_id, references("vehicle_events"))
     end
   end
 end
