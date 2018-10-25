@@ -2,8 +2,6 @@ defmodule PredictionAnalyzerWeb.VehicleEventsTest do
   use PredictionAnalyzerWeb.ConnCase
 
   test "GET /", %{conn: conn} do
-    conn = get(conn, "/vehicle_events")
-
     event = %PredictionAnalyzer.VehicleEvents.VehicleEvent{
       vehicle_id: "abc123",
       vehicle_label: "1234",
@@ -18,15 +16,16 @@ defmodule PredictionAnalyzerWeb.VehicleEventsTest do
 
     PredictionAnalyzer.Repo.insert(event)
 
+    conn = get(conn, "/vehicle_events")
     response = html_response(conn, 200)
-    assert response =~ "vehicle_id"
-    assert response =~ "vehicle_label"
-    assert response =~ "is_deleted"
-    assert response =~ "route_id"
-    assert response =~ "direction_id"
-    assert response =~ "trip_id"
-    assert response =~ "stop_id"
-    assert response =~ "arrival_time"
-    assert response =~ "departure_time"
+    assert response =~ "abc123"
+    assert response =~ "1234"
+    assert response =~ "false"
+    assert response =~ "Red"
+    assert response =~ "0"
+    assert response =~ "R12345"
+    assert response =~ "71234"
+    assert response =~ "1234567"
+    assert response =~ "2345678"
   end
 end
