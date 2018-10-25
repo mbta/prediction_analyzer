@@ -1,0 +1,29 @@
+<h1>Vehicle Events</h1>
+
+<table>
+  <tr>
+      <th>vehicle_id</th>
+      <th>vehicle_label</th>
+      <th>is_deleted</th>
+      <th>route_id</th>
+      <th>direction_id</th>
+      <th>trip_id</th>
+      <th>stop_id</th>
+      <th>arrival_time</th>
+      <th>departure_time</th>
+  </tr>
+
+  <%= for vp <- @vehicle_events do %>
+    <tr>
+      <td><%= vp.vehicle_id %></td>
+      <td><%= vp.vehicle_label  %></td>
+      <td><%= vp.is_deleted %></td>
+      <td><%= vp.route_id %></td>
+      <td><%= vp.direction_id %></td>
+      <td><%= vp.trip_id %></td>
+      <td><%= vp.stop_id %></td>
+      <td><%= vp.arrival_time %></td>
+      <td><%= vp.departure_time %></td>
+    </tr>
+  <% end %>
+</table>
