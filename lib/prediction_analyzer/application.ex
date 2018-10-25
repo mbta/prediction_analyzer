@@ -13,6 +13,7 @@ defmodule PredictionAnalyzer.Application do
     children = [
       # Start the Ecto repository
       supervisor(PredictionAnalyzer.Repo, []),
+      worker(PredictionAnalyzer.VehiclePositions.Tracker, []),
       worker(PredictionAnalyzer.Predictions.Download, [[name: PredictionAnalyzer.Predictions.Download]]),
       # Start the endpoint when the application starts
       supervisor(PredictionAnalyzerWeb.Endpoint, [])
@@ -43,5 +44,6 @@ defmodule PredictionAnalyzer.Application do
 
   defp set_runtime_config do
     Config.update_env(:aws_predictions_url, System.get_env("AWS_PREDICTIONS_URL"))
+    Config.update_env(:aws_vehicle_positions_url, System.get_env("AWS_VEHICLE_POSITIONS_URL"))
   end
 end
