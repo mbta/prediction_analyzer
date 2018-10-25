@@ -2,15 +2,15 @@
 
 <table>
   <tr>
-      <td>vehicle_id</td>
-      <td>vehicle_label</td>
-      <td>is_deleted</td>
-      <td>route_id</td>
-      <td>direction_id</td>
-      <td>trip_id</td>
-      <td>stop_id</td>
-      <td>arrival_time</td>
-      <td>departure_time</td>
+      <th>vehicle_id</th>
+      <th>vehicle_label</th>
+      <th>is_deleted</th>
+      <th>route_id</th>
+      <th>direction_id</th>
+      <th>trip_id</th>
+      <th>stop_id</th>
+      <th>arrival_time</th>
+      <th>departure_time</th>
   </tr>
 
   <%= for vp <- @vehicle_events do %>
