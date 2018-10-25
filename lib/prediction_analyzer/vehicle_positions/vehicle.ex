@@ -11,7 +11,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
     :route_id,
     :direction_id,
     :current_status,
-    :stop_id
+    :stop_id,
+    :timestamp
   ]
 
   defstruct @enforce_keys
@@ -25,7 +26,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
           trip_id: String.t(),
           route_id: String.t(),
           direction_id: 0 | 1,
-          current_status: :INCOMING_AT | :IN_TRANSIT_TO | :STOPPED_AT
+          current_status: :INCOMING_AT | :IN_TRANSIT_TO | :STOPPED_AT,
+          timestamp: integer()
         }
 
   @spec from_json(map()) :: {:ok, t()} | :error
@@ -34,6 +36,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
         "vehicle" => %{
           "current_status" => current_status,
           "stop_id" => stop_id,
+          "timestamp" => timestamp,
           "trip" => %{
             "direction_id" => direction_id,
             "route_id" => route_id,
@@ -47,7 +50,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
       })
       when is_boolean(is_deleted) and is_binary(stop_id) and is_binary(route_id) and
              is_binary(trip_id) and is_binary(id) and is_binary(label) and direction_id in [0, 1] and
-             current_status in ["INCOMING_AT", "IN_TRANSIT_TO", "STOPPED_AT"] do
+             current_status in ["INCOMING_AT", "IN_TRANSIT_TO", "STOPPED_AT"]
+             and is_integer(timestamp) do
 
     vehicle = %__MODULE__{
       id: id,
@@ -57,7 +61,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
       route_id: route_id,
       direction_id: direction_id,
       current_status: status_atom(current_status),
-      stop_id: stop_id
+      stop_id: stop_id,
+      timestamp: timestamp
     }
 
     {:ok, vehicle}

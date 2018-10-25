@@ -21,7 +21,7 @@ defmodule PredictionAnalyzer.VehiclePositions.VehicleTest do
         "speed" => nil
       },
       "stop_id" => "70049",
-      "timestamp" => 1540391481,
+      "timestamp" => 1_540_391_481,
       "trip" => %{
         "direction_id" => 0,
         "route_id" => "Blue",
@@ -38,22 +38,21 @@ defmodule PredictionAnalyzer.VehiclePositions.VehicleTest do
     }
   }
 
-
   describe "from_json/1" do
     test "parses a correctly formed bit of JSON data" do
       assert {
-        :ok,
-        %Vehicle{
-          id: "B-5458FB84",
-          label: "0758",
-          is_deleted: false,
-          trip_id: "38078941",
-          route_id: "Blue",
-          direction_id: 0,
-          current_status: :INCOMING_AT,
-          stop_id: "70049"
-        }
-      } = Vehicle.from_json(@data)
+               :ok,
+               %Vehicle{
+                 id: "B-5458FB84",
+                 label: "0758",
+                 is_deleted: false,
+                 trip_id: "38078941",
+                 route_id: "Blue",
+                 direction_id: 0,
+                 current_status: :INCOMING_AT,
+                 stop_id: "70049"
+               }
+             } = Vehicle.from_json(@data)
     end
 
     test "returns :error if JSON can't be made into vehicle" do

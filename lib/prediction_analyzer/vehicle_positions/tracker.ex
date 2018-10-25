@@ -3,11 +3,14 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
   require Logger
   alias PredictionAnalyzer.VehiclePositions.Vehicle
+  alias PredictionAnalyzer.VehiclePositions.Comparator
+
+  @type vehicle_map :: %{Vehicle.vehicle_id => Vehicle.t()}
 
   @type t :: %{
     http_fetcher: module(),
     aws_vehicle_positions_url: String.t(),
-    vehicles: %{Vehicle.vehicle_id() => Vehicle.t()}
+    vehicles: vehicle_map()
   }
 
   def start_link(opts \\ []) do
@@ -38,6 +41,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
       |> Jason.decode!()
       |> parse_vehicles
       |> Enum.into(%{}, fn v -> {v.id, v} end)
+      |> Comparator.compare(state.vehicles)
     end)
 
     Logger.info("Processed #{length(Map.keys(new_vehicles))} vehicles in #{time/1000} ms")

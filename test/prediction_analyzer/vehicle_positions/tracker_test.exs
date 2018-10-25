@@ -32,16 +32,15 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       assert {
-        :noreply,
-        %{vehicles: %{"R-5458F5AF" => %Vehicle{}}}
-      } = Tracker.handle_info(:track_vehicles, state)
-
+               :noreply,
+               %{vehicles: %{"R-5458F5AF" => %Vehicle{}}}
+             } = Tracker.handle_info(:track_vehicles, state)
     end
   end
 
   defmodule NotifyGet do
     def get!(url) do
-      send :tracker_test_listener, {:get, url}
+      send(:tracker_test_listener, {:get, url})
       %{body: Jason.encode!(%{"entity" => []})}
     end
   end
@@ -68,7 +67,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
                 "speed" => nil
               },
               "stop_id" => "70097",
-              "timestamp" => 1540242318,
+              "timestamp" => 1_540_242_318,
               "trip" => %{
                 "direction_id" => 0,
                 "route_id" => "Red",
