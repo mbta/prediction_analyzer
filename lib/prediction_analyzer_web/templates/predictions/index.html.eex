@@ -14,6 +14,8 @@
       <td>stop_id</td>
       <td>stop_sequence</td>
       <td>stops_away</td>
+      <td>actual arrival time</td>
+      <td>actual departure time</td>
     </tr>
 
     <%= for p <- @predictions do %>
@@ -28,6 +30,8 @@
       <td><%= p.stop_id %></td>
       <td><%= p.stop_sequence %></td>
       <td><%= p.stops_away %></td>
+      <td><%= p.vehicle_event && p.vehicle_event.arrival_time %></td>
+      <td><%= p.vehicle_event && p.vehicle_event.departure_time %></td>
     </tr>
     <% end %>
   </table>

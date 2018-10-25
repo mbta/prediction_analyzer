@@ -6,7 +6,14 @@ defmodule PredictionAnalyzerWeb.PredictionsController do
 
   def index(conn, _params) do
     query =
-      from(p in Prediction, order_by: [:arrival_time, :departure_time], limit: 100)
+      from(
+        p in Prediction,
+        join: ve in assoc(p, :vehicle_event),
+        order_by: [desc: :arrival_time, desc: :departure_time],
+        limit: 100,
+        preload: [vehicle_event: ve],
+        select: p
+      )
 
     predictions = PredictionAnalyzer.Repo.all(query)
     render(conn, "index.html", predictions: predictions)
