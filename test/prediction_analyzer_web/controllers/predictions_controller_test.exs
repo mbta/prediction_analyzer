@@ -2,7 +2,19 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
   use PredictionAnalyzerWeb.ConnCase
 
   test "GET /", %{conn: conn} do
-    conn = get(conn, "/predictions")
+    vehicle_event = %PredictionAnalyzer.VehicleEvents.VehicleEvent{
+      vehicle_id: "v1",
+      vehicle_label: "l1",
+      is_deleted: false,
+      route_id: "r1",
+      direction_id: 0,
+      trip_id: "TEST_TRIP",
+      stop_id: "70107",
+      arrival_time: 1000001,
+      departure_time: 1000002
+    }
+
+    {:ok, %{id: vehicle_event_id}} = PredictionAnalyzer.Repo.insert(vehicle_event)
 
     prediction = %PredictionAnalyzer.Predictions.Prediction{
       trip_id: "TEST_TRIP",
@@ -14,12 +26,17 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
       schedule_relationship: "SCHEDULED",
       stop_id: "70107",
       stop_sequence: 310,
-      stops_away: 0
+      stops_away: 0,
+      vehicle_event_id: vehicle_event_id
     }
 
-    PredictionAnalyzer.Repo.insert(prediction)
+    PredictionAnalyzer.Repo.insert!(prediction)
 
-    response = html_response(conn, 200)
+    response =
+      conn
+      |> get("/predictions")
+      |> html_response(200)
+
     assert response =~ "trip_id"
     assert response =~ "is_deleted"
     assert response =~ "delay"
@@ -30,5 +47,8 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
     assert response =~ "stop_id"
     assert response =~ "stop_sequence"
     assert response =~ "stops_away"
+    assert response =~ "TEST_TRIP"
+    assert response =~ "1000001"
+    assert response =~ "1000002"
   end
 end
