@@ -1,16 +1,29 @@
 <h1>Vehicle Events</h1>
-This is where I would put my events.
 
+<table>
+  <tr>
+      <td>vehicle_id</td>
+      <td>vehicle_label</td>
+      <td>is_deleted</td>
+      <td>route_id</td>
+      <td>direction_id</td>
+      <td>trip_id</td>
+      <td>stop_id</td>
+      <td>arrival_time</td>
+      <td>departure_time</td>
+  </tr>
 
-
-
-
-
-
-...
-
-
-
-
-
-If i HAD them!
+  <%= for vp <- @vehicle_events do %>
+    <tr>
+      <td><%= vp.vehicle_id %></td>
+      <td><%= vp.vehicle_label  %></td>
+      <td><%= vp.is_deleted %></td>
+      <td><%= vp.route_id %></td>
+      <td><%= vp.direction_id %></td>
+      <td><%= vp.trip_id %></td>
+      <td><%= vp.stop_id %></td>
+      <td><%= vp.arrival_time %></td>
+      <td><%= vp.departure_time %></td>
+    </tr>
+  <% end %>
+</table>
