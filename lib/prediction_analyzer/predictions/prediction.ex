@@ -1,5 +1,6 @@
 defmodule PredictionAnalyzer.Predictions.Prediction do
   use Ecto.Schema
+  alias PredictionAnalyzer.VehicleEvents.VehicleEvent
 
   schema "predictions" do
     field(:trip_id, :string)
@@ -12,5 +13,6 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
     field(:stop_id, :string)
     field(:stop_sequence, :integer)
     field(:stops_away, :integer)
+    belongs_to(:vehicle_event, VehicleEvent)
   end
 end

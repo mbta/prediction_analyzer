@@ -8,6 +8,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
   alias PredictionAnalyzer.VehiclePositions.Tracker
   alias PredictionAnalyzer.VehiclePositions.Vehicle
   alias PredictionAnalyzer.VehicleEvents.VehicleEvent
+  alias PredictionAnalyzer.Predictions.Prediction
   alias PredictionAnalyzer.Repo
   import Ecto.Query, only: [from: 2]
 
@@ -54,8 +55,9 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> VehicleEvent.changeset(params)
     |> Repo.insert
     |> case do
-      {:ok, _vehicle_event} ->
+      {:ok, vehicle_event} ->
         Logger.info("Inserted vehicle event: #{vehicle.label} arrived at #{vehicle.stop_id}")
+        associate_vehicle_event_with_predictions(vehicle_event)
 
       {:error, changeset} ->
         Logger.warn("Could not insert vehicle event: #{inspect(changeset)}")
@@ -84,7 +86,6 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     end
   end
 
-
   @spec vehicle_params(Vehicle.t()) :: map()
   defp vehicle_params(vehicle) do
     %{
@@ -96,5 +97,26 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       trip_id: vehicle.trip_id,
       stop_id: vehicle.stop_id
     }
+  end
+
+  defp associate_vehicle_event_with_predictions(vehicle_event) do
+    from(
+      p in Prediction,
+      where: p.trip_id == ^(vehicle_event.trip_id)
+        and p.stop_id == ^(vehicle_event.stop_id)
+        and (
+          p.arrival_time > ^(:os.system_time(:second) - 60*60*2)
+          or p.departure_time > ^(:os.system_time(:second) - 60*60*2)
+        ),
+      update: [set: [vehicle_event_id: ^(vehicle_event.id)]]
+    )
+    |> Repo.update_all([])
+    |> case do
+      {0, _} ->
+        Logger.warn("Created vehicle_event with no associated prediction: #{vehicle_event.id}")
+
+      {n, _} ->
+        Logger.info("Associated vehicle_event with #{n} prediction(s)")
+    end
   end
 end

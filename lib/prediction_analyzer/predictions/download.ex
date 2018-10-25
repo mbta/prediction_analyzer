@@ -43,7 +43,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     predictions =
       Enum.flat_map(entities, fn prediction ->
         trip_prediction = %{
-          trip_id: prediction["id"],
+          trip_id: prediction["trip_update"]["trip"]["trip_id"],
           is_deleted: prediction["is_deleted"]
         }
 
