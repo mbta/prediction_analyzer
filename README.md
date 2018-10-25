@@ -15,13 +15,13 @@ An app for aggregating and analyzing the accuracy of gtfs predictions using Trip
 ## Running the app
 
 In order to run this app locally you will need to set several ENV variables.
-For downloading the Trip updates, you will need an `AWS_ACCESS_KEY_ID` and a `AWS_SECRET_ACCESS_KEY`, as well as `AWS_PREDICTIONS_BUCKET`, and `AWS_PREDICTIONS_PATH`
+For downloading the trip updates and vehicle positions, you will need an `AWS_PREDICTIONS_URL` and `AWS_VEHICLE_POSITIONS_URL`.
 
 In order to store them you will need a local postgres database, run the migrations, and set a `DATABASE_URL` in the form:
 `postgresql://<usernam>:<password>@<hostname>:<port>/<database_name>`
 
 Example run command:
-`AWS_PREDICTIONS_BUCKET=<bucket> AWS_PREDICTIONS_PATH=<path> AWS_ACCESS_KEY_ID=<access_id> AWS_SECRET_ACCESS_KEY=<secret_access_id> DATABASE_URL=<url> iex -S mix`
+`AWS_PREDICTIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" AWS_VEHICLE_POSITIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/VehiclePositions_enhanced.json" DATABASE_URL="postgres://user:pass@localhost:5432/prediction_analyzer_repo" iex -S mix`
 
 ## Learn more
 

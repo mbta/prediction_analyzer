@@ -16,3 +16,5 @@ config :prediction_analyzer, PredictionAnalyzer.Repo,
   database: "prediction_analyzer_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :prediction_analyzer, :http_fetcher, FakeHTTPoison
