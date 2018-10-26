@@ -23,6 +23,21 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
     timestamp: :os.system_time(:second)
   }
 
+  @prediction %Prediction{
+    file_timestamp: :os.system_time(:second),
+    trip_id: "trip",
+    is_deleted: false,
+    delay: 0,
+    arrival_time: nil,
+    boarding_status: nil,
+    departure_time: nil,
+    schedule_relationship: nil,
+    stop_id: "stop",
+    stop_sequence: 10,
+    stops_away: 2,
+    vehicle_event_id: nil
+  }
+
   describe "compare_vehicles" do
     test "records arrival and departure of vehicle" do
       assert Repo.one(from(ve in VehicleEvent, select: count(ve.id))) == 0
@@ -66,22 +81,26 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
     end
 
     test "updates relevant predictions" do
-      prediction1 = %Prediction{
-        trip_id: "trip1",
-        arrival_time: :os.system_time(:second),
-        stop_id: "stop1"
+      prediction1 = %{
+        @prediction
+        | trip_id: "trip1",
+          arrival_time: :os.system_time(:second),
+          stop_id: "stop1"
       }
 
-      prediction2 = %Prediction{
-        trip_id: "trip1",
-        arrival_time: :os.system_time(:second),
-        stop_id: "stop0"
+      prediction2 = %{
+        @prediction
+        | trip_id: "trip1",
+          arrival_time: :os.system_time(:second),
+          stop_id: "stop0"
       }
 
-      prediction3 = %Prediction{
-        trip_id: "trip1",
-        arrival_time: :os.system_time(:second) - 24 * 60 * 60,
-        stop_id: "stop1"
+      prediction3 = %{
+        @prediction
+        | trip_id: "trip1",
+          arrival_time: :os.system_time(:second) - 24 * 60 * 60,
+          file_timestamp: :os.system_time(:second) - 60 * 60 * 24,
+          stop_id: "stop1"
       }
 
       [p1_id, p2_id, p3_id] =
