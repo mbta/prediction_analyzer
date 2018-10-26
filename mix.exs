@@ -9,6 +9,7 @@ defmodule PredictionAnalyzer.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      test_coverage: [tool: ExCoveralls],
       aliases: aliases(),
       deps: deps()
     ]
@@ -34,6 +35,7 @@ defmodule PredictionAnalyzer.Mixfile do
   defp deps do
     [
       {:ecto, "~> 2.0"},
+      {:excoveralls, "~> 0.5", only: :test},
       {:hackney, "~> 1.0"},
       {:httpoison, "~> 1.4.0"},
       {:jason, "~> 1.0"},
