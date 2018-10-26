@@ -81,23 +81,26 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
     end
 
     test "updates relevant predictions" do
-      prediction1 = %{@prediction |
-        trip_id: "trip1",
-        arrival_time: :os.system_time(:second),
-        stop_id: "stop1"
+      prediction1 = %{
+        @prediction
+        | trip_id: "trip1",
+          arrival_time: :os.system_time(:second),
+          stop_id: "stop1"
       }
 
-      prediction2 = %{@prediction |
-        trip_id: "trip1",
-        arrival_time: :os.system_time(:second),
-        stop_id: "stop0"
+      prediction2 = %{
+        @prediction
+        | trip_id: "trip1",
+          arrival_time: :os.system_time(:second),
+          stop_id: "stop0"
       }
 
-      prediction3 = %{@prediction |
-        trip_id: "trip1",
-        arrival_time: :os.system_time(:second) - 24 * 60 * 60,
-        file_timestamp: :os.system_time(:second) - 60 * 60 * 24,
-        stop_id: "stop1"
+      prediction3 = %{
+        @prediction
+        | trip_id: "trip1",
+          arrival_time: :os.system_time(:second) - 24 * 60 * 60,
+          file_timestamp: :os.system_time(:second) - 60 * 60 * 24,
+          stop_id: "stop1"
       }
 
       [p1_id, p2_id, p3_id] =
