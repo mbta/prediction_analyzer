@@ -3,6 +3,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
   alias PredictionAnalyzer.VehicleEvents.VehicleEvent
 
   schema "predictions" do
+    field(:file_timestamp, :integer)
     field(:trip_id, :string)
     field(:is_deleted, :boolean)
     field(:delay, :integer)

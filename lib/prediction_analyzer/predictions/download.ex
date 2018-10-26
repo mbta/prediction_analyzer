@@ -39,10 +39,11 @@ defmodule PredictionAnalyzer.Predictions.Download do
     {:noreply, predictions}
   end
 
-  defp store_predictions(%{"entity" => entities}) do
+  defp store_predictions(%{"entity" => entities, "header" => %{"timestamp" => timestamp}}) do
     predictions =
       Enum.flat_map(entities, fn prediction ->
         trip_prediction = %{
+          file_timestamp: timestamp,
           trip_id: prediction["trip_update"]["trip"]["trip_id"],
           is_deleted: prediction["is_deleted"]
         }

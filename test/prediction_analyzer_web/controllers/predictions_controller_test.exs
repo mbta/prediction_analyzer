@@ -17,6 +17,7 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
     {:ok, %{id: vehicle_event_id}} = PredictionAnalyzer.Repo.insert(vehicle_event)
 
     prediction = %PredictionAnalyzer.Predictions.Prediction{
+      file_timestamp: :os.system_time(:second),
       trip_id: "TEST_TRIP",
       is_deleted: false,
       delay: 0,

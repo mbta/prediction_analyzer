@@ -103,8 +103,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       p in Prediction,
       where:
         p.trip_id == ^vehicle_event.trip_id and p.stop_id == ^vehicle_event.stop_id and
-          (p.arrival_time > ^(:os.system_time(:second) - 60 * 60 * 2) or
-             p.departure_time > ^(:os.system_time(:second) - 60 * 60 * 2)),
+          p.file_timestamp > ^(:os.system_time(:second) - 60 * 60 * 3),
       update: [set: [vehicle_event_id: ^vehicle_event.id]]
     )
     |> Repo.update_all([])
