@@ -3,3 +3,5 @@ set -e
 set -x
 
 mix format --check-formatted
+
+mix test
