@@ -14,12 +14,9 @@ MIX_ENV=test mix test --only integration
 find $SEMAPHORE_CACHE_DIR -name "dialyxir_*_deps-test.plt*" | xargs -I{} cp '{}' _build/test
 
 export ERL_CRASH_DUMP=/dev/null
-MIX_ENV=test mix dialyzer --plt
 
 # copy build PLTs back
 cp _build/test/*_deps-test.plt* $SEMAPHORE_CACHE_DIR
-
-MIX_ENV=test mix dialyzer --halt-exit-status
 
 mix format mix.exs "lib/**/*.{ex,exs}" "test/**/*.{ex,exs}" --check-formatted
 
