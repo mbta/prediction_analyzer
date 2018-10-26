@@ -7,7 +7,7 @@ MIX_ENV=test pronto run -f github github_status -c origin/master &
 pronto_pid=$!
 
 MIX_ENV=test mix coveralls.json
-bash <(curl -s https://codecov.io/bash) -t $PREDICTION_ANALYZER_CODECOV_TOKEN
+bash <(curl -s https://codecov.io/bash) -t $PREDICTION_ANALYZER_CODECOV_TOKEN -r mbta/prediction_analyzer
 
 export ERL_CRASH_DUMP=/dev/null
 
