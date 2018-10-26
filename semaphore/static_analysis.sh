@@ -2,4 +2,4 @@
 set -e
 set -x
 
-mix format mix.exs "lib/**/*.{ex,exs}" "test/**/*.{ex,exs}" --check-formatted
+mix format --check-formatted
