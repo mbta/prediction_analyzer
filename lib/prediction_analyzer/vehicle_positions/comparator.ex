@@ -53,7 +53,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
 
     %VehicleEvent{}
     |> VehicleEvent.changeset(params)
-    |> Repo.insert
+    |> Repo.insert()
     |> case do
       {:ok, vehicle_event} ->
         Logger.info("Inserted vehicle event: #{vehicle.label} arrived at #{vehicle.stop_id}")
@@ -67,11 +67,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
   defp record_departure(vehicle) do
     from(
       ve in VehicleEvent,
-      where: ve.vehicle_id == ^(vehicle.id)
-        and ve.stop_id == ^(vehicle.stop_id)
-        and is_nil(ve.departure_time)
-        and ve.arrival_time > ^(:os.system_time(:second) - 60*30),
-      update: [set: [departure_time: ^(vehicle.timestamp)]]
+      where:
+        ve.vehicle_id == ^vehicle.id and ve.stop_id == ^vehicle.stop_id and
+          is_nil(ve.departure_time) and ve.arrival_time > ^(:os.system_time(:second) - 60 * 30),
+      update: [set: [departure_time: ^vehicle.timestamp]]
     )
     |> Repo.update_all([])
     |> case do
@@ -102,13 +101,11 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
   defp associate_vehicle_event_with_predictions(vehicle_event) do
     from(
       p in Prediction,
-      where: p.trip_id == ^(vehicle_event.trip_id)
-        and p.stop_id == ^(vehicle_event.stop_id)
-        and (
-          p.arrival_time > ^(:os.system_time(:second) - 60*60*2)
-          or p.departure_time > ^(:os.system_time(:second) - 60*60*2)
-        ),
-      update: [set: [vehicle_event_id: ^(vehicle_event.id)]]
+      where:
+        p.trip_id == ^vehicle_event.trip_id and p.stop_id == ^vehicle_event.stop_id and
+          (p.arrival_time > ^(:os.system_time(:second) - 60 * 60 * 2) or
+             p.departure_time > ^(:os.system_time(:second) - 60 * 60 * 2)),
+      update: [set: [vehicle_event_id: ^vehicle_event.id]]
     )
     |> Repo.update_all([])
     |> case do

@@ -5,21 +5,28 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   alias PredictionAnalyzer.VehiclePositions.Vehicle
   alias PredictionAnalyzer.VehiclePositions.Comparator
 
-  @type vehicle_map :: %{Vehicle.vehicle_id => Vehicle.t()}
+  @type vehicle_map :: %{Vehicle.vehicle_id() => Vehicle.t()}
 
   @type t :: %{
-    http_fetcher: module(),
-    aws_vehicle_positions_url: String.t(),
-    vehicles: vehicle_map()
-  }
+          http_fetcher: module(),
+          aws_vehicle_positions_url: String.t(),
+          vehicles: vehicle_map()
+        }
 
   def start_link(opts \\ []) do
-    aws_vehicle_positions_url = Keyword.get(opts, :aws_vehicle_positions_url, Application.get_env(:prediction_analyzer, :aws_vehicle_positions_url))
-    http_fetcher = Keyword.get(opts, :http_fetcher, Application.get_env(:prediction_analyzer, :http_fetcher))
+    aws_vehicle_positions_url =
+      Keyword.get(
+        opts,
+        :aws_vehicle_positions_url,
+        Application.get_env(:prediction_analyzer, :aws_vehicle_positions_url)
+      )
+
+    http_fetcher =
+      Keyword.get(opts, :http_fetcher, Application.get_env(:prediction_analyzer, :http_fetcher))
 
     initial_state = %{
       aws_vehicle_positions_url: aws_vehicle_positions_url,
-      http_fetcher: http_fetcher,
+      http_fetcher: http_fetcher
     }
 
     GenServer.start_link(__MODULE__, initial_state)
@@ -36,15 +43,16 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
     %{body: body} = state.http_fetcher.get!(state.aws_vehicle_positions_url)
 
-    {time, new_vehicles} = :timer.tc(fn ->
-      body
-      |> Jason.decode!()
-      |> parse_vehicles
-      |> Enum.into(%{}, fn v -> {v.id, v} end)
-      |> Comparator.compare(state.vehicles)
-    end)
+    {time, new_vehicles} =
+      :timer.tc(fn ->
+        body
+        |> Jason.decode!()
+        |> parse_vehicles
+        |> Enum.into(%{}, fn v -> {v.id, v} end)
+        |> Comparator.compare(state.vehicles)
+      end)
 
-    Logger.info("Processed #{length(Map.keys(new_vehicles))} vehicles in #{time/1000} ms")
+    Logger.info("Processed #{length(Map.keys(new_vehicles))} vehicles in #{time / 1000} ms")
     schedule_fetch(self())
     {:noreply, %{state | vehicles: new_vehicles}}
   end

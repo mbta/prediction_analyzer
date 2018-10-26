@@ -14,7 +14,9 @@ defmodule PredictionAnalyzer.Application do
       # Start the Ecto repository
       supervisor(PredictionAnalyzer.Repo, []),
       worker(PredictionAnalyzer.VehiclePositions.Tracker, []),
-      worker(PredictionAnalyzer.Predictions.Download, [[name: PredictionAnalyzer.Predictions.Download]]),
+      worker(PredictionAnalyzer.Predictions.Download, [
+        [name: PredictionAnalyzer.Predictions.Download]
+      ]),
       # Start the endpoint when the application starts
       supervisor(PredictionAnalyzerWeb.Endpoint, [])
       # Start your own worker by calling: PredictionAnalyzer.Worker.start_link(arg1, arg2, arg3)
@@ -24,6 +26,7 @@ defmodule PredictionAnalyzer.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: PredictionAnalyzer.Supervisor]
+
     case Supervisor.start_link(children, opts) do
       {:ok, _} = success ->
         Logger.info("Started application, running migrations")

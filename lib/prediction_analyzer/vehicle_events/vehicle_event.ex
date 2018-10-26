@@ -16,7 +16,17 @@ defmodule PredictionAnalyzer.VehicleEvents.VehicleEvent do
   end
 
   def changeset(vehicle_event, params \\ %{}) do
-    fields = [:vehicle_id, :vehicle_label, :is_deleted, :route_id, :direction_id, :trip_id, :stop_id, :arrival_time]
+    fields = [
+      :vehicle_id,
+      :vehicle_label,
+      :is_deleted,
+      :route_id,
+      :direction_id,
+      :trip_id,
+      :stop_id,
+      :arrival_time
+    ]
+
     vehicle_event
     |> cast(params, fields)
     |> validate_required(fields)

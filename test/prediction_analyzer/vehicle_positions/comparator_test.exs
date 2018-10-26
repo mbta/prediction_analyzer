@@ -42,8 +42,8 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       vehicle_events = Repo.all(from(ve in VehicleEvent, select: ve))
 
       assert [
-        %VehicleEvent{vehicle_id: "1", arrival_time: ^timestamp, departure_time: nil}
-      ] = vehicle_events
+               %VehicleEvent{vehicle_id: "1", arrival_time: ^timestamp, departure_time: nil}
+             ] = vehicle_events
 
       ve_id = List.first(vehicle_events).id
 
@@ -56,8 +56,13 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       Comparator.compare(new_vehicles, old_vehicles)
 
       assert [
-        %VehicleEvent{id: ^ve_id, vehicle_id: "1", arrival_time: ^timestamp, departure_time: ^timestamp}
-      ] =Repo.all(from(ve in VehicleEvent, select: ve))
+               %VehicleEvent{
+                 id: ^ve_id,
+                 vehicle_id: "1",
+                 arrival_time: ^timestamp,
+                 departure_time: ^timestamp
+               }
+             ] = Repo.all(from(ve in VehicleEvent, select: ve))
     end
 
     test "updates relevant predictions" do
@@ -79,9 +84,10 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         stop_id: "stop1"
       }
 
-      [p1_id, p2_id, p3_id] = Enum.map([prediction1, prediction2, prediction3], fn prediction ->
-        Repo.insert!(prediction) |> Map.get(:id)
-      end)
+      [p1_id, p2_id, p3_id] =
+        Enum.map([prediction1, prediction2, prediction3], fn prediction ->
+          Repo.insert!(prediction) |> Map.get(:id)
+        end)
 
       vehicle = %{@vehicle | trip_id: "trip1", stop_id: "stop1"}
 
@@ -95,10 +101,16 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
       Comparator.compare(new_vehicles, old_vehicles)
 
-      [ve_id] = Repo.all(from ve in VehicleEvent, select: ve.id)
-      assert Repo.one(from p in Prediction, where: p.id == ^p1_id, select: p.vehicle_event_id) == ve_id
-      assert Repo.one(from p in Prediction, where: p.id == ^p2_id, select: p.vehicle_event_id) == nil
-      assert Repo.one(from p in Prediction, where: p.id == ^p3_id, select: p.vehicle_event_id) == nil
+      [ve_id] = Repo.all(from(ve in VehicleEvent, select: ve.id))
+
+      assert Repo.one(from(p in Prediction, where: p.id == ^p1_id, select: p.vehicle_event_id)) ==
+               ve_id
+
+      assert Repo.one(from(p in Prediction, where: p.id == ^p2_id, select: p.vehicle_event_id)) ==
+               nil
+
+      assert Repo.one(from(p in Prediction, where: p.id == ^p3_id, select: p.vehicle_event_id)) ==
+               nil
     end
   end
 end

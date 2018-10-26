@@ -10,8 +10,8 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
       direction_id: 0,
       trip_id: "TEST_TRIP",
       stop_id: "70107",
-      arrival_time: 1000001,
-      departure_time: 1000002
+      arrival_time: 1_000_001,
+      departure_time: 1_000_002
     }
 
     {:ok, %{id: vehicle_event_id}} = PredictionAnalyzer.Repo.insert(vehicle_event)

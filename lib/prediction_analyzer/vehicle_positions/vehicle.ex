@@ -50,9 +50,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
       })
       when is_boolean(is_deleted) and is_binary(stop_id) and is_binary(route_id) and
              is_binary(trip_id) and is_binary(id) and is_binary(label) and direction_id in [0, 1] and
-             current_status in ["INCOMING_AT", "IN_TRANSIT_TO", "STOPPED_AT"]
-             and is_integer(timestamp) do
-
+             current_status in ["INCOMING_AT", "IN_TRANSIT_TO", "STOPPED_AT"] and
+             is_integer(timestamp) do
     vehicle = %__MODULE__{
       id: id,
       label: label,
