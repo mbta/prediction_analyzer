@@ -32,6 +32,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
     boarding_status: nil,
     departure_time: nil,
     schedule_relationship: nil,
+    route_id: "Blue",
     stop_id: "stop",
     stop_sequence: 10,
     stops_away: 2,

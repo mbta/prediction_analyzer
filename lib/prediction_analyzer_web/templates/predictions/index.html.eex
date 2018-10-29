@@ -11,6 +11,7 @@
       <td>boarding_status</td>
       <td>departure_time</td>
       <td>schedule_relationship</td>
+      <td>route_id</td>
       <td>stop_id</td>
       <td>stop_sequence</td>
       <td>stops_away</td>
@@ -27,6 +28,7 @@
       <td><%= p.boarding_status %></td>
       <td><%= p.departure_time %></td>
       <td><%= p.schedule_relationship %></td>
+      <td><%= p.route_id %></td>
       <td><%= p.stop_id %></td>
       <td><%= p.stop_sequence %></td>
       <td><%= p.stops_away %></td>

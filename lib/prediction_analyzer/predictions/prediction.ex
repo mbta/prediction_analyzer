@@ -12,6 +12,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
     field(:departure_time, :integer)
     field(:schedule_relationship, :string)
     field(:stop_id, :string)
+    field(:route_id, :string)
     field(:stop_sequence, :integer)
     field(:stops_away, :integer)
     belongs_to(:vehicle_event, VehicleEvent)

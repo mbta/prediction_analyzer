@@ -25,6 +25,7 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
       boarding_status: "Stopped at station",
       departure_time: nil,
       schedule_relationship: "SCHEDULED",
+      route_id: "r1",
       stop_id: "70107",
       stop_sequence: 310,
       stops_away: 0,
@@ -38,16 +39,16 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
       |> get("/predictions")
       |> html_response(200)
 
-    assert response =~ "trip_id"
-    assert response =~ "is_deleted"
-    assert response =~ "delay"
-    assert response =~ "arrival_time"
-    assert response =~ "boarding_status"
-    assert response =~ "departure_time"
-    assert response =~ "schedule_relationship"
-    assert response =~ "stop_id"
-    assert response =~ "stop_sequence"
-    assert response =~ "stops_away"
+    assert response =~ "TEST_TRIP"
+    assert response =~ "false"
+    assert response =~ "0"
+    assert response =~ "1539896675"
+    assert response =~ "Stopped at station"
+    assert response =~ "SCHEDULED"
+    assert response =~ "r1"
+    assert response =~ "70107"
+    assert response =~ "310"
+    assert response =~ "0"
     assert response =~ "TEST_TRIP"
     assert response =~ "1000001"
     assert response =~ "1000002"

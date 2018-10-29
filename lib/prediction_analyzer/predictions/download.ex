@@ -45,6 +45,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
         trip_prediction = %{
           file_timestamp: timestamp,
           trip_id: prediction["trip_update"]["trip"]["trip_id"],
+          route_id: prediction["trip_update"]["trip"]["route_id"],
           is_deleted: prediction["is_deleted"]
         }
 
