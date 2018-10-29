@@ -1,0 +1,24 @@
+<div>
+  <table>
+    <th>Service Date</th>
+    <th>Hour of Day</th>
+    <th>Stop id</th>
+    <th>Route id</th>
+    <th>Arrival/Departure</th>
+    <th>Bin</th>
+    <th>Number of predictions</th>
+    <th>Number of accurate predictions</th>
+    <tr>
+      <%= for accuracy <- @accuracies do %>
+        <td><%= accuracy.service_date %></td>
+        <td><%= accuracy.hour_of_day %></td>
+        <td><%= accuracy.stop_id %></td>
+        <td><%= accuracy.route_id %></td>
+        <td><%= accuracy.arrival_departure %></td>
+        <td><%= accuracy.bin %></td>
+        <td><%= accuracy.num_predictions %></td>
+        <td><%= accuracy.num_accurate_predictions %></td>
+      <% end %>
+    </tr>
+  </table>
+</div>
