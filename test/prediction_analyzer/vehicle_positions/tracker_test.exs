@@ -1,10 +1,15 @@
 defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias PredictionAnalyzer.VehiclePositions.Tracker
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.NotifyGet
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.OneVehicle
   alias PredictionAnalyzer.VehiclePositions.Vehicle
+
+  setup do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
+    Ecto.Adapters.SQL.Sandbox.mode(PredictionAnalyzer.Repo, {:shared, self()})
+  end
 
   test "Loops every second and downloads the vehicles" do
     Process.register(self(), :tracker_test_listener)
