@@ -2,6 +2,10 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
   use ExUnit.Case, async: true
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
 
+  setup do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
+  end
+
   describe "new_insert_changeset/1" do
     test "valid when fields are correct" do
       changeset =
