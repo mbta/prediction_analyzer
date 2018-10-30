@@ -9,9 +9,10 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AggregatorTest do
     Ecto.Adapters.SQL.Sandbox.mode(PredictionAnalyzer.Repo, {:shared, self()})
 
     log_level = Logger.level()
-    on_exit fn ->
+
+    on_exit(fn ->
       Logger.configure(level: log_level)
-    end
+    end)
   end
 
   test "Can be started up without incident" do
@@ -23,9 +24,10 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AggregatorTest do
   test "the :aggregate handle_info runs and logs its results" do
     Logger.configure(level: :info)
 
-    logs = capture_log(fn ->
-      {:noreply, []} = Aggregator.handle_info(:aggregate, [])
-    end)
+    logs =
+      capture_log(fn ->
+        {:noreply, []} = Aggregator.handle_info(:aggregate, [])
+      end)
 
     assert logs =~ "Finished prediction aggregations"
   end

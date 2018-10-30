@@ -47,55 +47,73 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       bin_error_min = -30
       bin_error_max = 60
 
-      file_time = :os.system_time(:second) - 60*90
-      arrival_time = file_time + 60*7
+      file_time = :os.system_time(:second) - 60 * 90
+      arrival_time = file_time + 60 * 7
 
-      %{id: ve_id} =
-        Repo.insert!(%{@vehicle_event |
-          arrival_time: arrival_time
-        })
+      %{id: ve_id} = Repo.insert!(%{@vehicle_event | arrival_time: arrival_time})
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time + 60*90 # too late to be considered
+      Repo.insert!(%{
+        @prediction
+        | # too late to be considered
+          file_timestamp: file_time + 60 * 90
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time - 60*90 # too early to be considered
+      Repo.insert!(%{
+        @prediction
+        | # too early to be considered
+          file_timestamp: file_time - 60 * 90
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time,
-        route_id: "route1",
-        stop_id: "stop1",
-        arrival_time: arrival_time - 15, # accurate
-        vehicle_event_id: ve_id
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # accurate
+          arrival_time: arrival_time - 15,
+          vehicle_event_id: ve_id
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time,
-        route_id: "route1",
-        stop_id: "stop1",
-        arrival_time: arrival_time - 45, # inaccurate
-        vehicle_event_id: ve_id
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # inaccurate
+          arrival_time: arrival_time - 45,
+          vehicle_event_id: ve_id
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time,
-        route_id: "route1",
-        stop_id: "stop1",
-        arrival_time: arrival_time + 45, # accurate
-        vehicle_event_id: ve_id
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # accurate
+          arrival_time: arrival_time + 45,
+          vehicle_event_id: ve_id
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time,
-        route_id: "route1",
-        stop_id: "stop1",
-        arrival_time: arrival_time + 65, # inaccurate
-        vehicle_event_id: ve_id
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # inaccurate
+          arrival_time: arrival_time + 65,
+          vehicle_event_id: ve_id
       })
 
-      {:ok, _} = Query.calculate_aggregate_accuracy(Timex.local(), "arrival", bin_name, bin_min, bin_max, bin_error_min, bin_error_max)
+      {:ok, _} =
+        Query.calculate_aggregate_accuracy(
+          Timex.local(),
+          "arrival",
+          bin_name,
+          bin_min,
+          bin_max,
+          bin_error_min,
+          bin_error_max
+        )
 
       [pa] = Repo.all(from(pa in PredictionAccuracy, select: pa))
 
@@ -114,55 +132,73 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       bin_error_min = -30
       bin_error_max = 60
 
-      file_time = :os.system_time(:second) - 60*90
-      departure_time = file_time + 60*7
+      file_time = :os.system_time(:second) - 60 * 90
+      departure_time = file_time + 60 * 7
 
-      %{id: ve_id} =
-        Repo.insert!(%{@vehicle_event |
-          departure_time: departure_time
-        })
+      %{id: ve_id} = Repo.insert!(%{@vehicle_event | departure_time: departure_time})
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time + 60*90 # too late to be considered
+      Repo.insert!(%{
+        @prediction
+        | # too late to be considered
+          file_timestamp: file_time + 60 * 90
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time - 60*90 # too early to be considered
+      Repo.insert!(%{
+        @prediction
+        | # too early to be considered
+          file_timestamp: file_time - 60 * 90
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time,
-        route_id: "route1",
-        stop_id: "stop1",
-        departure_time: departure_time - 15, # accurate
-        vehicle_event_id: ve_id
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # accurate
+          departure_time: departure_time - 15,
+          vehicle_event_id: ve_id
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time,
-        route_id: "route1",
-        stop_id: "stop1",
-        departure_time: departure_time - 45, # inaccurate
-        vehicle_event_id: ve_id
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # inaccurate
+          departure_time: departure_time - 45,
+          vehicle_event_id: ve_id
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time,
-        route_id: "route1",
-        stop_id: "stop1",
-        departure_time: departure_time + 45, # accurate
-        vehicle_event_id: ve_id
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # accurate
+          departure_time: departure_time + 45,
+          vehicle_event_id: ve_id
       })
 
-      Repo.insert!(%{@prediction |
-        file_timestamp: file_time,
-        route_id: "route1",
-        stop_id: "stop1",
-        departure_time: departure_time + 65, # inaccurate
-        vehicle_event_id: ve_id
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # inaccurate
+          departure_time: departure_time + 65,
+          vehicle_event_id: ve_id
       })
 
-      {:ok, _} = Query.calculate_aggregate_accuracy(Timex.local(), "departure", bin_name, bin_min, bin_max, bin_error_min, bin_error_max)
+      {:ok, _} =
+        Query.calculate_aggregate_accuracy(
+          Timex.local(),
+          "departure",
+          bin_name,
+          bin_min,
+          bin_max,
+          bin_error_min,
+          bin_error_max
+        )
 
       [pa] = Repo.all(from(pa in PredictionAccuracy, select: pa))
 

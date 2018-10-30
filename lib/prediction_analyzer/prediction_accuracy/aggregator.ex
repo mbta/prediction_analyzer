@@ -15,6 +15,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
 
   def handle_info(:aggregate, state) do
     Logger.info("Calculating prediction accuracies")
+
     {time, _result} =
       :timer.tc(fn ->
         current_time = Timex.local()
@@ -22,8 +23,27 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
         Enum.each(
           PredictionAccuracy.bins(),
           fn {bin_name, {bin_min, bin_max, bin_error_min, bin_error_max}} ->
-            {:ok, _} = Query.calculate_aggregate_accuracy(current_time, "arrival", bin_name, bin_min, bin_max, bin_error_min, bin_error_max)
-            {:ok, _} = Query.calculate_aggregate_accuracy(current_time, "departure", bin_name, bin_min, bin_max, bin_error_min, bin_error_max)
+            {:ok, _} =
+              Query.calculate_aggregate_accuracy(
+                current_time,
+                "arrival",
+                bin_name,
+                bin_min,
+                bin_max,
+                bin_error_min,
+                bin_error_max
+              )
+
+            {:ok, _} =
+              Query.calculate_aggregate_accuracy(
+                current_time,
+                "departure",
+                bin_name,
+                bin_min,
+                bin_max,
+                bin_error_min,
+                bin_error_max
+              )
           end
         )
       end)

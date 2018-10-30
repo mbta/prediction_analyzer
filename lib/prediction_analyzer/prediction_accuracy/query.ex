@@ -4,17 +4,24 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
   @doc """
   Calculate a given row of prediction_accuracy data. Looks back at files
   """
-  @spec calculate_aggregate_accuracy(DateTime.t(), String.t(), String.t(),
-    integer(), integer(), integer(), integer()) :: {:ok, term()}
+  @spec calculate_aggregate_accuracy(
+          DateTime.t(),
+          String.t(),
+          String.t(),
+          integer(),
+          integer(),
+          integer(),
+          integer()
+        ) :: {:ok, term()}
   def calculate_aggregate_accuracy(
-    current_time,
-    arrival_departure,
-    bin_name,
-    bin_min,
-    bin_max,
-    bin_error_min,
-    bin_error_max
-  ) do
+        current_time,
+        arrival_departure,
+        bin_name,
+        bin_min,
+        bin_max,
+        bin_error_min,
+        bin_error_max
+      ) do
     {service_date, hour_of_day, min_unix, max_unix} =
       current_time
       |> Timex.shift(hours: -2)
@@ -40,10 +47,11 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
   end
 
   defp query_template(arrival_departure) do
-    column_name = case arrival_departure do
-      "arrival" -> "arrival_time"
-      "departure" -> "departure_time"
-    end
+    column_name =
+      case arrival_departure do
+        "arrival" -> "arrival_time"
+        "departure" -> "departure_time"
+      end
 
     "
       INSERT INTO prediction_accuracy (

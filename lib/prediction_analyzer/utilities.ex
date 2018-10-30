@@ -11,7 +11,7 @@ defmodule PredictionAnalyzer.Utilities do
       |> Timex.set(minute: 0, second: 0, microsecond: {0, 6})
       |> DateTime.to_unix()
 
-    end_of_hour_unix = beginning_of_hour_unix + (60*60)
+    end_of_hour_unix = beginning_of_hour_unix + 60 * 60
 
     {date, hour} =
       if timestamp.hour < 3 do
