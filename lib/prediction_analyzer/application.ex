@@ -13,7 +13,22 @@ defmodule PredictionAnalyzer.Application do
     children = [
       # Start the Ecto repository
       supervisor(PredictionAnalyzer.Repo, []),
-      worker(PredictionAnalyzer.VehiclePositions.Tracker, []),
+      worker(
+        PredictionAnalyzer.VehiclePositions.Tracker,
+        [
+          [
+            environment: "dev-green",
+            aws_predictions_url:
+              "https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/VehiclePositions_enhanced.json"
+          ]
+        ],
+        id: DevGreenVehiclePositionsTracker
+      ),
+      worker(
+        PredictionAnalyzer.VehiclePositions.Tracker,
+        [[environment: "prod"]],
+        id: ProdVehiclePositionsTracker
+      ),
       worker(PredictionAnalyzer.Predictions.Download, [
         [name: PredictionAnalyzer.Predictions.Download]
       ]),

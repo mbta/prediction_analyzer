@@ -5,6 +5,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
 
   @enforce_keys [
     :id,
+    :environment,
     :label,
     :is_deleted,
     :trip_id,
@@ -21,6 +22,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
 
   @type t :: %__MODULE__{
           id: vehicle_id,
+          environment: String.t(),
           label: String.t(),
           is_deleted: boolean(),
           trip_id: String.t(),
@@ -30,30 +32,34 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
           timestamp: integer()
         }
 
-  @spec from_json(map()) :: {:ok, t()} | :error
-  def from_json(%{
-        "is_deleted" => is_deleted,
-        "vehicle" => %{
-          "current_status" => current_status,
-          "stop_id" => stop_id,
-          "timestamp" => timestamp,
-          "trip" => %{
-            "direction_id" => direction_id,
-            "route_id" => route_id,
-            "trip_id" => trip_id
-          },
+  @spec from_json(map(), String.t()) :: {:ok, t()} | :error
+  def from_json(
+        %{
+          "is_deleted" => is_deleted,
           "vehicle" => %{
-            "id" => id,
-            "label" => label
+            "current_status" => current_status,
+            "stop_id" => stop_id,
+            "timestamp" => timestamp,
+            "trip" => %{
+              "direction_id" => direction_id,
+              "route_id" => route_id,
+              "trip_id" => trip_id
+            },
+            "vehicle" => %{
+              "id" => id,
+              "label" => label
+            }
           }
-        }
-      })
+        },
+        environment
+      )
       when is_boolean(is_deleted) and is_binary(stop_id) and is_binary(route_id) and
              is_binary(trip_id) and is_binary(id) and is_binary(label) and direction_id in [0, 1] and
              current_status in ["INCOMING_AT", "IN_TRANSIT_TO", "STOPPED_AT"] and
              is_integer(timestamp) do
     vehicle = %__MODULE__{
       id: id,
+      environment: environment,
       label: label,
       is_deleted: is_deleted,
       trip_id: trip_id,
@@ -67,7 +73,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
     {:ok, vehicle}
   end
 
-  def from_json(_) do
+  def from_json(_, _) do
     :error
   end
 

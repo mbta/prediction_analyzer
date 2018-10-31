@@ -88,6 +88,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
   @spec vehicle_params(Vehicle.t()) :: map()
   defp vehicle_params(vehicle) do
     %{
+      environment: vehicle.environment,
       vehicle_id: vehicle.id,
       vehicle_label: vehicle.label,
       is_deleted: vehicle.is_deleted,
