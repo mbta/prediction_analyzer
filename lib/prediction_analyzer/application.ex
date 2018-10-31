@@ -17,6 +17,7 @@ defmodule PredictionAnalyzer.Application do
       worker(PredictionAnalyzer.Predictions.Download, [
         [name: PredictionAnalyzer.Predictions.Download]
       ]),
+      worker(PredictionAnalyzer.PredictionAccuracy.Aggregator, []),
       # Start the endpoint when the application starts
       supervisor(PredictionAnalyzerWeb.Endpoint, [])
       # Start your own worker by calling: PredictionAnalyzer.Worker.start_link(arg1, arg2, arg3)

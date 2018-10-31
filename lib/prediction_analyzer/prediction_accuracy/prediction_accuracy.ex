@@ -13,6 +13,21 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     field(:num_accurate_predictions, :integer)
   end
 
+  @doc """
+  Defines the bins we consider for aggregate accuracy. Each bin has the
+  window of predictions that it applies to (e.g. arriving within 3-6 minutes)
+  and the tolerance in seconds for which a prediction is considered accurate.
+  """
+  @spec bins() :: map()
+  def bins do
+    %{
+      "0-3 min" => {0, 180, -60, 60},
+      "3-6 min" => {180, 360, -90, 120},
+      "6-12 min" => {360, 720, -150, 210},
+      "12-30 min" => {720, 1800, -240, 360}
+    }
+  end
+
   def new_insert_changeset(params \\ %{}) do
     all_fields = [
       :service_date,
@@ -29,6 +44,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     |> cast(params, all_fields)
     |> validate_required(all_fields)
     |> validate_inclusion(:arrival_departure, ["arrival", "departure"])
-    |> validate_inclusion(:bin, ["0-3 min", "3-6 min", "6-12 min", "12-30 min"])
+    |> validate_inclusion(:bin, Map.keys(bins()))
   end
 end
