@@ -41,7 +41,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         bin_error_min,
         bin_error_max,
         min_unix,
-        max_unix
+        max_unix,
+        "prod"
       ]
     )
   end
@@ -55,6 +56,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
 
     "
       INSERT INTO prediction_accuracy (
+        environment,
         service_date,
         hour_of_day,
         route_id,
@@ -65,6 +67,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         num_accurate_predictions
       ) (
       SELECT
+        $11 AS environment,
         $1 AS service_date,
         $2 AS hour_of_day,
         p.route_id AS route_id,
@@ -84,6 +87,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       LEFT JOIN vehicle_events AS ve ON ve.id = p.vehicle_event_id
       WHERE p.file_timestamp > $9
         AND p.file_timestamp < $10
+        AND p.environment = $11
         AND p.#{arrival_or_departure_time_column} IS NOT NULL
         AND p.#{arrival_or_departure_time_column} > p.file_timestamp
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp >= $5
