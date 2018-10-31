@@ -10,7 +10,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
 
   def init(args) do
     schedule_prod_fetch(self(), 1_000)
-    schedule_dev_green_fetch(self(), 31_000)
+    schedule_dev_green_fetch(self(), 11_000)
     {:ok, args}
   end
 
