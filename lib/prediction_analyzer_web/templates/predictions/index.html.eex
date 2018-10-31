@@ -4,6 +4,7 @@
   </h1>
   <table>
     <tr>
+      <td>environment</td>
       <td>trip_id</td>
       <td>is_deleted</td>
       <td>delay</td>
@@ -21,6 +22,7 @@
 
     <%= for p <- @predictions do %>
     <tr>
+      <td><%= p.environment %></td>
       <td><%= p.trip_id %></td>
       <td><%= p.is_deleted %></td>
       <td><%= p.delay %></td>

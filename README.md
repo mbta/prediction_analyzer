@@ -15,7 +15,8 @@ An app for aggregating and analyzing the accuracy of gtfs predictions using Trip
 ## Running the app
 
 In order to run this app locally you will need to set several ENV variables.
-For downloading the trip updates and vehicle positions, you will need an `AWS_PREDICTIONS_URL` and `AWS_VEHICLE_POSITIONS_URL`.
+For downloading the prod trip updates and vehicle positions, you will need an `AWS_PREDICTIONS_URL` and `AWS_VEHICLE_POSITIONS_URL`.
+For downloading the dev-green trip updates, you will need an `DEV_GREEN_AWS_PREDICTIONS_URL`.
 
 In order to store them you will need a local postgres database, run the migrations, and set a `DATABASE_URL` in the form:
 `postgresql://<usernam>:<password>@<hostname>:<port>/<database_name>`

@@ -9,41 +9,65 @@ defmodule PredictionAnalyzer.Predictions.Download do
   end
 
   def init(args) do
-    schedule_fetch(self(), 1_000)
+    schedule_prod_fetch(self(), 1_000)
+    schedule_dev_green_fetch(self(), 11_000)
     {:ok, args}
   end
 
-  def get_predictions() do
-    {aws_predictions_url, http_fetcher} = get_vars()
+  def get_predictions(env) do
+    {aws_predictions_url, http_fetcher} = get_vars(env)
     Logger.info("Downloading predictions from #{aws_predictions_url}")
     %{body: body} = http_fetcher.get!(aws_predictions_url)
 
     body
     |> Jason.decode!()
-    |> store_predictions()
+    |> store_predictions(env)
   end
 
-  defp get_vars() do
-    aws_predictions_url = Application.get_env(:prediction_analyzer, :aws_predictions_url)
+  defp get_vars(:prod) do
+    prod_aws_predictions_url = Application.get_env(:prediction_analyzer, :aws_predictions_url)
     http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
-    {aws_predictions_url, http_fetcher}
+    {prod_aws_predictions_url, http_fetcher}
   end
 
-  defp schedule_fetch(pid, ms) do
-    Process.send_after(pid, :get_predictions, ms)
+  defp get_vars(:dev_green) do
+    dev_green_aws_predictions_url =
+      Application.get_env(:prediction_analyzer, :dev_green_aws_predictions_url)
+
+    http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
+    {dev_green_aws_predictions_url, http_fetcher}
   end
 
-  def handle_info(:get_predictions, _state) do
-    schedule_fetch(self(), 60_000)
-    predictions = get_predictions()
+  defp schedule_prod_fetch(pid, ms) do
+    Process.send_after(pid, :get_prod_predictions, ms)
+  end
+
+  defp schedule_dev_green_fetch(pid, ms) do
+    Process.send_after(pid, :get_dev_green_predictions, ms)
+  end
+
+  def handle_info(:get_prod_predictions, _state) do
+    schedule_prod_fetch(self(), 60_000)
+    predictions = get_predictions(:prod)
     {:noreply, predictions}
   end
 
-  defp store_predictions(%{"entity" => entities, "header" => %{"timestamp" => timestamp}}) do
+  def handle_info(:get_dev_green_predictions, _state) do
+    schedule_dev_green_fetch(self(), 60_000)
+    predictions = get_predictions(:dev_green)
+    {:noreply, predictions}
+  end
+
+  defp store_predictions(%{"entity" => entities, "header" => %{"timestamp" => timestamp}}, env) do
     predictions =
       Enum.flat_map(entities, fn prediction ->
         trip_prediction = %{
           file_timestamp: timestamp,
+          environment:
+            case env do
+              :prod -> "prod"
+              :dev_green -> "dev-green"
+            end,
           trip_id: prediction["trip_update"]["trip"]["trip_id"],
           route_id: prediction["trip_update"]["trip"]["route_id"],
           is_deleted: prediction["is_deleted"]
@@ -67,7 +91,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
   end
 
-  defp store_predictions(_) do
+  defp store_predictions(_, _) do
     nil
   end
 end

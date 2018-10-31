@@ -4,6 +4,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
 
   schema "predictions" do
     field(:file_timestamp, :integer)
+    field(:environment, :string)
     field(:trip_id, :string)
     field(:is_deleted, :boolean)
     field(:delay, :integer)
