@@ -79,7 +79,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
               AND ve.#{column_name} - p.#{column_name} < $8 THEN 1
             ELSE 0
           END
-      ) AS num_accurate_predictions
+        ) AS num_accurate_predictions
       FROM predictions AS p
       LEFT JOIN vehicle_events AS ve ON ve.id = p.vehicle_event_id
       WHERE p.file_timestamp > $9
