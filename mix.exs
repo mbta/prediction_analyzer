@@ -34,7 +34,6 @@ defmodule PredictionAnalyzer.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:cowboy, "~> 1.0"},
       {:distillery, "~> 2.0", runtime: false},
       {:ecto, "~> 2.0"},
       {:excoveralls, "~> 0.5", only: :test},
@@ -48,6 +47,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:phoenix_pubsub, "~> 1.0"},
+      {:plug_cowboy, "~> 1.0"},
       {:postgrex, ">= 0.0.0"},
       {:timex, "~> 3.1"}
     ]
