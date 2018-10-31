@@ -47,7 +47,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       bin_error_min = -30
       bin_error_max = 60
 
-      file_time = :os.system_time(:second) - 60 * 90
+      file_time = :os.system_time(:second) - 60 * 120
       arrival_time = file_time + 60 * 7
 
       %{id: ve_id} = Repo.insert!(%{@vehicle_event | arrival_time: arrival_time})
@@ -132,7 +132,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       bin_error_min = -30
       bin_error_max = 60
 
-      file_time = :os.system_time(:second) - 60 * 90
+      file_time = :os.system_time(:second) - 60 * 120
       departure_time = file_time + 60 * 7
 
       %{id: ve_id} = Repo.insert!(%{@vehicle_event | departure_time: departure_time})

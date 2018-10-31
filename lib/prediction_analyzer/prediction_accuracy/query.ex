@@ -47,7 +47,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
   end
 
   defp query_template(arrival_departure) do
-    column_name =
+    arrival_or_departure_time_column =
       case arrival_departure do
         "arrival" -> "arrival_time"
         "departure" -> "departure_time"
@@ -75,8 +75,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         SUM(
           CASE
             WHEN
-              ve.#{column_name} - p.#{column_name} > $7
-              AND ve.#{column_name} - p.#{column_name} < $8 THEN 1
+              ve.#{arrival_or_departure_time_column} - p.#{arrival_or_departure_time_column} > $7
+              AND ve.#{arrival_or_departure_time_column} - p.#{arrival_or_departure_time_column} < $8 THEN 1
             ELSE 0
           END
         ) AS num_accurate_predictions
@@ -84,10 +84,10 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       LEFT JOIN vehicle_events AS ve ON ve.id = p.vehicle_event_id
       WHERE p.file_timestamp > $9
         AND p.file_timestamp < $10
-        AND p.#{column_name} IS NOT NULL
-        AND p.#{column_name} > p.file_timestamp
-        AND p.#{column_name} - p.file_timestamp >= $5
-        AND p.#{column_name} - p.file_timestamp < $6
+        AND p.#{arrival_or_departure_time_column} IS NOT NULL
+        AND p.#{arrival_or_departure_time_column} > p.file_timestamp
+        AND p.#{arrival_or_departure_time_column} - p.file_timestamp >= $5
+        AND p.#{arrival_or_departure_time_column} - p.file_timestamp < $6
       GROUP BY p.route_id, p.stop_id
       )
     "
