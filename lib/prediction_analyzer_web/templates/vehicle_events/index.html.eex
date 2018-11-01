@@ -1,6 +1,6 @@
 <h1>Vehicle Events</h1>
 
-<table>
+<table class="table">
   <tr>
       <th>vehicle_id</th>
       <th>vehicle_label</th>

@@ -3,6 +3,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   import Ecto.Changeset
 
   schema "prediction_accuracy" do
+    field(:environment, :string)
     field(:service_date, :date)
     field(:hour_of_day, :integer)
     field(:stop_id, :string)

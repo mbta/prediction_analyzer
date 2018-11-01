@@ -2,6 +2,6 @@ defmodule PredictionAnalyzerWeb.PageController do
   use PredictionAnalyzerWeb, :controller
 
   def index(conn, _params) do
-    render(conn, "index.html")
+    redirect(conn, to: "/accuracy")
   end
 end

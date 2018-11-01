@@ -1,1 +1,10 @@
 /* This file is for your main application css. */
+
+.accuracy-summary-percentage {
+  font-size: 64px;
+  font-weight: bold;
+}
+.accuracy-summary-percent-sign {
+  font-size: 46px;
+  font-weight: bold;
+}

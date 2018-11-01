@@ -2,22 +2,22 @@
   <h1>
     Recent Predictions
   </h1>
-  <table>
+  <table class="table">
     <tr>
-      <td>environment</td>
-      <td>trip_id</td>
-      <td>is_deleted</td>
-      <td>delay</td>
-      <td>arrival_time</td>
-      <td>boarding_status</td>
-      <td>departure_time</td>
-      <td>schedule_relationship</td>
-      <td>route_id</td>
-      <td>stop_id</td>
-      <td>stop_sequence</td>
-      <td>stops_away</td>
-      <td>actual arrival time</td>
-      <td>actual departure time</td>
+      <th>environment</th>
+      <th>trip_id</th>
+      <th>is_deleted</th>
+      <th>delay</th>
+      <th>arrival_time</th>
+      <th>boarding_status</th>
+      <th>departure_time</th>
+      <th>schedule_relationship</th>
+      <th>route_id</th>
+      <th>stop_id</th>
+      <th>stop_sequence</th>
+      <th>stops_away</th>
+      <th>actual arrival time</th>
+      <th>actual departure time</th>
     </tr>
 
     <%= for p <- @predictions do %>
