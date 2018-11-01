@@ -43,4 +43,24 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert response =~ "From 150 accurate out of 200 total predictions"
     assert response =~ "75.0"
   end
+
+  test "GET /accuracy with query params filter prediction accuracy statistics", %{conn: conn} do
+    a1 = %{@prediction_accuracy | num_accurate_predictions: 10, num_predictions: 20}
+
+    a2 = %{
+      @prediction_accuracy
+      | num_accurate_predictions: 20,
+        num_predictions: 20,
+        stop_id: "70121"
+    }
+
+    PredictionAnalyzer.Repo.insert!(a1)
+    PredictionAnalyzer.Repo.insert!(a2)
+
+    conn = get(conn, "/accuracy")
+    assert html_response(conn, 200) =~ "From 30 accurate out of 40 total predictions"
+
+    conn = get(conn, "/accuracy", %{"filters" => %{"stop_id" => "70120"}})
+    assert html_response(conn, 200) =~ "From 10 accurate out of 20 total predictions"
+  end
 end

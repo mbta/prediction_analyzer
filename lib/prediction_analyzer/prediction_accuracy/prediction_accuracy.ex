@@ -2,6 +2,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   use Ecto.Schema
   import Ecto.Changeset
 
+  import Ecto.Query, only: [from: 2]
+
   schema "prediction_accuracy" do
     field(:environment, :string)
     field(:service_date, :date)
@@ -46,5 +48,50 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     |> validate_required(all_fields)
     |> validate_inclusion(:arrival_departure, ["arrival", "departure"])
     |> validate_inclusion(:bin, Map.keys(bins()))
+  end
+
+  def filter(params) do
+    from(acc in __MODULE__, [])
+    |> filter_by_route(params["route_id"])
+    |> filter_by_stop(params["stop_id"])
+    |> filter_by_arrival_departure(params["arrival_departure"])
+    |> filter_by_bin(params["bin"])
+    |> filter_by_service_date(params["service_date"])
+  end
+
+  defp filter_by_route(q, route_id) when is_binary(route_id) and route_id != "" do
+    from(acc in q, where: acc.route_id == ^route_id)
+  end
+
+  defp filter_by_route(q, _), do: q
+
+  defp filter_by_stop(q, stop_id) when is_binary(stop_id) and stop_id != "" do
+    from(acc in q, where: acc.stop_id == ^stop_id)
+  end
+
+  defp filter_by_stop(q, _), do: q
+
+  defp filter_by_arrival_departure(q, arr_dep) when arr_dep in ["arrival", "departure"] do
+    from(acc in q, where: acc.arrival_departure == ^arr_dep)
+  end
+
+  defp filter_by_arrival_departure(q, _), do: q
+
+  defp filter_by_bin(q, bin) do
+    if Map.has_key?(bins(), bin) do
+      from(acc in q, where: acc.bin == ^bin)
+    else
+      q
+    end
+  end
+
+  defp filter_by_service_date(q, date) do
+    case Date.from_iso8601(date || "") do
+      {:ok, d} ->
+        from(acc in q, where: acc.service_date == ^d)
+
+      _ ->
+        from(acc in q, where: acc.service_date == ^(Timex.local() |> DateTime.to_date()))
+    end
   end
 end
