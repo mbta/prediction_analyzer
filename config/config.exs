@@ -8,7 +8,7 @@ use Mix.Config
 # Configures the endpoint
 config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "local_secret_key_base",
+  secret_key_base: "local_secret_key_base_at_least_64_bytes_________________________________",
   render_errors: [view: PredictionAnalyzerWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: PredictionAnalyzer.PubSub, adapter: Phoenix.PubSub.PG2]
 
