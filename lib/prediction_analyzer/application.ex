@@ -60,6 +60,11 @@ defmodule PredictionAnalyzer.Application do
     Config.update_env(:aws_vehicle_positions_url, System.get_env("AWS_VEHICLE_POSITIONS_URL"))
 
     Config.update_env(
+      :dev_green_aws_predictions_url,
+      System.get_env("DEV_GREEN_AWS_PREDICTIONS_URL")
+    )
+
+    Config.update_env(
       :dev_green_aws_vehicle_positions_url,
       System.get_env("DEV_GREEN_AWS_VEHICLE_POSITIONS_URL")
     )
