@@ -15,18 +15,14 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
         }
 
   def start_link(opts \\ [], args) do
-    aws_vehicle_positions_url =
-      Keyword.get(
-        args,
-        :aws_vehicle_positions_url,
-        Application.get_env(:prediction_analyzer, :aws_vehicle_positions_url)
-      )
-
     environment =
       Keyword.get(
-        opts,
+        args,
         :environment
       )
+
+    aws_vehicle_positions_url =
+      get_env_vehicle_positions_url(environment) || args[:aws_vehicle_positions_url]
 
     http_fetcher =
       Keyword.get(args, :http_fetcher, Application.get_env(:prediction_analyzer, :http_fetcher))
@@ -82,6 +78,14 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
   defp parse_vehicles(_, _) do
     []
+  end
+
+  def get_env_vehicle_positions_url("dev-green") do
+    Application.get_env(:prediction_analyzer, :dev_green_aws_vehicle_positions_url)
+  end
+
+  def get_env_vehicle_positions_url("prod") do
+    Application.get_env(:prediction_analyzer, :aws_vehicle_positions_url)
   end
 
   defp schedule_fetch(pid) do
