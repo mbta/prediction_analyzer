@@ -13,6 +13,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
   @vehicle %Vehicle{
     id: "1",
+    environment: "dev-green",
     label: "1000",
     is_deleted: false,
     trip_id: "trip1",

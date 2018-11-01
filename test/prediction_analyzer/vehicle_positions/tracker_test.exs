@@ -13,7 +13,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
 
   test "Loops every second and downloads the vehicles" do
     Process.register(self(), :tracker_test_listener)
-    opts = [http_fetcher: NotifyGet, aws_vehicle_positions_url: "foo"]
+    opts = [environment: "dev-green", http_fetcher: NotifyGet, aws_vehicle_positions_url: "foo"]
 
     {:ok, _pid} = Tracker.start_link(opts)
     refute_received({:get, "foo"})
@@ -33,6 +33,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       state = %{
         http_fetcher: OneVehicle,
         aws_vehicle_positions_url: "vehiclepositions",
+        environment: "dev-green",
         vehicles: %{}
       }
 

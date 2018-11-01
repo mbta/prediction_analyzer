@@ -17,7 +17,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   def start_link(opts \\ [], args) do
     aws_vehicle_positions_url =
       Keyword.get(
-        opts,
+        args,
         :aws_vehicle_positions_url,
         Application.get_env(:prediction_analyzer, :aws_vehicle_positions_url)
       )
@@ -29,7 +29,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
       )
 
     http_fetcher =
-      Keyword.get(opts, :http_fetcher, Application.get_env(:prediction_analyzer, :http_fetcher))
+      Keyword.get(args, :http_fetcher, Application.get_env(:prediction_analyzer, :http_fetcher))
 
     initial_state = %{
       aws_vehicle_positions_url: aws_vehicle_positions_url,
