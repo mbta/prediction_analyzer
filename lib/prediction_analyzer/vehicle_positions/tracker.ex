@@ -9,23 +9,27 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
   @type t :: %{
           http_fetcher: module(),
+          environment: String.t(),
           aws_vehicle_positions_url: String.t(),
           vehicles: vehicle_map()
         }
 
-  def start_link(opts \\ []) do
-    aws_vehicle_positions_url =
+  def start_link(opts \\ [], args) do
+    environment =
       Keyword.get(
-        opts,
-        :aws_vehicle_positions_url,
-        Application.get_env(:prediction_analyzer, :aws_vehicle_positions_url)
+        args,
+        :environment
       )
 
+    aws_vehicle_positions_url =
+      get_env_vehicle_positions_url(environment) || args[:aws_vehicle_positions_url]
+
     http_fetcher =
-      Keyword.get(opts, :http_fetcher, Application.get_env(:prediction_analyzer, :http_fetcher))
+      Keyword.get(args, :http_fetcher, Application.get_env(:prediction_analyzer, :http_fetcher))
 
     initial_state = %{
       aws_vehicle_positions_url: aws_vehicle_positions_url,
+      environment: environment,
       http_fetcher: http_fetcher
     }
 
@@ -34,6 +38,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
   def init(args) do
     state = Map.put(args, :vehicles, %{})
+
     schedule_fetch(self())
     {:ok, state}
   end
@@ -47,7 +52,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
       :timer.tc(fn ->
         body
         |> Jason.decode!()
-        |> parse_vehicles
+        |> parse_vehicles(state.environment)
         |> Enum.into(%{}, fn v -> {v.id, v} end)
         |> Comparator.compare(state.vehicles)
       end)
@@ -62,17 +67,25 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     {:noreply, state}
   end
 
-  defp parse_vehicles(%{"entity" => entities}) do
+  defp parse_vehicles(%{"entity" => entities}, environment) do
     Enum.flat_map(entities, fn e ->
-      case Vehicle.from_json(e) do
+      case Vehicle.from_json(e, environment) do
         {:ok, vehicle} -> [vehicle]
         _ -> []
       end
     end)
   end
 
-  defp parse_vehicles(_) do
+  defp parse_vehicles(_, _) do
     []
+  end
+
+  def get_env_vehicle_positions_url("dev-green") do
+    Application.get_env(:prediction_analyzer, :dev_green_aws_vehicle_positions_url)
+  end
+
+  def get_env_vehicle_positions_url("prod") do
+    Application.get_env(:prediction_analyzer, :aws_vehicle_positions_url)
   end
 
   defp schedule_fetch(pid) do

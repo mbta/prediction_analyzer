@@ -3,6 +3,7 @@
 <table class="table">
   <tr>
       <th>vehicle_id</th>
+      <th>environment</th>
       <th>vehicle_label</th>
       <th>is_deleted</th>
       <th>route_id</th>
@@ -16,6 +17,7 @@
   <%= for vp <- @vehicle_events do %>
     <tr>
       <td><%= vp.vehicle_id %></td>
+      <td><%= vp.environment %></td>
       <td><%= vp.vehicle_label  %></td>
       <td><%= vp.is_deleted %></td>
       <td><%= vp.route_id %></td>

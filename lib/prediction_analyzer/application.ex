@@ -13,7 +13,16 @@ defmodule PredictionAnalyzer.Application do
     children = [
       # Start the Ecto repository
       supervisor(PredictionAnalyzer.Repo, []),
-      worker(PredictionAnalyzer.VehiclePositions.Tracker, []),
+      worker(
+        PredictionAnalyzer.VehiclePositions.Tracker,
+        [[environment: "dev-green"]],
+        id: DevGreenVehiclePositionsTracker
+      ),
+      worker(
+        PredictionAnalyzer.VehiclePositions.Tracker,
+        [[environment: "prod"]],
+        id: ProdVehiclePositionsTracker
+      ),
       worker(PredictionAnalyzer.Predictions.Download, [
         [name: PredictionAnalyzer.Predictions.Download]
       ]),
@@ -48,12 +57,16 @@ defmodule PredictionAnalyzer.Application do
 
   defp set_runtime_config do
     Config.update_env(:aws_predictions_url, System.get_env("AWS_PREDICTIONS_URL"))
+    Config.update_env(:aws_vehicle_positions_url, System.get_env("AWS_VEHICLE_POSITIONS_URL"))
 
     Config.update_env(
       :dev_green_aws_predictions_url,
       System.get_env("DEV_GREEN_AWS_PREDICTIONS_URL")
     )
 
-    Config.update_env(:aws_vehicle_positions_url, System.get_env("AWS_VEHICLE_POSITIONS_URL"))
+    Config.update_env(
+      :dev_green_aws_vehicle_positions_url,
+      System.get_env("DEV_GREEN_AWS_VEHICLE_POSITIONS_URL")
+    )
   end
 end

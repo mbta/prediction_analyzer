@@ -13,6 +13,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
   @vehicle %Vehicle{
     id: "1",
+    environment: "dev-green",
     label: "1000",
     is_deleted: false,
     trip_id: "trip1",
@@ -25,6 +26,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
   @prediction %Prediction{
     file_timestamp: :os.system_time(:second),
+    environment: "dev-green",
     trip_id: "trip",
     is_deleted: false,
     delay: 0,

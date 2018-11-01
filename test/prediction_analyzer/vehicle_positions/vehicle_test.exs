@@ -44,6 +44,7 @@ defmodule PredictionAnalyzer.VehiclePositions.VehicleTest do
                :ok,
                %Vehicle{
                  id: "B-5458FB84",
+                 environment: "dev-green",
                  label: "0758",
                  is_deleted: false,
                  trip_id: "38078941",
@@ -52,12 +53,12 @@ defmodule PredictionAnalyzer.VehiclePositions.VehicleTest do
                  current_status: :INCOMING_AT,
                  stop_id: "70049"
                }
-             } = Vehicle.from_json(@data)
+             } = Vehicle.from_json(@data, "dev-green")
     end
 
     test "returns :error if JSON can't be made into vehicle" do
       bad_data = Map.put(@data, "vehicle", nil)
-      assert :error = Vehicle.from_json(bad_data)
+      assert :error = Vehicle.from_json(bad_data, "dev-green")
     end
   end
 end
