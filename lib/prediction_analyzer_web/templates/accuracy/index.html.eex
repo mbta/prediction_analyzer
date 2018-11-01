@@ -1,15 +1,36 @@
+<h1> Prediction Accuracy</h1>
+
+<div class="top-line-summary">
+  <div>
+    <span class="accuracy-summary-percentage">
+      <%= accuracy_percentage(@num_accurate, @num_predictions) %>
+    </span>
+    <span class="accuracy-summary-percent-sign">
+      %
+    </span>
+  </div>
+  <div>
+    From <%= @num_accurate %> accurate out of <%= @num_predictions %> total predictions
+  </div>
+</div>
+
 <div>
-  <table>
-    <th>Service Date</th>
-    <th>Hour of Day</th>
-    <th>Stop id</th>
-    <th>Route id</th>
-    <th>Arrival/Departure</th>
-    <th>Bin</th>
-    <th>Number of predictions</th>
-    <th>Number of accurate predictions</th>
+  <table class="table">
     <tr>
-      <%= for accuracy <- @accuracies do %>
+      <th>Env</th>
+      <th>Service Date</th>
+      <th>Hour of Day</th>
+      <th>Stop id</th>
+      <th>Route id</th>
+      <th>Arrival/Departure</th>
+      <th>Bin</th>
+      <th>Number of predictions</th>
+      <th>Number of accurate predictions</th>
+    </tr>
+
+    <%= for accuracy <- @accuracies do %>
+      <tr>
+        <td><%= accuracy.environment %>
         <td><%= accuracy.service_date %></td>
         <td><%= accuracy.hour_of_day %></td>
         <td><%= accuracy.stop_id %></td>
@@ -18,7 +39,7 @@
         <td><%= accuracy.bin %></td>
         <td><%= accuracy.num_predictions %></td>
         <td><%= accuracy.num_accurate_predictions %></td>
-      <% end %>
-    </tr>
+      </tr>
+    <% end %>
   </table>
 </div>
