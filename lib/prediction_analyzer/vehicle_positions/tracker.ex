@@ -29,7 +29,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
     initial_state = %{
       aws_vehicle_positions_url: aws_vehicle_positions_url,
-      environment: args[:environment],
+      environment: environment,
       http_fetcher: http_fetcher
     }
 
