@@ -78,6 +78,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
   end
 
   defp schedule_next_run(pid) do
-    Process.send_after(pid, :aggregate, 10_000)
+    Process.send_after(pid, :aggregate, PredictionAnalyzer.Utilities.ms_to_next_hour())
   end
 end
