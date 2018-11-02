@@ -94,4 +94,25 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
         from(acc in q, where: acc.service_date == ^(Timex.local() |> DateTime.to_date()))
     end
   end
+
+  @doc """
+  Takes a Queryable and groups and sums the results into
+  a table like:
+
+  hour | prod total | prod accurate | dev-green total | dev-green accurate
+  """
+  def stats_by_environment_and_hour(q) do
+    from(
+      acc in q,
+      group_by: :hour_of_day,
+      order_by: :hour_of_day,
+      select: [
+        acc.hour_of_day,
+        sum(fragment("case when ? = ? then ? else 0 end", acc.environment, "prod", acc.num_predictions)),
+        sum(fragment("case when ? = ? then ? else 0 end", acc.environment, "prod", acc.num_accurate_predictions)),
+        sum(fragment("case when ? = ? then ? else 0 end", acc.environment, "dev-green", acc.num_predictions)),
+        sum(fragment("case when ? = ? then ? else 0 end", acc.environment, "dev-green", acc.num_accurate_predictions))
+      ]
+    )
+  end
 end
