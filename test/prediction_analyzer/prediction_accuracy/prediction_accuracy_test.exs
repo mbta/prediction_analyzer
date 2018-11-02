@@ -96,20 +96,19 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
         |> Repo.all()
 
       assert stats == [
-        [10, 209, 201, 809, 701],
-        [11, 495, 472, 1095, 872]
-      ]
+               [10, 209, 201, 809, 701],
+               [11, 495, 472, 1095, 872]
+             ]
     end
 
     defp insert_accuracy(env, hour, total, accurate) do
-      PredictionAnalyzer.Repo.insert!(
-        %{@prediction_accuracy |
-          environment: env,
+      PredictionAnalyzer.Repo.insert!(%{
+        @prediction_accuracy
+        | environment: env,
           hour_of_day: hour,
           num_predictions: total,
-          num_accurate_predictions: accurate,
-        }
-      )
+          num_accurate_predictions: accurate
+      })
     end
   end
 

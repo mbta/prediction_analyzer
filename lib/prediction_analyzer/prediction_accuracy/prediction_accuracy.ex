@@ -108,10 +108,38 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
       order_by: :hour_of_day,
       select: [
         acc.hour_of_day,
-        sum(fragment("case when ? = ? then ? else 0 end", acc.environment, "prod", acc.num_predictions)),
-        sum(fragment("case when ? = ? then ? else 0 end", acc.environment, "prod", acc.num_accurate_predictions)),
-        sum(fragment("case when ? = ? then ? else 0 end", acc.environment, "dev-green", acc.num_predictions)),
-        sum(fragment("case when ? = ? then ? else 0 end", acc.environment, "dev-green", acc.num_accurate_predictions))
+        sum(
+          fragment(
+            "case when ? = ? then ? else 0 end",
+            acc.environment,
+            "prod",
+            acc.num_predictions
+          )
+        ),
+        sum(
+          fragment(
+            "case when ? = ? then ? else 0 end",
+            acc.environment,
+            "prod",
+            acc.num_accurate_predictions
+          )
+        ),
+        sum(
+          fragment(
+            "case when ? = ? then ? else 0 end",
+            acc.environment,
+            "dev-green",
+            acc.num_predictions
+          )
+        ),
+        sum(
+          fragment(
+            "case when ? = ? then ? else 0 end",
+            acc.environment,
+            "dev-green",
+            acc.num_accurate_predictions
+          )
+        )
       ]
     )
   end

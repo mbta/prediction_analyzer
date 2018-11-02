@@ -44,21 +44,24 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     conn = get(conn, "/accuracy")
     response = html_response(conn, 200)
 
-    assert response =~ "209" # 101 + 108
-    assert response =~ "96.17%" # (99 + 102) / (101 + 108)
+    # 101 + 108
+    assert response =~ "209"
+    # (99 + 102) / (101 + 108)
+    assert response =~ "96.17%"
 
-    assert response =~ "1095" # 525 + 570
-    assert response =~ "79.63%" # (411 + 461) / (525 + 570)
+    # 525 + 570
+    assert response =~ "1095"
+    # (411 + 461) / (525 + 570)
+    assert response =~ "79.63%"
   end
 
   def insert_accuracy(env, hour, total, accurate) do
-    PredictionAnalyzer.Repo.insert!(
-      %{@prediction_accuracy |
-        environment: env,
+    PredictionAnalyzer.Repo.insert!(%{
+      @prediction_accuracy
+      | environment: env,
         hour_of_day: hour,
         num_predictions: total,
-        num_accurate_predictions: accurate,
-      }
-    )
+        num_accurate_predictions: accurate
+    })
   end
 end

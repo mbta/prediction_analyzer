@@ -19,26 +19,27 @@ defmodule PredictionAnalyzer.Application do
       # worker(PredictionAnalyzer.Worker, [arg1, arg2, arg3]),
     ]
 
-    workers = if Application.get_env(:prediction_analyzer, :start_workers) do
-      [
-        worker(
-          PredictionAnalyzer.VehiclePositions.Tracker,
-          [[environment: "dev-green"]],
-          id: DevGreenVehiclePositionsTracker
-        ),
-        worker(
-          PredictionAnalyzer.VehiclePositions.Tracker,
-          [[environment: "prod"]],
-          id: ProdVehiclePositionsTracker
-        ),
-        worker(PredictionAnalyzer.Predictions.Download, [
-          [name: PredictionAnalyzer.Predictions.Download]
-        ]),
-        worker(PredictionAnalyzer.PredictionAccuracy.Aggregator, []),
-      ]
-    else
-      []
-    end
+    workers =
+      if Application.get_env(:prediction_analyzer, :start_workers) do
+        [
+          worker(
+            PredictionAnalyzer.VehiclePositions.Tracker,
+            [[environment: "dev-green"]],
+            id: DevGreenVehiclePositionsTracker
+          ),
+          worker(
+            PredictionAnalyzer.VehiclePositions.Tracker,
+            [[environment: "prod"]],
+            id: ProdVehiclePositionsTracker
+          ),
+          worker(PredictionAnalyzer.Predictions.Download, [
+            [name: PredictionAnalyzer.Predictions.Download]
+          ]),
+          worker(PredictionAnalyzer.PredictionAccuracy.Aggregator, [])
+        ]
+      else
+        []
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
