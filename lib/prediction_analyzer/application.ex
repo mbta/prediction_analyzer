@@ -35,7 +35,8 @@ defmodule PredictionAnalyzer.Application do
           worker(PredictionAnalyzer.Predictions.Download, [
             [name: PredictionAnalyzer.Predictions.Download]
           ]),
-          worker(PredictionAnalyzer.PredictionAccuracy.Aggregator, [])
+          worker(PredictionAnalyzer.PredictionAccuracy.Aggregator, []),
+          worker(PredictionAnalyzer.Pruner, [])
         ]
       else
         []

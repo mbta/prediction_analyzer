@@ -35,4 +35,20 @@ defmodule PredictionAnalyzer.Utilities do
     |> Timex.set(minute: 0, second: 30)
     |> Timex.diff(local_now, :milliseconds)
   end
+
+  @doc """
+  Returns the number of ms to the next 3am local time.
+  """
+  def ms_to_3am(local_now) do
+    run_day =
+      if local_now.hour < 3 do
+        local_now
+      else
+        Timex.shift(local_now, days: 1)
+      end
+
+    run_day
+    |> Timex.set(hour: 3, minute: 0, second: 0, microsecond: {0, 6})
+    |> Timex.diff(local_now, :milliseconds)
+  end
 end

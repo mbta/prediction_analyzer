@@ -35,4 +35,24 @@ defmodule PredictionAnalyzer.UtilitiesTest do
       assert Utilities.ms_to_next_hour(late) == 3_510_000
     end
   end
+
+  describe "ms_to_3am" do
+    test "returns the milliseconds to 3am when 3am is tomorrow" do
+      time =
+        "America/New_York"
+        |> Timex.now()
+        |> Timex.set(hour: 23, minute: 59, second: 0, microsecond: {0, 6})
+
+      assert Utilities.ms_to_3am(time) == 10_860_000
+    end
+
+    test "returns the milliseconds to 3am when 3am is later today" do
+      time =
+        "America/New_York"
+        |> Timex.now()
+        |> Timex.set(hour: 2, minute: 59, second: 0, microsecond: {0, 6})
+
+      assert Utilities.ms_to_3am(time) == 60_000
+    end
+  end
 end
