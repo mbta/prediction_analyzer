@@ -20,32 +20,56 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
       :timer.tc(fn ->
         current_time = Timex.local()
 
-        Enum.each(
-          PredictionAccuracy.bins(),
-          fn {bin_name, {bin_min, bin_max, bin_error_min, bin_error_max}} ->
-            {:ok, _} =
-              Query.calculate_aggregate_accuracy(
-                current_time,
-                "arrival",
-                bin_name,
-                bin_min,
-                bin_max,
-                bin_error_min,
-                bin_error_max
-              )
+        Enum.each(PredictionAccuracy.bins(), fn {bin_name,
+                                                 {bin_min, bin_max, bin_error_min, bin_error_max}} ->
+          {:ok, _} =
+            Query.calculate_aggregate_accuracy(
+              current_time,
+              "arrival",
+              bin_name,
+              bin_min,
+              bin_max,
+              bin_error_min,
+              bin_error_max,
+              "prod"
+            )
 
-            {:ok, _} =
-              Query.calculate_aggregate_accuracy(
-                current_time,
-                "departure",
-                bin_name,
-                bin_min,
-                bin_max,
-                bin_error_min,
-                bin_error_max
-              )
-          end
-        )
+          {:ok, _} =
+            Query.calculate_aggregate_accuracy(
+              current_time,
+              "departure",
+              bin_name,
+              bin_min,
+              bin_max,
+              bin_error_min,
+              bin_error_max,
+              "prod"
+            )
+
+          {:ok, _} =
+            Query.calculate_aggregate_accuracy(
+              current_time,
+              "arrival",
+              bin_name,
+              bin_min,
+              bin_max,
+              bin_error_min,
+              bin_error_max,
+              "dev-green"
+            )
+
+          {:ok, _} =
+            Query.calculate_aggregate_accuracy(
+              current_time,
+              "departure",
+              bin_name,
+              bin_min,
+              bin_max,
+              bin_error_min,
+              bin_error_max,
+              "dev-green"
+            )
+        end)
       end)
 
     Logger.info("Finished prediction aggregations in #{time / 1000} ms")
@@ -54,6 +78,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
   end
 
   defp schedule_next_run(pid) do
-    Process.send_after(pid, :aggregate, PredictionAnalyzer.Utilities.ms_to_next_hour())
+    Process.send_after(pid, :aggregate, 10_000)
   end
 end

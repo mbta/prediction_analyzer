@@ -13,6 +13,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
 
   @prediction %Prediction{
     file_timestamp: :os.system_time(:second),
+    environment: "dev-green",
     trip_id: "trip",
     is_deleted: false,
     delay: 0,
@@ -29,6 +30,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
 
   @vehicle_event %VehicleEvent{
     vehicle_id: "vehicle",
+    environment: "dev-green",
     vehicle_label: "label",
     is_deleted: false,
     route_id: "route",
@@ -112,7 +114,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           bin_min,
           bin_max,
           bin_error_min,
-          bin_error_max
+          bin_error_max,
+          "dev-green"
         )
 
       [pa] = Repo.all(from(pa in PredictionAccuracy, select: pa))
@@ -197,7 +200,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           bin_min,
           bin_max,
           bin_error_min,
-          bin_error_max
+          bin_error_max,
+          "dev-green"
         )
 
       [pa] = Repo.all(from(pa in PredictionAccuracy, select: pa))
