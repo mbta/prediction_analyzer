@@ -44,6 +44,40 @@
     <% end %>
   </div>
 
+  <div class="row">
+
+    <div class="col-xs-2">
+      Prod:
+      <div>
+        <span class="accuracy-summary-percentage">
+          <%= accuracy_percentage(@prod_num_accurate, @prod_num_predictions) %>
+        </span>
+        <span class="accuracy-summary-percent-sign">
+          %
+        </span>
+      </div>
+      <div>
+        From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
+      </div>
+    </div>
+
+    <div class="col-xs-6">
+      Dev-Green:
+      <div>
+        <span class="accuracy-summary-percentage">
+          <%= accuracy_percentage(@dev_green_num_accurate, @dev_green_num_predictions) %>
+        </span>
+        <span class="accuracy-summary-percent-sign">
+          %
+        </span>
+      </div>
+      <div>
+        From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
+      </div>
+    </div>
+  </div>
+
+
   <div class="col-xs-9">
     <h1> Prediction Accuracy</h1>
     <table class="table">
