@@ -32,6 +32,8 @@ config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: "prediction_analyzer_repo"
 
+config :prediction_analyzer, start_workers: true
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

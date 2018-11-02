@@ -10,34 +10,41 @@ defmodule PredictionAnalyzer.Application do
 
     set_runtime_config()
     # Define workers and child supervisors to be supervised
-    children = [
+    supervisors = [
       # Start the Ecto repository
       supervisor(PredictionAnalyzer.Repo, []),
-      worker(
-        PredictionAnalyzer.VehiclePositions.Tracker,
-        [[environment: "dev-green"]],
-        id: DevGreenVehiclePositionsTracker
-      ),
-      worker(
-        PredictionAnalyzer.VehiclePositions.Tracker,
-        [[environment: "prod"]],
-        id: ProdVehiclePositionsTracker
-      ),
-      worker(PredictionAnalyzer.Predictions.Download, [
-        [name: PredictionAnalyzer.Predictions.Download]
-      ]),
-      worker(PredictionAnalyzer.PredictionAccuracy.Aggregator, []),
       # Start the endpoint when the application starts
       supervisor(PredictionAnalyzerWeb.Endpoint, [])
       # Start your own worker by calling: PredictionAnalyzer.Worker.start_link(arg1, arg2, arg3)
       # worker(PredictionAnalyzer.Worker, [arg1, arg2, arg3]),
     ]
 
+    workers = if Application.get_env(:prediction_analyzer, :start_workers) do
+      [
+        worker(
+          PredictionAnalyzer.VehiclePositions.Tracker,
+          [[environment: "dev-green"]],
+          id: DevGreenVehiclePositionsTracker
+        ),
+        worker(
+          PredictionAnalyzer.VehiclePositions.Tracker,
+          [[environment: "prod"]],
+          id: ProdVehiclePositionsTracker
+        ),
+        worker(PredictionAnalyzer.Predictions.Download, [
+          [name: PredictionAnalyzer.Predictions.Download]
+        ]),
+        worker(PredictionAnalyzer.PredictionAccuracy.Aggregator, []),
+      ]
+    else
+      []
+    end
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: PredictionAnalyzer.Supervisor]
 
-    case Supervisor.start_link(children, opts) do
+    case Supervisor.start_link(supervisors ++ workers, opts) do
       {:ok, _} = success ->
         Logger.info("Started application, running migrations")
         Application.get_env(:prediction_analyzer, :migration_task).migrate()
