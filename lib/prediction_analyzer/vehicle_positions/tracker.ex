@@ -14,7 +14,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
           vehicles: vehicle_map()
         }
 
-  def start_link(opts \\ [], args) do
+  def start_link(_opts \\ [], args) do
     environment =
       Keyword.get(
         args,
