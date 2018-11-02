@@ -14,14 +14,10 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       )
       |> PredictionAnalyzer.Repo.one!()
 
-    query =
-      from(
-        acc in relevant_accuracies,
-        order_by: [desc: :service_date, desc: :hour_of_day],
-        limit: 100
-      )
-
-    accuracies = PredictionAnalyzer.Repo.all(query)
+    accuracies =
+      relevant_accuracies
+      |> PredictionAccuracy.stats_by_environment_and_hour()
+      |> PredictionAnalyzer.Repo.all()
 
     render(
       conn,

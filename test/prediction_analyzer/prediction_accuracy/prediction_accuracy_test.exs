@@ -1,5 +1,5 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   alias PredictionAnalyzer.Repo
 
@@ -79,7 +79,40 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     end
   end
 
+  describe "stats_by_environment_and_hour/1" do
+    test "groups by environment and hour and sums" do
+      insert_accuracy("prod", 10, 101, 99)
+      insert_accuracy("prod", 10, 108, 102)
+      insert_accuracy("prod", 11, 225, 211)
+      insert_accuracy("prod", 11, 270, 261)
+      insert_accuracy("dev-green", 10, 401, 399)
+      insert_accuracy("dev-green", 10, 408, 302)
+      insert_accuracy("dev-green", 11, 525, 411)
+      insert_accuracy("dev-green", 11, 570, 461)
+
+      stats =
+        from(acc in PredictionAccuracy, [])
+        |> PredictionAccuracy.stats_by_environment_and_hour()
+        |> Repo.all()
+
+      assert stats == [
+               [10, 209, 201, 809, 701],
+               [11, 495, 472, 1095, 872]
+             ]
+    end
+  end
+
   defp execute_query(q) do
     Repo.all(from(acc in q, order_by: :id))
+  end
+
+  defp insert_accuracy(env, hour, total, accurate) do
+    PredictionAnalyzer.Repo.insert!(%{
+      @prediction_accuracy
+      | environment: env,
+        hour_of_day: hour,
+        num_predictions: total,
+        num_accurate_predictions: accurate
+    })
   end
 end

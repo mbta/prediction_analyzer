@@ -22,3 +22,5 @@ config :prediction_analyzer,
   aws_predictions_url: "https://prod.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json",
   dev_green_aws_predictions_url:
     "https://dev_green.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json"
+
+config :prediction_analyzer, start_workers: false

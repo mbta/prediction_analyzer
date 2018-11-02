@@ -63,28 +63,20 @@
 
     <table class="table">
       <tr>
-        <th>Env</th>
-        <th>Service Date</th>
         <th>Hour of Day</th>
-        <th>Stop id</th>
-        <th>Route id</th>
-        <th>Arrival/Departure</th>
-        <th>Bin</th>
-        <th>Number of predictions</th>
-        <th>Number of accurate predictions</th>
+        <th>Prod Accuracy</th>
+        <th>Prod Total</th>
+        <th>Dev-Green Accuracy</th>
+        <th>Dev-Green Total</th>
       </tr>
 
-      <%= for accuracy <- @accuracies do %>
+      <%= for [hour, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
         <tr>
-          <td><%= accuracy.environment %>
-          <td><%= accuracy.service_date %></td>
-          <td><%= accuracy.hour_of_day %></td>
-          <td><%= accuracy.stop_id %></td>
-          <td><%= accuracy.route_id %></td>
-          <td><%= accuracy.arrival_departure %></td>
-          <td><%= accuracy.bin %></td>
-          <td><%= accuracy.num_predictions %></td>
-          <td><%= accuracy.num_accurate_predictions %></td>
+          <td><%= hour %></td>
+          <td><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
+          <td><%= prod_total %></td>
+          <td><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
+          <td><%= dg_total %></td>
         </tr>
       <% end %>
     </table>

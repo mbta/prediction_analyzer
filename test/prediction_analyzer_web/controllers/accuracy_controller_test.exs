@@ -5,6 +5,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
   @today DateTime.to_date(Timex.local())
 
   @prediction_accuracy %PredictionAccuracy{
+    environment: "prod",
     service_date: @today,
     hour_of_day: 11,
     stop_id: "70120",
@@ -14,20 +15,6 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     num_predictions: 40,
     num_accurate_predictions: 21
   }
-
-  test "GET /", %{conn: conn} do
-    PredictionAnalyzer.Repo.insert!(@prediction_accuracy)
-
-    conn = get(conn, "/accuracy")
-    response = html_response(conn, 200)
-
-    assert response =~ "70120"
-    assert response =~ "Green-B"
-    assert response =~ "departure"
-    assert response =~ "0-3 min"
-    assert response =~ "40"
-    assert response =~ "21"
-  end
 
   test "GET /accuracy returns a top-level summary of accuracy", %{conn: conn} do
     a1 = %{@prediction_accuracy | num_accurate_predictions: 100, num_predictions: 100}
@@ -44,23 +31,37 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert response =~ "75.0"
   end
 
-  test "GET /accuracy with query params filter prediction accuracy statistics", %{conn: conn} do
-    a1 = %{@prediction_accuracy | num_accurate_predictions: 10, num_predictions: 20}
-
-    a2 = %{
-      @prediction_accuracy
-      | num_accurate_predictions: 20,
-        num_predictions: 20,
-        stop_id: "70121"
-    }
-
-    PredictionAnalyzer.Repo.insert!(a1)
-    PredictionAnalyzer.Repo.insert!(a2)
+  test "GET /accuracy aggregates the results by hour", %{conn: conn} do
+    insert_accuracy("prod", 10, 101, 99)
+    insert_accuracy("prod", 10, 108, 102)
+    insert_accuracy("prod", 11, 225, 211)
+    insert_accuracy("prod", 11, 270, 261)
+    insert_accuracy("dev-green", 10, 401, 399)
+    insert_accuracy("dev-green", 10, 408, 302)
+    insert_accuracy("dev-green", 11, 525, 411)
+    insert_accuracy("dev-green", 11, 570, 461)
 
     conn = get(conn, "/accuracy")
-    assert html_response(conn, 200) =~ "From 30 accurate out of 40 total predictions"
+    response = html_response(conn, 200)
 
-    conn = get(conn, "/accuracy", %{"filters" => %{"stop_id" => "70120"}})
-    assert html_response(conn, 200) =~ "From 10 accurate out of 20 total predictions"
+    # 101 + 108
+    assert response =~ "209"
+    # (99 + 102) / (101 + 108)
+    assert response =~ "96.17%"
+
+    # 525 + 570
+    assert response =~ "1095"
+    # (411 + 461) / (525 + 570)
+    assert response =~ "79.63%"
+  end
+
+  def insert_accuracy(env, hour, total, accurate) do
+    PredictionAnalyzer.Repo.insert!(%{
+      @prediction_accuracy
+      | environment: env,
+        hour_of_day: hour,
+        num_predictions: total,
+        num_accurate_predictions: accurate
+    })
   end
 end
