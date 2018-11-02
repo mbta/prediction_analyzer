@@ -46,21 +46,6 @@
 
   <div class="col-xs-9">
     <h1> Prediction Accuracy</h1>
-
-    <div>
-      <div>
-        <span class="accuracy-summary-percentage">
-          <%= accuracy_percentage(@num_accurate, @num_predictions) %>
-        </span>
-        <span class="accuracy-summary-percent-sign">
-          %
-        </span>
-      </div>
-      <div>
-        From <%= @num_accurate %> accurate out of <%= @num_predictions %> total predictions
-      </div>
-    </div>
-
     <table class="table">
       <tr>
         <th>Hour of Day</th>
