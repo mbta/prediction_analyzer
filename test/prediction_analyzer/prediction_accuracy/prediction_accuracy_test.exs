@@ -100,19 +100,19 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
                [11, 495, 472, 1095, 872]
              ]
     end
-
-    defp insert_accuracy(env, hour, total, accurate) do
-      PredictionAnalyzer.Repo.insert!(%{
-        @prediction_accuracy
-        | environment: env,
-          hour_of_day: hour,
-          num_predictions: total,
-          num_accurate_predictions: accurate
-      })
-    end
   end
 
   defp execute_query(q) do
     Repo.all(from(acc in q, order_by: :id))
+  end
+
+  defp insert_accuracy(env, hour, total, accurate) do
+    PredictionAnalyzer.Repo.insert!(%{
+      @prediction_accuracy
+      | environment: env,
+        hour_of_day: hour,
+        num_predictions: total,
+        num_accurate_predictions: accurate
+    })
   end
 end

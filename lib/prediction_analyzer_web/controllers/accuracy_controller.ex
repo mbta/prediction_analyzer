@@ -1,5 +1,4 @@
 defmodule PredictionAnalyzerWeb.AccuracyController do
-  require Logger
   use PredictionAnalyzerWeb, :controller
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
 
