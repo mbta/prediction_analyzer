@@ -4,7 +4,7 @@ defmodule PredictionAnalyzer.UtilitiesTest do
 
   describe "service_date_info" do
     test "returns current date if after 3am" do
-      time = Timex.set(Timex.now("America/New_York"), year: 2018, month: 10, day: 30, hour: 10)
+      time = Timex.to_datetime(~D[2018-10-30], "America/New_York") |> Timex.set(hour: 10)
 
       assert {
                ~D[2018-10-30],
@@ -15,7 +15,7 @@ defmodule PredictionAnalyzer.UtilitiesTest do
     end
 
     test "returns previous date if before 3am" do
-      time = Timex.set(Timex.now("America/New_York"), year: 2018, month: 10, day: 30, hour: 1)
+      time = Timex.to_datetime(~D[2018-10-30], "America/New_York") |> Timex.set(hour: 1)
 
       assert {
                ~D[2018-10-29],

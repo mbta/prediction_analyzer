@@ -24,19 +24,24 @@ defmodule PredictionAnalyzer.Pruner do
 
     unix_cutoff = Timex.local() |> Timex.shift(days: -7) |> DateTime.to_unix()
 
-    Repo.delete_all(
-      from(
-        p in Prediction,
-        where: p.file_timestamp < ^unix_cutoff
-      )
-    )
+    {time, _} =
+      :timer.tc(fn ->
+        Repo.delete_all(
+          from(
+            p in Prediction,
+            where: p.file_timestamp < ^unix_cutoff
+          )
+        )
 
-    Repo.delete_all(
-      from(
-        ve in VehicleEvent,
-        where: ve.arrival_time < ^unix_cutoff or ve.departure_time < ^unix_cutoff
-      )
-    )
+        Repo.delete_all(
+          from(
+            ve in VehicleEvent,
+            where: ve.arrival_time < ^unix_cutoff or ve.departure_time < ^unix_cutoff
+          )
+        )
+      end)
+
+    Logger.info("Pruning complete. db=#{time / 1000}")
 
     schedule_next_run(self())
     {:noreply, state}
