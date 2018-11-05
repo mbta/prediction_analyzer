@@ -4,7 +4,7 @@ defmodule PredictionAnalyzer.UtilitiesTest do
 
   describe "service_date_info" do
     test "returns current date if after 3am" do
-      time = Timex.set(Timex.now("America/New_York"), year: 2018, month: 10, day: 30, hour: 10)
+      time = Timex.to_datetime(~D[2018-10-30], "America/New_York") |> Timex.set(hour: 10)
 
       assert {
                ~D[2018-10-30],
@@ -15,7 +15,7 @@ defmodule PredictionAnalyzer.UtilitiesTest do
     end
 
     test "returns previous date if before 3am" do
-      time = Timex.set(Timex.now("America/New_York"), year: 2018, month: 10, day: 30, hour: 1)
+      time = Timex.to_datetime(~D[2018-10-30], "America/New_York") |> Timex.set(hour: 1)
 
       assert {
                ~D[2018-10-29],
@@ -33,6 +33,26 @@ defmodule PredictionAnalyzer.UtilitiesTest do
 
       assert Utilities.ms_to_next_hour(soon) == 150_000
       assert Utilities.ms_to_next_hour(late) == 3_510_000
+    end
+  end
+
+  describe "ms_to_3am" do
+    test "returns the milliseconds to 3am when 3am is tomorrow" do
+      time =
+        "America/New_York"
+        |> Timex.now()
+        |> Timex.set(hour: 23, minute: 59, second: 0, microsecond: {0, 6})
+
+      assert Utilities.ms_to_3am(time) == 10_860_000
+    end
+
+    test "returns the milliseconds to 3am when 3am is later today" do
+      time =
+        "America/New_York"
+        |> Timex.now()
+        |> Timex.set(hour: 2, minute: 59, second: 0, microsecond: {0, 6})
+
+      assert Utilities.ms_to_3am(time) == 60_000
     end
   end
 end
