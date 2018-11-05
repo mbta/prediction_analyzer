@@ -22,7 +22,11 @@ defmodule PredictionAnalyzer.Pruner do
   def handle_info(:prune, state) do
     Logger.info("Beginning prune of DB")
 
-    unix_cutoff = Timex.local() |> Timex.shift(days: -7) |> DateTime.to_unix()
+    unix_cutoff =
+      Timex.local()
+      |> Timex.shift(days: -7)
+      |> Timex.set(hour: 3, minute: 0, second: 0)
+      |> DateTime.to_unix()
 
     {time, _} =
       :timer.tc(fn ->
