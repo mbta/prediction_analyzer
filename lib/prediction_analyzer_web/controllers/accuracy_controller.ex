@@ -7,10 +7,19 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   def index(conn, params) do
     relevant_accuracies = PredictionAccuracy.filter(params["filters"] || %{})
 
-    [num_accurate, num_predictions] =
+    [prod_num_accurate, prod_num_predictions] =
       from(
         acc in relevant_accuracies,
-        select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)]
+        select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+        where: acc.environment == "prod"
+      )
+      |> PredictionAnalyzer.Repo.one!()
+
+    [dev_green_num_accurate, dev_green_num_predictions] =
+      from(
+        acc in relevant_accuracies,
+        select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+        where: acc.environment == "dev-green"
       )
       |> PredictionAnalyzer.Repo.one!()
 
@@ -23,8 +32,10 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       conn,
       "index.html",
       accuracies: accuracies,
-      num_predictions: num_predictions,
-      num_accurate: num_accurate
+      prod_num_accurate: prod_num_accurate,
+      prod_num_predictions: prod_num_predictions,
+      dev_green_num_accurate: dev_green_num_accurate,
+      dev_green_num_predictions: dev_green_num_predictions
     )
   end
 end

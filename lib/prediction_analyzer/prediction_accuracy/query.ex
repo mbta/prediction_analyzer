@@ -11,7 +11,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
           integer(),
           integer(),
           integer(),
-          integer()
+          integer(),
+          String.t()
         ) :: {:ok, term()}
   def calculate_aggregate_accuracy(
         current_time,
@@ -20,7 +21,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         bin_min,
         bin_max,
         bin_error_min,
-        bin_error_max
+        bin_error_max,
+        environment
       ) do
     {service_date, hour_of_day, min_unix, max_unix} =
       current_time
@@ -29,22 +31,19 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
 
     query = query_template(arrival_departure)
 
-    Repo.query(
-      query,
-      [
-        service_date,
-        hour_of_day,
-        arrival_departure,
-        bin_name,
-        bin_min,
-        bin_max,
-        bin_error_min,
-        bin_error_max,
-        min_unix,
-        max_unix,
-        "prod"
-      ]
-    )
+    Repo.query(query, [
+      service_date,
+      hour_of_day,
+      arrival_departure,
+      bin_name,
+      bin_min,
+      bin_max,
+      bin_error_min,
+      bin_error_max,
+      min_unix,
+      max_unix,
+      environment
+    ])
   end
 
   defp query_template(arrival_departure) do

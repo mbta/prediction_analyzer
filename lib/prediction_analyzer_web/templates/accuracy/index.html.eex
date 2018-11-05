@@ -45,40 +45,61 @@
   </div>
 
   <div class="col-xs-9">
-    <h1> Prediction Accuracy</h1>
+    <div class="row">
 
-    <div>
-      <div>
-        <span class="accuracy-summary-percentage">
-          <%= accuracy_percentage(@num_accurate, @num_predictions) %>
-        </span>
-        <span class="accuracy-summary-percent-sign">
-          %
-        </span>
+      <div class="col-xs-6">
+        Prod:
+        <div>
+          <span class="accuracy-summary-percentage">
+            <%= accuracy_percentage(@prod_num_accurate, @prod_num_predictions) %>
+          </span>
+          <span class="accuracy-summary-percent-sign">
+            %
+          </span>
+        </div>
+        <div>
+          From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
+        </div>
       </div>
-      <div>
-        From <%= @num_accurate %> accurate out of <%= @num_predictions %> total predictions
+
+      <div class="col-xs-6">
+        Dev-Green:
+        <div>
+          <span class="accuracy-summary-percentage">
+            <%= accuracy_percentage(@dev_green_num_accurate, @dev_green_num_predictions) %>
+          </span>
+          <span class="accuracy-summary-percent-sign">
+            %
+          </span>
+        </div>
+        <div>
+          From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
+        </div>
       </div>
     </div>
 
-    <table class="table">
-      <tr>
-        <th>Hour of Day</th>
-        <th>Prod Accuracy</th>
-        <th>Prod Total</th>
-        <th>Dev-Green Accuracy</th>
-        <th>Dev-Green Total</th>
-      </tr>
 
-      <%= for [hour, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
+    <div class="col-xs-9">
+      <h1> Prediction Accuracy</h1>
+      <table class="table">
         <tr>
-          <td><%= hour %></td>
-          <td><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
-          <td><%= prod_total %></td>
-          <td><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
-          <td><%= dg_total %></td>
+          <th>Hour of Day</th>
+          <th>Prod Accuracy</th>
+          <th>Prod Total</th>
+          <th>Dev-Green Accuracy</th>
+          <th>Dev-Green Total</th>
         </tr>
-      <% end %>
-    </table>
+
+        <%= for [hour, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
+          <tr>
+            <td><%= hour %></td>
+            <td><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
+            <td><%= prod_total %></td>
+            <td><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
+            <td><%= dg_total %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
   </div>
 </div>
