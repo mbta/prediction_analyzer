@@ -30,8 +30,6 @@ defmodule PredictionAnalyzer.Pruner do
 
     {time, _} =
       :timer.tc(fn ->
-        Logger.info("deleting old predictions")
-
         Repo.delete_all(
           from(
             p in Prediction,
@@ -39,21 +37,10 @@ defmodule PredictionAnalyzer.Pruner do
           )
         )
 
-        Logger.info("deleting old vehicle events based on arrival")
-
         Repo.delete_all(
           from(
             ve in VehicleEvent,
-            where: ve.arrival_time < ^unix_cutoff
-          )
-        )
-
-        Logger.info("deleting old vehicle events based on departure")
-
-        Repo.delete_all(
-          from(
-            ve in VehicleEvent,
-            where: ve.departure_time < ^unix_cutoff
+            where: ve.arrival_time < ^unix_cutoff or ve.departure_time < ^unix_cutoff
           )
         )
       end)
