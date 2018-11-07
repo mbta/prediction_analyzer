@@ -68,6 +68,6 @@ defmodule PredictionAnalyzer.Pruner do
   end
 
   defp schedule_next_run(pid) do
-    Process.send_after(pid, :prune, Utilities.ms_to_3am(Timex.local()))
+    Process.send_after(pid, :prune, Utilities.ms_to_3am(Timex.local()) + 10 * 60 * 1_000)
   end
 end
