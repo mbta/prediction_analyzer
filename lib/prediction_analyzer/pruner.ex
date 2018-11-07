@@ -36,7 +36,8 @@ defmodule PredictionAnalyzer.Pruner do
           from(
             p in Prediction,
             where: p.file_timestamp < ^unix_cutoff
-          )
+          ),
+          timeout: 120_000
         )
 
         Logger.info("deleting old vehicle events based on arrival")
@@ -45,7 +46,8 @@ defmodule PredictionAnalyzer.Pruner do
           from(
             ve in VehicleEvent,
             where: ve.arrival_time < ^unix_cutoff
-          )
+          ),
+          timeout: 120_000
         )
 
         Logger.info("deleting old vehicle events based on departure")
@@ -54,7 +56,8 @@ defmodule PredictionAnalyzer.Pruner do
           from(
             ve in VehicleEvent,
             where: ve.departure_time < ^unix_cutoff
-          )
+          ),
+          timeout: 120_000
         )
       end)
 
