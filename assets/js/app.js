@@ -7,11 +7,14 @@
 // in vendor, which are never wrapped in imports and
 // therefore are always executed.
 
+
 // Import dependencies
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
 import "phoenix_html"
+import "jquery"
+window.$ = window.jQuery;
 
 // Import local files
 //
@@ -19,3 +22,7 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+import setupDashboard from "./chart"
+
+setupDashboard();

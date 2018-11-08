@@ -32,10 +32,27 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       conn,
       "index.html",
       accuracies: accuracies,
+      chart_data: Jason.encode!(set_up_accuracy_chart(accuracies)),
       prod_num_accurate: prod_num_accurate,
       prod_num_predictions: prod_num_predictions,
       dev_green_num_accurate: dev_green_num_accurate,
       dev_green_num_predictions: dev_green_num_predictions
     )
+  end
+
+  defp set_up_accuracy_chart(accuracies) do
+    Enum.reduce(accuracies, %{hours: [], prod_accs: [], dg_accs: []}, fn [
+                                                                           hour,
+                                                                           prod_total,
+                                                                           prod_accurate,
+                                                                           dg_total,
+                                                                           dg_accurate
+                                                                         ] = data,
+                                                                         acc ->
+      acc
+      |> Map.put(:hours, acc[:hours] ++ [hour])
+      |> Map.put(:prod_accs, acc[:prod_accs] ++ [prod_accurate / prod_total])
+      |> Map.put(:dg_accs, acc[:dg_accs] ++ [dg_accurate / dg_total])
+    end)
   end
 end
