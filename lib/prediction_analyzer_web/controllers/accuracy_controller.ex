@@ -47,7 +47,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
                                                                            prod_accurate,
                                                                            dg_total,
                                                                            dg_accurate
-                                                                         ] = data,
+                                                                         ],
                                                                          acc ->
       acc
       |> Map.put(:hours, acc[:hours] ++ [hour])
