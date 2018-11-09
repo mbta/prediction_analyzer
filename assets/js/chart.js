@@ -3,7 +3,9 @@ import c3 from 'c3';
 
 export default function() {
   window.addEventListener("DOMContentLoaded", function() {
-    setupDashboard();
+    if(document.getElementById("chart-prediction-accuracy")) {
+      setupDashboard();
+    }
   });
 }
 
