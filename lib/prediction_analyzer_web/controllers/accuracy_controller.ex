@@ -49,10 +49,13 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
                                                                            dg_accurate
                                                                          ],
                                                                          acc ->
+      prod_accuracy = if prod_total == 0, do: [0], else: [prod_accurate / prod_total]
+      dg_accuracy = if dg_total == 0, do: [0], else: [dg_accurate / dg_total]
+
       acc
       |> Map.put(:hours, acc[:hours] ++ [hour])
-      |> Map.put(:prod_accs, acc[:prod_accs] ++ [prod_accurate / prod_total])
-      |> Map.put(:dg_accs, acc[:dg_accs] ++ [dg_accurate / dg_total])
+      |> Map.put(:prod_accs, acc[:prod_accs] ++ prod_accuracy)
+      |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
     end)
   end
 end
