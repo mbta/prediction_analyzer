@@ -1,24 +1,20 @@
 import d3 from 'd3';
 import c3 from 'c3';
 
-$ = $ || window.jQuery;
-
-
 export default function() {
-    $(document).ready(setupDashboard());
+  window.addEventListener("DOMContentLoaded", function() {
+    setupDashboard();
+  });
 }
 
 export function setupDashboard() {
-  var jsonData = $("[data-prediction-accuracy]").innerText
-  console.log(jsonData);
-  var rawData = $.parseJSON(jsonData);
-  console.log(rawData);
+  var rawData = window.dataPredictionAccuracyJSON;
   var prodAccs = rawData["prod_accs"];
   var dgAccs = rawData["dg_accs"];
   var dateRangeData = rawData["hours"];
 
-  var col_1 = ["prod_accs"].concat( prodAccs);
-  var col_2 = ["dg_accs"].concat( dgAccs);
+  var col_1 = ["prod_accs"].concat(prodAccs);
+  var col_2 = ["dg_accs"].concat(dgAccs);
   var x_data = ["x"].concat(dateRangeData);
 
   var chart = c3.generate({
@@ -31,13 +27,12 @@ export function setupDashboard() {
           col_2,
         ]
     },
-      axis: {
-        y: {
+    axis: {
+      y: {
         max: 1,
-          min: 0,
-          padding: {top: 0, bottom:0},
-          tick: {
-          format: d3.format(".0%")
+        min: 0,
+        padding: {top: 0, bottom:0},
+        tick: {
         }
       }
     }

@@ -103,4 +103,6 @@
     </div>
   </div>
 </div>
-
+<script>
+  window.dataPredictionAccuracyJSON = <%= raw(@chart_data) %>
+</script>
