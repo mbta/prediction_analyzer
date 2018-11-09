@@ -7,6 +7,7 @@
 // in vendor, which are never wrapped in imports and
 // therefore are always executed.
 
+
 // Import dependencies
 //
 // If you no longer want to use a dependency, remember
@@ -19,3 +20,7 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+import setupDashboard from "./chart"
+
+setupDashboard();
