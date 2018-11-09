@@ -80,7 +80,7 @@
 
     <div class="col-xs-9">
       <h1> Prediction Accuracy</h1>
-      <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"><%= @chart_data %></div>
+      <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <table class="table">
         <tr>
           <th>Hour of Day</th>
