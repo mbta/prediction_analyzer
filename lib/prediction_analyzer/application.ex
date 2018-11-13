@@ -48,11 +48,9 @@ defmodule PredictionAnalyzer.Application do
 
     case Supervisor.start_link(supervisors ++ workers, opts) do
       {:ok, _} = success ->
-        spawn(fn ->
-          Logger.info("Started application, running migrations")
-          Application.get_env(:prediction_analyzer, :migration_task).migrate()
-          Logger.info("Finished migrations")
-        end)
+        Logger.info("Started application, running migrations")
+        Application.get_env(:prediction_analyzer, :migration_task).migrate()
+        Logger.info("Finished migrations")
 
         success
 

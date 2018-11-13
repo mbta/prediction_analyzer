@@ -47,7 +47,7 @@ defmodule PredictionAnalyzer.Pruner do
             ve in VehicleEvent,
             where: ve.arrival_time < ^unix_cutoff
           ),
-          timeout: 600_000
+          timeout: 120_000
         )
 
         Logger.info("deleting old vehicle events based on departure")
@@ -57,7 +57,7 @@ defmodule PredictionAnalyzer.Pruner do
             ve in VehicleEvent,
             where: ve.departure_time < ^unix_cutoff
           ),
-          timeout: 600_000
+          timeout: 120_000
         )
       end)
 
