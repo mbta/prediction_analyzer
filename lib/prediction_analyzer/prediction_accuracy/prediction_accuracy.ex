@@ -24,7 +24,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   @spec bins() :: map()
   def bins do
     %{
-      "0-3 min" => {0, 180, -60, 60},
+      "0-3 min" => {-30, 180, -60, 60},
       "3-6 min" => {180, 360, -90, 120},
       "6-12 min" => {360, 720, -150, 210},
       "12-30 min" => {720, 1800, -240, 360}
