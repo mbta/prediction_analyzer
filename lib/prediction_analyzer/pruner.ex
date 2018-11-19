@@ -37,7 +37,7 @@ defmodule PredictionAnalyzer.Pruner do
             p in Prediction,
             where: p.file_timestamp < ^unix_cutoff
           ),
-          timeout: 120_000
+          timeout: 600_000
         )
 
         Logger.info("deleting old vehicle events based on arrival")
