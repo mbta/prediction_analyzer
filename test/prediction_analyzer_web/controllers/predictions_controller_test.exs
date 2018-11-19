@@ -17,7 +17,7 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
     {:ok, %{id: vehicle_event_id}} = PredictionAnalyzer.Repo.insert(vehicle_event)
 
     prediction = %PredictionAnalyzer.Predictions.Prediction{
-      file_timestamp: :os.system_time(:second),
+      file_timestamp: 1_542_558_122,
       trip_id: "TEST_TRIP",
       is_deleted: false,
       delay: 0,
@@ -36,7 +36,7 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
 
     response =
       conn
-      |> get("/predictions")
+      |> get("/predictions?stop_id=70107&service_date=2018-11-18&hour=11")
       |> html_response(200)
 
     assert response =~ "TEST_TRIP"
@@ -52,5 +52,14 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
     assert response =~ "TEST_TRIP"
     assert response =~ "1000001"
     assert response =~ "1000002"
+  end
+
+  test "GET /predictions with format=csv downloads file", %{conn: conn} do
+    response =
+      conn
+      |> get("/predictions?format=csv")
+      |> response(200)
+
+    assert response =~ "env,file_timestamp,is_deleted"
   end
 end

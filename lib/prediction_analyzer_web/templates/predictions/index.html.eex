@@ -2,9 +2,16 @@
   <h1>
     Recent Predictions
   </h1>
+
+  <div>Count: <%= length(@predictions) %> </div>
+  <div>
+    <%= link("Download", to: predictions_path(@conn, :index, Map.put(@conn.params, "format", "csv"))) %>
+  </div>
+
   <table class="table">
     <tr>
       <th>environment</th>
+      <th>file timestamp</th>
       <th>trip_id</th>
       <th>is_deleted</th>
       <th>delay</th>
@@ -23,6 +30,7 @@
     <%= for p <- @predictions do %>
     <tr>
       <td><%= p.environment %></td>
+      <td><%= p.file_timestamp %></td>
       <td><%= p.trip_id %></td>
       <td><%= p.is_deleted %></td>
       <td><%= p.delay %></td>
