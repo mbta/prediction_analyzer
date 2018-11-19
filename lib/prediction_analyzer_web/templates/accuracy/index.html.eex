@@ -88,6 +88,9 @@
           <th>Prod Total</th>
           <th>Dev-Green Accuracy</th>
           <th>Dev-Green Total</th>
+          <%= if show_download?(@conn.params) do %>
+            <th>Raw Data</th>
+          <% end %>
         </tr>
 
         <%= for [hour, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
@@ -97,6 +100,9 @@
             <td><%= prod_total %></td>
             <td><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
             <td><%= dg_total %></td>
+            <%= if show_download?(@conn.params) do %>
+              <th><%= link("csv", to: predictions_path_with_filters(@conn, hour)) %></th>
+            <% end %>
           </tr>
         <% end %>
       </table>

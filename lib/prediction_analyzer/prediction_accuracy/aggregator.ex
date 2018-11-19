@@ -18,7 +18,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
 
     {time, _result} =
       :timer.tc(fn ->
-        current_time = Timex.local()
+        current_time = Timex.now("America/New_York")
 
         Enum.each(PredictionAccuracy.bins(), fn {bin_name,
                                                  {bin_min, bin_max, bin_error_min, bin_error_max}} ->

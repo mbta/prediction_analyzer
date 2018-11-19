@@ -20,4 +20,29 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
       |> Date.to_string()
     end)
   end
+
+  def show_download?(%{"filters" => %{"stop_id" => stop_id, "service_date" => service_date}})
+      when not is_nil(stop_id) and stop_id != "" and not is_nil(service_date) and
+             service_date != "" do
+    true
+  end
+
+  def show_download?(_params) do
+    false
+  end
+
+  def predictions_path_with_filters(
+        %{params: %{"filters" => %{"stop_id" => stop_id, "service_date" => service_date}}} = conn,
+        hour
+      ) do
+    predictions_path(conn, :index, %{
+      "stop_id" => stop_id,
+      "service_date" => service_date,
+      "hour" => hour
+    })
+  end
+
+  def predictions_path_with_filters(_params, _hour) do
+    "#"
+  end
 end
