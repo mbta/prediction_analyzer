@@ -6,6 +6,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
     field(:file_timestamp, :integer)
     field(:environment, :string)
     field(:trip_id, :string)
+    field(:vehicle_id, :string)
     field(:is_deleted, :boolean)
     field(:delay, :integer)
     field(:arrival_time, :integer)
@@ -31,6 +32,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
         "stop_sequence,",
         "stops_away,",
         "trip_id,",
+        "trip_vehicle_id,",
         "route_id,",
         "stop_id,",
         "predicted_arrival,",
@@ -58,6 +60,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
           p.stop_sequence,
           p.stops_away,
           p.trip_id,
+          p.vehicle_id,
           p.route_id,
           p.stop_id,
           p.arrival_time,
