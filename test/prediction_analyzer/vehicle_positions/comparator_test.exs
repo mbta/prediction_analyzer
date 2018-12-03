@@ -87,6 +87,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       prediction1 = %{
         @prediction
         | trip_id: "trip1",
+          vehicle_id: "1",
           arrival_time: :os.system_time(:second),
           stop_id: "stop1"
       }
@@ -94,6 +95,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       prediction2 = %{
         @prediction
         | trip_id: "trip1",
+          vehicle_id: "1",
           arrival_time: :os.system_time(:second),
           stop_id: "stop0"
       }
@@ -101,6 +103,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       prediction3 = %{
         @prediction
         | trip_id: "trip1",
+          vehicle_id: "1",
           arrival_time: :os.system_time(:second) - 24 * 60 * 60,
           file_timestamp: :os.system_time(:second) - 60 * 60 * 24,
           stop_id: "stop1"

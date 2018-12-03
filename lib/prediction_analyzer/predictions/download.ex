@@ -69,6 +69,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
               :dev_green -> "dev-green"
             end,
           trip_id: prediction["trip_update"]["trip"]["trip_id"],
+          vehicle_id: prediction["trip_update"]["vehicle"]["id"],
           route_id: prediction["trip_update"]["trip"]["route_id"],
           is_deleted: prediction["is_deleted"]
         }

@@ -104,7 +104,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     from(
       p in Prediction,
       where:
-        p.trip_id == ^vehicle_event.trip_id and p.stop_id == ^vehicle_event.stop_id and
+        p.vehicle_id == ^vehicle_event.vehicle_id and p.stop_id == ^vehicle_event.stop_id and
           p.environment == ^vehicle_event.environment and is_nil(p.vehicle_event_id) and
           p.file_timestamp > ^(:os.system_time(:second) - 60 * 60 * 3),
       update: [set: [vehicle_event_id: ^vehicle_event.id]]
