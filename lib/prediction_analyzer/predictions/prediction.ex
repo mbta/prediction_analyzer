@@ -32,7 +32,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
         "stop_sequence,",
         "stops_away,",
         "trip_id,",
-        "vehicle_id,",
+        "trip_vehicle_id,",
         "route_id,",
         "stop_id,",
         "predicted_arrival,",
