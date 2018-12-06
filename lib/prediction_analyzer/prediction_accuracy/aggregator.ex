@@ -22,7 +22,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
 
         Enum.each(PredictionAccuracy.bins(), fn {bin_name,
                                                  {bin_min, bin_max, bin_error_min, bin_error_max}} ->
-          {:ok, _} =
+          {:ok, r} =
             Query.calculate_aggregate_accuracy(
               current_time,
               "arrival",
@@ -34,7 +34,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
               "prod"
             )
 
-          {:ok, _} =
+          Logger.info("prediction_accuracy_aggregator arrival prod result=#{inspect(r)}")
+
+          {:ok, r} =
             Query.calculate_aggregate_accuracy(
               current_time,
               "departure",
@@ -46,7 +48,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
               "prod"
             )
 
-          {:ok, _} =
+          Logger.info("prediction_accuracy_aggregator departure prod result=#{inspect(r)}")
+
+          {:ok, r} =
             Query.calculate_aggregate_accuracy(
               current_time,
               "arrival",
@@ -58,7 +62,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
               "dev-green"
             )
 
-          {:ok, _} =
+          Logger.info("prediction_accuracy_aggregator arrival dev_green result=#{inspect(r)}")
+
+          {:ok, r} =
             Query.calculate_aggregate_accuracy(
               current_time,
               "departure",
@@ -69,6 +75,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
               bin_error_max,
               "dev-green"
             )
+
+          Logger.info("prediction_accuracy_aggregator departure dev_green result=#{inspect(r)}")
         end)
       end)
 
