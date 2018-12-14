@@ -21,13 +21,16 @@ export function setupDashboard() {
 
   var chart = c3.generate({
     bindto: "#chart-prediction-accuracy",
-      data: {
+    data: {
       x: 'x',
-        columns: [
+      columns: [
         x_data,
-          col_1,
-          col_2,
-        ]
+        col_1,
+        col_2,
+      ]
+    },
+    color: {
+      pattern: ["#1fecff", "#c743f0"]
     },
     axis: {
       y: {
@@ -35,6 +38,7 @@ export function setupDashboard() {
         min: 0,
         padding: {top: 0, bottom:0},
         tick: {
+          format: function(x) { return (x*100).toString() + "%";}
         }
       }
     }

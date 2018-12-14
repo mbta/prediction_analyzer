@@ -172,3 +172,26 @@
 
 .c3-chart-arc.c3-target.c3-focused g path {
   opacity: 1; }
+
+.c3-axis .tick {
+  fill: white;
+}
+
+.c3-legend-item-prod_accs text {
+  fill: #1fecff;
+  stroke: #1fecff;
+}
+
+.c3-legend-item-dg_accs text {
+  fill: #c743f0;
+  stroke: #c743f0;
+}
+
+.c3-axis path,
+.c3-axis line {
+  stroke: white;
+}
+
+.c3-tooltip-container {
+  color: black;
+}
