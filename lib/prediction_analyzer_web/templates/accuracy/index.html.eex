@@ -81,10 +81,10 @@
       <table class="table">
         <tr>
           <th>Hour of Day</th>
-          <th>Prod Accuracy</th>
-          <th>Prod Total</th>
-          <th>Dev-Green Accuracy</th>
-          <th>Dev-Green Total</th>
+          <th class="prod-text">Prod Accuracy</th>
+          <th class="prod-text">Prod Total</th>
+          <th class="dev-green-text">Dev-Green Accuracy</th>
+          <th class="dev-green-text">Dev-Green Total</th>
           <%= if show_download?(@conn.params) do %>
             <th>Raw Data</th>
           <% end %>
@@ -93,10 +93,10 @@
         <%= for [hour, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
           <tr>
             <td><%= hour %></td>
-            <td><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
-            <td><%= prod_total %></td>
-            <td><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
-            <td><%= dg_total %></td>
+            <td class="prod-text"><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
+            <td class="prod-text"><%= prod_total %></td>
+            <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
+            <td class="dev-green-text"><%= dg_total %></td>
             <%= if show_download?(@conn.params) do %>
               <th><%= link("csv", to: predictions_path_with_filters(@conn, hour)) %></th>
             <% end %>
