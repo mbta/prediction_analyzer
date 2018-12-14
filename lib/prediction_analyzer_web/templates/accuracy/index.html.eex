@@ -1,8 +1,6 @@
 <div class="row">
   <div class="col-xs-3">
-    <h3>Filters</h3>
-
-    <%= form_for @conn, accuracy_path(@conn, :index), [as: :filters, method: :get], fn f -> %>
+    <%= form_for @conn, accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
       <div class="form-group">
         <%= label(f, :route_id, "Route ID") %>
         <%= text_input(f, :route_id, class: "form-control") %>
@@ -45,41 +43,40 @@
   </div>
 
   <div class="col-xs-9">
-    <div class="row">
+    <div class="row accuracy-summary-header">
 
       <div class="col-xs-6">
-        Prod:
+        <span class="prod-text">PROD</span>
         <div>
-          <span class="accuracy-summary-percentage">
+          <span class="accuracy-summary-percentage prod-text">
             <%= accuracy_percentage(@prod_num_accurate, @prod_num_predictions) %>
           </span>
-          <span class="accuracy-summary-percent-sign">
+          <span class="accuracy-summary-percent-sign prod-text">
             %
           </span>
         </div>
-        <div>
+        <div class="prod-text">
           From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
         </div>
       </div>
 
       <div class="col-xs-6">
-        Dev-Green:
+        <span class="dev-green-text">DEV GREEN</span>
         <div>
-          <span class="accuracy-summary-percentage">
+          <span class="accuracy-summary-percentage dev-green-text">
             <%= accuracy_percentage(@dev_green_num_accurate, @dev_green_num_predictions) %>
           </span>
-          <span class="accuracy-summary-percent-sign">
+          <span class="accuracy-summary-percent-sign dev-green-text">
             %
           </span>
         </div>
-        <div>
+        <div class="dev-green-text">
           From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
         </div>
       </div>
     </div>
 
     <div class="col-xs-9">
-      <h1> Prediction Accuracy</h1>
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <table class="table">
         <tr>
