@@ -24,17 +24,17 @@
 }
 
 .prediction-analyzer-app {
-  background-color: rgb(2, 36, 65);
+  background-color: #022441;
   color: white;
 }
 
 .accuracy-form {
-  background-color: rgb(14, 67, 110);
+  background-color: #0e4364;
   padding: 1em;
 }
 
 .prod-text {
-  color: rgb(31, 236, 255);
+  color: #1fecff;
 }
 
 .prod-text-header {
@@ -43,7 +43,7 @@
 }
 
 .dev-green-text {
-  color: rgb(199, 67, 240);
+  color: #c743f0;
 }
 
 .dev-green-text-header {
