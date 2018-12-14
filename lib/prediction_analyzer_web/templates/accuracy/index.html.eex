@@ -46,7 +46,7 @@
     <div class="row accuracy-summary-header">
 
       <div class="col-xs-6">
-        <span class="prod-text">PROD</span>
+        <span class="prod-text prod-text-header">Prod</span>
         <div>
           <span class="accuracy-summary-percentage prod-text">
             <%= accuracy_percentage(@prod_num_accurate, @prod_num_predictions) %>
@@ -61,7 +61,7 @@
       </div>
 
       <div class="col-xs-6">
-        <span class="dev-green-text">DEV GREEN</span>
+        <span class="dev-green-text dev-green-text-header">Dev Green</span>
         <div>
           <span class="accuracy-summary-percentage dev-green-text">
             <%= accuracy_percentage(@dev_green_num_accurate, @dev_green_num_predictions) %>

@@ -178,23 +178,18 @@
 }
 
 .c3-legend-item-prod_accs text {
-  fill: rgb(31, 236, 255);
-  stroke: rgb(31, 236, 255);
+  fill: #1fecff;
+  stroke: #1fecff;
 }
 
 .c3-legend-item-dg_accs text {
-  fill: rgb(199, 67, 240);
-  stroke: rgb(199, 67, 240);
+  fill: #c743f0;
+  stroke: #c743f0;
 }
 
 .c3-axis path,
 .c3-axis line {
   stroke: white;
-}
-
-.c3-line-prod_accs {
-  fill: rgb(31, 236, 255);
-  stroke: rgb(31, 236, 255);
 }
 
 .c3-tooltip-container {

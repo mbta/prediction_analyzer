@@ -37,8 +37,18 @@
   color: rgb(31, 236, 255);
 }
 
+.prod-text-header {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
 .dev-green-text {
   color: rgb(199, 67, 240);
+}
+
+.dev-green-text-header {
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .prediction-analyzer-app-title {
