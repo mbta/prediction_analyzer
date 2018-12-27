@@ -58,3 +58,5 @@ config :phoenix, :stacktrace_depth, 20
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
   pool_size: 10
+
+config :prediction_analyzer, start_workers: false

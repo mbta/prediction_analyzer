@@ -56,7 +56,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     |> filter_by_stop(params["stop_id"])
     |> filter_by_arrival_departure(params["arrival_departure"])
     |> filter_by_bin(params["bin"])
-    |> filter_by_service_date(params["service_date"])
+    |> filter_by_timeframe(params["chart_range"], params["service_date"])
   end
 
   defp filter_by_route(q, route_id) when is_binary(route_id) and route_id != "" do
@@ -85,7 +85,12 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     end
   end
 
-  defp filter_by_service_date(q, date) do
+  defp filter_by_timeframe(q, "Daily", _date) do
+    date = Timex.local() |> Timex.shift(days: -14) |> DateTime.to_date()
+    from(acc in q, where: acc.service_date >= ^date)
+  end
+
+  defp filter_by_timeframe(q, _chart_range, date) do
     case Date.from_iso8601(date || "") do
       {:ok, d} ->
         from(acc in q, where: acc.service_date == ^d)
@@ -101,13 +106,15 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
   hour | prod total | prod accurate | dev-green total | dev-green accurate
   """
-  def stats_by_environment_and_hour(q) do
+  def stats_by_environment_and_hour(q, filters) do
+    scope = if filters["chart_range"] == "Daily", do: :service_date, else: :hour_of_day
+
     from(
       acc in q,
-      group_by: :hour_of_day,
-      order_by: :hour_of_day,
+      group_by: ^scope,
+      order_by: ^scope,
       select: [
-        acc.hour_of_day,
+        field(acc, ^scope),
         sum(
           fragment(
             "case when ? = ? then ? else 0 end",

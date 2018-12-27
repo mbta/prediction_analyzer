@@ -31,9 +31,18 @@
       </div>
 
       <div class="form-group">
-        <%= label(f, :service_date, "Service Date") %>
-        <%= select(f, :service_date, service_dates(), class: "form-control") %>
+        <%= label(f, :chart_range, "Chart Range") %>
+        <%= select(f, :chart_range, ["Hourly", "Daily"], class: "form-control") %>
       </div>
+
+      <%= if f.params["chart_range"] == "Hourly" do %>
+        <div class="form-group">
+          <%= label(f, :service_date, "Service Date") %>
+          <%= select(f, :service_date, service_dates(), class: "form-control") %>
+        </div>
+      <% else %>
+        Range: Last two weeks
+      <% end %>
 
       <div class="form-group">
         <%= submit "Filter", class: "btn btn-default" %>
@@ -80,7 +89,7 @@
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <table class="table">
         <tr>
-          <th>Hour of Day</th>
+          <th>Hour / Date</th>
           <th class="prod-text">Prod Accuracy</th>
           <th class="prod-text">Prod Total</th>
           <th class="dev-green-text">Dev-Green Accuracy</th>

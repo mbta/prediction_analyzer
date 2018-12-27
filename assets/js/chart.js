@@ -13,7 +13,7 @@ export function setupDashboard() {
   var rawData = window.dataPredictionAccuracyJSON;
   var prodAccs = rawData["prod_accs"];
   var dgAccs = rawData["dg_accs"];
-  var dateRangeData = rawData["hours"];
+  var dateRangeData = rawData["time_buckets"];
 
   var col_1 = ["prod_accs"].concat(prodAccs);
   var col_2 = ["dg_accs"].concat(dgAccs);
