@@ -40,6 +40,13 @@ export function setupDashboard() {
         tick: {
           format: function(x) { return (x*100).toString() + "%";}
         }
+      },
+      x: {
+        type: 'timeseries',
+        tick: {
+          rotate: 75,
+          values: dateRangeData
+        }
       }
     }
   });
