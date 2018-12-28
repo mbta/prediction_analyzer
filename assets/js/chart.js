@@ -14,6 +14,7 @@ export function setupDashboard() {
   var prodAccs = rawData["prod_accs"];
   var dgAccs = rawData["dg_accs"];
   var dateRangeData = rawData["time_buckets"];
+  var chartType = rawData["chart_type"];
 
   var col_1 = ["prod_accs"].concat(prodAccs);
   var col_2 = ["dg_accs"].concat(dgAccs);
@@ -42,10 +43,10 @@ export function setupDashboard() {
         }
       },
       x: {
-        type: 'timeseries',
+        type: (chartType === "Hourly" ? 'indexed' : 'timeseries'),
         tick: {
           rotate: 75,
-          values: dateRangeData
+          culling: false
         }
       },
     },

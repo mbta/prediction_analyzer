@@ -5,7 +5,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   import Ecto.Query, only: [from: 2]
 
   def index(conn, params) do
-    relevant_accuracies = PredictionAccuracy.filter(params["filters"] || %{})
+    filter_params = params["filters"] || %{}
+    relevant_accuracies = PredictionAccuracy.filter(filter_params)
 
     [prod_num_accurate, prod_num_predictions] =
       from(
@@ -25,14 +26,14 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
     accuracies =
       relevant_accuracies
-      |> PredictionAccuracy.stats_by_environment_and_hour(params["filters"])
+      |> PredictionAccuracy.stats_by_environment_and_hour(filter_params)
       |> PredictionAnalyzer.Repo.all()
 
     render(
       conn,
       "index.html",
       accuracies: accuracies,
-      chart_data: Jason.encode!(set_up_accuracy_chart(accuracies)),
+      chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
       prod_num_accurate: prod_num_accurate,
       prod_num_predictions: prod_num_predictions,
       dev_green_num_accurate: dev_green_num_accurate,
@@ -40,7 +41,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     )
   end
 
-  defp set_up_accuracy_chart(accuracies) do
+  defp set_up_accuracy_chart(accuracies, filter_params) do
     Enum.reduce(accuracies, %{time_buckets: [], prod_accs: [], dg_accs: []}, fn [
                                                                                   time_bucket,
                                                                                   prod_total,
@@ -57,5 +58,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       |> Map.put(:prod_accs, acc[:prod_accs] ++ prod_accuracy)
       |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
     end)
+    |> Map.put(:chart_type, filter_params["chart_range"] || "Hourly")
   end
 end
