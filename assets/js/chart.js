@@ -47,6 +47,14 @@ export function setupDashboard() {
           rotate: 75,
           values: dateRangeData
         }
+      },
+    },
+    grid: {
+      x: {
+        show: true
+      },
+      y: {
+        show: true
       }
     }
   });

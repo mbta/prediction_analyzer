@@ -29,13 +29,10 @@
 /*-- Axis --*/
 /*-- Grid --*/
 .c3-grid line {
-  stroke: #aaa; }
+  stroke: #2f516e; }
 
 .c3-grid text {
-  fill: #aaa; }
-
-.c3-xgrid, .c3-ygrid {
-  stroke-dasharray: 3 3; }
+  fill: #2f516e; }
 
 /*-- Text on Chart --*/
 .c3-text.c3-empty {
