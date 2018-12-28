@@ -54,3 +54,25 @@
 .prediction-analyzer-app-title {
   font-weight: 400;
 }
+
+.accuracy-separator {
+  color: #2f516e;
+  border-color: #2f516e;
+}
+
+.button-link {
+  background-color: #165c96;
+  border-radius: 3px;
+  color: white;
+  display: inline-block;
+  line-height: 2.5;
+  margin-right: 0.5em;
+  text-align: center;
+  width: 7em;
+}
+
+.button-link-active {
+  background-color: white;
+  color: #022441;
+  font-weight: bold;
+}
