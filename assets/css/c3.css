@@ -46,10 +46,10 @@
 /*-- Point --*/
 .c3-circle._expanded_ {
   stroke-width: 1px;
-  stroke: white; }
+  stroke: #ffffff; }
 
 .c3-selected-circle {
-  fill: white;
+  fill: #ffffff;
   stroke-width: 2px; }
 
 /*-- Bar --*/
@@ -89,7 +89,7 @@
 
 .c3-legend-background {
   opacity: 0.75;
-  fill: white;
+  fill: #ffffff;
   stroke: lightgray;
   stroke-width: 1; }
 
@@ -171,7 +171,7 @@
   opacity: 1; }
 
 .c3-axis .tick {
-  fill: white;
+  fill: #ffffff;
 }
 
 .c3-legend-item-prod_accs text {
@@ -186,9 +186,9 @@
 
 .c3-axis path,
 .c3-axis line {
-  stroke: white;
+  stroke: #ffffff;
 }
 
 .c3-tooltip-container {
-  color: black;
+  color: #000000;
 }
