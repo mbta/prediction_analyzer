@@ -93,7 +93,7 @@
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <table class="table">
         <tr>
-          <th><%= if f.params["chart_range"] == "Hourly", do: "Hour", else: "Date" %></th>
+          <th><%= if f.params["chart_range"] != "Daily", do: "Hour", else: "Date" %></th>
           <th class="prod-text">Prod Accuracy</th>
           <th class="prod-text">Prod Total</th>
           <th class="dev-green-text">Dev-Green Accuracy</th>

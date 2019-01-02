@@ -77,6 +77,37 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       q = from(acc in PredictionAccuracy.filter(%{"bin" => "6-12 min"}), [])
       assert [%{id: ^acc5_id}] = execute_query(q)
     end
+
+    test "can filter by single date or more" do
+      yesterday = Timex.local() |> Timex.shift(days: -1) |> DateTime.to_date()
+      day_before = Timex.local() |> Timex.shift(days: -2) |> DateTime.to_date()
+
+      acc1 = %{@prediction_accuracy | service_date: yesterday}
+      acc2 = %{@prediction_accuracy | service_date: day_before}
+
+      [acc1_id, acc2_id] =
+        Enum.map([acc1, acc2], fn acc ->
+          %{id: id} = Repo.insert!(acc)
+          id
+        end)
+
+      q =
+        from(acc in PredictionAccuracy.filter(%{"service_date" => Date.to_string(yesterday)}), [])
+
+      assert [%{id: ^acc1_id}] = execute_query(q)
+
+      q =
+        from(
+          acc in PredictionAccuracy.filter(%{"service_date" => Date.to_string(day_before)}),
+          []
+        )
+
+      assert [%{id: ^acc2_id}] = execute_query(q)
+
+      q = from(acc in PredictionAccuracy.filter(%{"chart_range" => "Daily"}), [])
+
+      assert [%{id: ^acc1_id}, %{id: ^acc2_id}] = execute_query(q)
+    end
   end
 
   describe "stats_by_environment_and_hour/2" do
