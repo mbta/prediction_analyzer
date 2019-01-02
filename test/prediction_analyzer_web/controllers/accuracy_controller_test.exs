@@ -55,6 +55,22 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert response =~ "79.63%"
   end
 
+  test "GET /accuracy defaults to hourly", %{conn: conn} do
+    conn = get(conn, "/accuracy")
+    response = html_response(conn, 200)
+
+    assert response =~ "<th>Hour</th>"
+    refute response =~ "<th>Date</th>"
+  end
+
+  test "GET /accuracy can be changed to daily", %{conn: conn} do
+    conn = get(conn, "/accuracy", %{"filters" => %{"chart_range" => "Daily"}})
+    response = html_response(conn, 200)
+
+    assert response =~ "<th>Date</th>"
+    refute response =~ "<th>Hour</th>"
+  end
+
   def insert_accuracy(env, hour, total, accurate) do
     PredictionAnalyzer.Repo.insert!(%{
       @prediction_accuracy
