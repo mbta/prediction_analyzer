@@ -25,10 +25,10 @@
 
 .prediction-analyzer-app {
   background-color: #022441;
-  color: white;
+  color: #ffffff;
 }
 
-.accuracy-form {
+.accuracy-form-filters {
   background-color: #0e4364;
   padding: 1em;
 }
@@ -53,4 +53,26 @@
 
 .prediction-analyzer-app-title {
   font-weight: 400;
+}
+
+.accuracy-separator {
+  color: #2f516e;
+  border-color: #2f516e;
+}
+
+.button-link {
+  background-color: #165c96;
+  border-radius: 3px;
+  color: #ffffff;
+  display: inline-block;
+  line-height: 2.5;
+  margin-right: 0.5em;
+  text-align: center;
+  width: 7em;
+}
+
+.button-link-active {
+  background-color: #ffffff;
+  color: #022441;
+  font-weight: bold;
 }

@@ -1,78 +1,91 @@
-<div class="row">
-  <div class="col-xs-3">
-    <%= form_for @conn, accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
-      <div class="form-group">
-        <%= label(f, :route_id, "Route ID") %>
-        <%= text_input(f, :route_id, class: "form-control") %>
-      </div>
+<%= content_tag :a, "All lines", class: button_class(@conn, ""), href: "/accuracy?filters%5Broute_id%5D=" %>
 
-      <div class="form-group">
-        <%= label(f, :stop_id, "Stop ID") %>
-        <%= text_input(f, :stop_id, class: "form-control") %>
-      </div>
+<%= for route_id <- ["Red", "Orange", "Blue", "Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"] do %>
+  <%= content_tag :a, "#{route_id} line", class: button_class(@conn, route_id), href: "/accuracy?filters%5Broute_id%5D=#{route_id}" %>
+<% end %>
 
-      <div class="form-group">
-        <%= label(class: "radio-inline") do %>
-          <%= radio_button(f, :arrival_departure, "arrival") %> Arrivals
-        <% end %>
-
-        <%= label class: "radio-inline" do %>
-          <%= radio_button(f, :arrival_departure, "departure") %> Departures
-        <% end %>
-
-        <%= label class: "radio-inline" do %>
-          <%= radio_button(f, :arrival_departure, "all") %> All
-        <% end %>
-      </div>
-
-      <div class="form-group">
-        <%= label(f, :bin, "Bin") %>
-        <%= select(f, :bin, ["All" | Map.keys(PredictionAccuracy.bins())], class: "form-control") %>
-      </div>
-
-      <div class="form-group">
-        <%= label(f, :service_date, "Service Date") %>
-        <%= select(f, :service_date, service_dates(), class: "form-control") %>
-      </div>
-
-      <div class="form-group">
-        <%= submit "Filter", class: "btn btn-default" %>
-      </div>
-
-    <% end %>
+<div class="row accuracy-summary-header">
+  <div class="col-xs-6">
+    <span class="prod-text prod-text-header">Prod</span>
+    <div>
+      <span class="accuracy-summary-percentage prod-text">
+        <%= accuracy_percentage(@prod_num_accurate, @prod_num_predictions) %>
+      </span>
+      <span class="accuracy-summary-percent-sign prod-text">
+        %
+      </span>
+    </div>
+    <div class="prod-text">
+      From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
+    </div>
   </div>
 
-  <div class="col-xs-9">
-    <div class="row accuracy-summary-header">
+  <div class="col-xs-6">
+    <span class="dev-green-text dev-green-text-header">Dev Green</span>
+    <div>
+      <span class="accuracy-summary-percentage dev-green-text">
+        <%= accuracy_percentage(@dev_green_num_accurate, @dev_green_num_predictions) %>
+      </span>
+      <span class="accuracy-summary-percent-sign dev-green-text">
+        %
+      </span>
+    </div>
+    <div class="dev-green-text">
+      From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
+    </div>
+  </div>
+</div>
 
-      <div class="col-xs-6">
-        <span class="prod-text prod-text-header">Prod</span>
-        <div>
-          <span class="accuracy-summary-percentage prod-text">
-            <%= accuracy_percentage(@prod_num_accurate, @prod_num_predictions) %>
-          </span>
-          <span class="accuracy-summary-percent-sign prod-text">
-            %
-          </span>
-        </div>
-        <div class="prod-text">
-          From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
-        </div>
-      </div>
+<hr class="accuracy-separator">
 
-      <div class="col-xs-6">
-        <span class="dev-green-text dev-green-text-header">Dev Green</span>
-        <div>
-          <span class="accuracy-summary-percentage dev-green-text">
-            <%= accuracy_percentage(@dev_green_num_accurate, @dev_green_num_predictions) %>
-          </span>
-          <span class="accuracy-summary-percent-sign dev-green-text">
-            %
-          </span>
+<%= form_for @conn, accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
+  <%= hidden_input(f, :route_id) %>
+
+  <div class="row">
+    <div class="col-xs-3">
+      <div class="accuracy-form-filters">
+        <div class="form-group">
+          <%= label(f, :stop_id, "Stop ID") %>
+          <%= text_input(f, :stop_id, class: "form-control") %>
         </div>
-        <div class="dev-green-text">
-          From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
+
+        <div class="form-group">
+          <%= label(class: "radio-inline") do %>
+            <%= radio_button(f, :arrival_departure, "arrival") %> Arrivals
+          <% end %>
+
+          <%= label class: "radio-inline" do %>
+            <%= radio_button(f, :arrival_departure, "departure") %> Departures
+          <% end %>
+
+          <%= label class: "radio-inline" do %>
+            <%= radio_button(f, :arrival_departure, "all") %> All
+          <% end %>
         </div>
+
+        <div class="form-group">
+          <%= label(f, :bin, "Bin") %>
+          <%= select(f, :bin, ["All" | Map.keys(PredictionAccuracy.bins())], class: "form-control") %>
+        </div>
+
+        <div class="form-group">
+          <%= label(f, :chart_range, "Chart Range") %>
+          <%= select(f, :chart_range, ["Hourly", "Daily"], class: "form-control") %>
+        </div>
+
+        <%= if f.params["chart_range"] == "Hourly" do %>
+          <div class="form-group">
+            <%= label(f, :service_date, "Service Date") %>
+            <%= select(f, :service_date, service_dates(), class: "form-control") %>
+          </div>
+        <% else %>
+          Range: Last two weeks
+        <% end %>
+
+        <div class="form-group">
+          <%= submit "Filter", class: "btn btn-default" %>
+        </div>
+
       </div>
     </div>
 
@@ -80,7 +93,7 @@
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <table class="table">
         <tr>
-          <th>Hour of Day</th>
+          <th><%= if f.params["chart_range"] != "Daily", do: "Hour", else: "Date" %></th>
           <th class="prod-text">Prod Accuracy</th>
           <th class="prod-text">Prod Total</th>
           <th class="dev-green-text">Dev-Green Accuracy</th>
@@ -105,7 +118,7 @@
       </table>
     </div>
   </div>
-</div>
+<% end %>
 <script>
   window.dataPredictionAccuracyJSON = <%= raw(@chart_data) %>
 </script>

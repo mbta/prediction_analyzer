@@ -77,9 +77,40 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       q = from(acc in PredictionAccuracy.filter(%{"bin" => "6-12 min"}), [])
       assert [%{id: ^acc5_id}] = execute_query(q)
     end
+
+    test "can filter by single date or more" do
+      yesterday = Timex.local() |> Timex.shift(days: -1) |> DateTime.to_date()
+      day_before = Timex.local() |> Timex.shift(days: -2) |> DateTime.to_date()
+
+      acc1 = %{@prediction_accuracy | service_date: yesterday}
+      acc2 = %{@prediction_accuracy | service_date: day_before}
+
+      [acc1_id, acc2_id] =
+        Enum.map([acc1, acc2], fn acc ->
+          %{id: id} = Repo.insert!(acc)
+          id
+        end)
+
+      q =
+        from(acc in PredictionAccuracy.filter(%{"service_date" => Date.to_string(yesterday)}), [])
+
+      assert [%{id: ^acc1_id}] = execute_query(q)
+
+      q =
+        from(
+          acc in PredictionAccuracy.filter(%{"service_date" => Date.to_string(day_before)}),
+          []
+        )
+
+      assert [%{id: ^acc2_id}] = execute_query(q)
+
+      q = from(acc in PredictionAccuracy.filter(%{"chart_range" => "Daily"}), [])
+
+      assert [%{id: ^acc1_id}, %{id: ^acc2_id}] = execute_query(q)
+    end
   end
 
-  describe "stats_by_environment_and_hour/1" do
+  describe "stats_by_environment_and_hour/2" do
     test "groups by environment and hour and sums" do
       insert_accuracy("prod", 10, 101, 99)
       insert_accuracy("prod", 10, 108, 102)
@@ -92,12 +123,36 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       stats =
         from(acc in PredictionAccuracy, [])
-        |> PredictionAccuracy.stats_by_environment_and_hour()
+        |> PredictionAccuracy.stats_by_environment_and_hour(%{"chart_range" => "Hourly"})
         |> Repo.all()
 
       assert stats == [
                [10, 209, 201, 809, 701],
                [11, 495, 472, 1095, 872]
+             ]
+    end
+
+    test "groups by environment and service date and sums" do
+      today = Timex.local() |> DateTime.to_date()
+      yesterday = Timex.local() |> Timex.shift(days: -1) |> DateTime.to_date()
+
+      insert_accuracy("prod", 10, 101, 99, yesterday)
+      insert_accuracy("prod", 11, 108, 102, yesterday)
+      insert_accuracy("prod", 10, 225, 211, today)
+      insert_accuracy("prod", 11, 270, 261, today)
+      insert_accuracy("dev-green", 10, 401, 399, yesterday)
+      insert_accuracy("dev-green", 11, 408, 302, yesterday)
+      insert_accuracy("dev-green", 10, 525, 411, today)
+      insert_accuracy("dev-green", 11, 570, 461, today)
+
+      stats =
+        from(acc in PredictionAccuracy, [])
+        |> PredictionAccuracy.stats_by_environment_and_hour(%{"chart_range" => "Daily"})
+        |> Repo.all()
+
+      assert stats == [
+               [yesterday, 209, 201, 809, 701],
+               [today, 495, 472, 1095, 872]
              ]
     end
   end
@@ -106,13 +161,22 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     Repo.all(from(acc in q, order_by: :id))
   end
 
-  defp insert_accuracy(env, hour, total, accurate) do
-    PredictionAnalyzer.Repo.insert!(%{
+  defp insert_accuracy(env, hour, total, accurate, service_date \\ nil) do
+    accuracy = %{
       @prediction_accuracy
       | environment: env,
         hour_of_day: hour,
         num_predictions: total,
         num_accurate_predictions: accurate
-    })
+    }
+
+    accuracy =
+      if service_date do
+        %{accuracy | service_date: service_date}
+      else
+        accuracy
+      end
+
+    PredictionAnalyzer.Repo.insert!(accuracy)
   end
 end

@@ -45,4 +45,13 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   def predictions_path_with_filters(_params, _hour) do
     "#"
   end
+
+  def button_class(%{params: %{"filters" => %{"route_id" => route_id}}}, route_id),
+    do: "button-link button-link-active"
+
+  def button_class(%{params: %{"filters" => %{"route_id" => _route}}}, _other_route),
+    do: "button-link"
+
+  def button_class(%{}, ""), do: "button-link button-link-active"
+  def button_class(%{}, _else), do: "button-link"
 end
