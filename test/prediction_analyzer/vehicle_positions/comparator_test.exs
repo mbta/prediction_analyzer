@@ -96,21 +96,29 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         @prediction
         | trip_id: "trip1",
           vehicle_id: "1",
-          arrival_time: :os.system_time(:second),
-          stop_id: "stop0"
+          arrival_time: :os.system_time(:second) - 60 * 15,
+          stop_id: "stop1"
       }
 
       prediction3 = %{
         @prediction
         | trip_id: "trip1",
           vehicle_id: "1",
-          arrival_time: :os.system_time(:second) - 24 * 60 * 60,
-          file_timestamp: :os.system_time(:second) - 60 * 60 * 24,
+          arrival_time: :os.system_time(:second),
+          stop_id: "stop0"
+      }
+
+      prediction4 = %{
+        @prediction
+        | trip_id: "trip1",
+          vehicle_id: "1",
+          arrival_time: :os.system_time(:second) - 60 * 60,
+          file_timestamp: :os.system_time(:second) - 60 * 60,
           stop_id: "stop1"
       }
 
-      [p1_id, p2_id, p3_id] =
-        Enum.map([prediction1, prediction2, prediction3], fn prediction ->
+      [p1_id, p2_id, p3_id, p4_id] =
+        Enum.map([prediction1, prediction2, prediction3, prediction4], fn prediction ->
           Repo.insert!(prediction) |> Map.get(:id)
         end)
 
@@ -132,9 +140,12 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
                ve_id
 
       assert Repo.one(from(p in Prediction, where: p.id == ^p2_id, select: p.vehicle_event_id)) ==
-               nil
+               ve_id
 
       assert Repo.one(from(p in Prediction, where: p.id == ^p3_id, select: p.vehicle_event_id)) ==
+               nil
+
+      assert Repo.one(from(p in Prediction, where: p.id == ^p4_id, select: p.vehicle_event_id)) ==
                nil
     end
   end

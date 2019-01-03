@@ -100,13 +100,14 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     }
   end
 
+  @spec associate_vehicle_event_with_predictions(VehicleEvent.t()) :: nil
   defp associate_vehicle_event_with_predictions(vehicle_event) do
     from(
       p in Prediction,
       where:
         p.vehicle_id == ^vehicle_event.vehicle_id and p.stop_id == ^vehicle_event.stop_id and
           p.environment == ^vehicle_event.environment and is_nil(p.vehicle_event_id) and
-          p.file_timestamp > ^(:os.system_time(:second) - 60 * 60 * 3),
+          p.file_timestamp > ^(:os.system_time(:second) - 60 * 30),
       update: [set: [vehicle_event_id: ^vehicle_event.id]]
     )
     |> Repo.update_all([])
@@ -117,5 +118,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       {n, _} ->
         Logger.info("Associated vehicle_event with #{n} prediction(s)")
     end
+
+    nil
   end
 end
