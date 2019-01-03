@@ -23,7 +23,7 @@ defmodule PredictionAnalyzerWeb.PredictionsController do
       if service_date && hour do
         {date, hour} =
           if hour >= 24 do
-            {Timex.shift(service_date, days: -1), hour - 24}
+            {Timex.shift(service_date, days: 1), hour - 24}
           else
             {service_date, hour}
           end
