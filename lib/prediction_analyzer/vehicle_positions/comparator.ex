@@ -100,6 +100,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     }
   end
 
+  @spec associate_vehicle_event_with_predictions(VehicleEvent.t()) :: nil
   defp associate_vehicle_event_with_predictions(vehicle_event) do
     from(
       p in Prediction,
@@ -117,5 +118,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       {n, _} ->
         Logger.info("Associated vehicle_event with #{n} prediction(s)")
     end
+
+    nil
   end
 end
