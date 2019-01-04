@@ -192,3 +192,17 @@
 .c3-tooltip-container {
   color: #000000;
 }
+
+.c3-axis-y-label {
+  fill: #ffffff;
+  font-size: 2em;
+}
+
+.c3-axis-x-label {
+  fill: #ffffff;
+  font-size: 1.5em;
+}
+
+.c3-axis-x .tick text tspan {
+  font-size: 1.25em;
+}
