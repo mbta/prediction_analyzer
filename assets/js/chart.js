@@ -16,8 +16,8 @@ export function setupDashboard() {
   var dateRangeData = rawData["time_buckets"];
   var chartType = rawData["chart_type"];
 
-  var col_1 = ["prod_accs"].concat(prodAccs);
-  var col_2 = ["dg_accs"].concat(dgAccs);
+  var col_1 = ["Prod"].concat(prodAccs);
+  var col_2 = ["Dev Green"].concat(dgAccs);
   var x_data = ["x"].concat(dateRangeData);
 
   var chart = c3.generate({
@@ -35,6 +35,10 @@ export function setupDashboard() {
     },
     axis: {
       y: {
+        label: {
+          text: "% Accurate",
+          position: "outer-middle"
+        },
         max: 1,
         min: 0,
         padding: {top: 0, bottom:0},
@@ -43,9 +47,13 @@ export function setupDashboard() {
         }
       },
       x: {
+        label: {
+          text: (chartType === "Hourly" ? "Hour of Day" : ""),
+          position: "outer-center"
+        },
         type: (chartType === "Hourly" ? 'indexed' : 'timeseries'),
         tick: {
-          rotate: 75,
+          rotate: (chartType === "Hourly" ? 0 : 75),
           culling: false
         }
       },
@@ -57,6 +65,12 @@ export function setupDashboard() {
       y: {
         show: true
       }
+    },
+    size: {
+      height: 400
+    },
+    legend: {
+      position: "inset"
     }
   });
 }

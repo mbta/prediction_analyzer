@@ -174,12 +174,12 @@
   fill: #ffffff;
 }
 
-.c3-legend-item-prod_accs text {
+.c3-legend-item-Prod text {
   fill: #1fecff;
   stroke: #1fecff;
 }
 
-.c3-legend-item-dg_accs text {
+.c3-legend-item-Dev-Green text {
   fill: #c743f0;
   stroke: #c743f0;
 }
@@ -191,4 +191,23 @@
 
 .c3-tooltip-container {
   color: #000000;
+}
+
+.c3-axis-y-label {
+  fill: #ffffff;
+  font-size: 2em;
+}
+
+.c3-axis-x-label {
+  fill: #ffffff;
+  font-size: 1.25em;
+}
+
+.c3-axis-x .tick text tspan {
+  font-size: 1.25em;
+}
+
+.c3-legend-background {
+  stroke: #2f516e;
+  fill: #022441;
 }
