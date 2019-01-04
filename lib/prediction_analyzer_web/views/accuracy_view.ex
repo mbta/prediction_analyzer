@@ -21,7 +21,13 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     end)
   end
 
-  def show_download?(%{"filters" => %{"stop_id" => stop_id, "service_date" => service_date}})
+  def show_download?(%{
+        "filters" => %{
+          "stop_id" => stop_id,
+          "service_date" => service_date,
+          "chart_range" => "Hourly"
+        }
+      })
       when not is_nil(stop_id) and stop_id != "" and not is_nil(service_date) and
              service_date != "" do
     true
