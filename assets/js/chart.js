@@ -16,8 +16,8 @@ export function setupDashboard() {
   var dateRangeData = rawData["time_buckets"];
   var chartType = rawData["chart_type"];
 
-  var col_1 = ["prod_accs"].concat(prodAccs);
-  var col_2 = ["dg_accs"].concat(dgAccs);
+  var col_1 = ["Prod"].concat(prodAccs);
+  var col_2 = ["Dev Green"].concat(dgAccs);
   var x_data = ["x"].concat(dateRangeData);
 
   var chart = c3.generate({
@@ -49,7 +49,7 @@ export function setupDashboard() {
       x: {
         label: {
           text: (chartType === "Hourly" ? "Hour of Day" : ""),
-          position: "outer-left"
+          position: "outer-center"
         },
         type: (chartType === "Hourly" ? 'indexed' : 'timeseries'),
         tick: {
@@ -68,6 +68,9 @@ export function setupDashboard() {
     },
     size: {
       height: 400
+    },
+    legend: {
+      position: "inset"
     }
   });
 }
