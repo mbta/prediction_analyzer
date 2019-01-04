@@ -21,6 +21,7 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     end)
   end
 
+  @spec show_download?(map()) :: boolean()
   def show_download?(%{
         "filters" => %{
           "stop_id" => stop_id,
