@@ -65,7 +65,11 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
     assert %{
              "filters[chart_range]" => "Hourly",
-             "filters[service_date]" => @today_str
+             "filters[service_date]" => @today_str,
+             "filters[route_id]" => "",
+             "filters[stop_id]" => "",
+             "filters[arrival_departure]" => "all",
+             "filters[bin]" => "All"
            } =
              URI.parse(redirected_to(conn))
              |> Map.get(:query)

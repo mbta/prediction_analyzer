@@ -51,7 +51,11 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
     default_filters = %{
       "chart_range" => "Hourly",
-      "service_date" => Timex.local() |> Date.to_string()
+      "service_date" => Timex.local() |> Date.to_string(),
+      "route_id" => "",
+      "stop_id" => "",
+      "arrival_departure" => "all",
+      "bin" => "All"
     }
 
     filters = Map.merge(default_filters, filters)
