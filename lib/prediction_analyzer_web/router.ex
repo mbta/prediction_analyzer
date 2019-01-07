@@ -21,6 +21,7 @@ defmodule PredictionAnalyzerWeb.Router do
     get("/predictions", PredictionsController, :index)
     get("/vehicle_events", VehicleEventsController, :index)
     get("/accuracy", AccuracyController, :index)
+    get("/_health", HealthController, :index)
   end
 
   # Other scopes may use custom stacks.
