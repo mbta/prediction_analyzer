@@ -5,13 +5,12 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   import Ecto.Query, only: [from: 2]
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def index(
-        conn,
-        params = %{"filters" => %{"chart_range" => chart_range, "service_date" => service_date}}
-      )
+  def index(conn, %{
+        "filters" =>
+          %{"chart_range" => chart_range, "service_date" => service_date} = filter_params
+      })
       when (chart_range == "Hourly" and not is_nil(service_date) and service_date != "") or
              chart_range == "Daily" do
-    filter_params = params["filters"]
     relevant_accuracies = PredictionAccuracy.filter(filter_params)
 
     [prod_num_accurate, prod_num_predictions] =
