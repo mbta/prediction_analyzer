@@ -3,6 +3,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
 
   @today DateTime.to_date(Timex.local())
+  @today_str Date.to_string(@today)
 
   @prediction_accuracy %PredictionAccuracy{
     environment: "prod",
@@ -59,21 +60,22 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
   test "GET /accuracy defaults to hourly", %{conn: conn} do
     conn = get(conn, "/accuracy")
+
     assert redirected_to(conn) =~ "/accuracy"
 
-    IO.inspect(redirected_params(conn))
-
     assert %{
-             "filters" => %{
-               "chart_range" => "Hourly",
-               "service_date" => @today
-             }
-           } = redirected_params(conn)
+             "filters[chart_range]" => "Hourly",
+             "filters[service_date]" => @today_str
+           } =
+             URI.parse(redirected_to(conn))
+             |> Map.get(:query)
+             |> URI.decode_query()
 
-    # response = html_response(conn, 200)
+    conn = get(conn, redirected_to(conn))
+    response = html_response(conn, 200)
 
-    # assert response =~ "<th>Hour</th>"
-    # refute response =~ "<th>Date</th>"
+    assert response =~ "<th>Hour</th>"
+    refute response =~ "<th>Date</th>"
   end
 
   test "GET /accuracy can be changed to daily", %{conn: conn} do
