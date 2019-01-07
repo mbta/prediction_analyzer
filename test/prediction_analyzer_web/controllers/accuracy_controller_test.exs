@@ -25,6 +25,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     PredictionAnalyzer.Repo.insert!(a2)
 
     conn = get(conn, "/accuracy")
+    conn = get(conn, redirected_to(conn))
     response = html_response(conn, 200)
 
     assert response =~ "From 150 accurate out of 200 total predictions"
@@ -42,6 +43,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     insert_accuracy("dev-green", 11, 570, 461)
 
     conn = get(conn, "/accuracy")
+    conn = get(conn, redirected_to(conn))
     response = html_response(conn, 200)
 
     # 101 + 108
@@ -57,14 +59,26 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
   test "GET /accuracy defaults to hourly", %{conn: conn} do
     conn = get(conn, "/accuracy")
-    response = html_response(conn, 200)
+    assert redirected_to(conn) =~ "/accuracy"
 
-    assert response =~ "<th>Hour</th>"
-    refute response =~ "<th>Date</th>"
+    IO.inspect(redirected_params(conn))
+
+    assert %{
+             "filters" => %{
+               "chart_range" => "Hourly",
+               "service_date" => @today
+             }
+           } = redirected_params(conn)
+
+    # response = html_response(conn, 200)
+
+    # assert response =~ "<th>Hour</th>"
+    # refute response =~ "<th>Date</th>"
   end
 
   test "GET /accuracy can be changed to daily", %{conn: conn} do
     conn = get(conn, "/accuracy", %{"filters" => %{"chart_range" => "Daily"}})
+    conn = get(conn, redirected_to(conn))
     response = html_response(conn, 200)
 
     assert response =~ "<th>Date</th>"
