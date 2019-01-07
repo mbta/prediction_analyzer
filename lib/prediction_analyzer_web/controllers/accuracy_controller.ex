@@ -4,8 +4,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   import Ecto.Query, only: [from: 2]
 
-  defguard is_binary_present(val) when is_binary(val) and val != ""
-
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, %{
         "filters" =>
@@ -18,9 +16,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             "bin" => bin
           } = filter_params
       })
-      when is_binary_present(chart_range) and is_binary_present(service_date) and
-             not is_nil(route_id) and not is_nil(stop_id) and is_binary_present(arrival_departure) and
-             is_binary_present(bin) do
+      when byte_size(chart_range) > 0 and byte_size(service_date) > 0 and not is_nil(route_id) and
+             not is_nil(stop_id) and byte_size(arrival_departure) > 0 and byte_size(bin) > 0 do
     relevant_accuracies = PredictionAccuracy.filter(filter_params)
 
     [prod_num_accurate, prod_num_predictions] =
