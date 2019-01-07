@@ -7,10 +7,19 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, %{
         "filters" =>
-          %{"chart_range" => chart_range, "service_date" => service_date} = filter_params
+          %{
+            "chart_range" => chart_range,
+            "service_date" => service_date,
+            "route_id" => route_id,
+            "stop_id" => stop_id,
+            "arrival_departure" => arrival_departure,
+            "bin" => bin
+          } = filter_params
       })
-      when (chart_range == "Hourly" and not is_nil(service_date) and service_date != "") or
-             chart_range == "Daily" do
+      when not is_nil(chart_range) and chart_range != "" and not is_nil(service_date) and
+             service_date != "" and not is_nil(route_id) and not is_nil(stop_id) and
+             not is_nil(arrival_departure) and arrival_departure != "" and not is_nil(bin) and
+             bin != "" do
     relevant_accuracies = PredictionAccuracy.filter(filter_params)
 
     [prod_num_accurate, prod_num_predictions] =
