@@ -21,10 +21,16 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
 
   test "show_download?/1" do
     assert AccuracyView.show_download?(%{
-             "filters" => %{"stop_id" => "123", "service_date" => "2018-10-10"}
+             "filters" => %{
+               "stop_id" => "123",
+               "service_date" => "2018-10-10",
+               "chart_range" => "Hourly"
+             }
            })
 
-    refute AccuracyView.show_download?(%{"filters" => %{}})
+    refute AccuracyView.show_download?(%{
+             "filters" => %{"stop_id" => "", "service_date" => "", "chart_range" => "Daily"}
+           })
   end
 
   test "predictions_path_with_filters/2" do

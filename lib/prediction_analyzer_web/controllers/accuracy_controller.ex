@@ -4,8 +4,20 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   import Ecto.Query, only: [from: 2]
 
-  def index(conn, params) do
-    filter_params = params["filters"] || %{}
+  @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def index(conn, %{
+        "filters" =>
+          %{
+            "chart_range" => chart_range,
+            "service_date" => service_date,
+            "route_id" => route_id,
+            "stop_id" => stop_id,
+            "arrival_departure" => arrival_departure,
+            "bin" => bin
+          } = filter_params
+      })
+      when byte_size(chart_range) > 0 and byte_size(service_date) > 0 and not is_nil(route_id) and
+             not is_nil(stop_id) and byte_size(arrival_departure) > 0 and byte_size(bin) > 0 do
     relevant_accuracies = PredictionAccuracy.filter(filter_params)
 
     [prod_num_accurate, prod_num_predictions] =
@@ -38,6 +50,26 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       prod_num_predictions: prod_num_predictions,
       dev_green_num_accurate: dev_green_num_accurate,
       dev_green_num_predictions: dev_green_num_predictions
+    )
+  end
+
+  def index(conn, params) do
+    filters = params["filters"] || %{}
+
+    default_filters = %{
+      "chart_range" => "Hourly",
+      "service_date" => Timex.local() |> Date.to_string(),
+      "route_id" => "",
+      "stop_id" => "",
+      "arrival_departure" => "all",
+      "bin" => "All"
+    }
+
+    filters = Map.merge(default_filters, filters)
+
+    redirect(
+      conn,
+      to: accuracy_path(conn, :index, %{"filters" => filters})
     )
   end
 

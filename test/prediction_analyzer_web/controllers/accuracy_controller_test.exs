@@ -3,6 +3,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
 
   @today DateTime.to_date(Timex.local())
+  @today_str Date.to_string(@today)
 
   @prediction_accuracy %PredictionAccuracy{
     environment: "prod",
@@ -25,6 +26,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     PredictionAnalyzer.Repo.insert!(a2)
 
     conn = get(conn, "/accuracy")
+    conn = get(conn, redirected_to(conn))
     response = html_response(conn, 200)
 
     assert response =~ "From 150 accurate out of 200 total predictions"
@@ -42,6 +44,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     insert_accuracy("dev-green", 11, 570, 461)
 
     conn = get(conn, "/accuracy")
+    conn = get(conn, redirected_to(conn))
     response = html_response(conn, 200)
 
     # 101 + 108
@@ -57,6 +60,22 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
   test "GET /accuracy defaults to hourly", %{conn: conn} do
     conn = get(conn, "/accuracy")
+
+    assert redirected_to(conn) =~ "/accuracy"
+
+    assert %{
+             "filters[chart_range]" => "Hourly",
+             "filters[service_date]" => @today_str,
+             "filters[route_id]" => "",
+             "filters[stop_id]" => "",
+             "filters[arrival_departure]" => "all",
+             "filters[bin]" => "All"
+           } ==
+             URI.parse(redirected_to(conn))
+             |> Map.get(:query)
+             |> URI.decode_query()
+
+    conn = get(conn, redirected_to(conn))
     response = html_response(conn, 200)
 
     assert response =~ "<th>Hour</th>"
@@ -65,6 +84,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
   test "GET /accuracy can be changed to daily", %{conn: conn} do
     conn = get(conn, "/accuracy", %{"filters" => %{"chart_range" => "Daily"}})
+    conn = get(conn, redirected_to(conn))
     response = html_response(conn, 200)
 
     assert response =~ "<th>Date</th>"
