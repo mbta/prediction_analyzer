@@ -4,6 +4,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   import Ecto.Query, only: [from: 2]
 
+  @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(
         conn,
         params = %{"filters" => %{"chart_range" => chart_range, "service_date" => service_date}}
