@@ -4,41 +4,59 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   import Ecto.Query, only: [from: 2]
 
+  def index(conn, %{"filters" => %{"chart_range" => chart_range, "service_date" => service_date}})
+      when (chart_range == "Hourly" and not is_nil(service_date) and not service_date == "") or
+             chart_range == "Daily" do
+    IO.puts("Here")
+    # filter_params = params["filters"] || %{}
+    # relevant_accuracies = PredictionAccuracy.filter(filter_params)
+
+    # [prod_num_accurate, prod_num_predictions] =
+    #   from(
+    #     acc in relevant_accuracies,
+    #     select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+    #     where: acc.environment == "prod"
+    #   )
+    #   |> PredictionAnalyzer.Repo.one!()
+
+    # [dev_green_num_accurate, dev_green_num_predictions] =
+    #   from(
+    #     acc in relevant_accuracies,
+    #     select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+    #     where: acc.environment == "dev-green"
+    #   )
+    #   |> PredictionAnalyzer.Repo.one!()
+
+    # accuracies =
+    #   relevant_accuracies
+    #   |> PredictionAccuracy.stats_by_environment_and_hour(filter_params)
+    #   |> PredictionAnalyzer.Repo.all()
+
+    # render(
+    #   conn,
+    #   "index.html",
+    #   accuracies: accuracies,
+    #   chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
+    #   prod_num_accurate: prod_num_accurate,
+    #   prod_num_predictions: prod_num_predictions,
+    #   dev_green_num_accurate: dev_green_num_accurate,
+    #   dev_green_num_predictions: dev_green_num_predictions
+    # )
+  end
+
   def index(conn, params) do
-    filter_params = params["filters"] || %{}
-    relevant_accuracies = PredictionAccuracy.filter(filter_params)
+    filters = params["filters"] || %{}
+    chart_range = filters["chart_range"] || "Hourly"
+    service_date = filters["service_date"] || Timex.local() |> Date.to_string()
 
-    [prod_num_accurate, prod_num_predictions] =
-      from(
-        acc in relevant_accuracies,
-        select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-        where: acc.environment == "prod"
-      )
-      |> PredictionAnalyzer.Repo.one!()
+    IO.inspect(params)
 
-    [dev_green_num_accurate, dev_green_num_predictions] =
-      from(
-        acc in relevant_accuracies,
-        select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-        where: acc.environment == "dev-green"
-      )
-      |> PredictionAnalyzer.Repo.one!()
+    default_filters = %{
+      "chart_range" => chart_range,
+      "service_date" => service_date
+    }
 
-    accuracies =
-      relevant_accuracies
-      |> PredictionAccuracy.stats_by_environment_and_hour(filter_params)
-      |> PredictionAnalyzer.Repo.all()
-
-    render(
-      conn,
-      "index.html",
-      accuracies: accuracies,
-      chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
-      prod_num_accurate: prod_num_accurate,
-      prod_num_predictions: prod_num_predictions,
-      dev_green_num_accurate: dev_green_num_accurate,
-      dev_green_num_predictions: dev_green_num_predictions
-    )
+    redirect(conn, to: accuracy_path(conn, :index, %{"filters" => default_filters}))
   end
 
   defp set_up_accuracy_chart(accuracies, filter_params) do
