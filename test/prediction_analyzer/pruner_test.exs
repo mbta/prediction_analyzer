@@ -15,6 +15,7 @@ defmodule PredictionAnalyzer.PrunerTest do
 
   @prediction %Prediction{
     file_timestamp: :os.system_time(:second),
+    vehicle_id: "vehicle",
     trip_id: "trip",
     is_deleted: false,
     delay: 0,

@@ -13,6 +13,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
 
   @prediction %Prediction{
     file_timestamp: :os.system_time(:second),
+    vehicle_id: "vehicle",
     environment: "dev-green",
     trip_id: "trip",
     is_deleted: false,

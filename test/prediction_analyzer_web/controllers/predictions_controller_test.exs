@@ -18,6 +18,7 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
 
     prediction = %PredictionAnalyzer.Predictions.Prediction{
       file_timestamp: 1_542_558_122,
+      vehicle_id: "v1",
       trip_id: "TEST_TRIP",
       is_deleted: false,
       delay: 0,
@@ -70,6 +71,7 @@ defmodule PredictionAnalyzerWeb.PredictionsControllerTest do
     {:ok, %{id: vehicle_event_id}} = PredictionAnalyzer.Repo.insert(vehicle_event)
 
     prediction = %PredictionAnalyzer.Predictions.Prediction{
+      vehicle_id: "v1",
       file_timestamp: 1_542_608_520,
       trip_id: "TEST_TRIP",
       is_deleted: false,

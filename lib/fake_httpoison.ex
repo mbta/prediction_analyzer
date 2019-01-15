@@ -23,6 +23,9 @@ defmodule FakeHTTPoison do
           "is_deleted" => false,
           "trip_update" => %{
             "delay" => nil,
+            "vehicle" => %{
+              "id" => "vehicle_id"
+            },
             "trip" => %{
               "trip_id" => "TEST_TRIP",
               "route_id" => "Blue"
