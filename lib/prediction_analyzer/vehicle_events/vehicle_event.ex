@@ -3,6 +3,19 @@ defmodule PredictionAnalyzer.VehicleEvents.VehicleEvent do
 
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          vehicle_id: String.t(),
+          environment: String.t(),
+          vehicle_label: String.t(),
+          is_deleted: boolean(),
+          route_id: String.t(),
+          direction_id: integer(),
+          trip_id: String.t(),
+          stop_id: String.t(),
+          arrival_time: integer(),
+          departure_time: integer()
+        }
+
   schema "vehicle_events" do
     field(:vehicle_id, :string)
     field(:environment, :string)
