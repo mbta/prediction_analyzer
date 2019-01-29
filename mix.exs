@@ -10,6 +10,7 @@ defmodule PredictionAnalyzer.Mixfile do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
+      dialyzer: [plt_add_apps: [:ex_unit]],
       aliases: aliases(),
       deps: deps()
     ]
@@ -34,6 +35,7 @@ defmodule PredictionAnalyzer.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev, :test], runtime: false},
       {:distillery, "~> 2.0", runtime: false},
       {:ecto, "~> 2.0"},
       {:excoveralls, "~> 0.5", only: :test},

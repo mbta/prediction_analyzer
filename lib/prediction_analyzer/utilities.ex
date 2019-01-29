@@ -4,7 +4,7 @@ defmodule PredictionAnalyzer.Utilities do
   date extends to 3am of the following day, so the hour can range
   from 3 - 26
   """
-  @spec service_date_info(DateTime.t()) :: {Date.t(), non_neg_integer()}
+  @spec service_date_info(DateTime.t()) :: {Date.t(), non_neg_integer(), integer(), integer()}
   def service_date_info(timestamp) do
     beginning_of_hour_unix =
       timestamp
