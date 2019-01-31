@@ -6,6 +6,26 @@ export default function() {
     if(document.getElementById("chart-prediction-accuracy")) {
       setupDashboard();
     }
+
+    var accuracyForm = document.getElementsByClassName('accuracy-form')[0];
+    if(accuracyForm) {
+      bindChartRangeLinks(accuracyForm);
+    }
+  });
+}
+
+export function bindChartRangeLinks(accuracyForm) {
+  var chartRangeInput = document.getElementById('filters_chart_range');
+
+  document.getElementById('link-hourly').addEventListener('click', function(event) {
+    event.preventDefault();
+    chartRangeInput.value = 'Hourly';
+    accuracyForm.submit();
+  });
+  document.getElementById('link-daily').addEventListener('click', function(event) {
+    event.preventDefault();
+    chartRangeInput.value = 'Daily';
+    accuracyForm.submit();
   });
 }
 

@@ -61,4 +61,13 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
 
   def button_class(%{}, ""), do: "button-link button-link-active"
   def button_class(%{}, _else), do: "button-link"
+
+  @spec chart_range_class(map(), String.t()) :: String.t()
+  def chart_range_class(%{params: %{"filters" => %{"chart_range" => chart_range}}}, chart_range),
+    do: "chart-range-link chart-range-link-active"
+
+  def chart_range_class(_, _), do: "chart-range-link"
+
+  @spec chart_range_id(String.t()) :: String.t()
+  def chart_range_id(chart_range), do: "link-#{String.downcase(chart_range)}"
 end
