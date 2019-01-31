@@ -57,7 +57,13 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
           id
         end)
 
-      q = from(acc in PredictionAccuracy.filter(%{}), [])
+      {accs, _} =
+        PredictionAccuracy.filter(%{
+          "chart_range" => "Hourly",
+          "service_date" => Timex.local() |> DateTime.to_date()
+        })
+
+      q = from(acc in accs, [])
 
       assert [%{id: ^acc2_id}, %{id: ^acc3_id}, %{id: ^acc4_id}, %{id: ^acc5_id}] =
                execute_query(q)
@@ -91,22 +97,28 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
           id
         end)
 
-      q =
-        from(acc in PredictionAccuracy.filter(%{"service_date" => Date.to_string(yesterday)}), [])
+      {accs, _} =
+        PredictionAccuracy.filter(%{
+          "chart_range" => "Hourly",
+          "service_date" => Date.to_string(yesterday)
+        })
+
+      q = from(acc in accs, [])
 
       assert [%{id: ^acc1_id}] = execute_query(q)
 
-      q =
-        from(
-          acc in PredictionAccuracy.filter(%{"service_date" => Date.to_string(day_before)}),
-          []
-        )
+      {accs, _} =
+        PredictionAccuracy.filter(%{
+          "chart_range" => "Hourly",
+          "service_date" => Date.to_string(day_before)
+        })
+
+      q = from(acc in accs, [])
 
       assert [%{id: ^acc2_id}] = execute_query(q)
 
-      q = from(acc in PredictionAccuracy.filter(%{"chart_range" => "Daily"}), [])
-
-      assert [%{id: ^acc1_id}, %{id: ^acc2_id}] = execute_query(q)
+      assert {_, "No start or end date given."} =
+               PredictionAccuracy.filter(%{"chart_range" => "Daily"})
     end
   end
 

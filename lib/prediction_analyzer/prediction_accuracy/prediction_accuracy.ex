@@ -51,54 +51,84 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   end
 
   def filter(params) do
-    from(acc in __MODULE__, [])
-    |> filter_by_route(params["route_id"])
-    |> filter_by_stop(params["stop_id"])
-    |> filter_by_arrival_departure(params["arrival_departure"])
-    |> filter_by_bin(params["bin"])
-    |> filter_by_timeframe(params["chart_range"], params["service_date"])
+    q = from(acc in __MODULE__, [])
+
+    with {:ok, q} <- filter_by_route(q, params["route_id"]),
+         {:ok, q} <- filter_by_stop(q, params["stop_id"]),
+         {:ok, q} <- filter_by_arrival_departure(q, params["arrival_departure"]),
+         {:ok, q} <- filter_by_bin(q, params["bin"]),
+         {:ok, q} <-
+           filter_by_timeframe(
+             q,
+             params["chart_range"],
+             params["service_date"],
+             params["daily_date_start"],
+             params["daily_date_end"]
+           ) do
+      {q, nil}
+    else
+      {:error, msg} -> {from(acc in q, where: false), msg}
+    end
   end
 
   defp filter_by_route(q, route_id) when is_binary(route_id) and route_id != "" do
-    from(acc in q, where: acc.route_id == ^route_id)
+    {:ok, from(acc in q, where: acc.route_id == ^route_id)}
   end
 
-  defp filter_by_route(q, _), do: q
+  defp filter_by_route(q, _), do: {:ok, q}
 
   defp filter_by_stop(q, stop_id) when is_binary(stop_id) and stop_id != "" do
-    from(acc in q, where: acc.stop_id == ^stop_id)
+    {:ok, from(acc in q, where: acc.stop_id == ^stop_id)}
   end
 
-  defp filter_by_stop(q, _), do: q
+  defp filter_by_stop(q, _), do: {:ok, q}
 
   defp filter_by_arrival_departure(q, arr_dep) when arr_dep in ["arrival", "departure"] do
-    from(acc in q, where: acc.arrival_departure == ^arr_dep)
+    {:ok, from(acc in q, where: acc.arrival_departure == ^arr_dep)}
   end
 
-  defp filter_by_arrival_departure(q, _), do: q
+  defp filter_by_arrival_departure(q, _), do: {:ok, q}
 
   defp filter_by_bin(q, bin) do
     if Map.has_key?(bins(), bin) do
-      from(acc in q, where: acc.bin == ^bin)
+      {:ok, from(acc in q, where: acc.bin == ^bin)}
     else
-      q
+      {:ok, q}
     end
   end
 
-  defp filter_by_timeframe(q, "Daily", _date) do
-    date = Timex.local() |> Timex.shift(days: -14) |> DateTime.to_date()
-    from(acc in q, where: acc.service_date >= ^date)
-  end
+  defp filter_by_timeframe(q, "Daily", _date, start_date, end_date)
+       when is_binary(start_date) and is_binary(end_date) do
+    case {Date.from_iso8601(start_date), Date.from_iso8601(end_date)} do
+      {{:ok, d1}, {:ok, d2}} ->
+        case Timex.diff(d2, d1, :days) do
+          n when n < 0 ->
+            {:error, "Start date is after end date"}
 
-  defp filter_by_timeframe(q, _chart_range, date) do
-    case Date.from_iso8601(date || "") do
-      {:ok, d} ->
-        from(acc in q, where: acc.service_date == ^d)
+          n when n > 28 ->
+            {:error, "Dates can't be more than 4 weeks apart"}
+
+          _ ->
+            {:ok, from(acc in q, where: acc.service_date >= ^d1 and acc.service_date <= ^d2)}
+        end
 
       _ ->
-        from(acc in q, where: acc.service_date == ^(Timex.local() |> DateTime.to_date()))
+        {:error, "Can't parse start or end date."}
     end
   end
+
+  defp filter_by_timeframe(q, "Hourly", date, _daily_start, _daily_end) when is_binary(date) do
+    case Date.from_iso8601(date) do
+      {:ok, d} ->
+        {:ok, from(acc in q, where: acc.service_date == ^d)}
+
+      _ ->
+        {:error, "Can't parse service date."}
+    end
+  end
+
+  defp filter_by_timeframe(_q, "Hourly", _, _, _), do: {:error, "No service date given."}
+  defp filter_by_timeframe(_q, "Daily", _, _, _), do: {:error, "No start or end date given."}
 
   @doc """
   Takes a Queryable and groups and sums the results into

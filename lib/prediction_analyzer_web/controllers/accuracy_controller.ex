@@ -5,67 +5,98 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   import Ecto.Query, only: [from: 2]
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def index(conn, %{
-        "filters" =>
-          %{
-            "chart_range" => chart_range,
-            "service_date" => service_date,
-            "route_id" => route_id,
-            "stop_id" => stop_id,
-            "arrival_departure" => arrival_departure,
-            "bin" => bin
-          } = filter_params
-      })
-      when byte_size(chart_range) > 0 and byte_size(service_date) > 0 and not is_nil(route_id) and
-             not is_nil(stop_id) and byte_size(arrival_departure) > 0 and byte_size(bin) > 0 do
-    relevant_accuracies = PredictionAccuracy.filter(filter_params)
-
-    [prod_num_accurate, prod_num_predictions] =
-      from(
-        acc in relevant_accuracies,
-        select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-        where: acc.environment == "prod"
+  def index(
+        conn,
+        %{
+          "filters" =>
+            %{
+              "route_id" => route_id,
+              "stop_id" => stop_id,
+              "arrival_departure" => arrival_departure,
+              "bin" => bin
+            } = filter_params
+        } = params
       )
-      |> PredictionAnalyzer.Repo.one!()
+      when not is_nil(route_id) and not is_nil(stop_id) and byte_size(arrival_departure) > 0 and
+             byte_size(bin) > 0 do
+    if time_filters_present?(filter_params) do
+      {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
 
-    [dev_green_num_accurate, dev_green_num_predictions] =
-      from(
-        acc in relevant_accuracies,
-        select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-        where: acc.environment == "dev-green"
+      [prod_num_accurate, prod_num_predictions] =
+        from(
+          acc in relevant_accuracies,
+          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+          where: acc.environment == "prod"
+        )
+        |> PredictionAnalyzer.Repo.one!()
+
+      [dev_green_num_accurate, dev_green_num_predictions] =
+        from(
+          acc in relevant_accuracies,
+          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+          where: acc.environment == "dev-green"
+        )
+        |> PredictionAnalyzer.Repo.one!()
+
+      accuracies =
+        relevant_accuracies
+        |> PredictionAccuracy.stats_by_environment_and_hour(filter_params)
+        |> PredictionAnalyzer.Repo.all()
+
+      render(
+        conn,
+        "index.html",
+        accuracies: accuracies,
+        chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
+        prod_num_accurate: prod_num_accurate,
+        prod_num_predictions: prod_num_predictions,
+        dev_green_num_accurate: dev_green_num_accurate,
+        dev_green_num_predictions: dev_green_num_predictions,
+        error_msg: error_msg
       )
-      |> PredictionAnalyzer.Repo.one!()
-
-    accuracies =
-      relevant_accuracies
-      |> PredictionAccuracy.stats_by_environment_and_hour(filter_params)
-      |> PredictionAnalyzer.Repo.all()
-
-    render(
-      conn,
-      "index.html",
-      accuracies: accuracies,
-      chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
-      prod_num_accurate: prod_num_accurate,
-      prod_num_predictions: prod_num_predictions,
-      dev_green_num_accurate: dev_green_num_accurate,
-      dev_green_num_predictions: dev_green_num_predictions
-    )
+    else
+      redirect_with_default_filters(conn, params)
+    end
   end
 
   def index(conn, params) do
+    redirect_with_default_filters(conn, params)
+  end
+
+  defp redirect_with_default_filters(conn, params) do
     filters = params["filters"] || %{}
 
     default_filters = %{
-      "chart_range" => "Hourly",
-      "service_date" => Timex.local() |> Date.to_string(),
       "route_id" => "",
       "stop_id" => "",
       "arrival_departure" => "all",
       "bin" => "All"
     }
 
-    filters = Map.merge(default_filters, filters)
+    time_filters =
+      cond do
+        filters["chart_range"] == "Daily" && filters["daily_date_start"] &&
+            filters["daily_date_end"] ->
+          Map.take(filters, ["chart_range", "daily_date_start", "daily_date_end"])
+
+        filters["chart_range"] == "Daily" ->
+          %{
+            "chart_range" => "Daily",
+            "daily_date_start" => Timex.local() |> Timex.shift(days: -14) |> Date.to_string(),
+            "daily_date_end" => Timex.local() |> Date.to_string()
+          }
+
+        filters["chart_range"] == "Hourly" && filters["service_date"] ->
+          Map.take(filters, ["chart_range", "service_date"])
+
+        true ->
+          %{"chart_range" => "Hourly", "service_date" => Timex.local() |> Date.to_string()}
+      end
+
+    filters =
+      default_filters
+      |> Map.merge(time_filters)
+      |> Map.merge(filters)
 
     redirect(
       conn,
@@ -91,5 +122,11 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
     end)
     |> Map.put(:chart_type, filter_params["chart_range"] || "Hourly")
+  end
+
+  defp time_filters_present?(filters) do
+    (filters["chart_range"] == "Hourly" && filters["service_date"]) ||
+      (filters["chart_range"] == "Daily" && filters["daily_date_start"] &&
+         filters["daily_date_end"])
   end
 end
