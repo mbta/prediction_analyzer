@@ -110,6 +110,36 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert redirected_to(conn) =~ "daily_date_end"
   end
 
+  test "GET /accuracy maintains service date when redirecting", %{conn: conn} do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "chart_range" => "Hourly",
+          "daily_date_start" => "2019-01-01"
+        }
+      })
+
+    assert response(conn, 302)
+    assert redirected_to(conn) =~ "Hourly"
+    assert redirected_to(conn) =~ "2019-01-01"
+  end
+
+  test "GET /accuracy maintains daily date range when redirecting", %{conn: conn} do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "chart_range" => "Daily",
+          "daily_date_start" => "2019-01-01",
+          "daily_date_end" => "2019-01-05"
+        }
+      })
+
+    assert response(conn, 302)
+    assert redirected_to(conn) =~ "Daily"
+    assert redirected_to(conn) =~ "2019-01-01"
+    assert redirected_to(conn) =~ "2019-01-05"
+  end
+
   test "GET /accuracy with invalid date renders error", %{conn: conn} do
     conn =
       get(conn, "/accuracy", %{
