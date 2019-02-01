@@ -51,36 +51,47 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       acc4 = %{@prediction_accuracy | arrival_departure: "departure"}
       acc5 = %{@prediction_accuracy | bin: "6-12 min"}
 
+      base_params = %{
+        "chart_range" => "Hourly",
+        "service_date" => Timex.local() |> Date.to_string()
+      }
+
       [acc1_id, acc2_id, acc3_id, acc4_id, acc5_id] =
         Enum.map([acc1, acc2, acc3, acc4, acc5], fn acc ->
           %{id: id} = Repo.insert!(acc)
           id
         end)
 
-      {accs, _} =
-        PredictionAccuracy.filter(%{
-          "chart_range" => "Hourly",
-          "service_date" => Timex.local() |> DateTime.to_date()
-        })
-
+      {accs, nil} = PredictionAccuracy.filter(base_params)
       q = from(acc in accs, [])
 
       assert [%{id: ^acc2_id}, %{id: ^acc3_id}, %{id: ^acc4_id}, %{id: ^acc5_id}] =
                execute_query(q)
 
-      q = from(acc in PredictionAccuracy.filter(%{"service_date" => "2018-01-01"}), [])
+      {accs, nil} =
+        PredictionAccuracy.filter(Map.merge(base_params, %{"service_date" => "2018-01-01"}))
+
+      q = from(acc in accs, [])
       assert [%{id: ^acc1_id}] = execute_query(q)
 
-      q = from(acc in PredictionAccuracy.filter(%{"stop_id" => "some_stop"}), [])
+      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"stop_id" => "some_stop"}))
+      q = from(acc in accs, [])
       assert [%{id: ^acc2_id}] = execute_query(q)
 
-      q = from(acc in PredictionAccuracy.filter(%{"route_id" => "some_route"}), [])
+      {accs, nil} =
+        PredictionAccuracy.filter(Map.merge(base_params, %{"route_id" => "some_route"}))
+
+      q = from(acc in accs, [])
       assert [%{id: ^acc3_id}] = execute_query(q)
 
-      q = from(acc in PredictionAccuracy.filter(%{"arrival_departure" => "departure"}), [])
+      {accs, nil} =
+        PredictionAccuracy.filter(Map.merge(base_params, %{"arrival_departure" => "departure"}))
+
+      q = from(acc in accs, [])
       assert [%{id: ^acc4_id}] = execute_query(q)
 
-      q = from(acc in PredictionAccuracy.filter(%{"bin" => "6-12 min"}), [])
+      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"bin" => "6-12 min"}))
+      q = from(acc in accs, [])
       assert [%{id: ^acc5_id}] = execute_query(q)
     end
 
@@ -97,7 +108,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
           id
         end)
 
-      {accs, _} =
+      {accs, nil} =
         PredictionAccuracy.filter(%{
           "chart_range" => "Hourly",
           "service_date" => Date.to_string(yesterday)
@@ -107,7 +118,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       assert [%{id: ^acc1_id}] = execute_query(q)
 
-      {accs, _} =
+      {accs, nil} =
         PredictionAccuracy.filter(%{
           "chart_range" => "Hourly",
           "service_date" => Date.to_string(day_before)
