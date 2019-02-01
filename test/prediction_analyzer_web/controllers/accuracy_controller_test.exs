@@ -115,7 +115,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
       get(conn, "/accuracy", %{
         "filters" => %{
           "chart_range" => "Hourly",
-          "daily_date_start" => "2019-01-01"
+          "service_date" => "2019-01-01"
         }
       })
 
