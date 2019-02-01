@@ -91,6 +91,32 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     refute response =~ "<th>Hour</th>"
   end
 
+  test "GET /accuracy with partial daily range redirects to full range", %{conn: conn} do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{"chart_range" => "Daily", "daily_date_start" => "2019-01-01"}
+      })
+
+    assert response(conn, 301)
+    assert redirected_to(conn) =~ "Daily"
+    assert redirected_to(conn) =~ "daily_date_start"
+    assert redirected_to(conn) =~ "daily_date_end"
+  end
+
+  test "GET /accuracy with invalid date renders error", %{conn: conn} do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "chart_range" => "Daily",
+          "daily_date_start" => "2019-01-01",
+          "daily_date_end" => "invalid"
+        }
+      })
+
+    response = html_response(conn, 200)
+    assert response =~ "Can't parse start or end date."
+  end
+
   def insert_accuracy(env, hour, total, accurate) do
     PredictionAnalyzer.Repo.insert!(%{
       @prediction_accuracy
