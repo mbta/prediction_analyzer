@@ -50,6 +50,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     |> validate_inclusion(:bin, Map.keys(bins()))
   end
 
+  @spec filter(map()) :: {Ecto.Query.t(), nil | String.t()}
   def filter(params) do
     q = from(acc in __MODULE__, [])
 
@@ -71,24 +72,29 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     end
   end
 
+  @spec filter_by_route(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
   defp filter_by_route(q, route_id) when is_binary(route_id) and route_id != "" do
     {:ok, from(acc in q, where: acc.route_id == ^route_id)}
   end
 
   defp filter_by_route(q, _), do: {:ok, q}
 
+  @spec filter_by_stop(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
   defp filter_by_stop(q, stop_id) when is_binary(stop_id) and stop_id != "" do
     {:ok, from(acc in q, where: acc.stop_id == ^stop_id)}
   end
 
   defp filter_by_stop(q, _), do: {:ok, q}
 
+  @spec filter_by_arrival_departure(Ecto.Query.t(), any()) ::
+          {:ok, Ecto.Query.t()} | {:error, String.t()}
   defp filter_by_arrival_departure(q, arr_dep) when arr_dep in ["arrival", "departure"] do
     {:ok, from(acc in q, where: acc.arrival_departure == ^arr_dep)}
   end
 
   defp filter_by_arrival_departure(q, _), do: {:ok, q}
 
+  @spec filter_by_bin(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
   defp filter_by_bin(q, bin) do
     if Map.has_key?(bins(), bin) do
       {:ok, from(acc in q, where: acc.bin == ^bin)}
@@ -97,6 +103,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     end
   end
 
+  @spec filter_by_timeframe(Ecto.Query.t(), any(), any(), any(), any()) ::
+          {:ok, Ecto.Query.t()} | {:error, String.t()}
   defp filter_by_timeframe(q, "Daily", _date, start_date, end_date)
        when is_binary(start_date) and is_binary(end_date) do
     case {Date.from_iso8601(start_date), Date.from_iso8601(end_date)} do

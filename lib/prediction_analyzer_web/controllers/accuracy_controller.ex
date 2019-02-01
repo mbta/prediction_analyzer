@@ -63,6 +63,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     redirect_with_default_filters(conn, params)
   end
 
+  @spec redirect_with_default_filters(Plug.Conn.t(), map()) :: Plug.Conn.t()
   defp redirect_with_default_filters(conn, params) do
     filters = params["filters"] || %{}
 
@@ -124,6 +125,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     |> Map.put(:chart_type, filter_params["chart_range"] || "Hourly")
   end
 
+  @spec time_filters_present?(map()) :: boolean()
   defp time_filters_present?(filters) do
     (filters["chart_range"] == "Hourly" && filters["service_date"]) ||
       (filters["chart_range"] == "Daily" && filters["daily_date_start"] &&
