@@ -104,10 +104,12 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
         }
       })
 
+    today = Timex.local() |> Date.to_string()
+
     assert response(conn, 302)
     assert redirected_to(conn) =~ "Daily"
-    assert redirected_to(conn) =~ "daily_date_start"
-    assert redirected_to(conn) =~ "daily_date_end"
+    assert redirected_to(conn) =~ "filters[daily_date_start]=2019-01-01"
+    assert redirected_to(conn) =~ "filters[daily_date_end]=#{today}"
   end
 
   test "GET /accuracy maintains service date when redirecting", %{conn: conn} do
