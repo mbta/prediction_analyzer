@@ -162,7 +162,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       q = from(acc in accs, [])
       assert [%{id: ^acc1_id}, %{id: ^acc2_id}] = execute_query(q)
 
-      assert {accs, "Dates can't be more than 4 weeks apart"} =
+      assert {_accs, "Dates can't be more than 4 weeks apart"} =
                PredictionAccuracy.filter(%{
                  "chart_range" => "Daily",
                  "daily_date_start" => "2018-01-01",

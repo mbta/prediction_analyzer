@@ -94,10 +94,17 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
   test "GET /accuracy with partial daily range redirects to full range", %{conn: conn} do
     conn =
       get(conn, "/accuracy", %{
-        "filters" => %{"chart_range" => "Daily", "daily_date_start" => "2019-01-01"}
+        "filters" => %{
+          "chart_range" => "Daily",
+          "daily_date_start" => "2019-01-01",
+          "route_id" => "",
+          "stop_id" => "",
+          "arrival_departure" => "all",
+          "bin" => "All"
+        }
       })
 
-    assert response(conn, 301)
+    assert response(conn, 302)
     assert redirected_to(conn) =~ "Daily"
     assert redirected_to(conn) =~ "daily_date_start"
     assert redirected_to(conn) =~ "daily_date_end"
@@ -109,12 +116,16 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
         "filters" => %{
           "chart_range" => "Daily",
           "daily_date_start" => "2019-01-01",
-          "daily_date_end" => "invalid"
+          "daily_date_end" => "invalid",
+          "route_id" => "",
+          "stop_id" => "",
+          "arrival_departure" => "all",
+          "bin" => "All"
         }
       })
 
     response = html_response(conn, 200)
-    assert response =~ "Can't parse start or end date."
+    assert response =~ "Can&#39;t parse start or end date."
   end
 
   def insert_accuracy(env, hour, total, accurate) do
