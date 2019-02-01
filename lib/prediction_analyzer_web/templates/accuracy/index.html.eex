@@ -78,16 +78,19 @@
         <%= if f.params["chart_range"] == "Hourly" do %>
           <div class="form-group">
             <%= label(f, :service_date, "Service Date") %>
+            <small>(YYYY-MM-DD)</small>
             <%= text_input(f, :service_date, class: "form-control") %>
           </div>
         <% else %>
           <div class="form-group">
             <%= label(f, :service_date, "Start Date") %>
+            <small>(YYYY-MM-DD)</small>
             <%= text_input(f, :daily_date_start, class: "form-control") %>
           </div>
 
           <div class="form-group">
             <%= label(f, :service_date, "End Date") %>
+            <small>(YYYY-MM-DD)</small>
             <%= text_input(f, :daily_date_end, class: "form-control") %>
           </div>
         <% end %>
