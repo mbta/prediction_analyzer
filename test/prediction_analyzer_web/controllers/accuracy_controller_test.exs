@@ -91,6 +91,75 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     refute response =~ "<th>Hour</th>"
   end
 
+  test "GET /accuracy with partial daily range redirects to full range", %{conn: conn} do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "chart_range" => "Daily",
+          "daily_date_start" => "2019-01-01",
+          "route_id" => "",
+          "stop_id" => "",
+          "arrival_departure" => "all",
+          "bin" => "All"
+        }
+      })
+
+    today = Timex.local() |> Date.to_string()
+
+    assert response(conn, 302)
+    assert redirected_to(conn) =~ "Daily"
+    assert redirected_to(conn) =~ "filters[daily_date_start]=2019-01-01"
+    assert redirected_to(conn) =~ "filters[daily_date_end]=#{today}"
+  end
+
+  test "GET /accuracy maintains service date when redirecting", %{conn: conn} do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "chart_range" => "Hourly",
+          "service_date" => "2019-01-01"
+        }
+      })
+
+    assert response(conn, 302)
+    assert redirected_to(conn) =~ "Hourly"
+    assert redirected_to(conn) =~ "2019-01-01"
+  end
+
+  test "GET /accuracy maintains daily date range when redirecting", %{conn: conn} do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "chart_range" => "Daily",
+          "daily_date_start" => "2019-01-01",
+          "daily_date_end" => "2019-01-05"
+        }
+      })
+
+    assert response(conn, 302)
+    assert redirected_to(conn) =~ "Daily"
+    assert redirected_to(conn) =~ "2019-01-01"
+    assert redirected_to(conn) =~ "2019-01-05"
+  end
+
+  test "GET /accuracy with invalid date renders error", %{conn: conn} do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "chart_range" => "Daily",
+          "daily_date_start" => "2019-01-01",
+          "daily_date_end" => "invalid",
+          "route_id" => "",
+          "stop_id" => "",
+          "arrival_departure" => "all",
+          "bin" => "All"
+        }
+      })
+
+    response = html_response(conn, 200)
+    assert response =~ "Can&#39;t parse start or end date."
+  end
+
   def insert_accuracy(env, hour, total, accurate) do
     PredictionAnalyzer.Repo.insert!(%{
       @prediction_accuracy
