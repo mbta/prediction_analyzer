@@ -131,6 +131,44 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       assert {_, "No start or end date given."} =
                PredictionAccuracy.filter(%{"chart_range" => "Daily"})
     end
+
+    test "can customize range of date filter, with max of 4 weeks" do
+      acc1 = %{@prediction_accuracy | service_date: ~D[2018-01-01]}
+      acc2 = %{@prediction_accuracy | service_date: ~D[2018-01-21]}
+
+      [acc1_id, acc2_id] =
+        Enum.map([acc1, acc2], fn acc ->
+          %{id: id} = Repo.insert!(acc)
+          id
+        end)
+
+      {accs, nil} =
+        PredictionAccuracy.filter(%{
+          "chart_range" => "Daily",
+          "daily_date_start" => "2018-01-01",
+          "daily_date_end" => "2018-01-14"
+        })
+
+      q = from(acc in accs, [])
+      assert [%{id: ^acc1_id}] = execute_query(q)
+
+      {accs, nil} =
+        PredictionAccuracy.filter(%{
+          "chart_range" => "Daily",
+          "daily_date_start" => "2018-01-01",
+          "daily_date_end" => "2018-01-21"
+        })
+
+      q = from(acc in accs, [])
+      assert [%{id: ^acc1_id}, %{id: ^acc2_id}] = execute_query(q)
+
+      assert {accs, "Dates can't be more than 4 weeks apart"} =
+               PredictionAccuracy.filter(%{
+                 "chart_range" => "Daily",
+                 "daily_date_start" => "2018-01-01",
+                 "daily_date_end" => "2018-01-31"
+               })
+    end
   end
 
   describe "stats_by_environment_and_hour/2" do
