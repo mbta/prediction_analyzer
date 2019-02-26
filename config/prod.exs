@@ -20,8 +20,7 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
   server: true
 
-# Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :debug
 
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
