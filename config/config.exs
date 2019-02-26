@@ -14,6 +14,7 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
 
 # Configures Elixir's Logger
 config :logger, :console,
+  level: :debug,
   format: "$time $metadata[$level] $message\n",
   metadata: [:user_id]
 

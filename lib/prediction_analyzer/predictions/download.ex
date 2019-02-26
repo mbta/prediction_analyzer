@@ -58,6 +58,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     {:noreply, predictions}
   end
 
+  @spec store_predictions(map(), :dev_green | :prod) :: {integer(), nil | [term()]} | no_return()
   defp store_predictions(%{"entity" => entities, "header" => %{"timestamp" => timestamp}}, env) do
     predictions =
       Enum.flat_map(entities, fn prediction ->
@@ -89,7 +90,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
         end
       end)
 
-    PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
+    {_, _} = PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
   end
 
   defp store_predictions(_, _) do
