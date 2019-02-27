@@ -71,4 +71,16 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
   test "chart_range_id/1" do
     assert AccuracyView.chart_range_id("SomeRange") == "link-somerange"
   end
+
+  test "button_class/2" do
+    assert AccuracyView.button_class(%{params: %{"filters" => %{"route_id" => "Blue"}}}, "Blue") =~
+             "route-button"
+
+    assert AccuracyView.button_class(%{params: %{"filters" => %{"route_id" => "Blue"}}}, "Red") =~
+             "route-button"
+
+    assert AccuracyView.button_class(%{}, "Red") =~ "route-button"
+
+    assert AccuracyView.button_class(%{}, "") =~ "route-button"
+  end
 end
