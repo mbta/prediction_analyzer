@@ -53,14 +53,15 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     "#"
   end
 
+  @spec button_class(map(), String.t()) :: String.t()
   def button_class(%{params: %{"filters" => %{"route_id" => route_id}}}, route_id),
-    do: "button-link button-link-active"
+    do: "button-link button-link-active route-button"
 
   def button_class(%{params: %{"filters" => %{"route_id" => _route}}}, _other_route),
-    do: "button-link"
+    do: "button-link route-button"
 
-  def button_class(%{}, ""), do: "button-link button-link-active"
-  def button_class(%{}, _else), do: "button-link"
+  def button_class(%{}, ""), do: "button-link button-link-active route-button"
+  def button_class(%{}, _else), do: "button-link route-button"
 
   @spec chart_range_class(map(), String.t()) :: String.t()
   def chart_range_class(%{params: %{"filters" => %{"chart_range" => chart_range}}}, chart_range),
