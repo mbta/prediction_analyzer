@@ -9,13 +9,14 @@ export default function() {
 
     var accuracyForm = document.getElementsByClassName('accuracy-form')[0];
     if(accuracyForm) {
-      bindChartRangeLinks(accuracyForm);
+      bindFormLinks(accuracyForm);
     }
   });
 }
 
-export function bindChartRangeLinks(accuracyForm) {
+export function bindFormLinks(accuracyForm) {
   var chartRangeInput = document.getElementById('filters_chart_range');
+  var routeIdInput = document.getElementById('filters_route_id');
 
   document.getElementById('link-hourly').addEventListener('click', function(event) {
     event.preventDefault();
@@ -27,6 +28,21 @@ export function bindChartRangeLinks(accuracyForm) {
     chartRangeInput.value = 'Daily';
     accuracyForm.submit();
   });
+
+  var routeButtonElements = document.getElementsByClassName('route-button');
+  for (var i = 0; i < routeButtonElements.length; i++) {
+    routeButtonElements[i].addEventListener('click', function(event) {
+      event.preventDefault();
+      if (event.currentTarget.text === 'All lines') {
+	routeIdInput.value = '';
+      }
+      else {
+	var words = event.currentTarget.text.split(' ');
+	routeIdInput.value = words[0];
+      }
+      accuracyForm.submit();
+    });
+  }
 }
 
 export function setupDashboard() {

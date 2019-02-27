@@ -1,7 +1,7 @@
-<%= content_tag :a, "All lines", class: button_class(@conn, ""), href: "/accuracy?filters%5Broute_id%5D=" %>
+<%= content_tag :a, "All lines", class: button_class(@conn, ""), href: "#" %>
 
 <%= for route_id <- ["Red", "Orange", "Blue", "Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"] do %>
-  <%= content_tag :a, "#{route_id} line", class: button_class(@conn, route_id), href: "/accuracy?filters%5Broute_id%5D=#{route_id}" %>
+  <%= content_tag :a, "#{route_id} line", class: button_class(@conn, route_id), href: "#" %>
 <% end %>
 
 <div class="row accuracy-summary-header">
