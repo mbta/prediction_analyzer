@@ -33,7 +33,7 @@ export function bindFormLinks(accuracyForm) {
   for (var i = 0; i < routeButtonElements.length; i++) {
     routeButtonElements[i].addEventListener('click', function(event) {
       event.preventDefault();
-      routeIdInput.value = this.text;
+      routeIdInput.value = event.currentTarget.text;
       if (this.text === 'All lines') {
 	routeIdInput.value = '';
       }
