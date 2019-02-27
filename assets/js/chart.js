@@ -9,12 +9,12 @@ export default function() {
 
     var accuracyForm = document.getElementsByClassName('accuracy-form')[0];
     if(accuracyForm) {
-      bindChartRangeLinks(accuracyForm);
+      bindFormLinks(accuracyForm);
     }
   });
 }
 
-export function bindChartRangeLinks(accuracyForm) {
+export function bindFormLinks(accuracyForm) {
   var chartRangeInput = document.getElementById('filters_chart_range');
   var routeIdInput = document.getElementById('filters_route_id');
 
