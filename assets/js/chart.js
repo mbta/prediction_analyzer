@@ -32,7 +32,6 @@ export function bindChartRangeLinks(accuracyForm) {
   var routeButtonElements = document.getElementsByClassName('route-button');
   for (var i = 0; i < routeButtonElements.length; i++) {
     routeButtonElements[i].addEventListener('click', function(event) {
-      console.log(this);
       event.preventDefault();
       routeIdInput.value = this.text;
       if (this.text === 'All lines') {
@@ -40,7 +39,6 @@ export function bindChartRangeLinks(accuracyForm) {
       }
       else {
 	var words = this.text.split(' ');
-	console.log(words);
 	routeIdInput.value = words[0];
       }
       accuracyForm.submit();
