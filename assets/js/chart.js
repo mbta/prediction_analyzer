@@ -33,12 +33,11 @@ export function bindFormLinks(accuracyForm) {
   for (var i = 0; i < routeButtonElements.length; i++) {
     routeButtonElements[i].addEventListener('click', function(event) {
       event.preventDefault();
-      routeIdInput.value = event.currentTarget.text;
-      if (this.text === 'All lines') {
+      if (event.currentTarget.text === 'All lines') {
 	routeIdInput.value = '';
       }
       else {
-	var words = this.text.split(' ');
+	var words = event.currentTarget.text.split(' ');
 	routeIdInput.value = words[0];
       }
       accuracyForm.submit();
