@@ -45,6 +45,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     nil
   end
 
+  @spec record_arrival(Vehicle.t()) :: nil
   defp record_arrival(vehicle) do
     params =
       vehicle
@@ -62,8 +63,11 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       {:error, changeset} ->
         Logger.warn("Could not insert vehicle event: #{inspect(changeset)}")
     end
+
+    nil
   end
 
+  @spec record_departure(Vehicle.t()) :: nil
   defp record_departure(vehicle) do
     from(
       ve in VehicleEvent,
@@ -85,6 +89,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       {_, _} ->
         Logger.error("One departure, multiple updates for #{vehicle.label}")
     end
+
+    nil
   end
 
   @spec vehicle_params(Vehicle.t()) :: map()
