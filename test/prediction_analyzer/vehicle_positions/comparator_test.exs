@@ -147,6 +147,33 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
       assert Repo.one(from(p in Prediction, where: p.id == ^p4_id, select: p.vehicle_event_id)) ==
                nil
+
+      prediction5 = %{
+        @prediction
+        | trip_id: "trip1",
+          vehicle_id: "1",
+          departure_time: :os.system_time(:second) + 1,
+          stop_id: "stop1"
+      }
+
+      p5_id = Repo.insert!(prediction5) |> Map.get(:id)
+
+      vehicle = %{@vehicle | trip_id: "trip1"}
+
+      old_vehicles = %{
+        "1" => %{vehicle | stop_id: "stop1", current_status: :STOPPED_AT}
+      }
+
+      new_vehicles = %{
+        "1" => %{vehicle | stop_id: "stop2", current_status: :IN_TRANSIT_TO}
+      }
+
+      Comparator.compare(new_vehicles, old_vehicles)
+
+      [ve_id] = Repo.all(from(ve in VehicleEvent, select: ve.id))
+
+      assert Repo.one(from(p in Prediction, where: p.id == ^p5_id, select: p.vehicle_event_id)) ==
+               ve_id
     end
   end
 end
