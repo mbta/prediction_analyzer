@@ -170,8 +170,6 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
       Comparator.compare(new_vehicles, old_vehicles)
 
-      [ve_id] = Repo.all(from(ve in VehicleEvent, select: ve.id))
-
       assert Repo.one(from(p in Prediction, where: p.id == ^p5_id, select: p.vehicle_event_id)) ==
                ve_id
     end
