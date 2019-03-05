@@ -45,6 +45,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     nil
   end
 
+  @spec record_arrival(Vehicle.t()) :: nil
   defp record_arrival(vehicle) do
     params =
       vehicle
@@ -62,8 +63,11 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       {:error, changeset} ->
         Logger.warn("Could not insert vehicle event: #{inspect(changeset)}")
     end
+
+    nil
   end
 
+  @spec record_departure(Vehicle.t()) :: nil
   defp record_departure(vehicle) do
     from(
       ve in VehicleEvent,
@@ -73,17 +77,20 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
           ve.arrival_time > ^(:os.system_time(:second) - 60 * 30),
       update: [set: [departure_time: ^vehicle.timestamp]]
     )
-    |> Repo.update_all([])
+    |> Repo.update_all([], returning: true)
     |> case do
       {0, _} ->
         Logger.warn("Tried to update departure time, but no arrival for #{vehicle.label}")
 
-      {1, _} ->
+      {1, [ve]} ->
         Logger.info("Added departure to vehicle event for #{vehicle.label}")
+        associate_vehicle_event_with_predictions(ve)
 
       {_, _} ->
         Logger.error("One departure, multiple updates for #{vehicle.label}")
     end
+
+    nil
   end
 
   @spec vehicle_params(Vehicle.t()) :: map()
