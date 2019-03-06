@@ -120,7 +120,9 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> Repo.update_all([])
     |> case do
       {0, _} ->
-        Logger.warn("Created vehicle_event with no associated prediction: #{vehicle_event.id}")
+        unless vehicle_event.departure_time do
+          Logger.warn("Created vehicle_event with no associated prediction: #{vehicle_event.id}")
+        end
 
       {n, _} ->
         Logger.info("Associated vehicle_event with #{n} prediction(s)")

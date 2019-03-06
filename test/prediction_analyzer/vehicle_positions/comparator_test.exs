@@ -1,5 +1,6 @@
 defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
   use ExUnit.Case
+  import ExUnit.CaptureLog
   import Ecto.Query, only: [from: 2]
   alias PredictionAnalyzer.VehicleEvents.VehicleEvent
   alias PredictionAnalyzer.Predictions.Prediction
@@ -172,6 +173,33 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
       assert Repo.one(from(p in Prediction, where: p.id == ^p5_id, select: p.vehicle_event_id)) ==
                ve_id
+    end
+
+    test "Don't log vehicle_event warnings for departures" do
+      old_vehicles = %{
+        "1" => %{@vehicle | stop_id: "stop1", current_status: :IN_TRANSIT_TO}
+      }
+
+      new_vehicles = %{
+        "1" => %{@vehicle | stop_id: "stop1", current_status: :STOPPED_AT}
+      }
+
+      Comparator.compare(new_vehicles, old_vehicles)
+
+      old_vehicles = %{
+        "1" => %{@vehicle | stop_id: "stop1", current_status: :STOPPED_AT}
+      }
+
+      new_vehicles = %{
+        "1" => %{@vehicle | stop_id: "stop2", current_status: :IN_TRANSIT_TO}
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      refute log =~ "Created vehicle_event with no associated prediction"
     end
   end
 end
