@@ -56,6 +56,34 @@ defmodule PredictionAnalyzer.VehiclePositions.VehicleTest do
              } = Vehicle.from_json(@data, "dev-green")
     end
 
+    test "translates to generic terminal stop IDs" do
+      assert {
+               :ok,
+               %Vehicle{
+                 id: "B-5458FB84",
+                 environment: "dev-green",
+                 label: "0758",
+                 is_deleted: false,
+                 trip_id: "38078941",
+                 route_id: "Red",
+                 direction_id: 0,
+                 current_status: :INCOMING_AT,
+                 stop_id: "70061"
+               }
+             } =
+               Vehicle.from_json(
+                 %{
+                   @data
+                   | "vehicle" => %{
+                       @data["vehicle"]
+                       | "stop_id" => "Alewife-01",
+                         "trip" => %{@data["vehicle"]["trip"] | "route_id" => "Red"}
+                     }
+                 },
+                 "dev-green"
+               )
+    end
+
     test "returns :error if JSON can't be made into vehicle" do
       bad_data = Map.put(@data, "vehicle", nil)
       assert :error = Vehicle.from_json(bad_data, "dev-green")

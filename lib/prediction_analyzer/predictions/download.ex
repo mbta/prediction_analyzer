@@ -82,7 +82,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
               departure_time: update["departure"]["time"],
               boarding_status: update["boarding_status"],
               schedule_relationship: update["schedule_relationship"],
-              stop_id: update["stop_id"],
+              stop_id: PredictionAnalyzer.Utilities.generic_stop_id(update["stop_id"]),
               stop_sequence: update["stop_sequence"],
               stops_away: update["stops_away"]
             })

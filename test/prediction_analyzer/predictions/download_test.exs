@@ -13,10 +13,16 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
     test "downloads and stores prod predictions" do
       Download.get_predictions(:prod)
       Download.get_predictions(:dev_green)
-      query = from(p in Prediction, select: p.environment)
+      query = from(p in Prediction, select: [p.environment, p.stop_id])
 
       preds = PredictionAnalyzer.Repo.all(query)
-      assert preds == ["prod", "prod", "dev-green", "dev-green"]
+
+      assert preds == [
+               ["prod", "70061"],
+               ["prod", "70063"],
+               ["dev-green", "70061"],
+               ["dev-green", "70063"]
+             ]
     end
   end
 end

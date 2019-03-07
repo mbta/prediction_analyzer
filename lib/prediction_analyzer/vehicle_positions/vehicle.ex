@@ -66,7 +66,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
       route_id: route_id,
       direction_id: direction_id,
       current_status: status_atom(current_status),
-      stop_id: stop_id,
+      stop_id: PredictionAnalyzer.Utilities.generic_stop_id(stop_id),
       timestamp: timestamp
     }
 
