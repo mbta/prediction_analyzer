@@ -55,4 +55,18 @@ defmodule PredictionAnalyzer.UtilitiesTest do
       assert Utilities.ms_to_3am(time) == 60_000
     end
   end
+
+  describe "generic_stop_id/1" do
+    test "maps terminal child stop ID to generic terminal stop ID" do
+      assert Utilities.generic_stop_id("Alewife-01") == "70061"
+    end
+
+    test "maps generic terminal stop ID to itself" do
+      assert Utilities.generic_stop_id("70061") == "70061"
+    end
+
+    test "maps non-terminal stop ID to itself" do
+      assert Utilities.generic_stop_id("70063") == "70063"
+    end
+  end
 end

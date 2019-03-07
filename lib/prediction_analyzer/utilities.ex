@@ -51,4 +51,15 @@ defmodule PredictionAnalyzer.Utilities do
     |> Timex.set(hour: 3, minute: 0, second: 0, microsecond: {0, 6})
     |> Timex.diff(local_now, :milliseconds)
   end
+
+  @spec generic_stop_id(String.t()) :: String.t()
+  def generic_stop_id("Alewife-01"), do: "70061"
+  def generic_stop_id("Alewife-02"), do: "70061"
+  def generic_stop_id("Braintree-01"), do: "70105"
+  def generic_stop_id("Braintree-02"), do: "70105"
+  def generic_stop_id("Forest Hills-01"), do: "70001"
+  def generic_stop_id("Forest Hills-02"), do: "70001"
+  def generic_stop_id("Oak Grove-01"), do: "70036"
+  def generic_stop_id("Oak Grove-02"), do: "70036"
+  def generic_stop_id(stop_id), do: stop_id
 end

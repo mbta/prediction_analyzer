@@ -28,7 +28,7 @@ defmodule FakeHTTPoison do
             },
             "trip" => %{
               "trip_id" => "TEST_TRIP",
-              "route_id" => "Blue"
+              "route_id" => "Red"
             },
             "stop_time_update" => [
               %{
@@ -40,7 +40,7 @@ defmodule FakeHTTPoison do
                   "uncertainty" => nil
                 },
                 "schedule_relationship" => "SCHEDULED",
-                "stop_id" => "70206",
+                "stop_id" => "Alewife-01",
                 "stop_sequence" => 20,
                 "stops_away" => 5
               },
@@ -57,7 +57,7 @@ defmodule FakeHTTPoison do
                   "uncertainty" => nil
                 },
                 "schedule_relationship" => "SCHEDULED",
-                "stop_id" => "70204",
+                "stop_id" => "70063",
                 "stop_sequence" => 30,
                 "stops_away" => 6
               }
