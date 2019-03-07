@@ -28,6 +28,7 @@ config :logger, :console,
 config :prediction_analyzer, ecto_repos: [PredictionAnalyzer.Repo]
 config :prediction_analyzer, http_fetcher: HTTPoison
 config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks.NoOp
+config :prediction_analyzer, :stop_name_fetcher, PredictionAnalyzer.StopNameFetcher
 
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,

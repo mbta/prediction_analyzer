@@ -1,7 +1,6 @@
 defmodule PredictionAnalyzerWeb.AccuracyController do
   use PredictionAnalyzerWeb, :controller
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
-  alias PredictionAnalyzer.StopNameFetcher
 
   import Ecto.Query, only: [from: 2]
 
@@ -44,7 +43,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         |> PredictionAccuracy.stats_by_environment_and_hour(filter_params)
         |> PredictionAnalyzer.Repo.all()
 
-      stop_map = PredictionAnalyzer.StopNameFetcher.get_stop_map()
+      stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
+      stop_map = stop_name_fetcher.get_stop_map()
 
       render(
         conn,

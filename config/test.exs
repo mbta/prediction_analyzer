@@ -24,3 +24,4 @@ config :prediction_analyzer,
     "https://dev_green.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json"
 
 config :prediction_analyzer, start_workers: false
+config :prediction_analyzer, :stop_name_fetcher, PredictionAnalyzer.FakeStopNameFetcher
