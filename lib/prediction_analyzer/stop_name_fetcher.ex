@@ -33,7 +33,8 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
     body["data"]
     |> Enum.map(fn stop ->
-      {"#{stop["attributes"]["name"]} (#{stop["id"]})", stop["id"]}
+      {"#{stop["attributes"]["description"]} (#{stop["id"]})", stop["id"]}
     end)
+    |> Enum.sort()
   end
 end
