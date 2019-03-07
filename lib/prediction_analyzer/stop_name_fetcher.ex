@@ -17,8 +17,15 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
   def handle_call(:get_stop_map, _from, state), do: {:reply, state, state}
 
-  defp get_stop_names do
-    case HTTPoison.get("https://api-v3.mbta.com/stops?filter%5Broute_type%5D=0,1") do
+  def get_stop_names do
+    url = "https://api-v3.mbta.com/stops"
+    api_key = Application.get_env(:prediction_analyzer, :api_v3_key)
+    headers = if api_key, do: [{"x-api-key", api_key}], else: []
+    params = %{"filter[route_type]" => "0,1"}
+
+    http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
+
+    case http_fetcher.get(url, headers, params: params) do
       {:ok, response} ->
         parse_response(response)
 
