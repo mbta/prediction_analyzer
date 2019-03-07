@@ -25,6 +25,10 @@ defmodule FakeHTTPoison do
     {:ok, response}
   end
 
+  def get("https://api-v3.mbta.com/bad_stops", _headers, _params) do
+    {:error, %HTTPoison.Error{}}
+  end
+
   def get!("https://prod.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" = url) do
     prediction_response_body(url)
   end

@@ -16,16 +16,16 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   end
 
   @spec get_stop_map() :: {:reply, state, state}
-  def get_stop_map() do
-    GenServer.call(__MODULE__, :get_stop_map)
+  def get_stop_map(pid \\ __MODULE__) do
+    GenServer.call(pid, :get_stop_map)
   end
 
   @spec handle_call(:get_stop_map, GenServer.from(), state) :: {:reply, state, state}
   def handle_call(:get_stop_map, _from, state), do: {:reply, state, state}
 
   @spec get_stop_names() :: state
-  def get_stop_names do
-    url = "https://api-v3.mbta.com/stops"
+  defp get_stop_names do
+    url = Application.get_env(:prediction_analyzer, :stop_fetch_url)
     api_key = Application.get_env(:prediction_analyzer, :api_v3_key)
     headers = if api_key, do: [{"x-api-key", api_key}], else: []
     params = %{"filter[route_type]" => "0,1"}
@@ -38,7 +38,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
       {:error, e} ->
         Logger.warn("Could not download stop names; received: #{inspect(e)}")
-        %{}
+        []
     end
   end
 

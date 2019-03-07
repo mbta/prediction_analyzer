@@ -28,6 +28,7 @@ config :logger, :console,
 config :prediction_analyzer, ecto_repos: [PredictionAnalyzer.Repo]
 config :prediction_analyzer, http_fetcher: HTTPoison
 config :prediction_analyzer, :api_v3_key, System.get_env("API_V3_KEY")
+config :prediction_analyzer, :stop_fetch_url, "https://api-v3.mbta.com/stops"
 config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks.NoOp
 config :prediction_analyzer, :stop_name_fetcher, PredictionAnalyzer.StopNameFetcher
 

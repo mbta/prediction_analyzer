@@ -1,5 +1,6 @@
 defmodule PredictionAnalyzer.StopNameFetcherTest do
   alias PredictionAnalyzer.StopNameFetcher
+  import Test.Support.Env
 
   use ExUnit.Case, async: false
 
@@ -15,18 +16,14 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
     assert Process.alive?(pid)
   end
 
-  describe "handle_call/3" do
-    test "returns the list of description/stop ID pairs" do
-      assert StopNameFetcher.handle_call(:get_stop_map, self(), @expected_stops) ==
-               {:reply, @expected_stops, @expected_stops}
-    end
+  test "get_stop_map/1 returns parsed results in alphabetical order" do
+    {:ok, pid} = StopNameFetcher.start_link()
+    assert StopNameFetcher.get_stop_map(pid) == @expected_stops
   end
 
-  describe "get_stop_names/0" do
-    test "fetches, parses, and alphabetizes all stops" do
-      result = StopNameFetcher.get_stop_names()
-
-      assert result == @expected_stops
-    end
+  test "if API fetch fails, proceeds with an empty list of stops" do
+    reassign_env(:stop_fetch_url, "https://api-v3.mbta.com/bad_stops")
+    {:ok, pid} = StopNameFetcher.start_link()
+    assert StopNameFetcher.get_stop_map(pid) == []
   end
 end
