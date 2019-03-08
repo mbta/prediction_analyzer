@@ -1,5 +1,6 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
   use ExUnit.Case, async: true
+  import ExUnit.CaptureLog
   import Ecto.Query, only: [from: 2]
   alias PredictionAnalyzer.Repo
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
@@ -42,7 +43,13 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
     departure_time: nil
   }
 
-  describe "calculate_aggregate_accuracy" do
+  defmodule FakeRepo do
+    def query(_query, _params) do
+      raise DBConnection.ConnectionError
+    end
+  end
+
+  describe "calculate_aggregate_accuracy/9" do
     test "selects the right predictions based on bin and grades them accurately, for arrivals" do
       bin_name = "6-12 min"
       bin_min = 360
@@ -109,6 +116,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
 
       {:ok, _} =
         Query.calculate_aggregate_accuracy(
+          PredictionAnalyzer.Repo,
           Timex.local(),
           "arrival",
           bin_name,
@@ -195,6 +203,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
 
       {:ok, _} =
         Query.calculate_aggregate_accuracy(
+          PredictionAnalyzer.Repo,
           Timex.local(),
           "departure",
           bin_name,
@@ -213,6 +222,26 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       assert pa.bin == "6-12 min"
       assert pa.num_predictions == 4
       assert pa.num_accurate_predictions == 2
+    end
+
+    test "handles database failure properly" do
+      log =
+        capture_log([level: :error], fn ->
+          :error =
+            Query.calculate_aggregate_accuracy(
+              FakeRepo,
+              Timex.local(),
+              "departure",
+              "6-12 min",
+              360,
+              720,
+              -30,
+              60,
+              "dev-green"
+            )
+        end)
+
+      assert ~r/do_calculate_aggregate_accuracy/ |> Regex.scan(log) |> length() == 2
     end
   end
 end
