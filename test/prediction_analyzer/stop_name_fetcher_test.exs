@@ -17,10 +17,6 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
   end
 
   describe "get_stop_map/1" do
-    test "doesn't crash if fetcher hasn't been started" do
-      assert StopNameFetcher.get_stop_map() == %{}
-    end
-
     test "returns parsed results in alphabetical order" do
       StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
       assert StopNameFetcher.get_stop_map() == @expected_stops
