@@ -6,12 +6,12 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
   @spec start_link([any]) :: {:ok, pid}
   def start_link(opts \\ []) do
-    state = get_stop_names()
-    GenServer.start_link(__MODULE__, state, opts)
+    GenServer.start_link(__MODULE__, [{"", ""}], opts)
   end
 
   @spec init(state) :: {:ok, state}
   def init(state) do
+    send(self(), :get_stop_names)
     {:ok, state}
   end
 
@@ -33,6 +33,10 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
   @spec handle_call(:get_stop_map, GenServer.from(), state) :: {:reply, state, state}
   def handle_call(:get_stop_map, _from, state), do: {:reply, state, state}
+
+  def handle_info(:get_stop_names, _state) do
+    {:noreply, get_stop_names()}
+  end
 
   @spec get_stop_names() :: state
   defp get_stop_names do
