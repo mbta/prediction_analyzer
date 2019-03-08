@@ -226,7 +226,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
 
     test "handles database failure properly" do
       log =
-        capture_log([level: :error], fn ->
+        capture_log([level: :warn], fn ->
           :error =
             Query.calculate_aggregate_accuracy(
               FakeRepo,
@@ -241,7 +241,11 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
             )
         end)
 
-      assert ~r/do_calculate_aggregate_accuracy/ |> Regex.scan(log) |> length() == 2
+      base_log_msg =
+        "Elixir.PredictionAnalyzer.PredictionAccuracy.Query do_calculate_aggregate_accuracy"
+
+      assert log =~ "[warn] " <> base_log_msg
+      assert log =~ "[error] " <> base_log_msg
     end
   end
 end
