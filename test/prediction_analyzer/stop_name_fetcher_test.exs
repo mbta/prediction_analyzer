@@ -12,25 +12,25 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
   }
 
   test "starts up with no issue" do
-    {:ok, pid} = StopNameFetcher.start_link()
+    {:ok, pid} = StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
     :timer.sleep(500)
     assert Process.alive?(pid)
   end
 
   describe "get_stop_map/1" do
-    test "can be called with a name rather than a pid" do
-      assert StopNameFetcher.get_stop_map(:whatever) == %{"" => ""}
+    test "doesn't crash if fetcher hasn't been started" do
+      assert StopNameFetcher.get_stop_map() == %{"" => ""}
     end
 
     test "returns parsed results in alphabetical order" do
-      {:ok, pid} = StopNameFetcher.start_link()
-      assert StopNameFetcher.get_stop_map(pid) == @expected_stops
+      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
+      assert StopNameFetcher.get_stop_map() == @expected_stops
     end
-  end
 
-  test "if API fetch fails, proceeds with an empty list of stops" do
-    reassign_env(:stop_fetch_url, "https://api-v3.mbta.com/bad_stops")
-    {:ok, pid} = StopNameFetcher.start_link()
-    assert StopNameFetcher.get_stop_map(pid) == %{"" => ""}
+    test "if API fetch fails, proceeds with an empty list of stops" do
+      reassign_env(:stop_fetch_url, "https://api-v3.mbta.com/bad_stops")
+      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
+      assert StopNameFetcher.get_stop_map() == %{"" => ""}
+    end
   end
 end
