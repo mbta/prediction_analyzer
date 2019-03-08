@@ -38,6 +38,20 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     false
   end
 
+  def stop_names() do
+    stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
+
+    stop_name_fetcher.get_stop_map()
+    |> Enum.map(&stop_name/1)
+    |> Enum.sort()
+  end
+
+  defp stop_name({"", ""}), do: {"", ""}
+
+  defp stop_name({id, description}) do
+    {"#{description} (#{id})", id}
+  end
+
   def predictions_path_with_filters(
         %{params: %{"filters" => %{"stop_id" => stop_id, "service_date" => service_date}}} = conn,
         hour

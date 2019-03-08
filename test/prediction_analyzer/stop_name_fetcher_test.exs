@@ -4,11 +4,12 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
 
   use ExUnit.Case, async: false
 
-  @expected_stops [
-    {"Cleveland Circle - Green Line - Park Street & North (70238)", "70238"},
-    {"Jackson Square - Orange Line - Oak Grove (70007)", "70007"},
-    {"Park Street - Green Line - (C) Cleveland Circle (70197)", "70197"}
-  ]
+  @expected_stops %{
+    "" => "",
+    "70238" => "Cleveland Circle - Green Line - Park Street & North",
+    "70007" => "Jackson Square - Orange Line - Oak Grove",
+    "70197" => "Park Street - Green Line - (C) Cleveland Circle"
+  }
 
   test "starts up with no issue" do
     {:ok, pid} = StopNameFetcher.start_link()
@@ -24,6 +25,6 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
   test "if API fetch fails, proceeds with an empty list of stops" do
     reassign_env(:stop_fetch_url, "https://api-v3.mbta.com/bad_stops")
     {:ok, pid} = StopNameFetcher.start_link()
-    assert StopNameFetcher.get_stop_map(pid) == []
+    assert StopNameFetcher.get_stop_map(pid) == %{"" => ""}
   end
 end

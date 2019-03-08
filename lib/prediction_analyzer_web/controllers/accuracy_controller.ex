@@ -43,9 +43,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         |> PredictionAccuracy.stats_by_environment_and_hour(filter_params)
         |> PredictionAnalyzer.Repo.all()
 
-      stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
-      stop_map = stop_name_fetcher.get_stop_map()
-
       render(
         conn,
         "index.html",
@@ -55,8 +52,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         prod_num_predictions: prod_num_predictions,
         dev_green_num_accurate: dev_green_num_accurate,
         dev_green_num_predictions: dev_green_num_predictions,
-        error_msg: error_msg,
-        stop_names: stop_map
+        error_msg: error_msg
       )
     else
       redirect_with_default_filters(conn, params)

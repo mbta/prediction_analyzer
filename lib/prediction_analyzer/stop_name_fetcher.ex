@@ -2,7 +2,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   require Logger
   use GenServer
 
-  @type state() :: [{String.t(), String.t()}]
+  @type state() :: %{String.t() => String.t()}
 
   @spec start_link([any]) :: {:ok, pid}
   def start_link(opts \\ []) do
@@ -53,7 +53,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
       {:error, e} ->
         Logger.warn("Could not download stop names; received: #{inspect(e)}")
-        []
+        %{"" => ""}
     end
   end
 
@@ -63,8 +63,8 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
     body["data"]
     |> Enum.map(fn stop ->
-      {"#{stop["attributes"]["description"]} (#{stop["id"]})", stop["id"]}
+      {stop["id"], stop["attributes"]["description"]}
     end)
-    |> Enum.sort()
+    |> Enum.into(%{"" => ""})
   end
 end
