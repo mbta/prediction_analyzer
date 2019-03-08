@@ -24,6 +24,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
                                                  {bin_min, bin_max, bin_error_min, bin_error_max}} ->
           {:ok, r} =
             Query.calculate_aggregate_accuracy(
+              PredictionAnalyzer.Repo,
               current_time,
               "arrival",
               bin_name,
@@ -38,6 +39,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
 
           {:ok, r} =
             Query.calculate_aggregate_accuracy(
+              PredictionAnalyzer.Repo,
               current_time,
               "departure",
               bin_name,
@@ -52,6 +54,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
 
           {:ok, r} =
             Query.calculate_aggregate_accuracy(
+              PredictionAnalyzer.Repo,
               current_time,
               "arrival",
               bin_name,
@@ -66,6 +69,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
 
           {:ok, r} =
             Query.calculate_aggregate_accuracy(
+              PredictionAnalyzer.Repo,
               current_time,
               "departure",
               bin_name,
