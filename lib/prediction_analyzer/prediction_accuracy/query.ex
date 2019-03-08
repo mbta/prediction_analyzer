@@ -87,9 +87,11 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       ])
     rescue
       e in DBConnection.ConnectionError ->
-        Logger.error("#{__MODULE__} do_calculate_aggregate_accuracy #{inspect(e)}")
+        log_msg = "#{__MODULE__} do_calculate_aggregate_accuracy #{inspect(e)}"
 
         if retry? do
+          Logger.warn(log_msg)
+
           do_calculate_aggregate_accuracy(
             repo_module,
             current_time,
@@ -103,6 +105,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
             false
           )
         else
+          Logger.error(log_msg)
           :error
         end
     end
