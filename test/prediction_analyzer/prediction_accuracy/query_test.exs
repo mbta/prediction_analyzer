@@ -241,7 +241,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
             )
         end)
 
-      assert log =~ "do_calculate_aggregate_accuracy"
+      assert ~r/do_calculate_aggregate_accuracy/ |> Regex.scan(log) |> length() == 2
     end
   end
 end
