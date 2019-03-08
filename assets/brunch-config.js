@@ -57,6 +57,10 @@ exports.config = {
   },
 
   npm: {
-    enabled: true
+    enabled: true,
+    globals: {
+      jQuery: "jquery/dist/jquery.min",
+      combobox: "\@danielfarrell/bootstrap-combobox/js/bootstrap-combobox"
+    }
   }
 };

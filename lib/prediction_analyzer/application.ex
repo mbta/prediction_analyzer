@@ -36,6 +36,7 @@ defmodule PredictionAnalyzer.Application do
             [name: PredictionAnalyzer.Predictions.Download]
           ]),
           worker(PredictionAnalyzer.PredictionAccuracy.Aggregator, []),
+          worker(PredictionAnalyzer.StopNameFetcher, [[name: PredictionAnalyzer.StopNameFetcher]]),
           worker(PredictionAnalyzer.Pruner, [])
         ]
       else
@@ -69,6 +70,7 @@ defmodule PredictionAnalyzer.Application do
   end
 
   defp set_runtime_config do
+    Config.update_env(:api_v3_key, System.get_env("API_V3_KEY"))
     Config.update_env(:aws_predictions_url, System.get_env("AWS_PREDICTIONS_URL"))
     Config.update_env(:aws_vehicle_positions_url, System.get_env("AWS_VEHICLE_POSITIONS_URL"))
 

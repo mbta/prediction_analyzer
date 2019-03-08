@@ -1,6 +1,34 @@
 defmodule FakeHTTPoison do
   require Logger
 
+  def get("https://api-v3.mbta.com/stops", _headers, params: %{"filter[route_type]" => "0,1"}) do
+    body = %{
+      "data" => [
+        %{
+          "id" => "70197",
+          "attributes" => %{"description" => "Park Street - Green Line - (C) Cleveland Circle"}
+        },
+        %{
+          "id" => "70238",
+          "attributes" => %{
+            "description" => "Cleveland Circle - Green Line - Park Street & North"
+          }
+        },
+        %{
+          "id" => "70007",
+          "attributes" => %{"description" => "Jackson Square - Orange Line - Oak Grove"}
+        }
+      ]
+    }
+
+    response = %HTTPoison.Response{body: Jason.encode!(body)}
+    {:ok, response}
+  end
+
+  def get("https://api-v3.mbta.com/bad_stops", _headers, _params) do
+    {:error, %HTTPoison.Error{}}
+  end
+
   def get!("https://prod.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" = url) do
     prediction_response_body(url)
   end
