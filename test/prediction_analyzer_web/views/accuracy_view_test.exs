@@ -33,6 +33,14 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
            })
   end
 
+  test "stop_names/0" do
+    assert AccuracyView.stop_names() == [
+             {"", ""},
+             {"Jane Roe St (67890)", "67890"},
+             {"John Doe Square (12345)", "12345"}
+           ]
+  end
+
   test "predictions_path_with_filters/2" do
     conn =
       build_conn(:get, "/accuracy", %{

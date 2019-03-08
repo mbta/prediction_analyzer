@@ -17,9 +17,15 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
     assert Process.alive?(pid)
   end
 
-  test "get_stop_map/1 returns parsed results in alphabetical order" do
-    {:ok, pid} = StopNameFetcher.start_link()
-    assert StopNameFetcher.get_stop_map(pid) == @expected_stops
+  describe "get_stop_map/1" do
+    test "can be called with a name rather than a pid" do
+      assert StopNameFetcher.get_stop_map(:whatever) == %{"" => ""}
+    end
+
+    test "returns parsed results in alphabetical order" do
+      {:ok, pid} = StopNameFetcher.start_link()
+      assert StopNameFetcher.get_stop_map(pid) == @expected_stops
+    end
   end
 
   test "if API fetch fails, proceeds with an empty list of stops" do

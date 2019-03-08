@@ -27,7 +27,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
     if real_pid && Process.alive?(real_pid) do
       GenServer.call(real_pid, :get_stop_map)
     else
-      [{"", ""}]
+      %{"" => ""}
     end
   end
 
