@@ -6,7 +6,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
   @spec start_link([any]) :: {:ok, pid}
   def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, [{"", ""}], opts)
+    GenServer.start_link(__MODULE__, %{}, opts)
   end
 
   @spec init(state) :: {:ok, state}
@@ -22,7 +22,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
     if pid && Process.alive?(pid) do
       GenServer.call(pid, :get_stop_map)
     else
-      %{"" => ""}
+      %{}
     end
   end
 
@@ -48,7 +48,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
       {:error, e} ->
         Logger.warn("Could not download stop names; received: #{inspect(e)}")
-        %{"" => ""}
+        %{}
     end
   end
 
@@ -60,6 +60,6 @@ defmodule PredictionAnalyzer.StopNameFetcher do
     |> Enum.map(fn stop ->
       {stop["id"], stop["attributes"]["description"]}
     end)
-    |> Enum.into(%{"" => ""})
+    |> Enum.into(%{})
   end
 end
