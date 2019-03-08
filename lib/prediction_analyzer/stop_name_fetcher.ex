@@ -17,7 +17,18 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
   @spec get_stop_map() :: {:reply, state, state}
   def get_stop_map(pid \\ __MODULE__) do
-    GenServer.call(pid, :get_stop_map)
+    real_pid =
+      if is_pid(pid) do
+        pid
+      else
+        Process.whereis(pid)
+      end
+
+    if real_pid && Process.alive?(real_pid) do
+      GenServer.call(real_pid, :get_stop_map)
+    else
+      [{"", ""}]
+    end
   end
 
   @spec handle_call(:get_stop_map, GenServer.from(), state) :: {:reply, state, state}
