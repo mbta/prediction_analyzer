@@ -11,6 +11,17 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     0
   end
 
+  @spec bin_options() :: [String.t()]
+  def bin_options() do
+    PredictionAccuracy.bins()
+    |> Map.keys()
+    |> Enum.sort_by(fn key ->
+      String.split(key, "-", parts: 2)
+      |> hd
+      |> String.to_integer()
+    end)
+  end
+
   def service_dates(now \\ Timex.local()) do
     0..7
     |> Enum.map(fn n ->

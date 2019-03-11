@@ -72,7 +72,7 @@
 
         <div class="form-group">
           <%= label(f, :bin, "Bin") %>
-          <%= select(f, :bin, ["All" | Map.keys(PredictionAccuracy.bins())], class: "form-control") %>
+          <%= select(f, :bin, ["All" | bin_options()], class: "form-control") %>
         </div>
 
         <%= if f.params["chart_range"] == "Hourly" do %>

@@ -3,6 +3,10 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
 
   alias PredictionAnalyzerWeb.AccuracyView
 
+  test "bin_options/0 returns bin names in the proper order" do
+    assert AccuracyView.bin_options() == ["0-3 min", "3-6 min", "6-12 min", "12-30 min"]
+  end
+
   test "service_dates/1" do
     time = Timex.local() |> Timex.set(year: 2018, month: 10, day: 31)
 
