@@ -175,6 +175,51 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
                ve_id
     end
 
+    test "records arrival and departure of vehicle that doesn't track between stations" do
+      base_time = :os.system_time(:second)
+      stop1_arrival = base_time + 30
+      stop1_departure = base_time + 60
+      stop2_arrival = base_time + 90
+
+      old_vehicles = %{
+        "1" => %{@vehicle | timestamp: base_time}
+      }
+
+      new_vehicles = %{
+        "1" => %{@vehicle | timestamp: stop1_arrival, current_status: :STOPPED_AT}
+      }
+
+      Comparator.compare(new_vehicles, old_vehicles)
+
+      old_vehicles = %{
+        "1" => %{@vehicle | timestamp: stop1_departure, current_status: :STOPPED_AT}
+      }
+
+      new_vehicles = %{
+        "1" => %{
+          @vehicle
+          | timestamp: stop2_arrival,
+            stop_id: "stop2",
+            current_status: :STOPPED_AT
+        }
+      }
+
+      Comparator.compare(new_vehicles, old_vehicles)
+
+      assert [
+               %VehicleEvent{
+                 stop_id: "stop1",
+                 arrival_time: ^stop1_arrival,
+                 departure_time: ^stop1_departure
+               },
+               %VehicleEvent{
+                 stop_id: "stop2",
+                 arrival_time: ^stop2_arrival,
+                 departure_time: nil
+               }
+             ] = Repo.all(from(ve in VehicleEvent, select: ve, order_by: [asc: ve.id]))
+    end
+
     test "Don't log vehicle_event warnings for departures" do
       old_vehicles = %{
         "1" => %{@vehicle | stop_id: "stop1", current_status: :IN_TRANSIT_TO}
