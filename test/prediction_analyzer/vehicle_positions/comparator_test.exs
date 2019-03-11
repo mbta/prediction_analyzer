@@ -178,8 +178,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
     test "records arrival and departure of vehicle that doesn't track between stations" do
       base_time = :os.system_time(:second)
       stop1_arrival = base_time + 30
-      stop1_departure = base_time + 60
-      stop2_arrival = base_time + 90
+      stop2_arrival = base_time + 60
 
       old_vehicles = %{
         "1" => %{@vehicle | timestamp: base_time}
@@ -192,7 +191,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       Comparator.compare(new_vehicles, old_vehicles)
 
       old_vehicles = %{
-        "1" => %{@vehicle | timestamp: stop1_departure, current_status: :STOPPED_AT}
+        "1" => %{@vehicle | timestamp: stop1_arrival, current_status: :STOPPED_AT}
       }
 
       new_vehicles = %{
@@ -210,7 +209,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
                %VehicleEvent{
                  stop_id: "stop1",
                  arrival_time: ^stop1_arrival,
-                 departure_time: ^stop1_departure
+                 departure_time: ^stop2_arrival
                },
                %VehicleEvent{
                  stop_id: "stop2",
