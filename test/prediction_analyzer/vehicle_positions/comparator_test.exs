@@ -56,20 +56,27 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
       Comparator.compare(new_vehicles, old_vehicles)
 
-      timestamp = @vehicle.timestamp
+      arrival_time = @vehicle.timestamp
 
       vehicle_events = Repo.all(from(ve in VehicleEvent, select: ve))
 
       assert [
-               %VehicleEvent{vehicle_id: "1", arrival_time: ^timestamp, departure_time: nil}
+               %VehicleEvent{vehicle_id: "1", arrival_time: ^arrival_time, departure_time: nil}
              ] = vehicle_events
 
       ve_id = List.first(vehicle_events).id
 
+      departure_time = arrival_time + 30
+
       old_vehicles = new_vehicles
 
       new_vehicles = %{
-        "1" => %{@vehicle | current_status: :IN_TRANSIT_TO, stop_id: "stop2"}
+        "1" => %{
+          @vehicle
+          | current_status: :IN_TRANSIT_TO,
+            stop_id: "stop2",
+            timestamp: departure_time
+        }
       }
 
       Comparator.compare(new_vehicles, old_vehicles)
@@ -78,8 +85,8 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
                %VehicleEvent{
                  id: ^ve_id,
                  vehicle_id: "1",
-                 arrival_time: ^timestamp,
-                 departure_time: ^timestamp
+                 arrival_time: ^arrival_time,
+                 departure_time: ^departure_time
                }
              ] = Repo.all(from(ve in VehicleEvent, select: ve))
     end

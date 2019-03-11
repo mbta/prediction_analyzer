@@ -31,11 +31,11 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
   end
 
   defp compare_vehicle(
-         %Vehicle{stop_id: new_stop, current_status: new_status},
+         %Vehicle{stop_id: new_stop, current_status: new_status, timestamp: new_timestamp},
          %Vehicle{stop_id: old_stop, current_status: old_status} = old_vehicle
        )
        when new_stop != old_stop and old_status == :STOPPED_AT and new_status != :STOPPED_AT do
-    record_departure(old_vehicle)
+    record_departure(%{old_vehicle | timestamp: new_timestamp})
   end
 
   defp compare_vehicle(
