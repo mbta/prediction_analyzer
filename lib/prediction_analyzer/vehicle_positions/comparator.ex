@@ -21,6 +21,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     new_vehicles
   end
 
+  @spec compare_vehicle(Vehicle.t(), Vehicle.t()) :: nil
   defp compare_vehicle(
          %Vehicle{stop_id: new_stop, current_status: new_status} = vehicle,
          %Vehicle{stop_id: old_stop, current_status: old_status}
@@ -30,11 +31,20 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
   end
 
   defp compare_vehicle(
-         %Vehicle{stop_id: new_stop, current_status: new_status},
+         %Vehicle{stop_id: new_stop, current_status: new_status, timestamp: new_timestamp},
          %Vehicle{stop_id: old_stop, current_status: old_status} = old_vehicle
        )
        when new_stop != old_stop and old_status == :STOPPED_AT and new_status != :STOPPED_AT do
-    record_departure(old_vehicle)
+    record_departure(%{old_vehicle | timestamp: new_timestamp})
+  end
+
+  defp compare_vehicle(
+         %Vehicle{stop_id: new_stop, current_status: new_status} = new_vehicle,
+         %Vehicle{stop_id: old_stop, current_status: old_status} = old_vehicle
+       )
+       when new_stop != old_stop and old_status == :STOPPED_AT and new_status == :STOPPED_AT do
+    record_departure(%{old_vehicle | timestamp: new_vehicle.timestamp})
+    record_arrival(new_vehicle)
   end
 
   defp compare_vehicle(%Vehicle{label: label}, nil) do
