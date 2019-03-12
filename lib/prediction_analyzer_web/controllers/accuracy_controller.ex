@@ -76,11 +76,11 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
     time_filters =
       cond do
-        filters["chart_range"] == "Daily" && filters["daily_date_start"] &&
+        filters["chart_range"] in ["Daily", "By Station"] && filters["daily_date_start"] &&
             filters["daily_date_end"] ->
           Map.take(filters, ["chart_range", "daily_date_start", "daily_date_end"])
 
-        filters["chart_range"] == "Daily" ->
+        filters["chart_range"] in ["Daily", "By Station"] ->
           %{
             "chart_range" => "Daily",
             "daily_date_start" => Timex.local() |> Timex.shift(days: -14) |> Date.to_string(),
@@ -128,7 +128,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   @spec time_filters_present?(map()) :: boolean()
   defp time_filters_present?(filters) do
     (filters["chart_range"] == "Hourly" && filters["service_date"]) ||
-      (filters["chart_range"] == "Daily" && filters["daily_date_start"] &&
+      (filters["chart_range"] in ["Daily", "By Station"] && filters["daily_date_start"] &&
          filters["daily_date_end"])
   end
 end

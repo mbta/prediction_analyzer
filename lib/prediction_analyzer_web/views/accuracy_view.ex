@@ -98,5 +98,13 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   def chart_range_class(_, _), do: "chart-range-link"
 
   @spec chart_range_id(String.t()) :: String.t()
-  def chart_range_id(chart_range), do: "link-#{String.downcase(chart_range)}"
+  def chart_range_id(chart_range) do
+    normalized_chart_range =
+      chart_range
+      |> String.downcase()
+      |> String.replace(~r/\s+/, "_")
+      |> String.downcase()
+
+    "link-#{normalized_chart_range}"
+  end
 end

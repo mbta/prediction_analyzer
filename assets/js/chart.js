@@ -18,16 +18,17 @@ export function bindFormLinks(accuracyForm) {
   var chartRangeInput = document.getElementById('filters_chart_range');
   var routeIdInput = document.getElementById('filters_route_id');
 
-  document.getElementById('link-hourly').addEventListener('click', function(event) {
-    event.preventDefault();
-    chartRangeInput.value = 'Hourly';
-    accuracyForm.submit();
-  });
-  document.getElementById('link-daily').addEventListener('click', function(event) {
-    event.preventDefault();
-    chartRangeInput.value = 'Daily';
-    accuracyForm.submit();
-  });
+  var bindChartRangeLink = function(linkId, inputValue) {
+    document.getElementById(linkId).addEventListener('click', function(event) {
+      event.preventDefault();
+      chartRangeInput.value = inputValue;
+      accuracyForm.submit();
+    });
+  }
+
+  bindChartRangeLink('link-hourly', 'Hourly');
+  bindChartRangeLink('link-daily', 'Daily');
+  bindChartRangeLink('link-by_station', 'By Station');
 
   var routeButtonElements = document.getElementsByClassName('route-button');
   for (var i = 0; i < routeButtonElements.length; i++) {
