@@ -145,12 +145,12 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
   hour | prod total | prod accurate | dev-green total | dev-green accurate
   """
-  def stats_by_environment_and_hour(q, filters) do
+  def stats_by_environment_and_chart_range(q, filters) do
     scope =
-      if filters["chart_range"] in ["Daily", "By Station"] do
-        :service_date
-      else
-        :hour_of_day
+      case filters["chart_range"] do
+        "Daily" -> :service_date
+        "By Station" -> :stop_id
+        "Hourly" -> :hour_of_day
       end
 
     from(

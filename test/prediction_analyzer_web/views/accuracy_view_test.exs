@@ -37,8 +37,8 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
            })
   end
 
-  test "stop_names/0" do
-    assert AccuracyView.stop_names() == [
+  test "stop_descriptions/0" do
+    assert AccuracyView.stop_descriptions() == [
              {"", ""},
              {"Jane Roe St (67890)", "67890"},
              {"John Doe Square (12345)", "12345"}

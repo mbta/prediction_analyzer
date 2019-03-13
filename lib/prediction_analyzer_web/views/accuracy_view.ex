@@ -1,6 +1,7 @@
 defmodule PredictionAnalyzerWeb.AccuracyView do
   use PredictionAnalyzerWeb, :view
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.StopNameFetcher
 
   def accuracy_percentage(num_accurate, num_predictions)
       when is_integer(num_accurate) and is_integer(num_predictions) and num_predictions != 0 do
@@ -20,6 +21,22 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
       |> hd
       |> String.to_integer()
     end)
+  end
+
+  def chart_range_scope_header(chart_range) do
+    case chart_range do
+      "Hourly" -> "Hour"
+      "Daily" -> "Date"
+      "By Station" -> "Station"
+    end
+  end
+
+  def formatted_row_scope(conn, row_scope) do
+    if conn.params["filters"]["chart_range"] == "By Station" do
+      StopNameFetcher.get_stop_name(row_scope)
+    else
+      row_scope
+    end
   end
 
   def service_dates(now \\ Timex.local()) do
@@ -49,20 +66,20 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     false
   end
 
-  @spec stop_names() :: [{String.t(), String.t()}]
-  def stop_names() do
+  @spec stop_descriptions() :: [{String.t(), String.t()}]
+  def stop_descriptions() do
     stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
 
-    name_pairs =
-      stop_name_fetcher.get_stop_map()
-      |> Enum.map(&stop_name/1)
+    description_pairs =
+      stop_name_fetcher.get_stop_descriptions()
+      |> Enum.map(&stop_description/1)
       |> Enum.sort()
 
-    [{"", ""} | name_pairs]
+    [{"", ""} | description_pairs]
   end
 
-  @spec stop_name({String.t(), String.t()}) :: {String.t(), String.t()}
-  defp stop_name({id, description}) do
+  @spec stop_description({String.t(), String.t()}) :: {String.t(), String.t()}
+  defp stop_description({id, description}) do
     {"#{description} (#{id})", id}
   end
 

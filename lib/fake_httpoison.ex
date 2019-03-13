@@ -6,17 +6,27 @@ defmodule FakeHTTPoison do
       "data" => [
         %{
           "id" => "70197",
-          "attributes" => %{"description" => "Park Street - Green Line - (C) Cleveland Circle"}
+          "attributes" => %{
+            "description" => "Park Street - Green Line - (C) Cleveland Circle",
+            "name" => "Park St",
+            "platform_name" => "Cleveland Circle"
+          }
         },
         %{
           "id" => "70238",
           "attributes" => %{
-            "description" => "Cleveland Circle - Green Line - Park Street & North"
+            "description" => "Cleveland Circle - Green Line - Park Street & North",
+            "name" => "Cleveland Circle",
+            "platform_name" => "Park Street & North"
           }
         },
         %{
           "id" => "70007",
-          "attributes" => %{"description" => "Jackson Square - Orange Line - Oak Grove"}
+          "attributes" => %{
+            "description" => "Jackson Square - Orange Line - Oak Grove",
+            "name" => "Jackson Sq",
+            "platform_name" => "Oak Grove"
+          }
         }
       ]
     }

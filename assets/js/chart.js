@@ -50,7 +50,7 @@ export function setupDashboard() {
   var rawData = window.dataPredictionAccuracyJSON;
   var prodAccs = rawData["prod_accs"];
   var dgAccs = rawData["dg_accs"];
-  var dateRangeData = rawData["time_buckets"];
+  var dateRangeData = rawData["buckets"];
   var chartType = rawData["chart_type"];
 
   var col_1 = ["Prod"].concat(prodAccs);

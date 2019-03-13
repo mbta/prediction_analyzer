@@ -53,7 +53,7 @@
 
         <div class="form-group">
           <%= label(f, :stop_id, "Stop ID") %>
-          <%= select(f, :stop_id, stop_names(), class: 'combobox form-control') %>
+          <%= select(f, :stop_id, stop_descriptions(), class: 'combobox form-control') %>
         </div>
 
         <div class="form-group">
@@ -112,7 +112,7 @@
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <table class="table">
         <tr>
-          <th><%= if f.params["chart_range"] not in ["Daily", "By Station"], do: "Hour", else: "Date" %></th>
+          <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
           <th class="prod-text">Prod Accuracy</th>
           <th class="prod-text">Prod Total</th>
           <th class="dev-green-text">Dev-Green Accuracy</th>
@@ -122,15 +122,15 @@
           <% end %>
         </tr>
 
-        <%= for [hour, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
+        <%= for [row_scope, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
           <tr>
-            <td><%= hour %></td>
+            <td><%= formatted_row_scope(@conn, row_scope) %></td>
             <td class="prod-text"><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
             <td class="prod-text"><%= prod_total %></td>
             <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
             <td class="dev-green-text"><%= dg_total %></td>
             <%= if show_download?(@conn.params) do %>
-              <th><%= link("csv", to: predictions_path_with_filters(@conn, hour)) %></th>
+              <th><%= link("csv", to: predictions_path_with_filters(@conn, row_scope)) %></th>
             <% end %>
           </tr>
         <% end %>
