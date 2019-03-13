@@ -105,6 +105,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     )
   end
 
+  @spec set_up_accuracy_chart(list(), map()) :: map()
   defp set_up_accuracy_chart(accuracies, filter_params) do
     Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: []}, fn [
                                                                              bucket,

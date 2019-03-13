@@ -7,6 +7,27 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
     assert AccuracyView.bin_options() == ["0-3 min", "3-6 min", "6-12 min", "12-30 min"]
   end
 
+  test "chart_range_scope_header/1 returns the proper value" do
+    assert AccuracyView.chart_range_scope_header("Hourly") == "Hour"
+    assert AccuracyView.chart_range_scope_header("Daily") == "Date"
+    assert AccuracyView.chart_range_scope_header("By Station") == "Station"
+  end
+
+  describe "formatted_row_scope/2" do
+    test "returns a station name if chart range is By Station" do
+      assert AccuracyView.formatted_row_scope(%{"chart_range" => "By Station"}, "70238") ==
+               "Cleveland Circle (Park Street & North)"
+    end
+
+    test "returns the row scope unchanged otherwise" do
+      assert AccuracyView.formatted_row_scope(%{"chart_range" => "Hourly"}, "some_hour") ==
+               "some_hour"
+
+      assert AccuracyView.formatted_row_scope(%{"chart_range" => "Daily"}, "some_day") ==
+               "some_day"
+    end
+  end
+
   test "service_dates/1" do
     time = Timex.local() |> Timex.set(year: 2018, month: 10, day: 31)
 

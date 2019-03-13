@@ -1,7 +1,6 @@
 defmodule PredictionAnalyzerWeb.AccuracyView do
   use PredictionAnalyzerWeb, :view
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
-  alias PredictionAnalyzer.StopNameFetcher
 
   def accuracy_percentage(num_accurate, num_predictions)
       when is_integer(num_accurate) and is_integer(num_predictions) and num_predictions != 0 do
@@ -23,6 +22,7 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     end)
   end
 
+  @spec chart_range_scope_header(String.t()) :: String.t()
   def chart_range_scope_header(chart_range) do
     case chart_range do
       "Hourly" -> "Hour"
@@ -31,9 +31,11 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     end
   end
 
+  @spec formatted_row_scope(map(), String.t()) :: String.t()
   def formatted_row_scope(filter_params, row_scope) do
     if filter_params["chart_range"] == "By Station" do
-      StopNameFetcher.get_stop_name(row_scope)
+      stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
+      stop_name_fetcher.get_stop_name(row_scope)
     else
       row_scope
     end
