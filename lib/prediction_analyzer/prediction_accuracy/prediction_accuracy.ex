@@ -138,6 +138,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
   defp filter_by_timeframe(_q, "Hourly", _, _, _), do: {:error, "No service date given."}
   defp filter_by_timeframe(_q, "Daily", _, _, _), do: {:error, "No start or end date given."}
+  defp filter_by_timeframe(_q, "By Station", _, _, _), do: {:error, "No start or end date given."}
 
   @doc """
   Takes a Queryable and groups and sums the results into

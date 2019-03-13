@@ -118,7 +118,11 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       dg_accuracy = if dg_total == 0, do: [0], else: [dg_accurate / dg_total]
 
       acc
-      |> Map.put(:buckets, acc[:buckets] ++ [bucket])
+      |> Map.put(
+        :buckets,
+        acc[:buckets] ++
+          [PredictionAnalyzerWeb.AccuracyView.formatted_row_scope(filter_params, bucket)]
+      )
       |> Map.put(:prod_accs, acc[:prod_accs] ++ prod_accuracy)
       |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
     end)

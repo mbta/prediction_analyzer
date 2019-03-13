@@ -31,8 +31,8 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     end
   end
 
-  def formatted_row_scope(conn, row_scope) do
-    if conn.params["filters"]["chart_range"] == "By Station" do
+  def formatted_row_scope(filter_params, row_scope) do
+    if filter_params["chart_range"] == "By Station" do
       StopNameFetcher.get_stop_name(row_scope)
     else
       row_scope

@@ -51,10 +51,12 @@
           </div>
         <% end %>
 
-        <div class="form-group">
-          <%= label(f, :stop_id, "Stop ID") %>
-          <%= select(f, :stop_id, stop_descriptions(), class: 'combobox form-control') %>
-        </div>
+        <%= if f.params["chart_range"] != "By Station" do %>
+          <div class="form-group">
+            <%= label(f, :stop_id, "Stop ID") %>
+            <%= select(f, :stop_id, stop_descriptions(), class: 'combobox form-control') %>
+          </div>
+        <% end %>
 
         <div class="form-group">
           <%= label(class: "radio-inline") do %>
@@ -124,7 +126,7 @@
 
         <%= for [row_scope, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
           <tr>
-            <td><%= formatted_row_scope(@conn, row_scope) %></td>
+            <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
             <td class="prod-text"><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
             <td class="prod-text"><%= prod_total %></td>
             <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>

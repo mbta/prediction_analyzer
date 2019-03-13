@@ -52,6 +52,34 @@ export function setupDashboard() {
   var dgAccs = rawData["dg_accs"];
   var dateRangeData = rawData["buckets"];
   var chartType = rawData["chart_type"];
+  var dataType;
+  var xAxisText;
+  var xAxisType;
+  var xAxisRotation;
+
+  switch(chartType) {
+    case "Hourly": {
+      dataType = "line";
+      xAxisText = "Hour of Day";
+      xAxisType = "indexed";
+      xAxisRotation = 0;
+      break;
+    }
+    case "Daily": {
+      dataType = "line";
+      xAxisText = "";
+      xAxisType = "timeseries";
+      xAxisRotation = 75;
+      break;
+    }
+    case "By Station": {
+      dataType = "bar";
+      xAxisText = "";
+      xAxisType = "category";
+      xAxisRotation = 90;
+      break;
+    }
+  }
 
   var col_1 = ["Prod"].concat(prodAccs);
   var col_2 = ["Dev Green"].concat(dgAccs);
@@ -65,7 +93,8 @@ export function setupDashboard() {
         x_data,
         col_1,
         col_2,
-      ]
+      ],
+      type: dataType
     },
     color: {
       pattern: ["#1fecff", "#c743f0"]
@@ -84,13 +113,15 @@ export function setupDashboard() {
         }
       },
       x: {
+        height: 200,
         label: {
-          text: (chartType === "Hourly" ? "Hour of Day" : ""),
+          text: xAxisText,
           position: "outer-center"
         },
-        type: (chartType === "Hourly" ? 'indexed' : 'timeseries'),
+        type: xAxisType,
         tick: {
-          rotate: (chartType === "Hourly" ? 0 : 75),
+          multiline: false,
+          rotate: xAxisRotation,
           culling: false
         }
       },
@@ -104,7 +135,7 @@ export function setupDashboard() {
       }
     },
     size: {
-      height: 400
+      height: 540
     },
     legend: {
       position: "inset"
