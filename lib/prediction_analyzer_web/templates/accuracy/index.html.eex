@@ -51,10 +51,12 @@
           </div>
         <% end %>
 
-        <div class="form-group">
-          <%= label(f, :stop_id, "Stop ID") %>
-          <%= select(f, :stop_id, stop_names(), class: 'combobox form-control') %>
-        </div>
+        <%= if f.params["chart_range"] != "By Station" do %>
+          <div class="form-group">
+            <%= label(f, :stop_id, "Stop ID") %>
+            <%= select(f, :stop_id, stop_descriptions(), class: 'combobox form-control') %>
+          </div>
+        <% end %>
 
         <div class="form-group">
           <%= label(class: "radio-inline") do %>
@@ -104,7 +106,7 @@
 
     <div class="col-xs-9">
       <div class="chart-range-links">
-        <%= for chart_range <- ["Hourly", "Daily"] do %>
+        <%= for chart_range <- ["Hourly", "Daily", "By Station"] do %>
           <%= content_tag :a, chart_range, class: chart_range_class(@conn, chart_range), id: chart_range_id(chart_range), href: "#" %>
         <% end %>
       </div>
@@ -112,7 +114,7 @@
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <table class="table">
         <tr>
-          <th><%= if f.params["chart_range"] != "Daily", do: "Hour", else: "Date" %></th>
+          <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
           <th class="prod-text">Prod Accuracy</th>
           <th class="prod-text">Prod Total</th>
           <th class="dev-green-text">Dev-Green Accuracy</th>
@@ -122,15 +124,15 @@
           <% end %>
         </tr>
 
-        <%= for [hour, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
+        <%= for [row_scope, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
           <tr>
-            <td><%= hour %></td>
+            <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
             <td class="prod-text"><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
             <td class="prod-text"><%= prod_total %></td>
             <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
             <td class="dev-green-text"><%= dg_total %></td>
             <%= if show_download?(@conn.params) do %>
-              <th><%= link("csv", to: predictions_path_with_filters(@conn, hour)) %></th>
+              <th><%= link("csv", to: predictions_path_with_filters(@conn, row_scope)) %></th>
             <% end %>
           </tr>
         <% end %>

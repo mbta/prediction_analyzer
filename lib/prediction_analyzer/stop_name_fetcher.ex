@@ -11,24 +11,41 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
   @spec init(state) :: {:ok, state}
   def init(state) do
-    send(self(), :get_stop_names)
+    send(self(), :load_stop_data)
     {:ok, state}
   end
 
-  @spec get_stop_map() :: {:reply, state, state}
-  def get_stop_map() do
-    GenServer.call(__MODULE__, :get_stop_map)
+  @spec get_stop_descriptions() :: %{String.t() => String.t()}
+  def get_stop_descriptions() do
+    GenServer.call(__MODULE__, :get_stop_descriptions)
   end
 
-  @spec handle_call(:get_stop_map, GenServer.from(), state) :: {:reply, state, state}
-  def handle_call(:get_stop_map, _from, state), do: {:reply, state, state}
-
-  def handle_info(:get_stop_names, _state) do
-    {:noreply, get_stop_names()}
+  @spec get_stop_name(String.t()) :: String.t()
+  def get_stop_name(stop_id) do
+    GenServer.call(__MODULE__, {:get_stop_name, stop_id})
   end
 
-  @spec get_stop_names() :: state
-  defp get_stop_names do
+  def handle_call(:get_stop_descriptions, _from, state) do
+    description_map =
+      state
+      |> Enum.map(fn {id, data} -> {id, data.description} end)
+      |> Enum.into(%{})
+
+    {:reply, description_map, state}
+  end
+
+  def handle_call({:get_stop_name, stop_id}, _from, state) do
+    stop = state[stop_id]
+    stop_name = if stop, do: "#{stop.name} (#{stop.platform_name})", else: stop_id
+    {:reply, stop_name, state}
+  end
+
+  def handle_info(:load_stop_data, _state) do
+    {:noreply, load_stop_data()}
+  end
+
+  @spec load_stop_data() :: state
+  defp load_stop_data do
     url = Application.get_env(:prediction_analyzer, :stop_fetch_url)
     api_key = Application.get_env(:prediction_analyzer, :api_v3_key)
     headers = if api_key, do: [{"x-api-key", api_key}], else: []
@@ -52,7 +69,12 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
     body["data"]
     |> Enum.map(fn stop ->
-      {stop["id"], stop["attributes"]["description"]}
+      {stop["id"],
+       %{
+         description: stop["attributes"]["description"],
+         name: stop["attributes"]["name"],
+         platform_name: stop["attributes"]["platform_name"]
+       }}
     end)
     |> Enum.into(%{})
   end

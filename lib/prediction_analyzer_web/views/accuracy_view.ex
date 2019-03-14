@@ -22,6 +22,25 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     end)
   end
 
+  @spec chart_range_scope_header(String.t()) :: String.t()
+  def chart_range_scope_header(chart_range) do
+    case chart_range do
+      "Hourly" -> "Hour"
+      "Daily" -> "Date"
+      "By Station" -> "Station"
+    end
+  end
+
+  @spec formatted_row_scope(map(), String.t()) :: String.t()
+  def formatted_row_scope(filter_params, row_scope) do
+    if filter_params["chart_range"] == "By Station" do
+      stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
+      stop_name_fetcher.get_stop_name(row_scope)
+    else
+      row_scope
+    end
+  end
+
   def service_dates(now \\ Timex.local()) do
     0..7
     |> Enum.map(fn n ->
@@ -49,20 +68,20 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     false
   end
 
-  @spec stop_names() :: [{String.t(), String.t()}]
-  def stop_names() do
+  @spec stop_descriptions() :: [{String.t(), String.t()}]
+  def stop_descriptions() do
     stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
 
-    name_pairs =
-      stop_name_fetcher.get_stop_map()
-      |> Enum.map(&stop_name/1)
+    description_pairs =
+      stop_name_fetcher.get_stop_descriptions()
+      |> Enum.map(&stop_description/1)
       |> Enum.sort()
 
-    [{"", ""} | name_pairs]
+    [{"", ""} | description_pairs]
   end
 
-  @spec stop_name({String.t(), String.t()}) :: {String.t(), String.t()}
-  defp stop_name({id, description}) do
+  @spec stop_description({String.t(), String.t()}) :: {String.t(), String.t()}
+  defp stop_description({id, description}) do
     {"#{description} (#{id})", id}
   end
 
@@ -98,5 +117,13 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   def chart_range_class(_, _), do: "chart-range-link"
 
   @spec chart_range_id(String.t()) :: String.t()
-  def chart_range_id(chart_range), do: "link-#{String.downcase(chart_range)}"
+  def chart_range_id(chart_range) do
+    normalized_chart_range =
+      chart_range
+      |> String.downcase()
+      |> String.replace(~r/\s+/, "_")
+      |> String.downcase()
+
+    "link-#{normalized_chart_range}"
+  end
 end

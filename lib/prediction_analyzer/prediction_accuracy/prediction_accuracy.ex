@@ -105,8 +105,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
   @spec filter_by_timeframe(Ecto.Query.t(), any(), any(), any(), any()) ::
           {:ok, Ecto.Query.t()} | {:error, String.t()}
-  defp filter_by_timeframe(q, "Daily", _date, start_date, end_date)
-       when is_binary(start_date) and is_binary(end_date) do
+  defp filter_by_timeframe(q, chart_range, _date, start_date, end_date)
+       when (chart_range == "Daily" or chart_range == "By Station") and is_binary(start_date) and
+              is_binary(end_date) do
     case {Date.from_iso8601(start_date), Date.from_iso8601(end_date)} do
       {{:ok, d1}, {:ok, d2}} ->
         case Timex.diff(d2, d1, :days) do
@@ -137,6 +138,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
   defp filter_by_timeframe(_q, "Hourly", _, _, _), do: {:error, "No service date given."}
   defp filter_by_timeframe(_q, "Daily", _, _, _), do: {:error, "No start or end date given."}
+  defp filter_by_timeframe(_q, "By Station", _, _, _), do: {:error, "No start or end date given."}
 
   @doc """
   Takes a Queryable and groups and sums the results into
@@ -144,8 +146,14 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
   hour | prod total | prod accurate | dev-green total | dev-green accurate
   """
-  def stats_by_environment_and_hour(q, filters) do
-    scope = if filters["chart_range"] == "Daily", do: :service_date, else: :hour_of_day
+  @spec stats_by_environment_and_chart_range(Ecto.Query.t(), %{}) :: Ecto.Query.t()
+  def stats_by_environment_and_chart_range(q, filters) do
+    scope =
+      case filters["chart_range"] do
+        "Daily" -> :service_date
+        "By Station" -> :stop_id
+        "Hourly" -> :hour_of_day
+      end
 
     from(
       acc in q,

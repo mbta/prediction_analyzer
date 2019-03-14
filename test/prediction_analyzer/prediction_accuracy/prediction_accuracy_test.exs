@@ -171,7 +171,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     end
   end
 
-  describe "stats_by_environment_and_hour/2" do
+  describe "stats_by_environment_and_chart_range/2" do
     test "groups by environment and hour and sums" do
       insert_accuracy("prod", 10, 101, 99)
       insert_accuracy("prod", 10, 108, 102)
@@ -184,7 +184,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       stats =
         from(acc in PredictionAccuracy, [])
-        |> PredictionAccuracy.stats_by_environment_and_hour(%{"chart_range" => "Hourly"})
+        |> PredictionAccuracy.stats_by_environment_and_chart_range(%{"chart_range" => "Hourly"})
         |> Repo.all()
 
       assert stats == [
@@ -208,7 +208,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       stats =
         from(acc in PredictionAccuracy, [])
-        |> PredictionAccuracy.stats_by_environment_and_hour(%{"chart_range" => "Daily"})
+        |> PredictionAccuracy.stats_by_environment_and_chart_range(%{"chart_range" => "Daily"})
         |> Repo.all()
 
       assert stats == [

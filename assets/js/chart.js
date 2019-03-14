@@ -18,16 +18,17 @@ export function bindFormLinks(accuracyForm) {
   var chartRangeInput = document.getElementById('filters_chart_range');
   var routeIdInput = document.getElementById('filters_route_id');
 
-  document.getElementById('link-hourly').addEventListener('click', function(event) {
-    event.preventDefault();
-    chartRangeInput.value = 'Hourly';
-    accuracyForm.submit();
-  });
-  document.getElementById('link-daily').addEventListener('click', function(event) {
-    event.preventDefault();
-    chartRangeInput.value = 'Daily';
-    accuracyForm.submit();
-  });
+  var bindChartRangeLink = function(linkId, inputValue) {
+    document.getElementById(linkId).addEventListener('click', function(event) {
+      event.preventDefault();
+      chartRangeInput.value = inputValue;
+      accuracyForm.submit();
+    });
+  }
+
+  bindChartRangeLink('link-hourly', 'Hourly');
+  bindChartRangeLink('link-daily', 'Daily');
+  bindChartRangeLink('link-by_station', 'By Station');
 
   var routeButtonElements = document.getElementsByClassName('route-button');
   for (var i = 0; i < routeButtonElements.length; i++) {
@@ -49,8 +50,44 @@ export function setupDashboard() {
   var rawData = window.dataPredictionAccuracyJSON;
   var prodAccs = rawData["prod_accs"];
   var dgAccs = rawData["dg_accs"];
-  var dateRangeData = rawData["time_buckets"];
+  var dateRangeData = rawData["buckets"];
   var chartType = rawData["chart_type"];
+  var chartHeight;
+  var dataType;
+  var rotateAxes;
+  var xAxisText;
+  var xAxisType;
+  var xAxisRotation;
+
+  switch(chartType) {
+    case "Hourly": {
+      chartHeight = 540;
+      dataType = "line";
+      rotateAxes = false;
+      xAxisText = "Hour of Day";
+      xAxisType = "indexed";
+      xAxisRotation = 0;
+      break;
+    }
+    case "Daily": {
+      chartHeight = 540;
+      dataType = "line";
+      rotateAxes = false;
+      xAxisText = "";
+      xAxisType = "timeseries";
+      xAxisRotation = 75;
+      break;
+    }
+    case "By Station": {
+      chartHeight = prodAccs.length * 25;
+      dataType = "bar";
+      rotateAxes = true;
+      xAxisText = "";
+      xAxisType = "category";
+      xAxisRotation = 90;
+      break;
+    }
+  }
 
   var col_1 = ["Prod"].concat(prodAccs);
   var col_2 = ["Dev Green"].concat(dgAccs);
@@ -64,12 +101,14 @@ export function setupDashboard() {
         x_data,
         col_1,
         col_2,
-      ]
+      ],
+      type: dataType
     },
     color: {
       pattern: ["#1fecff", "#c743f0"]
     },
     axis: {
+      rotated: rotateAxes,
       y: {
         label: {
           text: "% Accurate",
@@ -83,13 +122,15 @@ export function setupDashboard() {
         }
       },
       x: {
+        height: 200,
         label: {
-          text: (chartType === "Hourly" ? "Hour of Day" : ""),
+          text: xAxisText,
           position: "outer-center"
         },
-        type: (chartType === "Hourly" ? 'indexed' : 'timeseries'),
+        type: xAxisType,
         tick: {
-          rotate: (chartType === "Hourly" ? 0 : 75),
+          multiline: false,
+          rotate: xAxisRotation,
           culling: false
         }
       },
@@ -103,7 +144,7 @@ export function setupDashboard() {
       }
     },
     size: {
-      height: 400
+      height: chartHeight
     },
     legend: {
       position: "inset"

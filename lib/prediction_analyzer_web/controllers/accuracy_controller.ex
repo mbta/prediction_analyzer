@@ -40,7 +40,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
       accuracies =
         relevant_accuracies
-        |> PredictionAccuracy.stats_by_environment_and_hour(filter_params)
+        |> PredictionAccuracy.stats_by_environment_and_chart_range(filter_params)
         |> PredictionAnalyzer.Repo.all()
 
       render(
@@ -76,11 +76,11 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
     time_filters =
       cond do
-        filters["chart_range"] == "Daily" && filters["daily_date_start"] &&
+        filters["chart_range"] in ["Daily", "By Station"] && filters["daily_date_start"] &&
             filters["daily_date_end"] ->
           Map.take(filters, ["chart_range", "daily_date_start", "daily_date_end"])
 
-        filters["chart_range"] == "Daily" ->
+        filters["chart_range"] in ["Daily", "By Station"] ->
           %{
             "chart_range" => "Daily",
             "daily_date_start" => Timex.local() |> Timex.shift(days: -14) |> Date.to_string(),
@@ -105,20 +105,25 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     )
   end
 
+  @spec set_up_accuracy_chart(list(), map()) :: map()
   defp set_up_accuracy_chart(accuracies, filter_params) do
-    Enum.reduce(accuracies, %{time_buckets: [], prod_accs: [], dg_accs: []}, fn [
-                                                                                  time_bucket,
-                                                                                  prod_total,
-                                                                                  prod_accurate,
-                                                                                  dg_total,
-                                                                                  dg_accurate
-                                                                                ],
-                                                                                acc ->
+    Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: []}, fn [
+                                                                             bucket,
+                                                                             prod_total,
+                                                                             prod_accurate,
+                                                                             dg_total,
+                                                                             dg_accurate
+                                                                           ],
+                                                                           acc ->
       prod_accuracy = if prod_total == 0, do: [0], else: [prod_accurate / prod_total]
       dg_accuracy = if dg_total == 0, do: [0], else: [dg_accurate / dg_total]
 
       acc
-      |> Map.put(:time_buckets, acc[:time_buckets] ++ [time_bucket])
+      |> Map.put(
+        :buckets,
+        acc[:buckets] ++
+          [PredictionAnalyzerWeb.AccuracyView.formatted_row_scope(filter_params, bucket)]
+      )
       |> Map.put(:prod_accs, acc[:prod_accs] ++ prod_accuracy)
       |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
     end)
@@ -128,7 +133,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   @spec time_filters_present?(map()) :: boolean()
   defp time_filters_present?(filters) do
     (filters["chart_range"] == "Hourly" && filters["service_date"]) ||
-      (filters["chart_range"] == "Daily" && filters["daily_date_start"] &&
+      (filters["chart_range"] in ["Daily", "By Station"] && filters["daily_date_start"] &&
          filters["daily_date_end"])
   end
 end
