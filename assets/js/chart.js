@@ -79,7 +79,7 @@ export function setupDashboard() {
       break;
     }
     case "By Station": {
-      chartHeight = prodAccs * 25;
+      chartHeight = prodAccs.length * 25;
       dataType = "bar";
       rotateAxes = true;
       xAxisText = "";
