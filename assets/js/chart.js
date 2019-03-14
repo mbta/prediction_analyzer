@@ -52,28 +52,36 @@ export function setupDashboard() {
   var dgAccs = rawData["dg_accs"];
   var dateRangeData = rawData["buckets"];
   var chartType = rawData["chart_type"];
+  var chartHeight;
   var dataType;
+  var rotateAxes;
   var xAxisText;
   var xAxisType;
   var xAxisRotation;
 
   switch(chartType) {
     case "Hourly": {
+      chartHeight = 540;
       dataType = "line";
+      rotateAxes = false;
       xAxisText = "Hour of Day";
       xAxisType = "indexed";
       xAxisRotation = 0;
       break;
     }
     case "Daily": {
+      chartHeight = 540;
       dataType = "line";
+      rotateAxes = false;
       xAxisText = "";
       xAxisType = "timeseries";
       xAxisRotation = 75;
       break;
     }
     case "By Station": {
+      chartHeight = prodAccs * 25;
       dataType = "bar";
+      rotateAxes = true;
       xAxisText = "";
       xAxisType = "category";
       xAxisRotation = 90;
@@ -100,6 +108,7 @@ export function setupDashboard() {
       pattern: ["#1fecff", "#c743f0"]
     },
     axis: {
+      rotated: rotateAxes,
       y: {
         label: {
           text: "% Accurate",
@@ -135,7 +144,7 @@ export function setupDashboard() {
       }
     },
     size: {
-      height: 540
+      height: chartHeight
     },
     legend: {
       position: "inset"
