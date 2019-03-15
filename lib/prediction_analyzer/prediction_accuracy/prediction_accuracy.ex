@@ -10,6 +10,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     field(:hour_of_day, :integer)
     field(:stop_id, :string)
     field(:route_id, :string)
+    field(:direction_id, :integer)
     field(:arrival_departure, :string)
     field(:bin, :string)
     field(:num_predictions, :integer)
@@ -37,6 +38,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
       :hour_of_day,
       :stop_id,
       :route_id,
+      :direction_id,
       :arrival_departure,
       :bin,
       :num_predictions,
@@ -56,6 +58,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
     with {:ok, q} <- filter_by_route(q, params["route_id"]),
          {:ok, q} <- filter_by_stop(q, params["stop_id"]),
+         {:ok, q} <- filter_by_direction(q, params["direction_id"]),
          {:ok, q} <- filter_by_arrival_departure(q, params["arrival_departure"]),
          {:ok, q} <- filter_by_bin(q, params["bin"]),
          {:ok, q} <-
@@ -93,6 +96,13 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   end
 
   defp filter_by_arrival_departure(q, _), do: {:ok, q}
+
+  @spec filter_by_direction(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
+  defp filter_by_direction(q, direction_id) when direction_id in [0, 1] do
+    {:ok, from(acc in q, where: acc.direction_id == ^direction_id)}
+  end
+
+  defp filter_by_direction(q, _), do: {:ok, q}
 
   @spec filter_by_bin(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
   defp filter_by_bin(q, bin) do
