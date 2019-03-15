@@ -28,6 +28,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
           hour_of_day: 5,
           stop_id: "stop1",
           route_id: "route1",
+          direction_id: 1,
           arrival_departure: "arrival",
           bin: "0-3 min",
           num_predictions: 100,

@@ -125,6 +125,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         hour_of_day,
         route_id,
         stop_id,
+	direction_id,
         arrival_departure,
         bin,
         num_predictions,
@@ -157,7 +158,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         AND p.#{arrival_or_departure_time_column} > p.file_timestamp
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp >= $5
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp < $6
-      GROUP BY p.route_id, p.stop_id
+      GROUP BY p.route_id, p.stop_id, p.direction_id
       )
     "
   end

@@ -13,6 +13,7 @@ defmodule PredictionAnalyzer.Predictions.PredictionTest do
           arrival_time: 234,
           trip_id: "trip1",
           stop_id: "stop1",
+          direction_id: 1,
           route_id: "route1"
         },
         %Prediction{
@@ -28,9 +29,9 @@ defmodule PredictionAnalyzer.Predictions.PredictionTest do
         |> String.split()
 
       assert lines == [
-               "env,file_timestamp,is_deleted,delay,boarding_status,schedule_relationship,stop_sequence,stops_away,trip_id,trip_vehicle_id,route_id,stop_id,predicted_arrival,predicted_departure,vehicle_id,vehicle_label,vehicle_direction_id,actual_arrival,actual_departure",
-               "prod,123,,,,,,,trip1,,route1,stop1,234,,,,,,",
-               ",,,,,,,,,,,,,,vehicle1,,,,"
+               "env,file_timestamp,is_deleted,delay,boarding_status,schedule_relationship,stop_sequence,stops_away,trip_id,trip_vehicle_id,route_id,stop_id,direction_id,predicted_arrival,predicted_departure,vehicle_id,vehicle_label,vehicle_direction_id,actual_arrival,actual_departure",
+               "prod,123,,,,,,,trip1,,route1,stop1,1,234,,,,,,",
+               ",,,,,,,,,,,,,,,vehicle1,,,,"
              ]
     end
   end
