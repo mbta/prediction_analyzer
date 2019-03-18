@@ -98,8 +98,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   defp filter_by_arrival_departure(q, _), do: {:ok, q}
 
   @spec filter_by_direction(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
-  defp filter_by_direction(q, direction_id) when direction_id in [0, 1] do
-    {:ok, from(acc in q, where: acc.direction_id == ^direction_id)}
+  defp filter_by_direction(q, direction_id) when direction_id in ["0", "1"] do
+    {direction_id_int, _} = Integer.parse(direction_id)
+    {:ok, from(acc in q, where: acc.direction_id == ^direction_id_int)}
   end
 
   defp filter_by_direction(q, _), do: {:ok, q}
