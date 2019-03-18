@@ -25,6 +25,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
     schedule_relationship: "SCHEDULED",
     stop_id: "stop",
     route_id: "route",
+    direction_id: 0,
     stop_sequence: 10,
     stops_away: 2,
     vehicle_event_id: nil
@@ -135,6 +136,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       assert pa.bin == "6-12 min"
       assert pa.num_predictions == 4
       assert pa.num_accurate_predictions == 2
+      assert pa.direction_id == 0
     end
 
     test "selects the right predictions based on bin and grades them accurately, for departures" do
@@ -222,6 +224,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       assert pa.bin == "6-12 min"
       assert pa.num_predictions == 4
       assert pa.num_accurate_predictions == 2
+      assert pa.direction_id == 0
     end
 
     test "handles database failure properly" do
