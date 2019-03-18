@@ -111,6 +111,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
     end
   end
 
+  @spec query_template(String.t()) :: String.t()
   defp query_template(arrival_departure) do
     arrival_or_departure_time_column =
       case arrival_departure do
