@@ -73,19 +73,19 @@
         </div>
 
 	<div class="form-group">
-	    <%= label(f, :direction_id, "Direction ID") %>
+	  <div><strong>Direction ID</strong></div>
 
-	    <%= label class: "radio-inline" do %>
-		<%= radio_button(f, :direction_id, "0") %> 0
-	    <% end %>
+	  <%= label class: "radio-inline" do %>
+	    <%= radio_button(f, :direction_id, "0") %> 0
+	  <% end %>
 
-	    <%= label class: "radio-inline" do %>
-		<%= radio_button(f, :direction_id, "1") %> 1
-	    <% end %>
+	  <%= label class: "radio-inline" do %>
+	    <%= radio_button(f, :direction_id, "1") %> 1
+	  <% end %>
 
-	    <%= label class: "radio-inline" do %>
-		<%= radio_button(f, :direction_id, "any") %> Any
-	    <% end %>
+	  <%= label class: "radio-inline" do %>
+	    <%= radio_button(f, :direction_id, "any") %> Any
+	  <% end %>
 	</div>
 
         <div class="form-group">
