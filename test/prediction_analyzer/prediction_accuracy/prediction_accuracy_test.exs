@@ -14,6 +14,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     hour_of_day: 10,
     stop_id: "stop1",
     route_id: "route1",
+    direction_id: 0,
     arrival_departure: "arrival",
     bin: "0-3 min",
     num_predictions: 10,
@@ -28,6 +29,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
           hour_of_day: 5,
           stop_id: "stop1",
           route_id: "route1",
+          direction_id: 1,
           arrival_departure: "arrival",
           bin: "0-3 min",
           num_predictions: 100,
@@ -50,14 +52,15 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       acc3 = %{@prediction_accuracy | route_id: "some_route"}
       acc4 = %{@prediction_accuracy | arrival_departure: "departure"}
       acc5 = %{@prediction_accuracy | bin: "6-12 min"}
+      acc6 = %{@prediction_accuracy | direction_id: 1}
 
       base_params = %{
         "chart_range" => "Hourly",
         "service_date" => Timex.local() |> Date.to_string()
       }
 
-      [acc1_id, acc2_id, acc3_id, acc4_id, acc5_id] =
-        Enum.map([acc1, acc2, acc3, acc4, acc5], fn acc ->
+      [acc1_id, acc2_id, acc3_id, acc4_id, acc5_id, acc6_id] =
+        Enum.map([acc1, acc2, acc3, acc4, acc5, acc6], fn acc ->
           %{id: id} = Repo.insert!(acc)
           id
         end)
@@ -65,7 +68,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       {accs, nil} = PredictionAccuracy.filter(base_params)
       q = from(acc in accs, [])
 
-      assert [%{id: ^acc2_id}, %{id: ^acc3_id}, %{id: ^acc4_id}, %{id: ^acc5_id}] =
+      assert [%{id: ^acc2_id}, %{id: ^acc3_id}, %{id: ^acc4_id}, %{id: ^acc5_id}, %{id: ^acc6_id}] =
                execute_query(q)
 
       {accs, nil} =
@@ -93,6 +96,10 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"bin" => "6-12 min"}))
       q = from(acc in accs, [])
       assert [%{id: ^acc5_id}] = execute_query(q)
+
+      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"direction_id" => "1"}))
+      q = from(acc in accs, [])
+      assert [%{id: ^acc6_id}] = execute_query(q)
     end
 
     test "can filter by single date or more" do

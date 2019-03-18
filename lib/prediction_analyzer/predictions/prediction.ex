@@ -17,6 +17,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
     field(:route_id, :string)
     field(:stop_sequence, :integer)
     field(:stops_away, :integer)
+    field(:direction_id, :integer)
     belongs_to(:vehicle_event, VehicleEvent)
   end
 
@@ -35,6 +36,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
         "trip_vehicle_id,",
         "route_id,",
         "stop_id,",
+        "direction_id,",
         "predicted_arrival,",
         "predicted_departure,",
         "vehicle_id,",
@@ -63,6 +65,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
           p.vehicle_id,
           p.route_id,
           p.stop_id,
+          p.direction_id,
           p.arrival_time,
           p.departure_time,
           vehicle_event && vehicle_event.vehicle_id,

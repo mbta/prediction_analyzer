@@ -68,6 +68,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
              "filters[service_date]" => @today_str,
              "filters[route_id]" => "",
              "filters[stop_id]" => "",
+             "filters[direction_id]" => "any",
              "filters[arrival_departure]" => "all",
              "filters[bin]" => "All"
            } ==
@@ -99,6 +100,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
           "daily_date_start" => "2019-01-01",
           "route_id" => "",
           "stop_id" => "",
+          "direction_id" => "any",
           "arrival_departure" => "all",
           "bin" => "All"
         }
@@ -151,6 +153,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
           "daily_date_end" => "invalid",
           "route_id" => "",
           "stop_id" => "",
+          "direction_id" => "any",
           "arrival_departure" => "all",
           "bin" => "All"
         }

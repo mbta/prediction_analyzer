@@ -66,7 +66,8 @@ defmodule FakeHTTPoison do
             },
             "trip" => %{
               "trip_id" => "TEST_TRIP",
-              "route_id" => "Red"
+              "route_id" => "Red",
+              "direction_id" => 1
             },
             "stop_time_update" => [
               %{

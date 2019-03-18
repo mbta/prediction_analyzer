@@ -12,13 +12,14 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             %{
               "route_id" => route_id,
               "stop_id" => stop_id,
+              "direction_id" => direction_id,
               "arrival_departure" => arrival_departure,
               "bin" => bin
             } = filter_params
         } = params
       )
-      when not is_nil(route_id) and not is_nil(stop_id) and byte_size(arrival_departure) > 0 and
-             byte_size(bin) > 0 do
+      when not is_nil(route_id) and not is_nil(stop_id) and not is_nil(direction_id) and
+             byte_size(arrival_departure) > 0 and byte_size(bin) > 0 do
     if time_filters_present?(filter_params) do
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
 
@@ -70,6 +71,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     default_filters = %{
       "route_id" => "",
       "stop_id" => "",
+      "direction_id" => "any",
       "arrival_departure" => "all",
       "bin" => "All"
     }

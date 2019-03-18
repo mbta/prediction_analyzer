@@ -111,6 +111,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
     end
   end
 
+  @spec query_template(String.t()) :: String.t()
   defp query_template(arrival_departure) do
     arrival_or_departure_time_column =
       case arrival_departure do
@@ -125,6 +126,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         hour_of_day,
         route_id,
         stop_id,
+        direction_id,
         arrival_departure,
         bin,
         num_predictions,
@@ -136,6 +138,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         $2 AS hour_of_day,
         p.route_id AS route_id,
         p.stop_id AS stop_id,
+        p.direction_id AS direction_id,
         $3 AS arrival_departure,
         $4 AS bin,
         COUNT(*) AS num_predictions,
@@ -156,7 +159,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         AND p.#{arrival_or_departure_time_column} > p.file_timestamp
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp >= $5
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp < $6
-      GROUP BY p.route_id, p.stop_id
+      GROUP BY p.route_id, p.stop_id, p.direction_id
       )
     "
   end
