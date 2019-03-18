@@ -21,6 +21,7 @@
       <th>schedule_relationship</th>
       <th>route_id</th>
       <th>stop_id</th>
+      <th>direction_id</th>
       <th>stop_sequence</th>
       <th>stops_away</th>
       <th>actual arrival time</th>
@@ -40,6 +41,7 @@
       <td><%= p.schedule_relationship %></td>
       <td><%= p.route_id %></td>
       <td><%= p.stop_id %></td>
+      <td><%= p.direction_id %></td>
       <td><%= p.stop_sequence %></td>
       <td><%= p.stops_away %></td>
       <td><%= p.vehicle_event && p.vehicle_event.arrival_time %></td>
