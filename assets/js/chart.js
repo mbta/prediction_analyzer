@@ -16,7 +16,6 @@ export default function() {
 
 export function bindFormLinks(accuracyForm) {
   var chartRangeInput = document.getElementById('filters_chart_range');
-  var routeIdInput = document.getElementById('filters_route_id');
 
   var bindChartRangeLink = function(linkId, inputValue) {
     document.getElementById(linkId).addEventListener('click', function(event) {
@@ -29,21 +28,6 @@ export function bindFormLinks(accuracyForm) {
   bindChartRangeLink('link-hourly', 'Hourly');
   bindChartRangeLink('link-daily', 'Daily');
   bindChartRangeLink('link-by_station', 'By Station');
-
-  var routeButtonElements = document.getElementsByClassName('route-button');
-  for (var i = 0; i < routeButtonElements.length; i++) {
-    routeButtonElements[i].addEventListener('click', function(event) {
-      event.preventDefault();
-      if (event.currentTarget.text === 'All lines') {
-	routeIdInput.value = '';
-      }
-      else {
-	var words = event.currentTarget.text.split(' ');
-	routeIdInput.value = words[0];
-      }
-      accuracyForm.submit();
-    });
-  }
 }
 
 export function setupDashboard() {
