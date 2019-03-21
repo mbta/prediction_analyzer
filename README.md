@@ -23,9 +23,10 @@ To start your Phoenix server:
   * You'll need a copy of Postgres running locally. There's an easy-to-use [Mac OS app](https://postgresapp.com/) you can use.
 	Install the app and make sure it's running.
   * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Optionally, you can insert some randomized sample data for a few Red and Orange Line stations by running `DATABASE_URL="postgres://postgres@localhost:5432/prediction_analyzer_repo" AWS_PREDICTIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" AWS_VEHICLE_POSITIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/VehiclePositions_enhanced.json" DEV_GREEN_AWS_PREDICTIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/TripUpdates_enhanced.json" DEV_GREEN_AWS_VEHICLE_POSITIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/VehiclePositions_enhanced.json" mix ecto.reset`.
+  * Optionally, you can insert some randomized sample data for a few Red and Orange Line stations by running `mix ecto.reset`,
+	supplying the environment variables given above, as in the example command.
   * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `DATABASE_URL="postgres://postgres@localhost:5432/prediction_analyzer_repo" AWS_PREDICTIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" AWS_VEHICLE_POSITIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/VehiclePositions_enhanced.json" DEV_GREEN_AWS_PREDICTIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/TripUpdates_enhanced.json" DEV_GREEN_AWS_VEHICLE_POSITIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/VehiclePositions_enhanced.json" mix phx.server`
+  * Start Phoenix endpoint with `mix phx.server`, supplying the environment variables.
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
