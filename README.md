@@ -20,7 +20,7 @@ Example run command:
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
-  * You'll need a copy of Postgres running locally. There's an easy-to-use [Mac OS app]{https://postgresapp.com/} you can use.
+  * You'll need a copy of Postgres running locally. There's an easy-to-use [Mac OS app](https://postgresapp.com/) you can use.
 	Install the app and make sure it's running.
   * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
   * Optionally, you can insert some randomized sample data for a few Red and Orange Line stations by running `DATABASE_URL="postgres://postgres@localhost:5432/prediction_analyzer_repo" AWS_PREDICTIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" AWS_VEHICLE_POSITIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/VehiclePositions_enhanced.json" DEV_GREEN_AWS_PREDICTIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/TripUpdates_enhanced.json" DEV_GREEN_AWS_VEHICLE_POSITIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/VehiclePositions_enhanced.json" mix ecto.reset`.
