@@ -1,9 +1,3 @@
-<%= content_tag :a, "All lines", class: button_class(@conn, ""), href: "#" %>
-
-<%= for route_id <- ["Red", "Orange", "Blue", "Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"] do %>
-  <%= content_tag :a, "#{route_id} line", class: button_class(@conn, route_id), href: "#" %>
-<% end %>
-
 <div class="row accuracy-summary-header">
   <div class="col-xs-6">
     <span class="prod-text prod-text-header">Prod</span>
@@ -50,6 +44,11 @@
             <%= @error_msg %>
           </div>
         <% end %>
+
+	<div class="form-group">
+	    <%= label(f, :route_id, "Route") %>
+	    <%= select(f, :route_id, route_options(), class: "form-control") %>
+	</div>
 
         <%= if f.params["chart_range"] != "By Station" do %>
           <div class="form-group">

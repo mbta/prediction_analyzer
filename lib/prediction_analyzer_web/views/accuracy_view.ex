@@ -11,6 +11,17 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     0
   end
 
+  @spec route_options :: [{String.t(), String.t()}]
+  def route_options do
+    [
+      {"All", ""}
+      | Enum.map(
+          ["Red", "Orange", "Blue", "Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"],
+          &{&1, &1}
+        )
+    ]
+  end
+
   @spec bin_options() :: [String.t()]
   def bin_options() do
     PredictionAccuracy.bins()

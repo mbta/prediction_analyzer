@@ -3,6 +3,12 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
 
   alias PredictionAnalyzerWeb.AccuracyView
 
+  test "route_options/0 returns proper values" do
+    route_options = AccuracyView.route_options()
+    assert {"All", ""} in route_options
+    assert {"Blue", "Blue"} in route_options
+  end
+
   test "bin_options/0 returns bin names in the proper order" do
     assert AccuracyView.bin_options() == ["0-3 min", "3-6 min", "6-12 min", "12-30 min"]
   end
