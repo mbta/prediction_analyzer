@@ -47,7 +47,7 @@
 
 	<div class="form-group">
 	    <%= label(f, :route_id, "Route") %>
-	    <%= select(f, :route_id, [{"All", ""} | Enum.map(["Red", "Orange", "Blue", "Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"], &{&1, &1})], class: "form-control") %>
+	    <%= select(f, :route_id, route_options(), class: "form-control") %>
 	</div>
 
         <%= if f.params["chart_range"] != "By Station" do %>
