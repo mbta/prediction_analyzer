@@ -15,7 +15,7 @@ doesn't, try using your local system username instead.
 Example run command:
 `DATABASE_URL="postgres://postgres@localhost:5432/prediction_analyzer_repo" AWS_PREDICTIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" AWS_VEHICLE_POSITIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3/rtr/VehiclePositions_enhanced.json" DEV_GREEN_AWS_PREDICTIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/TripUpdates_enhanced.json" DEV_GREEN_AWS_VEHICLE_POSITIONS_URL="https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/VehiclePositions_enhanced.json"  iex -S mix`
 
-## Dependencies / Setup
+## Quick Start
 
 To start your Phoenix server:
 
