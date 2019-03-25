@@ -29,6 +29,7 @@ defmodule PredictionAnalyzer.VehicleEvents.VehicleEvent do
     field(:departure_time, :integer)
   end
 
+  @spec changeset(Ecto.Schema.t(), %{atom => any}) :: Ecto.Changeset.t()
   def changeset(vehicle_event, params \\ %{}) do
     fields = [
       :vehicle_id,
@@ -42,8 +43,10 @@ defmodule PredictionAnalyzer.VehicleEvents.VehicleEvent do
       :arrival_time
     ]
 
+    required_fields = fields |> Enum.reject(&(&1 == :arrival_time))
+
     vehicle_event
     |> cast(params, fields)
-    |> validate_required(fields)
+    |> validate_required(required_fields)
   end
 end
