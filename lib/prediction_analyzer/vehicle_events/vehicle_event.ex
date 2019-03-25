@@ -29,6 +29,7 @@ defmodule PredictionAnalyzer.VehicleEvents.VehicleEvent do
     field(:departure_time, :integer)
   end
 
+  @spec changeset(Ecto.Schema.t(), %{atom => any}) :: Ecto.Changeset.t()
   def changeset(vehicle_event, params \\ %{}) do
     fields = [
       :vehicle_id,
