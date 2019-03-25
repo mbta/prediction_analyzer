@@ -262,6 +262,22 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       assert is_number(departure_time)
     end
 
+    test "logs warning if fails to record creation of vehicle created in STOPPED_AT state" do
+      old_vehicles = %{}
+
+      new_vehicles = %{
+        "1" => %{@vehicle | stop_id: nil, current_status: :STOPPED_AT}
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~ "Could not insert vehicle event"
+      assert [] = Repo.all(from(ve in VehicleEvent, select: ve))
+    end
+
     test "Don't log vehicle_event warnings for departures" do
       old_vehicles = %{
         "1" => %{@vehicle | stop_id: "stop1", current_status: :IN_TRANSIT_TO}

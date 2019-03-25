@@ -116,7 +116,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> Repo.insert()
     |> case do
       {:ok, vehicle_event} ->
-        Logger.info("Inserted vehicle event: #{vehicle.label} arrived at #{vehicle.stop_id}")
+        Logger.info(
+          "Inserted vehicle event: #{vehicle.label} materialized stopped at #{vehicle.stop_id}"
+        )
+
         associate_vehicle_event_with_predictions(vehicle_event)
 
       {:error, changeset} ->
