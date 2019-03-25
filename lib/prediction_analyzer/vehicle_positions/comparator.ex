@@ -47,7 +47,11 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     record_arrival(new_vehicle)
   end
 
-  defp compare_vehicle(%Vehicle{label: label}, nil) do
+  defp compare_vehicle(%Vehicle{label: label, current_status: status} = vehicle, nil) do
+    if status == :STOPPED_AT do
+      record_arrival(vehicle)
+    end
+
     Logger.info("Tracking new vehicle #{label}")
   end
 

@@ -226,6 +226,26 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
              ] = Repo.all(from(ve in VehicleEvent, select: ve, order_by: [asc: ve.id]))
     end
 
+    test "records arrival of vehicle created in STOPPED_AT state" do
+      old_vehicles = %{}
+
+      new_vehicles = %{
+        "1" => %{@vehicle | stop_id: "stop1", current_status: :STOPPED_AT}
+      }
+
+      Comparator.compare(new_vehicles, old_vehicles)
+
+      assert [
+               %VehicleEvent{
+                 vehicle_id: "1",
+                 arrival_time: arrival_time,
+                 departure_time: nil
+               }
+             ] = Repo.all(from(ve in VehicleEvent, select: ve))
+
+      assert is_number(arrival_time)
+    end
+
     test "Don't log vehicle_event warnings for departures" do
       old_vehicles = %{
         "1" => %{@vehicle | stop_id: "stop1", current_status: :IN_TRANSIT_TO}
