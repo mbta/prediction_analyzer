@@ -233,17 +233,33 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         "1" => %{@vehicle | stop_id: "stop1", current_status: :STOPPED_AT}
       }
 
+      newer_vehicles = %{
+        "1" => %{@vehicle | stop_id: "stop2", current_status: :IN_TRANSIT}
+      }
+
       Comparator.compare(new_vehicles, old_vehicles)
 
       assert [
                %VehicleEvent{
+                 id: event_id,
                  vehicle_id: "1",
-                 arrival_time: arrival_time,
+                 arrival_time: nil,
                  departure_time: nil
                }
              ] = Repo.all(from(ve in VehicleEvent, select: ve))
 
-      assert is_number(arrival_time)
+      Comparator.compare(newer_vehicles, new_vehicles)
+
+      assert [
+               %VehicleEvent{
+                 id: ^event_id,
+                 vehicle_id: "1",
+                 arrival_time: nil,
+                 departure_time: departure_time
+               }
+             ] = Repo.all(from(ve in VehicleEvent, select: ve))
+
+      assert is_number(departure_time)
     end
 
     test "Don't log vehicle_event warnings for departures" do

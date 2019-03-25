@@ -42,8 +42,10 @@ defmodule PredictionAnalyzer.VehicleEvents.VehicleEvent do
       :arrival_time
     ]
 
+    required_fields = fields |> Enum.reject(&(&1 == :arrival_time))
+
     vehicle_event
     |> cast(params, fields)
-    |> validate_required(fields)
+    |> validate_required(required_fields)
   end
 end
