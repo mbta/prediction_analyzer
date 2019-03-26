@@ -125,8 +125,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
           n when n < 0 ->
             {:error, "Start date is after end date"}
 
-          n when n > 28 ->
-            {:error, "Dates can't be more than 4 weeks apart"}
+          n when n > 35 ->
+            {:error, "Dates can't be more than 5 weeks apart"}
 
           _ ->
             {:ok, from(acc in q, where: acc.service_date >= ^d1 and acc.service_date <= ^d2)}
