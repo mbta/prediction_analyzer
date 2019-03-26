@@ -92,6 +92,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         if retry? do
           Logger.warn(log_msg)
 
+          Application.get_env(:prediction_analyzer, :retry_sleep_time)
+          |> Process.sleep()
+
           do_calculate_aggregate_accuracy(
             repo_module,
             current_time,
