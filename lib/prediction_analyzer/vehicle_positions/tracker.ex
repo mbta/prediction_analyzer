@@ -11,7 +11,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
           http_fetcher: module(),
           environment: String.t(),
           aws_vehicle_positions_url: String.t(),
-          vehicles: vehicle_map()
+          subway_vehicles: vehicle_map(),
+          commuter_rail_vehicles: vehicle_map()
         }
 
   def start_link(_opts \\ [], args) do
@@ -37,13 +38,13 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   end
 
   def init(args) do
-    state = Map.put(args, :vehicles, %{})
+    state = Map.merge(args, %{subway_vehicles: %{}, commuter_rail_vehicles: %{}})
 
     schedule_fetch(self())
     {:ok, state}
   end
 
-  def handle_info(:track_vehicles, state) do
+  def handle_info(:track_subway_vehicles, state) do
     Logger.info("Downloading vehicle positions")
 
     %{body: body} = state.http_fetcher.get!(state.aws_vehicle_positions_url)
@@ -59,7 +60,24 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
     Logger.info("Processed #{length(Map.keys(new_vehicles))} vehicles in #{time / 1000} ms")
     schedule_fetch(self())
-    {:noreply, %{state | vehicles: new_vehicles}}
+    {:noreply, %{state | subway_vehicles: new_vehicles}}
+  end
+
+  def handle_info(:track_commuter_rail_vehicles, state) do
+    api_base_url = Application.get_env(:prediction_analyzer, :api_base_url)
+    url_path = "vehicles"
+
+    api_key = Application.get_env(:prediction_analyzer, :api_v3_key)
+    headers = if api_key, do: [{"x-api-key", api_key}], else: []
+
+    params = %{
+      "filter[route]" =>
+        :commuter_rail |> PredictionAnalyzer.Utilities.routes_for_mode() |> Enum.join(",")
+    }
+
+    %{body: body} = state.http_fetcher.get!(api_base_url <> url_path, headers, params: params)
+
+    body |> Jason.decode!()
   end
 
   def handle_info(msg, state) do
@@ -89,6 +107,6 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   end
 
   defp schedule_fetch(pid) do
-    Process.send_after(pid, :track_vehicles, 1_000)
+    Process.send_after(pid, :track_subway_vehicles, 1_000)
   end
 end
