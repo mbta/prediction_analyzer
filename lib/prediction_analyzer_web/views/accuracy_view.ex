@@ -11,12 +11,25 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     0
   end
 
-  @spec route_options :: [{String.t(), String.t()}]
-  def route_options do
+  @spec mode_string(atom()) :: String.t()
+  def mode_string(:subway) do
+    "Subway"
+  end
+
+  def mode_string(:commuter_rail) do
+    "Commuter Rail"
+  end
+
+  def mode_string(_) do
+    "WEHATEVERAEG"
+  end
+
+  @spec route_options(:subway | :commuter_rail) :: [{String.t(), String.t()}]
+  def route_options(mode) do
     [
       {"All", ""}
       | Enum.map(
-          ["Red", "Orange", "Blue", "Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"],
+          PredictionAnalyzer.Utilities.routes_for_mode(mode),
           &{&1, &1}
         )
     ]

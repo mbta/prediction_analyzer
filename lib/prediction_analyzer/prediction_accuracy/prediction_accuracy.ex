@@ -61,6 +61,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
          {:ok, q} <- filter_by_direction(q, params["direction_id"]),
          {:ok, q} <- filter_by_arrival_departure(q, params["arrival_departure"]),
          {:ok, q} <- filter_by_bin(q, params["bin"]),
+         {:ok, q} <- filter_by_mode(q, params["mode"]),
          {:ok, q} <-
            filter_by_timeframe(
              q,
@@ -81,6 +82,22 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   end
 
   defp filter_by_route(q, _), do: {:ok, q}
+
+  @spec filter_by_mode(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
+  defp filter_by_mode(q, mode) when is_binary(mode) and mode != "" do
+    routes =
+      mode
+      |> PredictionAnalyzer.Utilities.string_to_mode()
+      |> PredictionAnalyzer.Utilities.routes_for_mode()
+
+    {:ok,
+     from(
+       acc in q,
+       where: acc.route_id in ^routes
+     )}
+  end
+
+  defp filter_by_mode(q, _), do: {:ok, q}
 
   @spec filter_by_stop(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
   defp filter_by_stop(q, stop_id) when is_binary(stop_id) and stop_id != "" do
