@@ -30,20 +30,48 @@ export function bindFormLinks(accuracyForm) {
   bindChartRangeLink('link-by_station', 'By Station');
 }
 
-export function setupDashboard() {
-  var rawData = window.dataPredictionAccuracyJSON;
-  var prodAccs = rawData["prod_accs"];
-  var dgAccs = rawData["dg_accs"];
-  var dateRangeData = rawData["buckets"];
-  var chartType = rawData["chart_type"];
+export function renderDashboard() {
+  var sortedProdAccs;
+  var sortedDgAccs;
+  var sortedBucketNames;
   var chartHeight;
   var dataType;
   var rotateAxes;
   var xAxisText;
   var xAxisType;
   var xAxisRotation;
+  var sortedDataPoints;
+  var sortFunction;
+  var sortOrderLink;
+  var sortOrder;
+  var i;
 
-  switch(chartType) {
+  sortedProdAccs = [];
+  sortedDgAccs = [];
+  sortedBucketNames = [];
+
+  if(window.sortOrderLink) {
+    sortOrder = window.sortOrderLink.getAttribute("data-sort-order");
+  } else {
+    sortOrder = "by_id";
+  }
+
+  if(sortOrder == "by_id") {
+    sortFunction = function(a, b) { return (a.id < b.id) ? -1 : 1; }
+  } else {
+    sortFunction = function(a, b) { return ([a.prodAcc, a.dgAcc] < [b.prodAcc, b.dgAcc]) ? -1 : 1; }
+  }
+
+  sortedDataPoints = window.dataPoints.sort(sortFunction);
+
+  for(i = 0; i < sortedDataPoints.length; i++) {
+    var dataPoint = sortedDataPoints[i];
+    sortedProdAccs.push(dataPoint.prodAcc);
+    sortedDgAccs.push(dataPoint.dgAcc);
+    sortedBucketNames.push(dataPoint.bucket);
+  }
+
+  switch(window.chartType) {
     case "Hourly": {
       chartHeight = 540;
       dataType = "line";
@@ -63,7 +91,7 @@ export function setupDashboard() {
       break;
     }
     case "By Station": {
-      chartHeight = prodAccs.length * 25;
+      chartHeight = sortedDataPoints.length * 25;
       dataType = "bar";
       rotateAxes = true;
       xAxisText = "";
@@ -73,9 +101,9 @@ export function setupDashboard() {
     }
   }
 
-  var col_1 = ["Prod"].concat(prodAccs);
-  var col_2 = ["Dev Green"].concat(dgAccs);
-  var x_data = ["x"].concat(dateRangeData);
+  var col_1 = ["Prod"].concat(sortedProdAccs);
+  var col_2 = ["Dev Green"].concat(sortedDgAccs);
+  var x_data = ["x"].concat(sortedBucketNames);
 
   var chart = c3.generate({
     bindto: "#chart-prediction-accuracy",
@@ -134,4 +162,44 @@ export function setupDashboard() {
       position: "inset"
     }
   });
+}
+
+export function setupDashboard() {
+  var rawData = window.dataPredictionAccuracyJSON;
+  var prodAccs = rawData["prod_accs"];
+  var dgAccs = rawData["dg_accs"];
+  var bucketNames = rawData["buckets"];
+  var i;
+
+  window.chartType = rawData["chart_type"];
+  window.dataPoints = [];
+
+  window.sortOrderLink = document.getElementById("sort-order-link");
+  if(window.sortOrderLink) {
+    window.sortOrderLink.addEventListener("click", toggleSortOrder);
+  }
+
+  for(i = 0; i < bucketNames.length; i++) {
+    window.dataPoints.push({
+      id: i,
+      bucket: bucketNames[i],
+      prodAcc: prodAccs[i],
+      dgAcc: dgAccs[i]
+    });
+  }
+
+  renderDashboard();
+}
+
+export function toggleSortOrder(event) {
+  event.preventDefault();
+  if(window.sortOrderLink.getAttribute("data-sort-order") == "by_id") {
+    window.sortOrderLink.innerText = "Sorted By Accuracy";
+    window.sortOrderLink.setAttribute("data-sort-order", "by_accuracy");
+  } else {
+    window.sortOrderLink.innerText = "Sorted By Route Order";
+    window.sortOrderLink.setAttribute("data-sort-order", "by_id");
+  }
+
+  renderDashboard();
 }
