@@ -130,13 +130,13 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
 
   test "button_class/2" do
     assert AccuracyView.button_class(%{params: %{"filters" => %{"route_id" => "Blue"}}}, "Blue") =~
-             "route-button"
+             "mode-button"
 
     assert AccuracyView.button_class(%{params: %{"filters" => %{"route_id" => "Blue"}}}, "Red") =~
-             "route-button"
+             "mode-button"
 
-    assert AccuracyView.button_class(%{}, "Red") =~ "route-button"
+    assert AccuracyView.button_class(%{}, "Red") =~ "mode-button"
 
-    assert AccuracyView.button_class(%{}, "") =~ "route-button"
+    assert AccuracyView.button_class(%{}, "") =~ "mode-button"
   end
 end
