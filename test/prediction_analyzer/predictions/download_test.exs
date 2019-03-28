@@ -25,4 +25,15 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
              ]
     end
   end
+
+  describe "get_commuter_rail_predictions/1" do
+    test "downloads and stores prod predictions" do
+      Download.get_commuter_rail_predictions(:prod)
+      query = from(p in Prediction, select: [p.stop_id, p.direction_id])
+
+      preds = PredictionAnalyzer.Repo.all(query)
+
+      assert preds == [["North Station", 0]]
+    end
+  end
 end

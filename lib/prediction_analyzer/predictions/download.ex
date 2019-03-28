@@ -25,7 +25,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     |> store_subway_predictions(env)
   end
 
-  @spec get_commuter_rail_predictions(:prod | :dev_green) :: no_return
+  @spec get_commuter_rail_predictions(:prod) :: no_return
   def get_commuter_rail_predictions(env) do
     {_, http_fetcher} = get_vars(env)
     api_base_url = Application.get_env(:prediction_analyzer, :api_base_url)
@@ -171,7 +171,6 @@ defmodule PredictionAnalyzer.Predictions.Download do
           trip_id: prediction["relationships"]["trip"]["data"]["id"],
           route_id: prediction["relationships"]["route"]["data"]["id"],
           direction_id: prediction["attributes"]["direction_id"],
-          # is_deleted: prediction["is_deleted"],
           arrival_time: arrival_time_unix,
           departure_time: departure_time_unix,
           boarding_status: prediction["attributes"]["status"],
