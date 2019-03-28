@@ -70,7 +70,8 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
              "filters[stop_id]" => "",
              "filters[direction_id]" => "any",
              "filters[arrival_departure]" => "all",
-             "filters[bin]" => "All"
+             "filters[bin]" => "All",
+             "filters[mode]" => "subway"
            } ==
              URI.parse(redirected_to(conn))
              |> Map.get(:query)
@@ -152,6 +153,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
           "daily_date_start" => "2019-01-01",
           "daily_date_end" => "invalid",
           "route_id" => "",
+          "mode" => "subway",
           "stop_id" => "",
           "direction_id" => "any",
           "arrival_departure" => "all",

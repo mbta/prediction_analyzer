@@ -34,13 +34,14 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         http_fetcher: OneVehicle,
         aws_vehicle_positions_url: "vehiclepositions",
         environment: "dev-green",
-        vehicles: %{}
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{}
       }
 
       assert {
                :noreply,
-               %{vehicles: %{"R-5458F5AF" => %Vehicle{}}}
-             } = Tracker.handle_info(:track_vehicles, state)
+               %{subway_vehicles: %{"R-5458F5AF" => %Vehicle{}}}
+             } = Tracker.handle_info(:track_subway_vehicles, state)
     end
   end
 

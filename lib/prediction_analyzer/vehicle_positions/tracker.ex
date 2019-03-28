@@ -55,7 +55,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
         |> Jason.decode!()
         |> parse_vehicles(state.environment)
         |> Enum.into(%{}, fn v -> {v.id, v} end)
-        |> Comparator.compare(state.vehicles)
+        |> Comparator.compare(state.subway_vehicles)
       end)
 
     Logger.info("Processed #{length(Map.keys(new_vehicles))} vehicles in #{time / 1000} ms")

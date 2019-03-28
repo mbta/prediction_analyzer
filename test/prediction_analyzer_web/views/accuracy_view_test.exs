@@ -3,10 +3,18 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
 
   alias PredictionAnalyzerWeb.AccuracyView
 
-  test "route_options/0 returns proper values" do
-    route_options = AccuracyView.route_options()
-    assert {"All", ""} in route_options
-    assert {"Blue", "Blue"} in route_options
+  describe "route_options/1" do
+    test "subway returns subway values" do
+      route_options = AccuracyView.route_options(:subway)
+      assert {"All", ""} in route_options
+      assert {"Blue", "Blue"} in route_options
+    end
+
+    test "commuter rail returns commuter rail values" do
+      route_options = AccuracyView.route_options(:commuter_rail)
+      assert {"All", ""} in route_options
+      assert {"CR-Fitchburg", "CR-Fitchburg"} in route_options
+    end
   end
 
   test "bin_options/0 returns bin names in the proper order" do
