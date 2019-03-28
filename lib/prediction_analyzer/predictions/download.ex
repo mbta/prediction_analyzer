@@ -47,7 +47,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
 
     body
     |> Jason.decode!()
-    |> store_commuter_rail_predictions(last_modified, env)
+    |> store_commuter_rail_predictions(last_modified)
   end
 
   defp get_vars(:prod) do
@@ -138,7 +138,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     nil
   end
 
-  defp store_commuter_rail_predictions(%{"data" => data} = response, last_modified, env) do
+  defp store_commuter_rail_predictions(%{"data" => data}, last_modified) do
     {:ok, timestamp} = last_modified |> Timex.parse("{RFC1123}")
     timestamp = DateTime.to_unix(timestamp)
 
