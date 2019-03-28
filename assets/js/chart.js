@@ -30,7 +30,7 @@ export function bindFormLinks(accuracyForm) {
   bindChartRangeLink('link-by_station', 'By Station');
 }
 
-export function renderDashboard() {
+function renderDashboard() {
   var sortedProdAccs;
   var sortedDgAccs;
   var sortedBucketNames;
@@ -191,7 +191,7 @@ export function setupDashboard() {
   renderDashboard();
 }
 
-export function toggleSortOrder(event) {
+function toggleSortOrder(event) {
   event.preventDefault();
   if(window.sortOrderLink.getAttribute("data-sort-order") == "by_id") {
     window.sortOrderLink.innerText = "Sorted By Accuracy";
