@@ -36,6 +36,7 @@
 <hr class="accuracy-separator">
 
 <%= form_for @conn, accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
+  <%= hidden_input(f, :mode) %>
   <%= hidden_input(f, :route_id) %>
   <%= hidden_input(f, :chart_range) %>
 
@@ -56,7 +57,7 @@
         <%= if f.params["chart_range"] != "By Station" do %>
           <div class="form-group">
             <%= label(f, :stop_id, "Stop ID") %>
-            <%= select(f, :stop_id, stop_descriptions(), class: 'combobox form-control') %>
+            <%= select(f, :stop_id, stop_descriptions(@mode), class: 'combobox form-control') %>
           </div>
         <% end %>
 

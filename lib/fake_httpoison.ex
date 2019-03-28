@@ -35,6 +35,15 @@ defmodule FakeHTTPoison do
     {:ok, response}
   end
 
+  def get("https://api-v3.mbta.com/stops", _headers, params: %{"filter[route_type]" => "2"}) do
+    body = %{
+      "data" => []
+    }
+
+    response = %HTTPoison.Response{body: Jason.encode!(body)}
+    {:ok, response}
+  end
+
   def get("https://api-v3.mbta.com/bad_stops", _headers, _params) do
     {:error, %HTTPoison.Error{}}
   end

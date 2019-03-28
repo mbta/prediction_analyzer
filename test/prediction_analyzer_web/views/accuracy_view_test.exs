@@ -72,12 +72,21 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
            })
   end
 
-  test "stop_descriptions/0" do
-    assert AccuracyView.stop_descriptions() == [
-             {"", ""},
-             {"Jane Roe St (67890)", "67890"},
-             {"John Doe Square (12345)", "12345"}
-           ]
+  describe "stop_descriptions/1" do
+    test "returns subway stops" do
+      assert AccuracyView.stop_descriptions(:subway) == [
+               {"", ""},
+               {"Jane Roe St (67890)", "67890"},
+               {"John Doe Square (12345)", "12345"}
+             ]
+    end
+
+    test "returns commuter rail stops" do
+      assert AccuracyView.stop_descriptions(:commuter_rail) == [
+               {"", ""},
+               {"No Description Stop", "No Description Stop"}
+             ]
+    end
   end
 
   test "predictions_path_with_filters/2" do

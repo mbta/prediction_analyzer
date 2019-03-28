@@ -59,7 +59,10 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   def formatted_row_scope(filter_params, row_scope) do
     if filter_params["chart_range"] == "By Station" do
       stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
-      stop_name_fetcher.get_stop_name(row_scope)
+
+      filter_params["mode"]
+      |> PredictionAnalyzer.Utilities.string_to_mode()
+      |> stop_name_fetcher.get_stop_name(row_scope)
     else
       row_scope
     end
@@ -92,12 +95,12 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     false
   end
 
-  @spec stop_descriptions() :: [{String.t(), String.t()}]
-  def stop_descriptions() do
+  @spec stop_descriptions(PredictionAnalyzer.Utilities.mode()) :: [{String.t(), String.t()}]
+  def stop_descriptions(mode) do
     stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
 
     description_pairs =
-      stop_name_fetcher.get_stop_descriptions()
+      stop_name_fetcher.get_stop_descriptions(mode)
       |> Enum.map(&stop_description/1)
       |> Enum.sort()
 
@@ -106,7 +109,11 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
 
   @spec stop_description({String.t(), String.t()}) :: {String.t(), String.t()}
   defp stop_description({id, description}) do
-    {"#{description} (#{id})", id}
+    if description do
+      {"#{description} (#{id})", id}
+    else
+      {id, id}
+    end
   end
 
   def predictions_path_with_filters(

@@ -91,7 +91,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       "direction_id" => "any",
       "arrival_departure" => "all",
       "bin" => "All",
-      "mode" => conn.assigns[:mode] || "subway"
+      "mode" => conn.assigns[:mode] || filters["mode"] || "subway"
     }
 
     time_filters =
