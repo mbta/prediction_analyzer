@@ -1,5 +1,5 @@
 <%= for mode_id <- [:subway, :commuter_rail] do %>
-  <%= content_tag :a, mode_string(mode_id), class: button_class(@conn, mode_id), href: accuracy_path(@conn, mode_id) %>
+  <%= content_tag :a, mode_string(mode_id), class: button_class(@conn, mode_string(mode_id)), href: accuracy_path(@conn, mode_id) %>
 <% end %>
 <div class="row accuracy-summary-header">
   <div class="col-xs-6">
