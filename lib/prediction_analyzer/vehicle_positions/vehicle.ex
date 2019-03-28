@@ -77,6 +77,51 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
     :error
   end
 
+  def parse_commuter_rail(%{
+        "attributes" => %{
+          "current_status" => current_status,
+          "direction_id" => direction_id,
+          "label" => label,
+          "updated_at" => updated_at
+        },
+        "id" => vehicle_id,
+        "relationships" => %{
+          "route" => %{
+            "data" => %{
+              "id" => route_id
+            }
+          },
+          "stop" => %{
+            "data" => %{
+              "id" => stop_id
+            }
+          },
+          "trip" => %{
+            "data" => %{
+              "id" => trip_id
+            }
+          }
+        }
+      }) do
+    {:ok, timestamp, _offset} = updated_at |> DateTime.from_iso8601()
+
+    {:ok,
+     %__MODULE__{
+       id: vehicle_id,
+       environment: "prod",
+       label: label,
+       is_deleted: false,
+       trip_id: trip_id,
+       route_id: route_id,
+       direction_id: direction_id,
+       stop_id: stop_id,
+       current_status: status_atom(current_status),
+       timestamp: DateTime.to_unix(timestamp)
+     }}
+  end
+
+  def parse_commuter_rail(_), do: :error
+
   defp status_atom("INCOMING_AT"), do: :INCOMING_AT
   defp status_atom("IN_TRANSIT_TO"), do: :IN_TRANSIT_TO
   defp status_atom("STOPPED_AT"), do: :STOPPED_AT

@@ -165,6 +165,20 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert response =~ "Can&#39;t parse start or end date."
   end
 
+  test "GET /accuracy/subway gets the index for subway mode", %{conn: conn} do
+    conn = get(conn, "/accuracy/subway", %{})
+
+    assert response(conn, 302)
+    assert conn.assigns[:mode] == :subway
+  end
+
+  test "GET /accuracy/commuter_rail gets the index for commuter rail mode", %{conn: conn} do
+    conn = get(conn, "/accuracy/commuter_rail", %{})
+
+    assert response(conn, 302)
+    assert conn.assigns[:mode] == :commuter_rail
+  end
+
   def insert_accuracy(env, hour, total, accurate) do
     PredictionAnalyzer.Repo.insert!(%{
       @prediction_accuracy

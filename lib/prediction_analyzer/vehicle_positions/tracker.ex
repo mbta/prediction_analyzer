@@ -77,7 +77,15 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
     %{body: body} = state.http_fetcher.get!(api_base_url <> url_path, headers, params: params)
 
-    body |> Jason.decode!()
+    new_vehicles =
+      body
+      |> Jason.decode!()
+      |> Map.get("data")
+      |> parse_commuter_rail("prod")
+      |> Enum.into(%{}, fn v -> {v.id, v} end)
+      |> Comparator.compare(state.subway_vehicles)
+
+    {:noreply, %{state | commuter_rail_vehicles: new_vehicles}}
   end
 
   def handle_info(msg, state) do
@@ -96,6 +104,15 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
   defp parse_vehicles(_, _) do
     []
+  end
+
+  defp parse_commuter_rail(data, _env) do
+    Enum.flat_map(data, fn d ->
+      case Vehicle.parse_commuter_rail(d) do
+        {:ok, vehicle} -> [vehicle]
+        _ -> []
+      end
+    end)
   end
 
   def get_env_vehicle_positions_url("dev-green") do
