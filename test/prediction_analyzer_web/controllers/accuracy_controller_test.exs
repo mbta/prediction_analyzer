@@ -129,6 +129,25 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert redirected_to(conn) =~ "2019-01-01"
   end
 
+  test "GET /accuracy when the filters dont have time filters, redirects such that it does", %{
+    conn: conn
+  } do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "route_id" => "",
+          "stop_id" => "",
+          "direction_id" => "any",
+          "arrival_departure" => "all",
+          "bin" => "All",
+          "mode" => "subway"
+        }
+      })
+
+    assert response(conn, 302)
+    assert redirected_to(conn) =~ "Hourly"
+  end
+
   test "GET /accuracy maintains daily date range when redirecting", %{conn: conn} do
     conn =
       get(conn, "/accuracy", %{

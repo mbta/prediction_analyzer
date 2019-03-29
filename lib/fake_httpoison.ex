@@ -85,6 +85,44 @@ defmodule FakeHTTPoison do
                 "type" => "route"
               }
             },
+            "vehicle" => %{
+              "data" => %{
+                "id" => "vehicle_id",
+                "type" => "vehicle"
+              }
+            },
+            "stop" => %{
+              "data" => %{
+                "id" => "North Station",
+                "type" => "stop"
+              }
+            },
+            "trip" => %{
+              "data" => %{
+                "id" => "CR-Weekday-Fall-18-415-LittletonWachusett",
+                "type" => "trip"
+              }
+            }
+          },
+          "type" => "prediction"
+        },
+        %{
+          "attributes" => %{
+            "arrival_time" => nil,
+            "departure_time" => "2019-03-28T15:31:00-04:00",
+            "direction_id" => 0,
+            "schedule_relationship" => nil,
+            "status" => "On time",
+            "stop_sequence" => 1
+          },
+          "id" => "prediction-CR-Weekday-Fall-18-415-LittletonWachusett-North Station-1",
+          "relationships" => %{
+            "route" => %{
+              "data" => %{
+                "id" => "CR-Fitchburg",
+                "type" => "route"
+              }
+            },
             "stop" => %{
               "data" => %{
                 "id" => "North Station",

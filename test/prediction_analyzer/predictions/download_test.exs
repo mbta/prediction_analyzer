@@ -23,6 +23,12 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
     assert_received :get_commuter_rail_predictions
   end
 
+  test "start_link/1" do
+    {:ok, pid} = Download.start_link()
+    :timer.sleep(500)
+    assert Process.alive?(pid)
+  end
+
   describe "get_subway_predictions/1" do
     test "downloads and stores prod predictions" do
       Download.get_subway_predictions(:prod)
@@ -43,7 +49,7 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
   describe "get_commuter_rail_predictions/1" do
     test "downloads and stores prod predictions" do
       Download.get_commuter_rail_predictions(:prod)
-      query = from(p in Prediction, select: [p.stop_id, p.direction_id])
+      query = from(p in Prediction, select: [p.stop_id, p.direction_id, p.vehicle_id])
 
       preds = PredictionAnalyzer.Repo.all(query)
 
