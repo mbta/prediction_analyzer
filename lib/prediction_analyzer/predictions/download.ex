@@ -8,10 +8,15 @@ defmodule PredictionAnalyzer.Predictions.Download do
     GenServer.start_link(__MODULE__, %{}, opts)
   end
 
-  def init(args) do
-    schedule_prod_fetch(self(), 1_000)
-    schedule_dev_green_fetch(self(), 11_000)
-    schedule_commuter_rail_fetch(self(), 21_000)
+  def init(args \\ []) do
+    initial_prod_fetch_ms = args[:initial_prod_fetch_ms] || 1_000
+    initial_dev_green_fetch_ms = args[:initial_dev_green_fetch_ms] || 11_000
+    initial_commuter_rail_fetch_ms = args[:initial_commuter_rail_fetch_ms] || 21_000
+
+    schedule_prod_fetch(self(), initial_prod_fetch_ms)
+    schedule_dev_green_fetch(self(), initial_dev_green_fetch_ms)
+    schedule_commuter_rail_fetch(self(), initial_commuter_rail_fetch_ms)
+
     {:ok, args}
   end
 

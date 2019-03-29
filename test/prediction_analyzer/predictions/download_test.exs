@@ -9,6 +9,20 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
   end
 
+  describe "init/1" do
+    Download.init(
+      initial_prod_fetch_ms: 10,
+      initial_dev_green_fetch_ms: 20,
+      initial_commuter_rail_fetch_ms: 30
+    )
+
+    Process.sleep(50)
+
+    assert_received :get_prod_predictions
+    assert_received :get_dev_green_predictions
+    assert_received :get_commuter_rail_predictions
+  end
+
   describe "get_subway_predictions/1" do
     test "downloads and stores prod predictions" do
       Download.get_subway_predictions(:prod)
