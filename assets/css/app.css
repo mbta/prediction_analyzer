@@ -77,7 +77,7 @@
   font-weight: bold;
 }
 
-.chart-range-link {
+.chart-range-link, .sort-order-link {
   background-color: #022441;
   border-color: #b6d8f5;
   border-radius: 3px;
@@ -87,7 +87,8 @@
   display: inline-block;
   line-height: 2.5;
   text-align: center;
-  width: 7em;
+  min-width: 7em;
+  padding: 3px;
 }
 
 .chart-range-link-active {
@@ -97,5 +98,11 @@
 }
 
 .chart-range-links {
+  display: inline-block;
   margin-bottom: 1em;
+  width: 50%;
+}
+
+.sort-order-link {
+  float: right;
 }
