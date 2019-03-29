@@ -89,8 +89,7 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
 
       assert preds == [
                ["North Station", 0, "vehicle_id"],
-               ["North Station", 0, "vehicle_id"],
-               ["North Station", 0, "CR-na"]
+               ["North Station", 0, "vehicle_id"]
              ]
     end
   end

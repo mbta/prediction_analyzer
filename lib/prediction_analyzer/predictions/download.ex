@@ -168,21 +168,28 @@ defmodule PredictionAnalyzer.Predictions.Download do
               DateTime.to_unix(departure_dt)
           end
 
-        %{
-          environment: "prod",
-          file_timestamp: timestamp,
-          vehicle_id: prediction["relationships"]["vehicle"]["data"]["id"] || "CR-na",
-          trip_id: prediction["relationships"]["trip"]["data"]["id"],
-          route_id: prediction["relationships"]["route"]["data"]["id"],
-          direction_id: prediction["attributes"]["direction_id"],
-          arrival_time: arrival_time_unix,
-          departure_time: departure_time_unix,
-          boarding_status: prediction["attributes"]["status"],
-          schedule_relationship: prediction["attributes"]["schedule_relationship"],
-          stop_id: prediction["relationships"]["stop"]["data"]["id"],
-          stop_sequence: prediction["attributes"]["stop_sequence"]
-        }
+        case prediction["relationships"]["vehicle"]["data"]["id"] do
+          nil ->
+            nil
+
+          vehicle_id ->
+            %{
+              environment: "prod",
+              file_timestamp: timestamp,
+              vehicle_id: vehicle_id,
+              trip_id: prediction["relationships"]["trip"]["data"]["id"],
+              route_id: prediction["relationships"]["route"]["data"]["id"],
+              direction_id: prediction["attributes"]["direction_id"],
+              arrival_time: arrival_time_unix,
+              departure_time: departure_time_unix,
+              boarding_status: prediction["attributes"]["status"],
+              schedule_relationship: prediction["attributes"]["schedule_relationship"],
+              stop_id: prediction["relationships"]["stop"]["data"]["id"],
+              stop_sequence: prediction["attributes"]["stop_sequence"]
+            }
+        end
       end)
+      |> Enum.reject(&(&1 == nil))
 
     {_, _} = PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
   end

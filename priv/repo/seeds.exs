@@ -19,7 +19,16 @@ stops = [
   {"Orange", "70278", 0},
   {"Orange", "70279", 1},
   {"Orange", "70030", 0},
-  {"Orange", "70031", 1}
+  {"Orange", "70031", 1},
+  {"CR-Fitchburg", "Waltham", 0},
+  {"CR-Fitchburg", "Waltham", 1},
+  {"CR-Fitchburg", "Belmont", 1},
+  {"CR-Fitchburg", "Belmont", 0},
+  {"CR-Fitchburg", "Fitchburg", 1},
+  {"CR-Fitchburg", "Fitchburg", 0},
+  {"CR-Fitchburg", "Concord", 1},
+  {"CR-Fitchburg", "Concord", 0},
+  {"CR-Fitchburg", "Lincoln", 1}
 ]
 
 Logger.info("Generating sample prediction_accuracy data")
