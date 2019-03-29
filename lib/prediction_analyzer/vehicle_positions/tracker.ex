@@ -71,17 +71,25 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
         :commuter_rail |> PredictionAnalyzer.Utilities.routes_for_mode() |> Enum.join(",")
     }
 
-    {:ok, %{body: body}} = PredictionAnalyzer.Utilities.APIv3.request(url_path, params: params)
+    state =
+      case PredictionAnalyzer.Utilities.APIv3.request(url_path, params: params) do
+        {:ok, %{body: body}} ->
+          new_vehicles =
+            body
+            |> Jason.decode!()
+            |> Map.get("data")
+            |> parse_commuter_rail("prod")
+            |> Enum.into(%{}, fn v -> {v.id, v} end)
+            |> Comparator.compare(state.commuter_rail_vehicles)
 
-    new_vehicles =
-      body
-      |> Jason.decode!()
-      |> Map.get("data")
-      |> parse_commuter_rail("prod")
-      |> Enum.into(%{}, fn v -> {v.id, v} end)
-      |> Comparator.compare(state.commuter_rail_vehicles)
+          %{state | commuter_rail_vehicles: new_vehicles}
 
-    {:noreply, %{state | commuter_rail_vehicles: new_vehicles}}
+        {:error, e} ->
+          Logger.warn("Could not download commuter rail vehicles; received: #{inspect(e)}")
+          state
+      end
+
+    {:noreply, state}
   end
 
   def handle_info(msg, state) do

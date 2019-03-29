@@ -1,10 +1,13 @@
 defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   use ExUnit.Case, async: false
+  import ExUnit.CaptureLog
+  import Test.Support.Env
 
   alias PredictionAnalyzer.VehiclePositions.Tracker
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.NotifyGet
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.SubwayVehicle
   alias PredictionAnalyzer.VehiclePositions.Vehicle
+  alias PredictionAnalyzer.VehiclePositions.TrackerTest.FailedHTTPFetcher
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
@@ -74,6 +77,31 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
                }
              } = Tracker.handle_info(:track_commuter_rail_vehicles, state)
     end
+
+    test "fails gracefully when API returns error" do
+      reassign_env(:http_fetcher, FailedHTTPFetcher)
+
+      state = %{
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "prod",
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{}
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          assert Tracker.handle_info(:track_commuter_rail_vehicles, state) ==
+                   {:noreply,
+                    %{
+                      aws_vehicle_positions_url: "vehiclepositions",
+                      environment: "prod",
+                      subway_vehicles: %{},
+                      commuter_rail_vehicles: %{}
+                    }}
+        end)
+
+      assert log =~ "Could not download commuter rail vehicles"
+    end
   end
 
   defmodule NotifyGet do
@@ -130,6 +158,12 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       %{body: Jason.encode!(data)}
+    end
+  end
+
+  defmodule FailedHTTPFetcher do
+    def get(_, _, _) do
+      {:error, "something"}
     end
   end
 end
