@@ -1,12 +1,21 @@
 defmodule PredictionAnalyzer.Predictions.DownloadTest do
   use ExUnit.Case, async: true
+  import ExUnit.CaptureLog
 
   import Ecto.Query, only: [from: 2]
+  import Test.Support.Env
   alias PredictionAnalyzer.Predictions.Download
   alias PredictionAnalyzer.Predictions.Prediction
+  alias PredictionAnalyzer.Predictions.DownloadTest.FailedHTTPFetcher
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
+  end
+
+  defmodule FailedHTTPFetcher do
+    def get(_, _, _) do
+      {:error, "something"}
+    end
   end
 
   describe "init/1" do
@@ -47,6 +56,22 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
   end
 
   describe "get_commuter_rail_predictions/0" do
+    test "when theres an error, gets no predictions" do
+      reassign_env(:http_fetcher, FailedHTTPFetcher)
+
+      log =
+        capture_log([level: :warn], fn ->
+          Download.get_commuter_rail_predictions()
+        end)
+
+      query = from(p in Prediction, select: [p.stop_id, p.direction_id, p.vehicle_id])
+
+      preds = PredictionAnalyzer.Repo.all(query)
+
+      assert preds == []
+      assert log =~ "Could not download commuter rail predictions"
+    end
+
     test "downloads and stores prod predictions" do
       Download.get_commuter_rail_predictions()
       query = from(p in Prediction, select: [p.stop_id, p.direction_id, p.vehicle_id])

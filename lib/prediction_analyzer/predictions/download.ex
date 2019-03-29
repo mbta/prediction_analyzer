@@ -49,7 +49,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
         |> store_commuter_rail_predictions(last_modified)
 
       {:error, e} ->
-        Logger.warn("Could not download stop names; received: #{inspect(e)}")
+        Logger.warn("Could not download commuter rail predictions; received: #{inspect(e)}")
         %{}
     end
   end

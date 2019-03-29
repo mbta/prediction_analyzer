@@ -58,6 +58,10 @@ defmodule FakeHTTPoison do
     {:error, %HTTPoison.Error{}}
   end
 
+  def get("https://bad-api-v3.mbta.com/predictions" = url, _, _) do
+    {:error, %HTTPoison.Error{}}
+  end
+
   def get("https://api-v3.mbta.com/predictions" = url, _, _) do
     {:ok, prediction_response_body(url)}
   end
