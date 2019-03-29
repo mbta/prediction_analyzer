@@ -5,7 +5,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
   alias PredictionAnalyzer.Predictions.Prediction
 
   def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, %{}, opts)
+    GenServer.start_link(__MODULE__, opts, opts)
   end
 
   def init(args \\ []) do
@@ -17,7 +17,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     schedule_dev_green_fetch(self(), initial_dev_green_fetch_ms)
     schedule_commuter_rail_fetch(self(), initial_commuter_rail_fetch_ms)
 
-    {:ok, args}
+    {:ok, %{}}
   end
 
   def get_subway_predictions(env) do

@@ -1,5 +1,5 @@
 defmodule PredictionAnalyzer.Predictions.DownloadTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   import ExUnit.CaptureLog
 
   import Ecto.Query, only: [from: 2]
@@ -10,6 +10,7 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
+    Ecto.Adapters.SQL.Sandbox.mode(PredictionAnalyzer.Repo, {:shared, self()})
   end
 
   defmodule FailedHTTPFetcher do
@@ -19,30 +20,31 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
   end
 
   describe "init/1" do
-    Download.init(
-      initial_prod_fetch_ms: 10,
-      initial_dev_green_fetch_ms: 20,
-      initial_commuter_rail_fetch_ms: 30
-    )
+    test "schedules initial download" do
+      Download.init(
+        initial_prod_fetch_ms: 10,
+        initial_dev_green_fetch_ms: 20,
+        initial_commuter_rail_fetch_ms: 30
+      )
 
-    Process.sleep(50)
+      Process.sleep(50)
 
-    assert_received :get_prod_predictions
-    assert_received :get_dev_green_predictions
-    assert_received :get_commuter_rail_predictions
+      assert_received :get_prod_predictions
+      assert_received :get_dev_green_predictions
+      assert_received :get_commuter_rail_predictions
+    end
   end
 
   test "start_link/1" do
     {:ok, pid} =
       Download.start_link(
-        initial_prod_fetch_ms: 10,
-        initial_dev_green_fetch_ms: 10,
-        initial_commuter_rail_fetch_ms: 10
+        initial_prod_fetch_ms: 100,
+        initial_dev_green_fetch_ms: 100,
+        initial_commuter_rail_fetch_ms: 100
       )
 
     :timer.sleep(500)
     assert Process.alive?(pid)
-    assert :sys.get_state(pid) == %{}
   end
 
   describe "get_subway_predictions/1" do
