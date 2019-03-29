@@ -64,12 +64,11 @@ function renderDashboard() {
 
   sortedDataPoints = window.dataPoints.sort(sortFunction);
 
-  for(i = 0; i < sortedDataPoints.length; i++) {
-    var dataPoint = sortedDataPoints[i];
+  sortedDataPoints.forEach(function(dataPoint) {
     sortedProdAccs.push(dataPoint.prodAcc);
     sortedDgAccs.push(dataPoint.dgAcc);
     sortedBucketNames.push(dataPoint.bucket);
-  }
+  });
 
   switch(window.chartType) {
     case "Hourly": {
