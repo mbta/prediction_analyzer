@@ -40,7 +40,6 @@ function renderDashboard() {
   var xAxisText;
   var xAxisType;
   var xAxisRotation;
-  var sortedDataPoints;
   var sortFunction;
   var sortOrderLink;
   var sortOrder;
@@ -62,9 +61,9 @@ function renderDashboard() {
     sortFunction = function(a, b) { return ([a.prodAcc, a.dgAcc] < [b.prodAcc, b.dgAcc]) ? -1 : 1; }
   }
 
-  sortedDataPoints = window.dataPoints.sort(sortFunction);
+  window.dataPoints.sort(sortFunction);
 
-  sortedDataPoints.forEach(function(dataPoint) {
+  window.dataPoints.forEach(function(dataPoint) {
     sortedProdAccs.push(dataPoint.prodAcc);
     sortedDgAccs.push(dataPoint.dgAcc);
     sortedBucketNames.push(dataPoint.bucket);
@@ -90,7 +89,7 @@ function renderDashboard() {
       break;
     }
     case "By Station": {
-      chartHeight = sortedDataPoints.length * 25;
+      chartHeight = window.dataPoints.length * 25;
       dataType = "bar";
       rotateAxes = true;
       xAxisText = "";
