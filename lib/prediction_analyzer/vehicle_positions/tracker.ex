@@ -64,18 +64,14 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   end
 
   def handle_info(:track_commuter_rail_vehicles, state) do
-    api_base_url = Application.get_env(:prediction_analyzer, :api_base_url)
     url_path = "vehicles"
-
-    api_key = Application.get_env(:prediction_analyzer, :api_v3_key)
-    headers = if api_key, do: [{"x-api-key", api_key}], else: []
 
     params = %{
       "filter[route]" =>
         :commuter_rail |> PredictionAnalyzer.Utilities.routes_for_mode() |> Enum.join(",")
     }
 
-    %{body: body} = state.http_fetcher.get!(api_base_url <> url_path, headers, params: params)
+    {:ok, %{body: body}} = PredictionAnalyzer.Utilities.APIv3.request(url_path, params: params)
 
     new_vehicles =
       body

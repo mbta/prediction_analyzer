@@ -4,7 +4,6 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   alias PredictionAnalyzer.VehiclePositions.Tracker
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.NotifyGet
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.SubwayVehicle
-  alias PredictionAnalyzer.VehiclePositions.TrackerTest.CommuterRailVehicle
   alias PredictionAnalyzer.VehiclePositions.Vehicle
 
   setup do
@@ -49,7 +48,6 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   describe "handle_info :track_commuter_rail_vehicles" do
     test "updates the state with new vehicles" do
       state = %{
-        http_fetcher: CommuterRailVehicle,
         aws_vehicle_positions_url: "vehiclepositions",
         environment: "prod",
         subway_vehicles: %{},
@@ -80,6 +78,11 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
 
   defmodule NotifyGet do
     def get!(url) do
+      send(:tracker_test_listener, {:get, url})
+      %{body: Jason.encode!(%{"entity" => []})}
+    end
+
+    def get!(url, _, _) do
       send(:tracker_test_listener, {:get, url})
       %{body: Jason.encode!(%{"entity" => []})}
     end
@@ -122,55 +125,6 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
                 "license_plate" => nil
               }
             }
-          }
-        ]
-      }
-
-      %{body: Jason.encode!(data)}
-    end
-  end
-
-  defmodule CommuterRailVehicle do
-    def get!(_url, _, _) do
-      data = %{
-        "data" => [
-          %{
-            "attributes" => %{
-              "bearing" => 137,
-              "current_status" => "IN_TRANSIT_TO",
-              "current_stop_sequence" => 8,
-              "direction_id" => 1,
-              "label" => "1629",
-              "latitude" => 42.376739501953125,
-              "longitude" => -71.07559204101563,
-              "speed" => 13,
-              "updated_at" => "2019-03-28T13:57:57-04:00"
-            },
-            "id" => "1629",
-            "links" => %{
-              "self" => "/vehicles/1629"
-            },
-            "relationships" => %{
-              "route" => %{
-                "data" => %{
-                  "id" => "CR-Lowell",
-                  "type" => "route"
-                }
-              },
-              "stop" => %{
-                "data" => %{
-                  "id" => "North Station",
-                  "type" => "stop"
-                }
-              },
-              "trip" => %{
-                "data" => %{
-                  "id" => "CR-Weekday-Fall-18-324",
-                  "type" => "trip"
-                }
-              }
-            },
-            "type" => "vehicle"
           }
         ]
       }

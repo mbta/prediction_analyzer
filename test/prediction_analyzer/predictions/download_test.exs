@@ -46,9 +46,9 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
     end
   end
 
-  describe "get_commuter_rail_predictions/1" do
+  describe "get_commuter_rail_predictions/0" do
     test "downloads and stores prod predictions" do
-      Download.get_commuter_rail_predictions(:prod)
+      Download.get_commuter_rail_predictions()
       query = from(p in Prediction, select: [p.stop_id, p.direction_id, p.vehicle_id])
 
       preds = PredictionAnalyzer.Repo.all(query)

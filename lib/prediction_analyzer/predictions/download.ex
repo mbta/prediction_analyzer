@@ -30,14 +30,9 @@ defmodule PredictionAnalyzer.Predictions.Download do
     |> store_subway_predictions(env)
   end
 
-  @spec get_commuter_rail_predictions(:prod) :: {integer(), nil | [term()]} | no_return()
-  def get_commuter_rail_predictions(env) do
-    {_, http_fetcher} = get_vars(env)
-    api_base_url = Application.get_env(:prediction_analyzer, :api_base_url)
+  @spec get_commuter_rail_predictions() :: {integer(), nil | [term()]} | no_return()
+  def get_commuter_rail_predictions() do
     url_path = "predictions"
-
-    api_key = Application.get_env(:prediction_analyzer, :api_v3_key)
-    headers = if api_key, do: [{"x-api-key", api_key}], else: []
 
     params = %{
       "filter[route]" =>
@@ -45,14 +40,18 @@ defmodule PredictionAnalyzer.Predictions.Download do
       "include" => "vehicle"
     }
 
-    %{body: body, headers: headers} =
-      http_fetcher.get!(api_base_url <> url_path, headers, params: params)
+    case PredictionAnalyzer.Utilities.APIv3.request(url_path, params: params) do
+      {:ok, %{body: body, headers: headers}} ->
+        last_modified = headers |> Enum.into(%{}) |> Map.get("last-modified")
 
-    last_modified = headers |> Enum.into(%{}) |> Map.get("last-modified")
+        body
+        |> Jason.decode!()
+        |> store_commuter_rail_predictions(last_modified)
 
-    body
-    |> Jason.decode!()
-    |> store_commuter_rail_predictions(last_modified)
+      {:error, e} ->
+        Logger.warn("Could not download stop names; received: #{inspect(e)}")
+        %{}
+    end
   end
 
   defp get_vars(:prod) do
@@ -95,7 +94,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
 
   def handle_info(:get_commuter_rail_predictions, _state) do
     schedule_commuter_rail_fetch(self(), 60_000)
-    predictions = get_commuter_rail_predictions(:prod)
+    predictions = get_commuter_rail_predictions()
     {:noreply, predictions}
   end
 
