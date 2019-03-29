@@ -30,7 +30,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     |> store_subway_predictions(env)
   end
 
-  @spec get_commuter_rail_predictions(:prod) :: no_return
+  @spec get_commuter_rail_predictions(:prod) :: {integer(), nil | [term()]} | no_return()
   def get_commuter_rail_predictions(env) do
     {_, http_fetcher} = get_vars(env)
     api_base_url = Application.get_env(:prediction_analyzer, :api_base_url)

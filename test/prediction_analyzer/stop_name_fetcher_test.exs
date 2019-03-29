@@ -23,7 +23,7 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
     end
 
     test "if API fetch fails, proceeds with an empty list of stops" do
-      reassign_env(:stop_fetch_url, "https://api-v3.mbta.com/bad_stops")
+      reassign_env(:api_base_url, "https://bad-api-v3.mbta.com/")
       StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
       assert StopNameFetcher.get_stop_descriptions(:subway) == %{}
       assert StopNameFetcher.get_stop_descriptions(:commuter_rail) == %{}

@@ -83,7 +83,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
       |> Map.get("data")
       |> parse_commuter_rail("prod")
       |> Enum.into(%{}, fn v -> {v.id, v} end)
-      |> Comparator.compare(state.subway_vehicles)
+      |> Comparator.compare(state.commuter_rail_vehicles)
 
     {:noreply, %{state | commuter_rail_vehicles: new_vehicles}}
   end
@@ -125,5 +125,6 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
   defp schedule_fetch(pid) do
     Process.send_after(pid, :track_subway_vehicles, 1_000)
+    Process.send_after(pid, :track_commuter_rail_vehicles, 1_000)
   end
 end

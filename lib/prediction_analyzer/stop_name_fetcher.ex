@@ -47,14 +47,10 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
   @spec load_stop_data(PredictionAnalyzer.Utilities.mode()) :: state
   defp load_stop_data(mode) do
-    url = Application.get_env(:prediction_analyzer, :stop_fetch_url)
-    api_key = Application.get_env(:prediction_analyzer, :api_v3_key)
-    headers = if api_key, do: [{"x-api-key", api_key}], else: []
+    path = "stops"
     params = get_params(mode)
 
-    http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
-
-    case http_fetcher.get(url, headers, params: params) do
+    case PredictionAnalyzer.Utilities.APIv3.request(path, params: params) do
       {:ok, response} ->
         parse_response(response)
 

@@ -53,7 +53,11 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
 
       preds = PredictionAnalyzer.Repo.all(query)
 
-      assert preds == [["North Station", 0, "vehicle_id"], ["North Station", 0, "CR-na"]]
+      assert preds == [
+               ["North Station", 0, "vehicle_id"],
+               ["North Station", 0, "vehicle_id"],
+               ["North Station", 0, "CR-na"]
+             ]
     end
   end
 end
