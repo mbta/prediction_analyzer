@@ -33,9 +33,16 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
   end
 
   test "start_link/1" do
-    {:ok, pid} = Download.start_link()
+    {:ok, pid} =
+      Download.start_link(
+        initial_prod_fetch_ms: 10,
+        initial_dev_green_fetch_ms: 10,
+        initial_commuter_rail_fetch_ms: 10
+      )
+
     :timer.sleep(500)
     assert Process.alive?(pid)
+    assert :sys.get_state(pid) == %{}
   end
 
   describe "get_subway_predictions/1" do
