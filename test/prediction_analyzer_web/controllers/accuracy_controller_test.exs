@@ -70,7 +70,8 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
              "filters[stop_id]" => "",
              "filters[direction_id]" => "any",
              "filters[arrival_departure]" => "all",
-             "filters[bin]" => "All"
+             "filters[bin]" => "All",
+             "filters[mode]" => "subway"
            } ==
              URI.parse(redirected_to(conn))
              |> Map.get(:query)
@@ -128,6 +129,25 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert redirected_to(conn) =~ "2019-01-01"
   end
 
+  test "GET /accuracy when the filters dont have time filters, redirects such that it does", %{
+    conn: conn
+  } do
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "route_id" => "",
+          "stop_id" => "",
+          "direction_id" => "any",
+          "arrival_departure" => "all",
+          "bin" => "All",
+          "mode" => "subway"
+        }
+      })
+
+    assert response(conn, 302)
+    assert redirected_to(conn) =~ "Hourly"
+  end
+
   test "GET /accuracy maintains daily date range when redirecting", %{conn: conn} do
     conn =
       get(conn, "/accuracy", %{
@@ -152,6 +172,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
           "daily_date_start" => "2019-01-01",
           "daily_date_end" => "invalid",
           "route_id" => "",
+          "mode" => "subway",
           "stop_id" => "",
           "direction_id" => "any",
           "arrival_departure" => "all",
@@ -161,6 +182,20 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
     response = html_response(conn, 200)
     assert response =~ "Can&#39;t parse start or end date."
+  end
+
+  test "GET /accuracy/subway gets the index for subway mode", %{conn: conn} do
+    conn = get(conn, "/accuracy/subway", %{})
+
+    assert response(conn, 302)
+    assert conn.assigns[:mode] == :subway
+  end
+
+  test "GET /accuracy/commuter_rail gets the index for commuter rail mode", %{conn: conn} do
+    conn = get(conn, "/accuracy/commuter_rail", %{})
+
+    assert response(conn, 302)
+    assert conn.assigns[:mode] == :commuter_rail
   end
 
   def insert_accuracy(env, hour, total, accurate) do

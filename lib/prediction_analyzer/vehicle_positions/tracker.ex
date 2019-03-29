@@ -11,7 +11,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
           http_fetcher: module(),
           environment: String.t(),
           aws_vehicle_positions_url: String.t(),
-          vehicles: vehicle_map()
+          subway_vehicles: vehicle_map(),
+          commuter_rail_vehicles: vehicle_map()
         }
 
   def start_link(_opts \\ [], args) do
@@ -37,13 +38,13 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   end
 
   def init(args) do
-    state = Map.put(args, :vehicles, %{})
+    state = Map.merge(args, %{subway_vehicles: %{}, commuter_rail_vehicles: %{}})
 
     schedule_fetch(self())
     {:ok, state}
   end
 
-  def handle_info(:track_vehicles, state) do
+  def handle_info(:track_subway_vehicles, state) do
     Logger.info("Downloading vehicle positions")
 
     %{body: body} = state.http_fetcher.get!(state.aws_vehicle_positions_url)
@@ -54,12 +55,41 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
         |> Jason.decode!()
         |> parse_vehicles(state.environment)
         |> Enum.into(%{}, fn v -> {v.id, v} end)
-        |> Comparator.compare(state.vehicles)
+        |> Comparator.compare(state.subway_vehicles)
       end)
 
     Logger.info("Processed #{length(Map.keys(new_vehicles))} vehicles in #{time / 1000} ms")
     schedule_fetch(self())
-    {:noreply, %{state | vehicles: new_vehicles}}
+    {:noreply, %{state | subway_vehicles: new_vehicles}}
+  end
+
+  def handle_info(:track_commuter_rail_vehicles, state) do
+    url_path = "vehicles"
+
+    params = %{
+      "filter[route]" =>
+        :commuter_rail |> PredictionAnalyzer.Utilities.routes_for_mode() |> Enum.join(",")
+    }
+
+    state =
+      case PredictionAnalyzer.Utilities.APIv3.request(url_path, params: params) do
+        {:ok, %{body: body}} ->
+          new_vehicles =
+            body
+            |> Jason.decode!()
+            |> Map.get("data")
+            |> parse_commuter_rail("prod")
+            |> Enum.into(%{}, fn v -> {v.id, v} end)
+            |> Comparator.compare(state.commuter_rail_vehicles)
+
+          %{state | commuter_rail_vehicles: new_vehicles}
+
+        {:error, e} ->
+          Logger.warn("Could not download commuter rail vehicles; received: #{inspect(e)}")
+          state
+      end
+
+    {:noreply, state}
   end
 
   def handle_info(msg, state) do
@@ -80,6 +110,15 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     []
   end
 
+  defp parse_commuter_rail(data, _env) do
+    Enum.flat_map(data, fn d ->
+      case Vehicle.parse_commuter_rail(d) do
+        {:ok, vehicle} -> [vehicle]
+        _ -> []
+      end
+    end)
+  end
+
   def get_env_vehicle_positions_url("dev-green") do
     Application.get_env(:prediction_analyzer, :dev_green_aws_vehicle_positions_url)
   end
@@ -89,6 +128,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   end
 
   defp schedule_fetch(pid) do
-    Process.send_after(pid, :track_vehicles, 1_000)
+    Process.send_after(pid, :track_subway_vehicles, 1_000)
+    Process.send_after(pid, :track_commuter_rail_vehicles, 1_000)
   end
 end

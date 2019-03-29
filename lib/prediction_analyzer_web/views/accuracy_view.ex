@@ -11,12 +11,25 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     0
   end
 
-  @spec route_options :: [{String.t(), String.t()}]
-  def route_options do
+  @spec mode_string(atom()) :: String.t()
+  def mode_string(:subway) do
+    "Subway"
+  end
+
+  def mode_string(:commuter_rail) do
+    "Commuter Rail"
+  end
+
+  def mode_string(_) do
+    "WEHATEVERAEG"
+  end
+
+  @spec route_options(:subway | :commuter_rail) :: [{String.t(), String.t()}]
+  def route_options(mode) do
     [
       {"All", ""}
       | Enum.map(
-          ["Red", "Orange", "Blue", "Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"],
+          PredictionAnalyzer.Utilities.routes_for_mode(mode),
           &{&1, &1}
         )
     ]
@@ -46,7 +59,10 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   def formatted_row_scope(filter_params, row_scope) do
     if filter_params["chart_range"] == "By Station" do
       stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
-      stop_name_fetcher.get_stop_name(row_scope)
+
+      filter_params["mode"]
+      |> PredictionAnalyzer.Utilities.string_to_mode()
+      |> stop_name_fetcher.get_stop_name(row_scope)
     else
       row_scope
     end
@@ -79,12 +95,12 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     false
   end
 
-  @spec stop_descriptions() :: [{String.t(), String.t()}]
-  def stop_descriptions() do
+  @spec stop_descriptions(PredictionAnalyzer.Utilities.mode()) :: [{String.t(), String.t()}]
+  def stop_descriptions(mode) do
     stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
 
     description_pairs =
-      stop_name_fetcher.get_stop_descriptions()
+      stop_name_fetcher.get_stop_descriptions(mode)
       |> Enum.map(&stop_description/1)
       |> Enum.sort()
 
@@ -93,7 +109,11 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
 
   @spec stop_description({String.t(), String.t()}) :: {String.t(), String.t()}
   defp stop_description({id, description}) do
-    {"#{description} (#{id})", id}
+    if description do
+      {"#{description} (#{id})", id}
+    else
+      {id, id}
+    end
   end
 
   def predictions_path_with_filters(
@@ -112,14 +132,14 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   end
 
   @spec button_class(map(), String.t()) :: String.t()
-  def button_class(%{params: %{"filters" => %{"route_id" => route_id}}}, route_id),
-    do: "button-link button-link-active route-button"
+  def button_class(%{params: %{"filters" => %{"mode" => mode_id}}}, mode_id),
+    do: "button-link button-link-active mode-button"
 
-  def button_class(%{params: %{"filters" => %{"route_id" => _route}}}, _other_route),
-    do: "button-link route-button"
+  def button_class(%{params: %{"filters" => %{"mode" => _mode_id}}}, _other_mode_id),
+    do: "button-link mode-button"
 
-  def button_class(%{}, ""), do: "button-link button-link-active route-button"
-  def button_class(%{}, _else), do: "button-link route-button"
+  def button_class(%{}, ""), do: "button-link button-link-active mode-button"
+  def button_class(%{}, _else), do: "button-link mode-button"
 
   @spec chart_range_class(map(), String.t()) :: String.t()
   def chart_range_class(%{params: %{"filters" => %{"chart_range" => chart_range}}}, chart_range),

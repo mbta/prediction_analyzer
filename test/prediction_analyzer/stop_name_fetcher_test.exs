@@ -19,20 +19,23 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
   describe "get_stop_descriptions/1" do
     test "returns parsed results in alphabetical order" do
       StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-      assert StopNameFetcher.get_stop_descriptions() == @expected_descriptions
+      assert StopNameFetcher.get_stop_descriptions(:subway) == @expected_descriptions
     end
 
     test "if API fetch fails, proceeds with an empty list of stops" do
-      reassign_env(:stop_fetch_url, "https://api-v3.mbta.com/bad_stops")
+      reassign_env(:api_base_url, "https://bad-api-v3.mbta.com/")
       StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-      assert StopNameFetcher.get_stop_descriptions() == %{}
+      assert StopNameFetcher.get_stop_descriptions(:subway) == %{}
+      assert StopNameFetcher.get_stop_descriptions(:commuter_rail) == %{}
     end
   end
 
   describe "get_stop_name/1" do
     test "returns the name (and platform code) of the stop in question" do
       StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-      assert StopNameFetcher.get_stop_name("70238") == "Cleveland Circle (Park Street & North)"
+
+      assert StopNameFetcher.get_stop_name(:subway, "70238") ==
+               "Cleveland Circle (Park Street & North)"
     end
   end
 end

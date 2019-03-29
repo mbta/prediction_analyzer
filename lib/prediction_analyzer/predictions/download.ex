@@ -5,23 +5,53 @@ defmodule PredictionAnalyzer.Predictions.Download do
   alias PredictionAnalyzer.Predictions.Prediction
 
   def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, %{}, opts)
+    GenServer.start_link(__MODULE__, opts, opts)
   end
 
-  def init(args) do
-    schedule_prod_fetch(self(), 1_000)
-    schedule_dev_green_fetch(self(), 11_000)
-    {:ok, args}
+  def init(args \\ []) do
+    initial_prod_fetch_ms = args[:initial_prod_fetch_ms] || 1_000
+    initial_dev_green_fetch_ms = args[:initial_dev_green_fetch_ms] || 11_000
+    initial_commuter_rail_fetch_ms = args[:initial_commuter_rail_fetch_ms] || 21_000
+
+    schedule_prod_fetch(self(), initial_prod_fetch_ms)
+    schedule_dev_green_fetch(self(), initial_dev_green_fetch_ms)
+    schedule_commuter_rail_fetch(self(), initial_commuter_rail_fetch_ms)
+
+    {:ok, %{}}
   end
 
-  def get_predictions(env) do
+  def get_subway_predictions(env) do
     {aws_predictions_url, http_fetcher} = get_vars(env)
-    Logger.info("Downloading predictions from #{aws_predictions_url}")
+    Logger.info("Downloading subway predictions from #{aws_predictions_url}")
     %{body: body} = http_fetcher.get!(aws_predictions_url)
 
     body
     |> Jason.decode!()
-    |> store_predictions(env)
+    |> store_subway_predictions(env)
+  end
+
+  @spec get_commuter_rail_predictions() :: {integer(), nil | [term()]} | no_return()
+  def get_commuter_rail_predictions() do
+    url_path = "predictions"
+
+    params = %{
+      "filter[route]" =>
+        :commuter_rail |> PredictionAnalyzer.Utilities.routes_for_mode() |> Enum.join(","),
+      "include" => "vehicle"
+    }
+
+    case PredictionAnalyzer.Utilities.APIv3.request(url_path, params: params) do
+      {:ok, %{body: body, headers: headers}} ->
+        last_modified = headers |> Enum.into(%{}) |> Map.get("last-modified")
+
+        body
+        |> Jason.decode!()
+        |> store_commuter_rail_predictions(last_modified)
+
+      {:error, e} ->
+        Logger.warn("Could not download commuter rail predictions; received: #{inspect(e)}")
+        %{}
+    end
   end
 
   defp get_vars(:prod) do
@@ -46,20 +76,34 @@ defmodule PredictionAnalyzer.Predictions.Download do
     Process.send_after(pid, :get_dev_green_predictions, ms)
   end
 
+  defp schedule_commuter_rail_fetch(pid, ms) do
+    Process.send_after(pid, :get_commuter_rail_predictions, ms)
+  end
+
   def handle_info(:get_prod_predictions, _state) do
     schedule_prod_fetch(self(), 60_000)
-    predictions = get_predictions(:prod)
+    predictions = get_subway_predictions(:prod)
     {:noreply, predictions}
   end
 
   def handle_info(:get_dev_green_predictions, _state) do
     schedule_dev_green_fetch(self(), 60_000)
-    predictions = get_predictions(:dev_green)
+    predictions = get_subway_predictions(:dev_green)
     {:noreply, predictions}
   end
 
-  @spec store_predictions(map(), :dev_green | :prod) :: {integer(), nil | [term()]} | no_return()
-  defp store_predictions(%{"entity" => entities, "header" => %{"timestamp" => timestamp}}, env) do
+  def handle_info(:get_commuter_rail_predictions, _state) do
+    schedule_commuter_rail_fetch(self(), 60_000)
+    predictions = get_commuter_rail_predictions()
+    {:noreply, predictions}
+  end
+
+  @spec store_subway_predictions(map(), :dev_green | :prod) ::
+          {integer(), nil | [term()]} | no_return()
+  defp store_subway_predictions(
+         %{"entity" => entities, "header" => %{"timestamp" => timestamp}},
+         env
+       ) do
     predictions =
       Enum.flat_map(entities, fn prediction ->
         trip_prediction = %{
@@ -94,7 +138,63 @@ defmodule PredictionAnalyzer.Predictions.Download do
     {_, _} = PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
   end
 
-  defp store_predictions(_, _) do
+  defp store_subway_predictions(_, _) do
+    nil
+  end
+
+  defp store_commuter_rail_predictions(%{"data" => data}, last_modified) do
+    {:ok, timestamp} = last_modified |> Timex.parse("{RFC1123}")
+    timestamp = DateTime.to_unix(timestamp)
+
+    predictions =
+      Enum.map(data, fn prediction ->
+        arrival_time_unix =
+          case prediction["attributes"]["arrival_time"] do
+            nil ->
+              nil
+
+            arrival_time ->
+              {:ok, arrival_dt, _offset} = DateTime.from_iso8601(arrival_time)
+              DateTime.to_unix(arrival_dt)
+          end
+
+        departure_time_unix =
+          case prediction["attributes"]["departure_time"] do
+            nil ->
+              nil
+
+            departure_time ->
+              {:ok, departure_dt, _offset} = DateTime.from_iso8601(departure_time)
+              DateTime.to_unix(departure_dt)
+          end
+
+        case prediction["relationships"]["vehicle"]["data"]["id"] do
+          nil ->
+            nil
+
+          vehicle_id ->
+            %{
+              environment: "prod",
+              file_timestamp: timestamp,
+              vehicle_id: vehicle_id,
+              trip_id: prediction["relationships"]["trip"]["data"]["id"],
+              route_id: prediction["relationships"]["route"]["data"]["id"],
+              direction_id: prediction["attributes"]["direction_id"],
+              arrival_time: arrival_time_unix,
+              departure_time: departure_time_unix,
+              boarding_status: prediction["attributes"]["status"],
+              schedule_relationship: prediction["attributes"]["schedule_relationship"],
+              stop_id: prediction["relationships"]["stop"]["data"]["id"],
+              stop_sequence: prediction["attributes"]["stop_sequence"]
+            }
+        end
+      end)
+      |> Enum.reject(&(&1 == nil))
+
+    {_, _} = PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
+  end
+
+  defp store_commuter_rail_predictions(_, _) do
     nil
   end
 end

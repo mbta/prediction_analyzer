@@ -3,10 +3,18 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
 
   alias PredictionAnalyzerWeb.AccuracyView
 
-  test "route_options/0 returns proper values" do
-    route_options = AccuracyView.route_options()
-    assert {"All", ""} in route_options
-    assert {"Blue", "Blue"} in route_options
+  describe "route_options/1" do
+    test "subway returns subway values" do
+      route_options = AccuracyView.route_options(:subway)
+      assert {"All", ""} in route_options
+      assert {"Blue", "Blue"} in route_options
+    end
+
+    test "commuter rail returns commuter rail values" do
+      route_options = AccuracyView.route_options(:commuter_rail)
+      assert {"All", ""} in route_options
+      assert {"CR-Fitchburg", "CR-Fitchburg"} in route_options
+    end
   end
 
   test "bin_options/0 returns bin names in the proper order" do
@@ -64,12 +72,21 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
            })
   end
 
-  test "stop_descriptions/0" do
-    assert AccuracyView.stop_descriptions() == [
-             {"", ""},
-             {"Jane Roe St (67890)", "67890"},
-             {"John Doe Square (12345)", "12345"}
-           ]
+  describe "stop_descriptions/1" do
+    test "returns subway stops" do
+      assert AccuracyView.stop_descriptions(:subway) == [
+               {"", ""},
+               {"Jane Roe St (67890)", "67890"},
+               {"John Doe Square (12345)", "12345"}
+             ]
+    end
+
+    test "returns commuter rail stops" do
+      assert AccuracyView.stop_descriptions(:commuter_rail) == [
+               {"", ""},
+               {"No Description Stop", "No Description Stop"}
+             ]
+    end
   end
 
   test "predictions_path_with_filters/2" do
@@ -113,13 +130,13 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
 
   test "button_class/2" do
     assert AccuracyView.button_class(%{params: %{"filters" => %{"route_id" => "Blue"}}}, "Blue") =~
-             "route-button"
+             "mode-button"
 
     assert AccuracyView.button_class(%{params: %{"filters" => %{"route_id" => "Blue"}}}, "Red") =~
-             "route-button"
+             "mode-button"
 
-    assert AccuracyView.button_class(%{}, "Red") =~ "route-button"
+    assert AccuracyView.button_class(%{}, "Red") =~ "mode-button"
 
-    assert AccuracyView.button_class(%{}, "") =~ "route-button"
+    assert AccuracyView.button_class(%{}, "") =~ "mode-button"
   end
 end

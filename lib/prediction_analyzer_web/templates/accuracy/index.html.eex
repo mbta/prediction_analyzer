@@ -1,3 +1,6 @@
+<%= for mode_id <- [:subway, :commuter_rail] do %>
+  <%= content_tag :a, mode_string(mode_id), class: button_class(@conn, mode_string(mode_id)), href: accuracy_path(@conn, mode_id) %>
+<% end %>
 <div class="row accuracy-summary-header">
   <div class="col-xs-6">
     <span class="prod-text prod-text-header">Prod</span>
@@ -33,6 +36,7 @@
 <hr class="accuracy-separator">
 
 <%= form_for @conn, accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
+  <%= hidden_input(f, :mode) %>
   <%= hidden_input(f, :route_id) %>
   <%= hidden_input(f, :chart_range) %>
 
@@ -47,13 +51,13 @@
 
 	<div class="form-group">
 	    <%= label(f, :route_id, "Route") %>
-	    <%= select(f, :route_id, route_options(), class: "form-control") %>
+	    <%= select(f, :route_id, route_options(@mode), class: "form-control") %>
 	</div>
 
         <%= if f.params["chart_range"] != "By Station" do %>
           <div class="form-group">
             <%= label(f, :stop_id, "Stop ID") %>
-            <%= select(f, :stop_id, stop_descriptions(), class: 'combobox form-control') %>
+            <%= select(f, :stop_id, stop_descriptions(@mode), class: 'combobox form-control') %>
           </div>
         <% end %>
 

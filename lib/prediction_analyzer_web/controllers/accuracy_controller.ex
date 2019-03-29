@@ -14,12 +14,16 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
               "stop_id" => stop_id,
               "direction_id" => direction_id,
               "arrival_departure" => arrival_departure,
-              "bin" => bin
+              "bin" => bin,
+              "mode" => mode
             } = filter_params
         } = params
       )
       when not is_nil(route_id) and not is_nil(stop_id) and not is_nil(direction_id) and
              byte_size(arrival_departure) > 0 and byte_size(bin) > 0 do
+    mode_atom = PredictionAnalyzer.Utilities.string_to_mode(mode)
+    routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
+
     if time_filters_present?(filter_params) do
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
 
@@ -27,7 +31,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         from(
           acc in relevant_accuracies,
           select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-          where: acc.environment == "prod"
+          where: acc.environment == "prod" and acc.route_id in ^routes
         )
         |> PredictionAnalyzer.Repo.one!()
 
@@ -35,7 +39,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         from(
           acc in relevant_accuracies,
           select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-          where: acc.environment == "dev-green"
+          where: acc.environment == "dev-green" and acc.route_id in ^routes
         )
         |> PredictionAnalyzer.Repo.one!()
 
@@ -53,7 +57,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         prod_num_predictions: prod_num_predictions,
         dev_green_num_accurate: dev_green_num_accurate,
         dev_green_num_predictions: dev_green_num_predictions,
-        error_msg: error_msg
+        error_msg: error_msg,
+        mode: mode_atom
       )
     else
       redirect_with_default_filters(conn, params)
@@ -62,6 +67,18 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   def index(conn, params) do
     redirect_with_default_filters(conn, params)
+  end
+
+  def subway(conn, params) do
+    conn
+    |> assign(:mode, :subway)
+    |> index(params)
+  end
+
+  def commuter_rail(conn, params) do
+    conn
+    |> assign(:mode, :commuter_rail)
+    |> index(params)
   end
 
   @spec redirect_with_default_filters(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -73,7 +90,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       "stop_id" => "",
       "direction_id" => "any",
       "arrival_departure" => "all",
-      "bin" => "All"
+      "bin" => "All",
+      "mode" => conn.assigns[:mode] || filters["mode"] || "subway"
     }
 
     time_filters =

@@ -24,6 +24,12 @@ defmodule PredictionAnalyzerWeb.Router do
     get("/_health", HealthController, :index)
   end
 
+  scope "/accuracy", PredictionAnalyzerWeb do
+    pipe_through(:browser)
+    get("/subway", AccuracyController, :subway)
+    get("/commuter_rail", AccuracyController, :commuter_rail)
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", PredictionAnalyzerWeb do
   #   pipe_through :api

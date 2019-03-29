@@ -1,4 +1,6 @@
 defmodule PredictionAnalyzer.Utilities do
+  @type mode() :: :subway | :commuter_rail
+
   @doc """
   Returns the current service date and hour. The service
   date extends to 3am of the following day, so the hour can range
@@ -62,4 +64,31 @@ defmodule PredictionAnalyzer.Utilities do
   def generic_stop_id("Oak Grove-01"), do: "70036"
   def generic_stop_id("Oak Grove-02"), do: "70036"
   def generic_stop_id(stop_id), do: stop_id
+
+  @spec routes_for_mode(atom()) :: [String.t()]
+  def routes_for_mode(:subway) do
+    ["Red", "Blue", "Orange", "Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"]
+  end
+
+  def routes_for_mode(:commuter_rail) do
+    [
+      "CR-Fitchburg",
+      "CR-Lowell",
+      "CR-Haverhill",
+      "CR-Newburyport",
+      "CR-Worcester",
+      "CR-Needham",
+      "CR-Franklin",
+      "CR-Providence",
+      "CR-Fairmount",
+      "CR-Middleborough",
+      "CR-Kingston",
+      "CR-Greenbush",
+      "CR-Foxboro"
+    ]
+  end
+
+  @spec string_to_mode(String.t()) :: :subway | :commuter_rail
+  def string_to_mode("commuter_rail"), do: :commuter_rail
+  def string_to_mode(_), do: :subway
 end

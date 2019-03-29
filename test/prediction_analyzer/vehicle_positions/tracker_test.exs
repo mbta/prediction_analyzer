@@ -1,10 +1,13 @@
 defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   use ExUnit.Case, async: false
+  import ExUnit.CaptureLog
+  import Test.Support.Env
 
   alias PredictionAnalyzer.VehiclePositions.Tracker
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.NotifyGet
-  alias PredictionAnalyzer.VehiclePositions.TrackerTest.OneVehicle
+  alias PredictionAnalyzer.VehiclePositions.TrackerTest.SubwayVehicle
   alias PredictionAnalyzer.VehiclePositions.Vehicle
+  alias PredictionAnalyzer.VehiclePositions.TrackerTest.FailedHTTPFetcher
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
@@ -28,19 +31,76 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
     assert_received({:get, "foo"})
   end
 
-  describe "handle_info :track_vehicles" do
+  describe "handle_info :track_subway_vehicles" do
     test "updates the state with new vehicles" do
       state = %{
-        http_fetcher: OneVehicle,
+        http_fetcher: SubwayVehicle,
         aws_vehicle_positions_url: "vehiclepositions",
         environment: "dev-green",
-        vehicles: %{}
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{}
       }
 
       assert {
                :noreply,
-               %{vehicles: %{"R-5458F5AF" => %Vehicle{}}}
-             } = Tracker.handle_info(:track_vehicles, state)
+               %{subway_vehicles: %{"R-5458F5AF" => %Vehicle{}}}
+             } = Tracker.handle_info(:track_subway_vehicles, state)
+    end
+  end
+
+  describe "handle_info :track_commuter_rail_vehicles" do
+    test "updates the state with new vehicles" do
+      state = %{
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "prod",
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{}
+      }
+
+      assert {
+               :noreply,
+               %{
+                 commuter_rail_vehicles: %{
+                   "1629" => %PredictionAnalyzer.VehiclePositions.Vehicle{
+                     current_status: :IN_TRANSIT_TO,
+                     direction_id: 1,
+                     environment: "prod",
+                     id: "1629",
+                     is_deleted: false,
+                     label: "1629",
+                     route_id: "CR-Lowell",
+                     stop_id: "North Station",
+                     timestamp: 1_553_795_877,
+                     trip_id: "CR-Weekday-Fall-18-324"
+                   }
+                 }
+               }
+             } = Tracker.handle_info(:track_commuter_rail_vehicles, state)
+    end
+
+    test "fails gracefully when API returns error" do
+      reassign_env(:http_fetcher, FailedHTTPFetcher)
+
+      state = %{
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "prod",
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{}
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          assert Tracker.handle_info(:track_commuter_rail_vehicles, state) ==
+                   {:noreply,
+                    %{
+                      aws_vehicle_positions_url: "vehiclepositions",
+                      environment: "prod",
+                      subway_vehicles: %{},
+                      commuter_rail_vehicles: %{}
+                    }}
+        end)
+
+      assert log =~ "Could not download commuter rail vehicles"
     end
   end
 
@@ -49,9 +109,14 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       send(:tracker_test_listener, {:get, url})
       %{body: Jason.encode!(%{"entity" => []})}
     end
+
+    def get!(url, _, _) do
+      send(:tracker_test_listener, {:get, url})
+      %{body: Jason.encode!(%{"entity" => []})}
+    end
   end
 
-  defmodule OneVehicle do
+  defmodule SubwayVehicle do
     def get!(_url) do
       data = %{
         "entity" => [
@@ -93,6 +158,12 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       %{body: Jason.encode!(data)}
+    end
+  end
+
+  defmodule FailedHTTPFetcher do
+    def get(_, _, _) do
+      {:error, "something"}
     end
   end
 end
