@@ -12,16 +12,12 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   end
 
   @spec mode_string(atom()) :: String.t()
-  def mode_string(:subway) do
-    "Subway"
-  end
-
   def mode_string(:commuter_rail) do
     "Commuter Rail"
   end
 
   def mode_string(_) do
-    "WEHATEVERAEG"
+    "Subway"
   end
 
   @spec route_options(:subway | :commuter_rail) :: [{String.t(), String.t()}]
@@ -131,14 +127,14 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     "#"
   end
 
-  @spec button_class(map(), String.t()) :: String.t()
-  def button_class(%{params: %{"filters" => %{"mode" => mode_id}}}, mode_id),
-    do: "button-link button-link-active mode-button"
+  @spec button_class(map(), atom()) :: String.t()
+  def button_class(%{params: %{"filters" => %{"mode" => mode_id}}}, mode) do
+    case PredictionAnalyzer.Utilities.string_to_mode(mode_id) do
+      ^mode -> "button-link button-link-active mode-button"
+      _ -> "button-link mode-button"
+    end
+  end
 
-  def button_class(%{params: %{"filters" => %{"mode" => _mode_id}}}, _other_mode_id),
-    do: "button-link mode-button"
-
-  def button_class(%{}, ""), do: "button-link button-link-active mode-button"
   def button_class(%{}, _else), do: "button-link mode-button"
 
   @spec chart_range_class(map(), String.t()) :: String.t()
