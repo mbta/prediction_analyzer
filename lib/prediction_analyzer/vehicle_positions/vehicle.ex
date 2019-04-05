@@ -77,38 +77,42 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
     :error
   end
 
-  def parse_commuter_rail(%{
-        "attributes" => %{
-          "current_status" => current_status,
-          "direction_id" => direction_id,
-          "label" => label,
-          "updated_at" => updated_at
-        },
-        "id" => vehicle_id,
-        "relationships" => %{
-          "route" => %{
-            "data" => %{
-              "id" => route_id
-            }
+  @spec parse_commuter_rail(map(), String.t()) :: {:ok, __MODULE__.t()} | :error
+  def parse_commuter_rail(
+        %{
+          "attributes" => %{
+            "current_status" => current_status,
+            "direction_id" => direction_id,
+            "label" => label,
+            "updated_at" => updated_at
           },
-          "stop" => %{
-            "data" => %{
-              "id" => stop_id
-            }
-          },
-          "trip" => %{
-            "data" => %{
-              "id" => trip_id
+          "id" => vehicle_id,
+          "relationships" => %{
+            "route" => %{
+              "data" => %{
+                "id" => route_id
+              }
+            },
+            "stop" => %{
+              "data" => %{
+                "id" => stop_id
+              }
+            },
+            "trip" => %{
+              "data" => %{
+                "id" => trip_id
+              }
             }
           }
-        }
-      }) do
+        },
+        env
+      ) do
     {:ok, timestamp, _offset} = updated_at |> DateTime.from_iso8601()
 
     {:ok,
      %__MODULE__{
        id: vehicle_id,
-       environment: "prod",
+       environment: env,
        label: label,
        is_deleted: false,
        trip_id: trip_id,
@@ -120,7 +124,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
      }}
   end
 
-  def parse_commuter_rail(_), do: :error
+  def parse_commuter_rail(_data, _env), do: :error
 
   defp status_atom("INCOMING_AT"), do: :INCOMING_AT
   defp status_atom("IN_TRANSIT_TO"), do: :IN_TRANSIT_TO

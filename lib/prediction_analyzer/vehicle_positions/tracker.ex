@@ -78,7 +78,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
             body
             |> Jason.decode!()
             |> Map.get("data")
-            |> parse_commuter_rail("prod")
+            |> parse_commuter_rail(state.environment)
             |> Enum.into(%{}, fn v -> {v.id, v} end)
             |> Comparator.compare(state.commuter_rail_vehicles)
 
@@ -110,9 +110,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     []
   end
 
-  defp parse_commuter_rail(data, _env) do
+  @spec parse_commuter_rail([map()], String.t()) :: [PredictionAnalyzer.VehiclePositions.Vehicle]
+  defp parse_commuter_rail(data, env) do
     Enum.flat_map(data, fn d ->
-      case Vehicle.parse_commuter_rail(d) do
+      case Vehicle.parse_commuter_rail(d, env) do
         {:ok, vehicle} -> [vehicle]
         _ -> []
       end
