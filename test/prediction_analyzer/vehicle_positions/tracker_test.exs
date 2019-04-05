@@ -102,6 +102,17 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
 
       assert log =~ "Could not download commuter rail vehicles"
     end
+
+    test "does nothing on dev-green" do
+      state = %{
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "dev-green",
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{}
+      }
+
+      assert Tracker.handle_info(:track_commuter_rail_vehicles, state) == {:noreply, state}
+    end
   end
 
   defmodule NotifyGet do

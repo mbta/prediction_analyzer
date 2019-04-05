@@ -63,6 +63,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     {:noreply, %{state | subway_vehicles: new_vehicles}}
   end
 
+  def handle_info(:track_commuter_rail_vehicles, %{environment: "dev-green"} = state) do
+    {:noreply, state}
+  end
+
   def handle_info(:track_commuter_rail_vehicles, state) do
     url_path = "vehicles"
 
