@@ -74,6 +74,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     state =
       case PredictionAnalyzer.Utilities.APIv3.request(url_path, params: params) do
         {:ok, %{body: body}} ->
+          Logger.info(body)
+
           new_vehicles =
             body
             |> Jason.decode!()
