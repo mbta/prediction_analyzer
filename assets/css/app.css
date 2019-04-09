@@ -91,6 +91,11 @@
   padding: 3px;
 }
 
+.sort-order-link:focus {
+  color: #b6d8f5;
+  text-decoration: none;
+}
+
 .chart-range-link-active {
   background-color: #b6d8f5;
   color: #022441;
