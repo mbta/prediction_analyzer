@@ -192,10 +192,10 @@ export function setupDashboard() {
 function toggleSortOrder(event) {
   event.preventDefault();
   if(window.sortOrderLink.getAttribute("data-sort-order") == "by_id") {
-    window.sortOrderLink.innerText = "Sorted By Accuracy";
+    window.sortOrderLink.innerText = "Sort By Route Order";
     window.sortOrderLink.setAttribute("data-sort-order", "by_accuracy");
   } else {
-    window.sortOrderLink.innerText = "Sorted By Route Order";
+    window.sortOrderLink.innerText = "Sort By Accuracy";
     window.sortOrderLink.setAttribute("data-sort-order", "by_id");
   }
 

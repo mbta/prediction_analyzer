@@ -131,7 +131,7 @@
       </div>
 
       <%= if f.params["chart_range"] == "By Station" do %>
-        <%= content_tag :a, "Sorted By Route Order", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
+        <%= content_tag :a, "Sort By Accuracy", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
       <% end %>
 
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
