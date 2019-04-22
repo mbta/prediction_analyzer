@@ -1,7 +1,7 @@
 defmodule PredictionAnalyzer.Utilities.APIv3 do
   @default_opts [timeout: 2000, recv_timeout: 2000]
 
-  @spec request(String.t(), Keyword.t(), Keyword.t()) :: {:error, any()} | {:ok, map()}
+  @spec request(String.t(), [tuple()], Keyword.t()) :: {:error, any()} | {:ok, map()}
   def request(path, extra_headers \\ [], opts) do
     base_url = Application.get_env(:prediction_analyzer, :api_base_url)
 

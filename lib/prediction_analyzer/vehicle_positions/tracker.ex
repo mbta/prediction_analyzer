@@ -162,10 +162,12 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     Application.get_env(:prediction_analyzer, :aws_vehicle_positions_url)
   end
 
+  @spec schedule_subway_fetch(pid() | atom()) :: reference
   defp schedule_subway_fetch(pid) do
     Process.send_after(pid, :track_subway_vehicles, 1_000)
   end
 
+  @spec schedule_commuter_rail_fetch(pid() | atom()) :: reference
   defp schedule_commuter_rail_fetch(pid) do
     Process.send_after(pid, :track_commuter_rail_vehicles, 10_500)
   end
