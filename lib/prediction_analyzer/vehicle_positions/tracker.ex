@@ -193,7 +193,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     Process.send_after(pid, :track_commuter_rail_vehicles, 10_500)
   end
 
-  @spec extract_last_modified([tuple()]) :: String.t() | nil
+  @spec extract_last_modified([{String.t(), String.t()}]) :: String.t() | nil
   defp extract_last_modified(headers) do
     case Enum.find(headers, fn {key, _value} -> String.downcase(key) == "last-modified" end) do
       {_key, value} -> value
