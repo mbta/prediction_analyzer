@@ -12,7 +12,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
           environment: String.t(),
           aws_vehicle_positions_url: String.t(),
           subway_vehicles: vehicle_map(),
-          commuter_rail_vehicles: vehicle_map()
+          commuter_rail_vehicles: vehicle_map(),
+          commuter_rail_last_modified: String.t()
         }
 
   def start_link(_opts \\ [], args) do
@@ -31,7 +32,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     initial_state = %{
       aws_vehicle_positions_url: aws_vehicle_positions_url,
       environment: environment,
-      http_fetcher: http_fetcher
+      http_fetcher: http_fetcher,
+      commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
     }
 
     GenServer.start_link(__MODULE__, initial_state)
@@ -76,8 +78,12 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     }
 
     state =
-      case PredictionAnalyzer.Utilities.APIv3.request(url_path, params: params) do
-        {:ok, %{body: body}} ->
+      case PredictionAnalyzer.Utilities.APIv3.request(
+             url_path,
+             [{"If-Modified-Since", state.commuter_rail_last_modified}],
+             params: params
+           ) do
+        {:ok, %{body: body, headers: headers}} ->
           new_vehicles =
             body
             |> Jason.decode!()
@@ -86,7 +92,29 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
             |> Enum.into(%{}, fn v -> {v.id, v} end)
             |> Comparator.compare(state.commuter_rail_vehicles)
 
-          %{state | commuter_rail_vehicles: new_vehicles}
+          new_last_modified_timestamp =
+            with {"last-modified", last_modified_timestamp} <-
+                   headers |> Enum.find(fn {k, _} -> k == "last-modified" end) do
+              last_modified_timestamp
+            else
+              _ ->
+                state.commuter_rail_last_modified
+            end
+
+          %{
+            state
+            | commuter_rail_vehicles: new_vehicles,
+              commuter_rail_last_modified: new_last_modified_timestamp
+          }
+
+        {:error, %{status_code: 304}} ->
+          Logger.warn(
+            "Commuter rail vehicle positions not modified since last request at #{
+              state.commuter_rail_last_modified
+            }"
+          )
+
+          state
 
         {:error, e} ->
           Logger.warn("Could not download commuter rail vehicles; received: #{inspect(e)}")

@@ -54,7 +54,8 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         aws_vehicle_positions_url: "vehiclepositions",
         environment: "prod",
         subway_vehicles: %{},
-        commuter_rail_vehicles: %{}
+        commuter_rail_vehicles: %{},
+        commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
       }
 
       assert {
@@ -85,7 +86,8 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         aws_vehicle_positions_url: "vehiclepositions",
         environment: "prod",
         subway_vehicles: %{},
-        commuter_rail_vehicles: %{}
+        commuter_rail_vehicles: %{},
+        commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
       }
 
       log =
@@ -96,7 +98,8 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
                       aws_vehicle_positions_url: "vehiclepositions",
                       environment: "prod",
                       subway_vehicles: %{},
-                      commuter_rail_vehicles: %{}
+                      commuter_rail_vehicles: %{},
+                      commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
                     }}
         end)
 
