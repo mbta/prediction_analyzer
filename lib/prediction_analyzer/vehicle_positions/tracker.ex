@@ -42,7 +42,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   def init(args) do
     state = Map.merge(args, %{subway_vehicles: %{}, commuter_rail_vehicles: %{}})
 
-    schedule_fetch(self())
+    schedule_subway_fetch(self())
+    schedule_commuter_rail_fetch(self())
     {:ok, state}
   end
 
@@ -61,7 +62,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
       end)
 
     Logger.info("Processed #{length(Map.keys(new_vehicles))} vehicles in #{time / 1000} ms")
-    schedule_fetch(self())
+    schedule_subway_fetch(self())
     {:noreply, %{state | subway_vehicles: new_vehicles}}
   end
 
@@ -76,6 +77,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
       "filter[route]" =>
         :commuter_rail |> PredictionAnalyzer.Utilities.routes_for_mode() |> Enum.join(",")
     }
+
+    schedule_commuter_rail_fetch(self())
 
     state =
       case PredictionAnalyzer.Utilities.APIv3.request(
@@ -159,8 +162,11 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     Application.get_env(:prediction_analyzer, :aws_vehicle_positions_url)
   end
 
-  defp schedule_fetch(pid) do
+  defp schedule_subway_fetch(pid) do
     Process.send_after(pid, :track_subway_vehicles, 1_000)
-    Process.send_after(pid, :track_commuter_rail_vehicles, 1_000)
+  end
+
+  defp schedule_commuter_rail_fetch(pid) do
+    Process.send_after(pid, :track_commuter_rail_vehicles, 10_500)
   end
 end
