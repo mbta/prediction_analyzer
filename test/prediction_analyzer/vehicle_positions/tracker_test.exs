@@ -39,13 +39,42 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         aws_vehicle_positions_url: "vehiclepositions",
         environment: "dev-green",
         subway_vehicles: %{},
-        commuter_rail_vehicles: %{}
+        commuter_rail_vehicles: %{},
+        subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
       }
 
       assert {
                :noreply,
                %{subway_vehicles: %{"R-5458F5AF" => %Vehicle{}}}
              } = Tracker.handle_info(:track_subway_vehicles, state)
+    end
+
+    test "handles 304s (Not Modified) gracefully" do
+      state = %{
+        http_fetcher: NotModifiedHTTPFetcher,
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "prod",
+        commuter_rail_vehicles: %{},
+        subway_vehicles: %{something: "another"},
+        subway_last_modified: "Mon, 22 Apr 2019 16:30:00 GMT"
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          assert Tracker.handle_info(:track_subway_vehicles, state) ==
+                   {:noreply,
+                    %{
+                      http_fetcher: NotModifiedHTTPFetcher,
+                      aws_vehicle_positions_url: "vehiclepositions",
+                      environment: "prod",
+                      subway_vehicles: %{something: "another"},
+                      commuter_rail_vehicles: %{},
+                      subway_last_modified: "Mon, 22 Apr 2019 16:30:00 GMT"
+                    }}
+        end)
+
+      assert log =~
+               "vehicle positions not modified since last request at Mon, 22 Apr 2019 16:30:00 GMT"
     end
   end
 
@@ -149,19 +178,19 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   end
 
   defmodule NotifyGet do
-    def get!(url) do
+    def get(url, _headers) do
       send(:tracker_test_listener, {:get, url})
-      %{body: Jason.encode!(%{"entity" => []})}
+      {:ok, %{status_code: 200, body: Jason.encode!(%{"entity" => []}), headers: []}}
     end
 
-    def get!(url, _, _) do
+    def get(url, _, _) do
       send(:tracker_test_listener, {:get, url})
-      %{body: Jason.encode!(%{"entity" => []})}
+      {:ok, %{status_code: 200, body: Jason.encode!(%{"entity" => []}), headers: []}}
     end
   end
 
   defmodule SubwayVehicle do
-    def get!(_url) do
+    def get(_url, _headers) do
       data = %{
         "entity" => [
           %{
@@ -201,7 +230,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         ]
       }
 
-      %{body: Jason.encode!(data)}
+      {:ok, %{status_code: 200, body: Jason.encode!(data), headers: []}}
     end
   end
 
@@ -212,6 +241,10 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   end
 
   defmodule NotModifiedHTTPFetcher do
+    def get(_, _) do
+      {:ok, %{status_code: 304}}
+    end
+
     def get(_, _, _) do
       %{status_code: 304}
     end

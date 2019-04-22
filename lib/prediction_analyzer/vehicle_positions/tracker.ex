@@ -13,7 +13,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
           aws_vehicle_positions_url: String.t(),
           subway_vehicles: vehicle_map(),
           commuter_rail_vehicles: vehicle_map(),
-          commuter_rail_last_modified: String.t()
+          commuter_rail_last_modified: String.t(),
+          subway_last_modified: String.t()
         }
 
   def start_link(_opts \\ [], args) do
@@ -33,7 +34,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
       aws_vehicle_positions_url: aws_vehicle_positions_url,
       environment: environment,
       http_fetcher: http_fetcher,
-      commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
+      commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT",
+      subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
     }
 
     GenServer.start_link(__MODULE__, initial_state)
@@ -50,20 +52,45 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   def handle_info(:track_subway_vehicles, state) do
     Logger.info("Downloading vehicle positions")
 
-    %{body: body} = state.http_fetcher.get!(state.aws_vehicle_positions_url)
-
-    {time, new_vehicles} =
-      :timer.tc(fn ->
-        body
-        |> Jason.decode!()
-        |> parse_vehicles(state.environment)
-        |> Enum.into(%{}, fn v -> {v.id, v} end)
-        |> Comparator.compare(state.subway_vehicles)
-      end)
-
-    Logger.info("Processed #{length(Map.keys(new_vehicles))} vehicles in #{time / 1000} ms")
     schedule_subway_fetch(self())
-    {:noreply, %{state | subway_vehicles: new_vehicles}}
+
+    case state.http_fetcher.get(state.aws_vehicle_positions_url, [
+           {"If-Modified-Since", state.subway_last_modified}
+         ]) do
+      {:ok, %{status_code: 200, body: body, headers: headers}} ->
+        {time, new_vehicles} =
+          :timer.tc(fn ->
+            body
+            |> Jason.decode!()
+            |> parse_vehicles(state.environment)
+            |> Enum.into(%{}, fn v -> {v.id, v} end)
+            |> Comparator.compare(state.subway_vehicles)
+          end)
+
+        new_last_modified_timestamp = extract_last_modified(headers) || state.subway_last_modified
+
+        Logger.info("Processed #{length(Map.keys(new_vehicles))} vehicles in #{time / 1000} ms")
+
+        {:noreply,
+         %{
+           state
+           | subway_vehicles: new_vehicles,
+             subway_last_modified: new_last_modified_timestamp
+         }}
+
+      {:ok, %{status_code: 304}} ->
+        Logger.warn(
+          "Subway vehicle positions not modified since last request at #{
+            state.subway_last_modified
+          }"
+        )
+
+        {:noreply, state}
+
+      {:error, e} ->
+        Logger.warn("Could not download subway vehicles; received: #{inspect(e)}")
+        {:noreply, state}
+    end
   end
 
   def handle_info(:track_commuter_rail_vehicles, %{environment: "dev-green"} = state) do
@@ -96,13 +123,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
             |> Comparator.compare(state.commuter_rail_vehicles)
 
           new_last_modified_timestamp =
-            with {"last-modified", last_modified_timestamp} <-
-                   headers |> Enum.find(fn {k, _} -> k == "last-modified" end) do
-              last_modified_timestamp
-            else
-              _ ->
-                state.commuter_rail_last_modified
-            end
+            extract_last_modified(headers) || state.commuter_rail_last_modified
 
           %{
             state
@@ -170,5 +191,13 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   @spec schedule_commuter_rail_fetch(pid() | atom()) :: reference
   defp schedule_commuter_rail_fetch(pid) do
     Process.send_after(pid, :track_commuter_rail_vehicles, 10_500)
+  end
+
+  @spec extract_last_modified([tuple()]) :: String.t() | nil
+  defp extract_last_modified(headers) do
+    case Enum.find(headers, fn {key, _value} -> String.downcase(key) == "last-modified" end) do
+      {_key, value} -> value
+      nil -> nil
+    end
   end
 end
