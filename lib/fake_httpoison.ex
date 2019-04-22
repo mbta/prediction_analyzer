@@ -119,7 +119,11 @@ defmodule FakeHTTPoison do
       ]
     }
 
-    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(body)}}
+    headers = [
+      {"last-modified", "Sat, 10 Sep 1977 08:25:00 GMT"}
+    ]
+
+    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(body), headers: headers}}
   end
 
   def get!("https://prod.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" = url) do
