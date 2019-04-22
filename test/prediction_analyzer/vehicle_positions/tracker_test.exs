@@ -8,6 +8,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.SubwayVehicle
   alias PredictionAnalyzer.VehiclePositions.Vehicle
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.FailedHTTPFetcher
+  alias PredictionAnalyzer.VehiclePositions.TrackerTest.NotModifiedHTTPFetcher
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
@@ -49,7 +50,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   end
 
   describe "handle_info :track_commuter_rail_vehicles" do
-    test "updates the state with new vehicles" do
+    test "updates the state with new vehicles and a new last-modified time" do
       state = %{
         aws_vehicle_positions_url: "vehiclepositions",
         environment: "prod",
@@ -74,9 +75,38 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
                      timestamp: 1_553_795_877,
                      trip_id: "CR-Weekday-Fall-18-324"
                    }
-                 }
+                 },
+                 commuter_rail_last_modified: "Sat, 10 Sep 1977 08:25:00 GMT"
                }
              } = Tracker.handle_info(:track_commuter_rail_vehicles, state)
+    end
+
+    test "handles 304s (Not Modified) gracefully" do
+      reassign_env(:http_fetcher, NotModifiedHTTPFetcher)
+
+      state = %{
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "prod",
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{something: "another"},
+        commuter_rail_last_modified: "Mon, 22 Apr 2019 16:30:00 GMT"
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          assert Tracker.handle_info(:track_commuter_rail_vehicles, state) ==
+                   {:noreply,
+                    %{
+                      aws_vehicle_positions_url: "vehiclepositions",
+                      environment: "prod",
+                      subway_vehicles: %{},
+                      commuter_rail_vehicles: %{something: "another"},
+                      commuter_rail_last_modified: "Mon, 22 Apr 2019 16:30:00 GMT"
+                    }}
+        end)
+
+      assert log =~
+               "vehicle positions not modified since last request at Mon, 22 Apr 2019 16:30:00 GMT"
     end
 
     test "fails gracefully when API returns error" do
@@ -178,6 +208,12 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   defmodule FailedHTTPFetcher do
     def get(_, _, _) do
       {:error, "something"}
+    end
+  end
+
+  defmodule NotModifiedHTTPFetcher do
+    def get(_, _, _) do
+      %{status_code: 304}
     end
   end
 end
