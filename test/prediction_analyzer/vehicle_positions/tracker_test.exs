@@ -76,6 +76,35 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       assert log =~
                "vehicle positions not modified since last request at Mon, 22 Apr 2019 16:30:00 GMT"
     end
+
+    test "handles failures gracefully" do
+      state = %{
+        http_fetcher: FailedHTTPFetcher,
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "prod",
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{},
+        commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT",
+        subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          assert Tracker.handle_info(:track_subway_vehicles, state) ==
+                   {:noreply,
+                    %{
+                      http_fetcher: FailedHTTPFetcher,
+                      aws_vehicle_positions_url: "vehiclepositions",
+                      environment: "prod",
+                      subway_vehicles: %{},
+                      commuter_rail_vehicles: %{},
+                      commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT",
+                      subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
+                    }}
+        end)
+
+      assert log =~ "Could not download subway vehicles"
+    end
   end
 
   describe "handle_info :track_commuter_rail_vehicles" do
@@ -235,6 +264,10 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   end
 
   defmodule FailedHTTPFetcher do
+    def get(_, _) do
+      {:error, "something"}
+    end
+
     def get(_, _, _) do
       {:error, "something"}
     end
