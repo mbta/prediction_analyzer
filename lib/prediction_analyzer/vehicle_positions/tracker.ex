@@ -12,9 +12,9 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
           environment: String.t(),
           aws_vehicle_positions_url: String.t(),
           subway_vehicles: vehicle_map(),
+          subway_last_modified: String.t(),
           commuter_rail_vehicles: vehicle_map(),
-          commuter_rail_last_modified: String.t(),
-          subway_last_modified: String.t()
+          commuter_rail_last_modified: String.t()
         }
 
   def start_link(_opts \\ [], args) do

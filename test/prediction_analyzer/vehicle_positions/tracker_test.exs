@@ -39,7 +39,6 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         aws_vehicle_positions_url: "vehiclepositions",
         environment: "dev-green",
         subway_vehicles: %{},
-        commuter_rail_vehicles: %{},
         subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
       }
 
