@@ -43,5 +43,11 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
 
       assert StopNameFetcher.get_stop_name(:commuter_rail, "Andover") == "Andover"
     end
+
+    test "returns the id if the stop doesn't have a name" do
+      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
+
+      assert StopNameFetcher.get_stop_name(:commuter_rail, "99999999") == "99999999"
+    end
   end
 end
