@@ -40,10 +40,10 @@ defmodule PredictionAnalyzer.StopNameFetcher do
       nil ->
         stop_id
 
-      %{platform_name: nil} ->
+      %{platform_name: nil} = stop ->
         stop.name
 
-      _ ->
+      stop ->
         "#{stop.name} (#{stop.platform_name})"
     end
 
