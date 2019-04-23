@@ -35,10 +35,25 @@ defmodule PredictionAnalyzer.StopNameFetcher do
     {:reply, description_map, state}
   end
 
-  def handle_call({:get_stop_name, mode, stop_id}, _from, state) do
-    stop = state[mode][stop_id]
-    stop_name = if stop, do: "#{stop.name} (#{stop.platform_name})", else: stop_id
+  def handle_call({:get_stop_name, mode, stop_id}, _from, state)
+      when mode in [:commuter_rail, :subway] do
+    stop_name =
+      case state[mode][stop_id] do
+        nil ->
+          stop_id
+
+        %{platform_name: nil} = stop ->
+          stop.name
+
+        stop ->
+          "#{stop.name} (#{stop.platform_name})"
+      end
+
     {:reply, stop_name, state}
+  end
+
+  def handle_call({:get_stop_name, _mode, stop_id}, _from, state) do
+    {:reply, stop_id, state}
   end
 
   def handle_info(:load_stop_data, _state) do

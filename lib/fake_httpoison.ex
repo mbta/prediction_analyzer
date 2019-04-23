@@ -48,7 +48,16 @@ defmodule FakeHTTPoison do
         params: %{"filter[route_type]" => "2"}
       ) do
     body = %{
-      "data" => []
+      "data" => [
+        %{
+          "id" => "Andover",
+          "attributes" => %{
+            "description" => nil,
+            "name" => "Andover",
+            "platform_name" => nil
+          }
+        }
+      ]
     }
 
     {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(body)}}
