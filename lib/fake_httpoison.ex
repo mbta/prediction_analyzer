@@ -56,14 +56,6 @@ defmodule FakeHTTPoison do
             "name" => "Andover",
             "platform_name" => nil
           }
-        },
-        %{
-          "id" => "99999999",
-          "attributes" => %{
-            "description" => nil,
-            "name" => nil,
-            "platform_name" => nil
-          }
         }
       ]
     }
