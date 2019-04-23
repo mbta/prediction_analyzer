@@ -52,7 +52,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
     {:reply, stop_name, state}
   end
 
-  def handle_call({:get_stop_name, mode, stop_id}, _from, state) do
+  def handle_call({:get_stop_name, _mode, stop_id}, _from, state) do
     {:reply, stop_id, state}
   end
 
