@@ -38,7 +38,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   def handle_call({:get_stop_name, mode, stop_id}, _from, state) do
     stop = state[mode][stop_id]
 
-    IO.puts("stop = #{inspect(stop)} and stop = #{inspect(stop)}")
+    IO.puts("stop_id = #{inspect(stop_id)} and stop = #{inspect(stop)}")
 
     stop_name =
       if stop do
