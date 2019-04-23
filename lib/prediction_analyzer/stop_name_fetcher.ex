@@ -36,16 +36,17 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   end
 
   def handle_call({:get_stop_name, mode, stop_id}, _from, state) do
-    case state[mode][stop_id] do
-      nil ->
-        stop_id
+    stop_name =
+      case state[mode][stop_id] do
+        nil ->
+          stop_id
 
-      %{platform_name: nil} = stop ->
-        stop.name
+        %{platform_name: nil} = stop ->
+          stop.name
 
-      stop ->
-        "#{stop.name} (#{stop.platform_name})"
-    end
+        stop ->
+          "#{stop.name} (#{stop.platform_name})"
+      end
 
     {:reply, stop_name, state}
   end
