@@ -49,5 +49,11 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
 
       assert StopNameFetcher.get_stop_name(:commuter_rail, "99999999") == "99999999"
     end
+
+    test "returns the id if the mode isn't found" do
+      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
+
+      assert StopNameFetcher.get_stop_name(:not_a_mode, "99999999") == "99999999"
+    end
   end
 end
