@@ -37,5 +37,11 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
       assert StopNameFetcher.get_stop_name(:subway, "70238") ==
                "Cleveland Circle (Park Street & North)"
     end
+
+    test "returns the name with no platform code if the stop doesn't have a platform code" do
+      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
+
+      assert StopNameFetcher.get_stop_name(:commuter_rail, "Andover") == "Andover"
+    end
   end
 end
