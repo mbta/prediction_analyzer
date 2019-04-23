@@ -37,6 +37,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
 
   def handle_call({:get_stop_name, mode, stop_id}, _from, state) do
     stop = state[mode][stop_id]
+
     stop_name =
       if stop do
         if stop.platform_name do
@@ -47,6 +48,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
       else
         stop_id
       end
+
     {:reply, stop_name, state}
   end
 
