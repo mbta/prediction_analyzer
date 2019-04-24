@@ -5,7 +5,8 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   @type stop_info :: %{
           description: String.t(),
           name: String.t(),
-          platform_name: String.t()
+          platform_name: String.t(),
+          unique_info?: boolean()
         }
   @type state() :: %{PredictionAnalyzer.Utilities.mode() => %{String.t() => stop_info()}}
 
@@ -48,14 +49,14 @@ defmodule PredictionAnalyzer.StopNameFetcher do
           stop_id
 
         %{platform_name: nil} = stop ->
-          if unique_stop_info?(state[mode], state[mode][stop_id]) do
+          if stop.unique_info? do
             stop.name
           else
             "#{stop.name} - #{stop_id}"
           end
 
         stop ->
-          if unique_stop_info?(state[mode], state[mode][stop_id]) do
+          if stop.unique_info? do
             "#{stop.name} (#{stop.platform_name})"
           else
             "#{stop.name} (#{stop.platform_name}) - #{stop_id}"
@@ -96,34 +97,31 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   defp parse_response(http_response) do
     {:ok, body} = Jason.decode(http_response.body)
 
+    unique_info =
+      body["data"]
+      |> Enum.reduce(%{}, fn stop, acc ->
+        Map.update(
+          acc,
+          %{
+            description: stop["attributes"]["description"],
+            name: stop["attributes"]["name"],
+            platform_name: stop["attributes"]["platform_name"]
+          },
+          true,
+          fn _ -> false end
+        )
+      end)
+
     body["data"]
     |> Enum.map(fn stop ->
-      {stop["id"],
-       %{
-         description: stop["attributes"]["description"],
-         name: stop["attributes"]["name"],
-         platform_name: stop["attributes"]["platform_name"]
-       }}
+      stop_info = %{
+        description: stop["attributes"]["description"],
+        name: stop["attributes"]["name"],
+        platform_name: stop["attributes"]["platform_name"]
+      }
+
+      {stop["id"], Map.merge(stop_info, %{unique_info?: unique_info[stop_info]})}
     end)
     |> Enum.into(%{})
-  end
-
-  @spec unique_stop_info?(%{String.t() => stop_info()}, stop_info()) :: boolean()
-  defp unique_stop_info?(mode_state, stop_info) do
-    mode_state
-    |> Map.values()
-    |> do_unique_stop_id?(stop_info, false)
-  end
-
-  @spec do_unique_stop_id?([stop_info()], stop_info(), boolean()) :: boolean()
-  defp do_unique_stop_id?([], _, _), do: true
-  defp do_unique_stop_id?([stop_info | _], stop_info, true), do: false
-
-  defp do_unique_stop_id?([stop_info | stop_infos], stop_info, false) do
-    do_unique_stop_id?(stop_infos, stop_info, true)
-  end
-
-  defp do_unique_stop_id?([_ | stop_infos], stop_info, seen?) do
-    do_unique_stop_id?(stop_infos, stop_info, seen?)
   end
 end
