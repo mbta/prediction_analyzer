@@ -2,7 +2,12 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   require Logger
   use GenServer
 
-  @type state() :: %{PredictionAnalyzer.Utilities.mode() => %{String.t() => String.t()}}
+  @type stop_info :: %{
+          description: String.t(),
+          name: String.t(),
+          platform_name: String.t()
+        }
+  @type state() :: %{PredictionAnalyzer.Utilities.mode() => %{String.t() => stop_info()}}
 
   @spec start_link([any]) :: {:ok, pid}
   def start_link(opts \\ []) do
@@ -43,10 +48,18 @@ defmodule PredictionAnalyzer.StopNameFetcher do
           stop_id
 
         %{platform_name: nil} = stop ->
-          stop.name
+          if unique_stop_info?(state[mode], state[mode][stop_id]) do
+            stop.name
+          else
+            "#{stop.name} - #{stop_id}"
+          end
 
         stop ->
-          "#{stop.name} (#{stop.platform_name})"
+          if unique_stop_info?(state[mode], state[mode][stop_id]) do
+            "#{stop.name} (#{stop.platform_name})"
+          else
+            "#{stop.name} (#{stop.platform_name}) - #{stop_id}"
+          end
       end
 
     {:reply, stop_name, state}
@@ -60,7 +73,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
     {:noreply, %{subway: load_stop_data(:subway), commuter_rail: load_stop_data(:commuter_rail)}}
   end
 
-  @spec load_stop_data(PredictionAnalyzer.Utilities.mode()) :: state
+  @spec load_stop_data(PredictionAnalyzer.Utilities.mode()) :: %{String.t() => stop_info()}
   defp load_stop_data(mode) do
     path = "stops"
     params = get_params(mode)
@@ -79,7 +92,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   defp get_params(:subway), do: %{"filter[route_type]" => "0,1"}
   defp get_params(:commuter_rail), do: %{"filter[route_type]" => "2"}
 
-  @spec parse_response(%HTTPoison.Response{}) :: state
+  @spec parse_response(%HTTPoison.Response{}) :: %{String.t() => stop_info()}
   defp parse_response(http_response) do
     {:ok, body} = Jason.decode(http_response.body)
 
@@ -93,5 +106,24 @@ defmodule PredictionAnalyzer.StopNameFetcher do
        }}
     end)
     |> Enum.into(%{})
+  end
+
+  @spec unique_stop_info?(%{String.t() => stop_info()}, stop_info()) :: boolean()
+  defp unique_stop_info?(mode_state, stop_info) do
+    mode_state
+    |> Map.values()
+    |> do_unique_stop_id?(stop_info, false)
+  end
+
+  @spec do_unique_stop_id?([stop_info()], stop_info(), boolean()) :: boolean()
+  defp do_unique_stop_id?([], _, _), do: true
+  defp do_unique_stop_id?([stop_info | _], stop_info, true), do: false
+
+  defp do_unique_stop_id?([stop_info | stop_infos], stop_info, false) do
+    do_unique_stop_id?(stop_infos, stop_info, true)
+  end
+
+  defp do_unique_stop_id?([_ | stop_infos], stop_info, seen?) do
+    do_unique_stop_id?(stop_infos, stop_info, seen?)
   end
 end

@@ -148,6 +148,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
     end)
     |> Map.put(:chart_type, filter_params["chart_range"] || "Hourly")
+    |> IO.inspect(label: :chart_data)
   end
 
   @spec time_filters_present?(map()) :: boolean()
