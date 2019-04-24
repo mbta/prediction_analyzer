@@ -97,7 +97,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   defp parse_response(http_response) do
     {:ok, body} = Jason.decode(http_response.body)
 
-    unique_info =
+    unique_info_map =
       body["data"]
       |> Enum.reduce(%{}, fn stop, acc ->
         Map.update(
@@ -120,7 +120,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
         platform_name: stop["attributes"]["platform_name"]
       }
 
-      {stop["id"], Map.merge(stop_info, %{unique_info?: unique_info[stop_info]})}
+      {stop["id"], Map.merge(stop_info, %{unique_info?: unique_info_map[stop_info]})}
     end)
     |> Enum.into(%{})
   end
