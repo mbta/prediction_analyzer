@@ -2,7 +2,13 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   require Logger
   use GenServer
 
-  @type state() :: %{PredictionAnalyzer.Utilities.mode() => %{String.t() => String.t()}}
+  @type stop_info :: %{
+          description: String.t(),
+          name: String.t(),
+          platform_name: String.t(),
+          unique_info?: boolean()
+        }
+  @type state() :: %{PredictionAnalyzer.Utilities.mode() => %{String.t() => stop_info()}}
 
   @spec start_link([any]) :: {:ok, pid}
   def start_link(opts \\ []) do
@@ -43,10 +49,18 @@ defmodule PredictionAnalyzer.StopNameFetcher do
           stop_id
 
         %{platform_name: nil} = stop ->
-          stop.name
+          if stop.unique_info? do
+            stop.name
+          else
+            "#{stop.name} - #{stop_id}"
+          end
 
         stop ->
-          "#{stop.name} (#{stop.platform_name})"
+          if stop.unique_info? do
+            "#{stop.name} (#{stop.platform_name})"
+          else
+            "#{stop.name} (#{stop.platform_name}) - #{stop_id}"
+          end
       end
 
     {:reply, stop_name, state}
@@ -60,7 +74,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
     {:noreply, %{subway: load_stop_data(:subway), commuter_rail: load_stop_data(:commuter_rail)}}
   end
 
-  @spec load_stop_data(PredictionAnalyzer.Utilities.mode()) :: state
+  @spec load_stop_data(PredictionAnalyzer.Utilities.mode()) :: %{String.t() => stop_info()}
   defp load_stop_data(mode) do
     path = "stops"
     params = get_params(mode)
@@ -79,18 +93,34 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   defp get_params(:subway), do: %{"filter[route_type]" => "0,1"}
   defp get_params(:commuter_rail), do: %{"filter[route_type]" => "2"}
 
-  @spec parse_response(%HTTPoison.Response{}) :: state
+  @spec parse_response(%HTTPoison.Response{}) :: %{String.t() => stop_info()}
   defp parse_response(http_response) do
     {:ok, body} = Jason.decode(http_response.body)
 
+    unique_info_map =
+      body["data"]
+      |> Enum.reduce(%{}, fn stop, acc ->
+        Map.update(
+          acc,
+          %{
+            description: stop["attributes"]["description"],
+            name: stop["attributes"]["name"],
+            platform_name: stop["attributes"]["platform_name"]
+          },
+          true,
+          fn _ -> false end
+        )
+      end)
+
     body["data"]
     |> Enum.map(fn stop ->
-      {stop["id"],
-       %{
-         description: stop["attributes"]["description"],
-         name: stop["attributes"]["name"],
-         platform_name: stop["attributes"]["platform_name"]
-       }}
+      stop_info = %{
+        description: stop["attributes"]["description"],
+        name: stop["attributes"]["name"],
+        platform_name: stop["attributes"]["platform_name"]
+      }
+
+      {stop["id"], Map.merge(stop_info, %{unique_info?: unique_info_map[stop_info]})}
     end)
     |> Enum.into(%{})
   end

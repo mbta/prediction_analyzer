@@ -33,6 +33,38 @@ defmodule FakeHTTPoison do
             "name" => "Jackson Sq",
             "platform_name" => "Oak Grove"
           }
+        },
+        %{
+          "id" => "70150",
+          "attributes" => %{
+            "description" => "Kenmore - Green Line - Park Street & North",
+            "name" => "Kenmore",
+            "platform_name" => "Park Street & North"
+          }
+        },
+        %{
+          "id" => "71150",
+          "attributes" => %{
+            "description" => "Kenmore - Green Line - Park Street & North",
+            "name" => "Kenmore",
+            "platform_name" => "Park Street & North"
+          }
+        },
+        %{
+          "id" => "dummystop1",
+          "attributes" => %{
+            "description" => "Dummy Stop Description",
+            "name" => "Dummy Stop Name",
+            "platform_name" => nil
+          }
+        },
+        %{
+          "id" => "dummystop2",
+          "attributes" => %{
+            "description" => "Dummy Stop Description",
+            "name" => "Dummy Stop Name",
+            "platform_name" => nil
+          }
         }
       ]
     }
