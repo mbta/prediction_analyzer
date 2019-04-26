@@ -1,8 +1,12 @@
 <%= for mode_id <- [:subway, :commuter_rail] do %>
   <%= content_tag :a, mode_string(mode_id), class: button_class(@conn, mode_id), href: accuracy_path(@conn, mode_id) %>
 <% end %>
+<div class="">
+  Show Dev Green results
+  <input type="checkbox" id="show-dev-green-check" checked>
+</div>
 <div class="row accuracy-summary-header">
-  <div class="col-xs-6">
+  <div class="col-xs-6" id="prod-accuracy-total">
     <span class="prod-text prod-text-header">Prod</span>
     <div>
       <span class="accuracy-summary-percentage prod-text">
@@ -17,7 +21,7 @@
     </div>
   </div>
 
-  <div class="col-xs-6">
+  <div class="col-xs-6" id="dev-green-accuracy-total">
     <span class="dev-green-text dev-green-text-header">Dev Green</span>
     <div>
       <span class="accuracy-summary-percentage dev-green-text">
@@ -135,31 +139,53 @@
       <% end %>
 
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
-      <table class="table">
-        <tr>
-          <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
-          <th class="prod-text">Prod Accuracy</th>
-          <th class="prod-text">Prod Total</th>
-          <th class="dev-green-text">Dev-Green Accuracy</th>
-          <th class="dev-green-text">Dev-Green Total</th>
-          <%= if show_download?(@conn.params) do %>
-            <th>Raw Data</th>
-          <% end %>
-        </tr>
-
-        <%= for [row_scope, prod_total, prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
+      <div class="col-xs-6">
+        <table class="table" id="prod-data-table">
           <tr>
-            <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
-            <td class="prod-text"><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
-            <td class="prod-text"><%= prod_total %></td>
-            <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
-            <td class="dev-green-text"><%= dg_total %></td>
+            <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
+            <th class="prod-text">Prod Accuracy</th>
+            <th class="prod-text">Prod Total</th>
             <%= if show_download?(@conn.params) do %>
-              <th><%= link("csv", to: predictions_path_with_filters(@conn, row_scope)) %></th>
+              <th>Raw Data</th>
             <% end %>
           </tr>
-        <% end %>
-      </table>
+
+          <%= for [row_scope, prod_total, prod_accurate, _dg_total, _dg_accurate] <- @accuracies do %>
+            <tr>
+              <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
+              <td class="prod-text"><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
+              <td class="prod-text"><%= prod_total %></td>
+              <%= if show_download?(@conn.params) do %>
+                <th><%= link("csv", to: predictions_path_with_filters(@conn, row_scope)) %></th>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+
+      <div class="col-xs-6">
+        <table class="table" id="dev-green-data-table">
+          <tr>
+            <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
+            <th class="dev-green-text">Dev-Green Accuracy</th>
+            <th class="dev-green-text">Dev-Green Total</th>
+            <%= if show_download?(@conn.params) do %>
+              <th>Raw Data</th>
+            <% end %>
+          </tr>
+
+          <%= for [row_scope, _prod_total, _prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
+            <tr>
+              <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
+              <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
+              <td class="dev-green-text"><%= dg_total %></td>
+              <%= if show_download?(@conn.params) do %>
+                <th><%= link("csv", to: predictions_path_with_filters(@conn, row_scope)) %></th>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
+      </div>
     </div>
   </div>
 <% end %>
