@@ -7,7 +7,8 @@ export default function() {
       setupDashboard();
     }
 
-    jQuery('#show-dev-green-check').change(function() {
+    jQuery('#show-dev-green-check').change(function(event) {
+      event.preventDefault();
       var showDevGreen = jQuery("#show-dev-green-check");
       if (showDevGreen.is(":checked")) {
         jQuery('#dev-green-data-table').show();
