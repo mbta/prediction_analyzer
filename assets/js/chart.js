@@ -7,6 +7,19 @@ export default function() {
       setupDashboard();
     }
 
+    jQuery('#show-dev-green-check').change(function(event) {
+      event.preventDefault();
+      var showDevGreen = jQuery("#show-dev-green-check");
+      if (showDevGreen.is(":checked")) {
+        jQuery('#dev-green-data-table').show();
+        jQuery('#dev-green-accuracy-total').show();
+      } else {
+        jQuery('#dev-green-data-table').hide();
+        jQuery('#dev-green-accuracy-total').hide();
+      }
+      setupDashboard();
+    });
+
     var accuracyForm = document.getElementsByClassName('accuracy-form')[0];
     if(accuracyForm) {
       bindFormLinks(accuracyForm);
@@ -45,6 +58,8 @@ function renderDashboard() {
   var sortOrder;
   var i;
 
+  var showDevGreen = jQuery("#show-dev-green-check").is(":checked");
+
   sortedProdAccs = [];
   sortedDgAccs = [];
   sortedBucketNames = [];
@@ -65,7 +80,9 @@ function renderDashboard() {
 
   window.dataPoints.forEach(function(dataPoint) {
     sortedProdAccs.push(dataPoint.prodAcc);
-    sortedDgAccs.push(dataPoint.dgAcc);
+    if(showDevGreen){
+      sortedDgAccs.push(dataPoint.dgAcc);
+    }
     sortedBucketNames.push(dataPoint.bucket);
   });
 
@@ -100,20 +117,33 @@ function renderDashboard() {
   }
 
   var col_1 = ["Prod"].concat(sortedProdAccs);
-  var col_2 = ["Dev Green"].concat(sortedDgAccs);
+  var col_2 = []
+  if(showDevGreen){
+    col_2 = ["Dev Green"].concat(sortedDgAccs);
+  }
   var x_data = ["x"].concat(sortedBucketNames);
-
-  var chart = c3.generate({
-    bindto: "#chart-prediction-accuracy",
-    data: {
-      x: 'x',
+  var data;
+  if(showDevGreen) {
+    data = {  x: 'x',
       columns: [
         x_data,
         col_1,
         col_2,
       ],
       type: dataType
-    },
+    }
+  } else {
+    data = {  x: 'x',
+      columns: [
+        x_data,
+        col_1,
+      ],
+      type: dataType
+    }
+  }
+  var chart = c3.generate({
+    bindto: "#chart-prediction-accuracy",
+    data: data,
     color: {
       pattern: ["#1fecff", "#c743f0"]
     },
@@ -165,7 +195,13 @@ function renderDashboard() {
 export function setupDashboard() {
   var rawData = window.dataPredictionAccuracyJSON;
   var prodAccs = rawData["prod_accs"];
-  var dgAccs = rawData["dg_accs"];
+  var showDevGreen = jQuery("#show-dev-green-check").is(":checked");
+  var dgAccs;
+  if (showDevGreen) {
+    dgAccs = rawData["dg_accs"];
+  } else {
+    dgAccs = [];
+  }
   var bucketNames = rawData["buckets"];
   var i;
 
@@ -177,13 +213,23 @@ export function setupDashboard() {
     window.sortOrderLink.addEventListener("click", toggleSortOrder);
   }
 
-  for(i = 0; i < bucketNames.length; i++) {
-    window.dataPoints.push({
-      id: i,
-      bucket: bucketNames[i],
-      prodAcc: prodAccs[i],
-      dgAcc: dgAccs[i]
-    });
+  if(showDevGreen) {
+    for(i = 0; i < bucketNames.length; i++) {
+      window.dataPoints.push({
+        id: i,
+        bucket: bucketNames[i],
+        prodAcc: prodAccs[i],
+        dgAcc: dgAccs[i]
+      });
+    }
+  } else {
+    for(i = 0; i < bucketNames.length; i++) {
+      window.dataPoints.push({
+        id: i,
+        bucket: bucketNames[i],
+        prodAcc: prodAccs[i]
+      });
+    }
   }
 
   renderDashboard();
