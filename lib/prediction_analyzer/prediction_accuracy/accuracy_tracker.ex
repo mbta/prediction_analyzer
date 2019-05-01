@@ -1,5 +1,4 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
-  alias PredictionAnalyzer.PredictionAccuracy.Query
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   require Logger
 
@@ -16,7 +15,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
     GenServer.call(pid, :check_accuracy)
   end
 
-  def handle_call(:check_accuracy, _from, state) do
+  def handle_call(:check_accuracy, _from, _state) do
     today = Date.utc_today()
     yesterday = today |> Timex.shift(days: -1) |> Date.to_iso8601()
     previous_day = today |> Timex.shift(days: -2) |> Date.to_iso8601()
@@ -32,7 +31,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
       |> PredictionAnalyzer.Repo.all()
 
     {yesterday_total, yesterday_accurate} =
-      Enum.reduce(yesterday_accs, {0, 0}, fn [h, p_t, p_a, _, _], {t, a} ->
+      Enum.reduce(yesterday_accs, {0, 0}, fn [_h, p_t, p_a, _, _], {t, a} ->
         {t + p_t, a + p_a}
       end)
 
@@ -47,7 +46,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
       |> PredictionAnalyzer.Repo.all()
 
     {previous_day_total, previous_day_accurate} =
-      Enum.reduce(previous_day_accs, {0, 0}, fn [h, p_t, p_a, _, _], {t, a} ->
+      Enum.reduce(previous_day_accs, {0, 0}, fn [_h, p_t, p_a, _, _], {t, a} ->
         {t + p_t, a + p_a}
       end)
 
