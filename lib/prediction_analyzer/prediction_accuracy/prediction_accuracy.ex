@@ -174,7 +174,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
   hour | prod total | prod accurate | dev-green total | dev-green accurate
   """
-  @spec stats_by_environment_and_chart_range(Ecto.Query.t(), %{}) :: Ecto.Query.t()
+  @spec stats_by_environment_and_chart_range(Ecto.Query.t(), map()) :: Ecto.Query.t()
   def stats_by_environment_and_chart_range(q, filters) do
     scope =
       case filters["chart_range"] do
