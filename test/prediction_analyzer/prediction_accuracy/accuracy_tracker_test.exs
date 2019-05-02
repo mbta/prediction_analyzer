@@ -10,6 +10,13 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
     Ecto.Adapters.SQL.Sandbox.mode(PredictionAnalyzer.Repo, {:shared, self()})
   end
 
+  describe "start_link/1" do
+    test "starts an instance of the accuracy tracker" do
+      {:ok, pid} = AccuracyTracker.start_link()
+      assert Process.alive?(pid)
+    end
+  end
+
   describe "handle_info/2 :check_accuracy" do
     test "logs a warning when accuracy drops from previous day to yesterday" do
       setup_db(70, 80)
