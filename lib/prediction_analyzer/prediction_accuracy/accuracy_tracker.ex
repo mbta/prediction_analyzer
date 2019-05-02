@@ -11,11 +11,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
     {:ok, [yesterdays_accuracy: 0, previous_days_accuracy: 0]}
   end
 
-  def check_accuracy(pid \\ __MODULE__) do
-    GenServer.call(pid, :check_accuracy)
-  end
-
-  def handle_call(:check_accuracy, _from, _state) do
+  @spec check_accuracy() :: [yesterday_accuracy: float(), previous_day_accuracy: float()]
+  def check_accuracy() do
     today = Date.utc_today()
     yesterday = today |> Timex.shift(days: -1) |> Date.to_iso8601()
     previous_day = today |> Timex.shift(days: -2) |> Date.to_iso8601()
@@ -74,14 +71,20 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
       )
     end
 
-    {:reply, :ok,
-     [
-       yesterdays_accuracy: yesterday_accuracy,
-       previous_day_accuracy: previous_day_accuracy
-     ]}
+    [yesterday_accuracy: yesterday_accuracy, previous_day_accuracy: previous_day_accuracy]
   end
 
+  @spec handle_info(:schedule_next_check, any) ::
+          {:noreply, [yesterdays_accuracy: float(), previous_days_accuracy: float()]}
+  def handle_info(:schedule_next_check, _state) do
+    state = check_accuracy()
+    schedule_next_check(self())
+    {:noreply, state}
+  end
+
+  @spec schedule_next_check(pid()) :: :ok
   defp schedule_next_check(pid) do
-    Process.send_after(pid, :check_accuracy, 10 * 1_000)
+    Process.send_after(pid, :schedule_next_check, 10 * 1_000)
+    :ok
   end
 end
