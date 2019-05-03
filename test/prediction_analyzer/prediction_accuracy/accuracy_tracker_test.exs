@@ -1,5 +1,5 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: false
   alias PredictionAnalyzer.PredictionAccuracy.AccuracyTracker
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   alias PredictionAnalyzer.Repo
@@ -49,6 +49,26 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
         end)
 
       refute log =~ "accuracy_drop"
+    end
+  end
+
+  describe "handle_info/2 :schedule_next_check" do
+    test "checks the accuracy of all lines we care about" do
+      Logger.configure(level: :info)
+
+      log =
+        capture_log([level: :info], fn ->
+          {:ok, pid} = AccuracyTracker.start_link()
+          Ecto.Adapters.SQL.Sandbox.mode(PredictionAnalyzer.Repo, {:shared, pid})
+
+          Process.send_after(pid, :schedule_next_check, 10)
+
+          :timer.sleep(50)
+        end)
+
+      Logger.configure(level: :warn)
+
+      assert log =~ "check_accuracy"
     end
   end
 

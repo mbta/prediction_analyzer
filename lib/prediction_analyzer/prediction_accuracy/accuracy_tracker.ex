@@ -77,6 +77,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
   @spec schedule_next_check(pid()) :: :ok
   defp schedule_next_check(pid) do
+    Logger.info("scheduling next check_accuracy")
     Process.send_after(pid, :schedule_next_check, 24 * 60 * 60 * 1_000)
     :ok
   end
