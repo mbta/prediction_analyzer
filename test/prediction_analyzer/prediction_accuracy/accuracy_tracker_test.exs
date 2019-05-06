@@ -18,8 +18,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
   end
 
   describe "handle_info/2 :check_accuracy" do
-    test "logs a warning when accuracy drops from previous day to yesterday" do
-      setup_db(70, 80)
+    test "logs a warning when accuracy drops by more than 10% from previous day to yesterday" do
+      setup_db(69, 80)
 
       log =
         capture_log([level: :warn], fn ->
@@ -29,8 +29,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
       assert log =~ "accuracy_drop"
     end
 
-    test "does not log a warning when accuracy stays the same from previous day to yesterday" do
-      setup_db(80, 80)
+    test "does not log a warning when accuracy drops 10% from previous day to yesterday" do
+      setup_db(80, 90)
 
       log =
         capture_log([level: :warn], fn ->
