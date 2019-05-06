@@ -2,6 +2,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   require Logger
 
+  @drop_threshold 0.1
+
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, [], opts)
   end
@@ -58,7 +60,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
     yesterday_accuracy = get_accuracy(yesterday_accs)
     previous_day_accuracy = get_accuracy(previous_day_accs)
 
-    if yesterday_accuracy < previous_day_accuracy - 0.1 do
+    if yesterday_accuracy < previous_day_accuracy - @drop_threshold do
       Logger.warn(
         "accuracy_drop on #{route_id} from #{previous_day_accuracy} to #{yesterday_accuracy} between #{
           previous_day
