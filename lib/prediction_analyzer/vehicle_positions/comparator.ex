@@ -66,6 +66,12 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       |> vehicle_params()
       |> Map.put(:arrival_time, vehicle.timestamp)
 
+    Logger.info(
+      "ml_datapoint vehicle_id=#{params.vehicle_id} trip_id=#{params.trip_id} event_type=arrival stop_id=#{
+        params.stop_id
+      } time=#{params.arrival_time}"
+    )
+
     %VehicleEvent{}
     |> VehicleEvent.changeset(params)
     |> Repo.insert()
@@ -161,6 +167,12 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
         end
 
       {n, _} ->
+        Logger.info(
+          "ml_datapoint vehicle_id=#{vehicle_event.vehicle_id} trip_id=#{vehicle_event.trip_id} event_type=departure stop_id=#{
+            vehicle_event.stop_id
+          } time=#{vehicle_event.departure_time}"
+        )
+
         Logger.info("Associated vehicle_event with #{n} prediction(s)")
     end
 
