@@ -24,7 +24,7 @@ defmodule PredictionAnalyzer.Pruner do
 
     unix_cutoff =
       Timex.local()
-      |> Timex.shift(days: -7)
+      |> Timex.shift(days: -28)
       |> Timex.set(hour: 3, minute: 0, second: 0)
       |> DateTime.to_unix()
 
