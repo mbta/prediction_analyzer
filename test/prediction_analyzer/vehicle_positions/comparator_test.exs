@@ -44,6 +44,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
   describe "compare_vehicles" do
     test "records arrival and departure of vehicle" do
+      Logger.configure(level: :info)
       assert Repo.one(from(ve in VehicleEvent, select: count(ve.id))) == 0
 
       old_vehicles = %{
@@ -54,41 +55,53 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         "1" => %{@vehicle | current_status: :STOPPED_AT}
       }
 
-      Comparator.compare(new_vehicles, old_vehicles)
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
 
-      arrival_time = @vehicle.timestamp
+          arrival_time = @vehicle.timestamp
 
-      vehicle_events = Repo.all(from(ve in VehicleEvent, select: ve))
+          vehicle_events = Repo.all(from(ve in VehicleEvent, select: ve))
 
-      assert [
-               %VehicleEvent{vehicle_id: "1", arrival_time: ^arrival_time, departure_time: nil}
-             ] = vehicle_events
+          assert [
+                   %VehicleEvent{
+                     vehicle_id: "1",
+                     arrival_time: ^arrival_time,
+                     departure_time: nil
+                   }
+                 ] = vehicle_events
 
-      ve_id = List.first(vehicle_events).id
+          ve_id = List.first(vehicle_events).id
 
-      departure_time = arrival_time + 30
+          departure_time = arrival_time + 30
 
-      old_vehicles = new_vehicles
+          old_vehicles = new_vehicles
 
-      new_vehicles = %{
-        "1" => %{
-          @vehicle
-          | current_status: :IN_TRANSIT_TO,
-            stop_id: "stop2",
-            timestamp: departure_time
-        }
-      }
+          new_vehicles = %{
+            "1" => %{
+              @vehicle
+              | current_status: :IN_TRANSIT_TO,
+                stop_id: "stop2",
+                timestamp: departure_time
+            }
+          }
 
-      Comparator.compare(new_vehicles, old_vehicles)
+          Comparator.compare(new_vehicles, old_vehicles)
 
-      assert [
-               %VehicleEvent{
-                 id: ^ve_id,
-                 vehicle_id: "1",
-                 arrival_time: ^arrival_time,
-                 departure_time: ^departure_time
-               }
-             ] = Repo.all(from(ve in VehicleEvent, select: ve))
+          assert [
+                   %VehicleEvent{
+                     id: ^ve_id,
+                     vehicle_id: "1",
+                     arrival_time: ^arrival_time,
+                     departure_time: ^departure_time
+                   }
+                 ] = Repo.all(from(ve in VehicleEvent, select: ve))
+        end)
+
+      assert log =~ "ml_datapoint"
+      assert log =~ "event_type=arrival"
+      assert log =~ "event_type=departure"
+      Logger.configure(level: :warn)
     end
 
     test "updates relevant predictions" do

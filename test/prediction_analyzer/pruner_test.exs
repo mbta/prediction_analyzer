@@ -48,15 +48,15 @@ defmodule PredictionAnalyzer.PrunerTest do
     assert Process.alive?(pid)
   end
 
-  test "prune deletes old data and leaves new data alone" do
-    days_ago_8 = Timex.local() |> Timex.shift(days: -8) |> DateTime.to_unix()
+  test "prune deletes data that is longer than 28 days old and leaves new data alone" do
+    days_ago_29 = Timex.local() |> Timex.shift(days: -29) |> DateTime.to_unix()
     days_ago_5 = Timex.local() |> Timex.shift(days: -5) |> DateTime.to_unix()
 
-    %{id: ve1} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_8})
+    %{id: ve1} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_29})
     %{id: ve2} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_5})
-    %{id: _ve3} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_8})
-    %{id: _p1} = Repo.insert!(%{@prediction | file_timestamp: days_ago_8, vehicle_event_id: ve1})
-    %{id: _p2} = Repo.insert!(%{@prediction | file_timestamp: days_ago_8})
+    %{id: _ve3} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_29})
+    %{id: _p1} = Repo.insert!(%{@prediction | file_timestamp: days_ago_29, vehicle_event_id: ve1})
+    %{id: _p2} = Repo.insert!(%{@prediction | file_timestamp: days_ago_29})
     %{id: p3} = Repo.insert!(%{@prediction | file_timestamp: days_ago_5})
 
     assert Repo.one(from(ve in VehicleEvent, select: fragment("count(*)"))) == 3
