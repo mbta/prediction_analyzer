@@ -151,6 +151,12 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
 
   @spec associate_vehicle_event_with_predictions(VehicleEvent.t()) :: nil
   defp associate_vehicle_event_with_predictions(vehicle_event) do
+    Logger.info(
+      "ml_datapoint vehicle_id=#{vehicle_event.vehicle_id} trip_id=#{vehicle_event.trip_id} event_type=departure stop_id=#{
+        vehicle_event.stop_id
+      } time=#{vehicle_event.departure_time}"
+    )
+
     from(
       p in Prediction,
       where:
@@ -167,12 +173,6 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
         end
 
       {n, _} ->
-        Logger.info(
-          "ml_datapoint vehicle_id=#{vehicle_event.vehicle_id} trip_id=#{vehicle_event.trip_id} event_type=departure stop_id=#{
-            vehicle_event.stop_id
-          } time=#{vehicle_event.departure_time}"
-        )
-
         Logger.info("Associated vehicle_event with #{n} prediction(s)")
     end
 
