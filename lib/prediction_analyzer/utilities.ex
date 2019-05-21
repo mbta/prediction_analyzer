@@ -91,4 +91,13 @@ defmodule PredictionAnalyzer.Utilities do
   @spec string_to_mode(String.t()) :: :subway | :commuter_rail
   def string_to_mode("commuter_rail"), do: :commuter_rail
   def string_to_mode(_), do: :subway
+
+  @spec route_param_to_list(String.t()) :: [String.t()]
+  def route_param_to_list("Green-All"), do: ["Green-B", "Green-C", "Green-D", "Green-E"]
+
+  def route_param_to_list("Light Rail"),
+    do: ["Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"]
+
+  def route_param_to_list("Heavt Rail"), do: ["Red", "Orange", "Blue"]
+  def route_param_to_list(param), do: [param]
 end

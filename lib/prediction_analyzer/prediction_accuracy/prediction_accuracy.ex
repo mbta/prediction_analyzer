@@ -78,7 +78,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
   @spec filter_by_route(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
   defp filter_by_route(q, route_id) when is_binary(route_id) and route_id != "" do
-    {:ok, from(acc in q, where: acc.route_id == ^route_id)}
+    route_ids = PredictionAnalyzer.Utilities.route_param_to_list(route_id)
+
+    {:ok, from(acc in q, where: acc.route_id in ^route_ids)}
   end
 
   defp filter_by_route(q, _), do: {:ok, q}
