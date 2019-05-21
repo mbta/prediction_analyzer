@@ -8,12 +8,14 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
       route_options = AccuracyView.route_options(:subway)
       assert {"All", ""} in route_options
       assert {"Blue", "Blue"} in route_options
+      assert {"Heavy Rail", "Heavy Rail"} in route_options
     end
 
     test "commuter rail returns commuter rail values" do
       route_options = AccuracyView.route_options(:commuter_rail)
       assert {"All", ""} in route_options
       assert {"CR-Fitchburg", "CR-Fitchburg"} in route_options
+      refute {"Heavy Rail", "Heavy Rail"} in route_options
     end
   end
 

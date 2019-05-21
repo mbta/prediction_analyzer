@@ -98,6 +98,6 @@ defmodule PredictionAnalyzer.Utilities do
   def route_param_to_list("Light Rail"),
     do: ["Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"]
 
-  def route_param_to_list("Heavt Rail"), do: ["Red", "Orange", "Blue"]
+  def route_param_to_list("Heavy Rail"), do: ["Red", "Orange", "Blue"]
   def route_param_to_list(param), do: [param]
 end

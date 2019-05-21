@@ -69,4 +69,16 @@ defmodule PredictionAnalyzer.UtilitiesTest do
       assert Utilities.generic_stop_id("70063") == "70063"
     end
   end
+
+  describe "route_param_to_list/1" do
+    test "Specific route groupings" do
+      assert "Green-C" in Utilities.route_param_to_list("Green-All")
+      assert "Mattapan" in Utilities.route_param_to_list("Light Rail")
+      assert "Orange" in Utilities.route_param_to_list("Heavy Rail")
+    end
+
+    test "Passes through arbitrary other values" do
+      assert Utilities.route_param_to_list("foo") == ["foo"]
+    end
+  end
 end

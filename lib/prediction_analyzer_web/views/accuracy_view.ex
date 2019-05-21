@@ -22,13 +22,20 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
 
   @spec route_options(:subway | :commuter_rail) :: [{String.t(), String.t()}]
   def route_options(mode) do
-    [
+    options = [
       {"All", ""}
       | Enum.map(
           PredictionAnalyzer.Utilities.routes_for_mode(mode),
           &{&1, &1}
         )
     ]
+
+    if mode == :subway do
+      options ++
+        [{"Green-All", "Green-All"}, {"Light Rail", "Light Rail"}, {"Heavy Rail", "Heavy Rail"}]
+    else
+      options
+    end
   end
 
   @spec bin_options() :: [String.t()]
