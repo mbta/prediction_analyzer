@@ -41,7 +41,6 @@
 
 <%= form_for @conn, accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
   <%= hidden_input(f, :mode) %>
-  <%= hidden_input(f, :route_id) %>
   <%= hidden_input(f, :chart_range) %>
 
   <div class="row">
@@ -54,8 +53,8 @@
         <% end %>
 
 	<div class="form-group">
-	    <%= label(f, :route_id, "Route") %>
-	    <%= select(f, :route_id, route_options(@mode), class: "form-control") %>
+	    <%= label(f, :route_ids, "Route") %>
+	    <%= select(f, :route_ids, route_options(@mode), class: "form-control") %>
 	</div>
 
         <%= if f.params["chart_range"] != "By Station" do %>

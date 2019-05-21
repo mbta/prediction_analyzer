@@ -82,7 +82,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       assert [%{id: ^acc2_id}] = execute_query(q)
 
       {accs, nil} =
-        PredictionAccuracy.filter(Map.merge(base_params, %{"route_id" => "some_route"}))
+        PredictionAccuracy.filter(
+          Map.merge(base_params, %{"route_ids" => "some_route,some_other_route"})
+        )
 
       q = from(acc in accs, [])
       assert [%{id: ^acc3_id}] = execute_query(q)
@@ -100,34 +102,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"direction_id" => "1"}))
       q = from(acc in accs, [])
       assert [%{id: ^acc6_id}] = execute_query(q)
-    end
-
-    test "filtering by a route grouping works" do
-      acc1 = %{@prediction_accuracy | route_id: "Red"}
-      acc2 = %{@prediction_accuracy | route_id: "Green-B"}
-
-      [acc1_id, acc2_id] =
-        Enum.map([acc1, acc2], fn acc ->
-          %{id: id} = Repo.insert!(acc)
-          id
-        end)
-
-      base_params = %{
-        "chart_range" => "Hourly",
-        "service_date" => Timex.local() |> Date.to_string()
-      }
-
-      {accs, nil} =
-        PredictionAccuracy.filter(Map.merge(base_params, %{"route_id" => "Heavy Rail"}))
-
-      q = from(acc in accs, [])
-      assert [%{id: ^acc1_id}] = execute_query(q)
-
-      {accs, nil} =
-        PredictionAccuracy.filter(Map.merge(base_params, %{"route_id" => "Light Rail"}))
-
-      q = from(acc in accs, [])
-      assert [%{id: ^acc2_id}] = execute_query(q)
     end
 
     test "can filter by single date or more" do

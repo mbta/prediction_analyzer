@@ -66,7 +66,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert %{
              "filters[chart_range]" => "Hourly",
              "filters[service_date]" => @today_str,
-             "filters[route_id]" => "",
+             "filters[route_ids]" => "",
              "filters[stop_id]" => "",
              "filters[direction_id]" => "any",
              "filters[arrival_departure]" => "all",
@@ -99,7 +99,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
         "filters" => %{
           "chart_range" => "Daily",
           "daily_date_start" => "2019-01-01",
-          "route_id" => "",
+          "route_ids" => "",
           "stop_id" => "",
           "direction_id" => "any",
           "arrival_departure" => "all",
@@ -135,7 +135,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     conn =
       get(conn, "/accuracy", %{
         "filters" => %{
-          "route_id" => "",
+          "route_ids" => "",
           "stop_id" => "",
           "direction_id" => "any",
           "arrival_departure" => "all",
@@ -171,7 +171,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
           "chart_range" => "Daily",
           "daily_date_start" => "2019-01-01",
           "daily_date_end" => "invalid",
-          "route_id" => "",
+          "route_ids" => "",
           "mode" => "subway",
           "stop_id" => "",
           "direction_id" => "any",
