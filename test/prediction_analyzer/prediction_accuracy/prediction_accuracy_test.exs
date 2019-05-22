@@ -82,7 +82,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       assert [%{id: ^acc2_id}] = execute_query(q)
 
       {accs, nil} =
-        PredictionAccuracy.filter(Map.merge(base_params, %{"route_id" => "some_route"}))
+        PredictionAccuracy.filter(
+          Map.merge(base_params, %{"route_ids" => "some_route,some_other_route"})
+        )
 
       q = from(acc in accs, [])
       assert [%{id: ^acc3_id}] = execute_query(q)

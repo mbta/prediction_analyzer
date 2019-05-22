@@ -56,7 +56,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   def filter(params) do
     q = from(acc in __MODULE__, [])
 
-    with {:ok, q} <- filter_by_route(q, params["route_id"]),
+    with {:ok, q} <- filter_by_route(q, params["route_ids"]),
          {:ok, q} <- filter_by_stop(q, params["stop_id"]),
          {:ok, q} <- filter_by_direction(q, params["direction_id"]),
          {:ok, q} <- filter_by_arrival_departure(q, params["arrival_departure"]),
@@ -77,8 +77,10 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   end
 
   @spec filter_by_route(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
-  defp filter_by_route(q, route_id) when is_binary(route_id) and route_id != "" do
-    {:ok, from(acc in q, where: acc.route_id == ^route_id)}
+  defp filter_by_route(q, route_ids) when is_binary(route_ids) and route_ids != "" do
+    route_id_list = String.split(route_ids, ",")
+
+    {:ok, from(acc in q, where: acc.route_id in ^route_id_list)}
   end
 
   defp filter_by_route(q, _), do: {:ok, q}

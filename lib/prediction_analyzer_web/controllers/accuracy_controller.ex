@@ -10,7 +10,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         %{
           "filters" =>
             %{
-              "route_id" => route_id,
+              "route_ids" => route_ids,
               "stop_id" => stop_id,
               "direction_id" => direction_id,
               "arrival_departure" => arrival_departure,
@@ -19,7 +19,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             } = filter_params
         } = params
       )
-      when not is_nil(route_id) and not is_nil(stop_id) and not is_nil(direction_id) and
+      when not is_nil(route_ids) and not is_nil(stop_id) and not is_nil(direction_id) and
              byte_size(arrival_departure) > 0 and byte_size(bin) > 0 do
     mode_atom = PredictionAnalyzer.Utilities.string_to_mode(mode)
     routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
@@ -86,7 +86,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     filters = params["filters"] || %{}
 
     default_filters = %{
-      "route_id" => "",
+      "route_ids" => "",
       "stop_id" => "",
       "direction_id" => "any",
       "arrival_departure" => "all",
