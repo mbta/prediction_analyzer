@@ -40,6 +40,7 @@ export function bindFormLinks(accuracyForm) {
 
   bindChartRangeLink('link-hourly', 'Hourly');
   bindChartRangeLink('link-daily', 'Daily');
+  bindChartRangeLink('link-weekly', 'Weekly');
   bindChartRangeLink('link-by_station', 'By Station');
 }
 
@@ -97,6 +98,15 @@ function renderDashboard() {
       break;
     }
     case "Daily": {
+      chartHeight = 540;
+      dataType = "line";
+      rotateAxes = false;
+      xAxisText = "";
+      xAxisType = "timeseries";
+      xAxisRotation = 75;
+      break;
+    }
+    case "Weekly": {
       chartHeight = 540;
       dataType = "line";
       rotateAxes = false;
