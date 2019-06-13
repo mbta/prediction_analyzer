@@ -56,6 +56,28 @@ defmodule PredictionAnalyzer.UtilitiesTest do
     end
   end
 
+  describe "get_week_range/1" do
+    test "gets the date of the given time and a date one week from the given time" do
+      time = Timex.to_datetime(~D[2019-06-09], "America/New_York") |> Timex.set(hour: 10)
+
+      assert {~D[2019-06-09], ~D[2019-06-15]} = Utilities.get_week_range(time)
+    end
+  end
+
+  describe "ms_to_next_week/1" do
+    test "gets how many ms until the end of the week as defined by Timex.days_to_end_of_week" do
+      time = Timex.to_datetime(~D[2019-06-08], "America/New_York") |> Timex.set(hour: 10)
+
+      assert Utilities.ms_to_next_week(time) == 54_000_000
+    end
+
+    test "when the days_to_end_of_week is 0, adds 7 days" do
+      time = Timex.to_datetime(~D[2019-06-09], "America/New_York") |> Timex.set(hour: 10)
+
+      assert Utilities.ms_to_next_week(time) == 572_400_000
+    end
+  end
+
   describe "generic_stop_id/1" do
     test "maps terminal child stop ID to generic terminal stop ID" do
       assert Utilities.generic_stop_id("Alewife-01") == "70061"
