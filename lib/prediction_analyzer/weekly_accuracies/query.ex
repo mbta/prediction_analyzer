@@ -104,7 +104,7 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Query do
       FROM prediction_accuracy
       WHERE service_date > $1
         AND service_date < $2
-      GROUP BY route_id, stop_id, environment, service_date, direction_id, arrival_departure, bin
+      GROUP BY route_id, stop_id, environment, direction_id, arrival_departure, bin
       )
     "
   end
