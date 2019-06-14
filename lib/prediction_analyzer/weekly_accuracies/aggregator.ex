@@ -11,7 +11,8 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
     schedule_next_week(self())
     schedule_backfill(self())
 
-    local_now = Timex.now("America/New_York")
+    timezone = Application.get_env(:timezone)
+    local_now = Timex.now(timezone)
 
     days_to_end_of_week =
       local_now
@@ -47,7 +48,8 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
 
     {time, _result} =
       :timer.tc(fn ->
-        current_time = Timex.now("America/New_York")
+        timezone = Application.get_env(:timezone)
+        current_time = Timex.now(timezone)
 
         Query.calculate_weekly_accuracies(
           PredictionAnalyzer.Repo,

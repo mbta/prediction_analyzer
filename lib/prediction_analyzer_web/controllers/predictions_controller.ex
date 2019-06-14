@@ -7,11 +7,13 @@ defmodule PredictionAnalyzerWeb.PredictionsController do
   def index(conn, params) do
     # todo: hour greater than 24
 
+    timezone = Application.get_env(:timezone)
+
     service_date =
       if not is_nil(params["service_date"]) and params["service_date"] != "" do
         params["service_date"]
         |> Date.from_iso8601!()
-        |> Timex.to_datetime("America/New_York")
+        |> Timex.to_datetime(timezone)
       end
 
     hour =
