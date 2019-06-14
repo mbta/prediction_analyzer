@@ -1,5 +1,4 @@
 defmodule PredictionAnalyzer.WeeklyAccuracies.Query do
-  import Ecto.Query
   require Logger
 
   @spec calculate_weekly_accuracies(

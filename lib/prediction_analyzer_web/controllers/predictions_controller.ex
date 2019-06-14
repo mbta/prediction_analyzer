@@ -7,7 +7,7 @@ defmodule PredictionAnalyzerWeb.PredictionsController do
   def index(conn, params) do
     # todo: hour greater than 24
 
-    timezone = Application.get_env(:timezone)
+    timezone = Application.get_env(:prediction_analyzer, :timezone)
 
     service_date =
       if not is_nil(params["service_date"]) and params["service_date"] != "" do

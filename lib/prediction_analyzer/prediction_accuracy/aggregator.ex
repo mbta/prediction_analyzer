@@ -18,7 +18,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
 
     {time, _result} =
       :timer.tc(fn ->
-        timezone = Application.get_env(:timezone)
+        timezone = Application.get_env(:prediction_analyzer, :timezone)
         current_time = Timex.now(timezone)
 
         Enum.each(PredictionAccuracy.bins(), fn {bin_name,
