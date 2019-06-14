@@ -30,7 +30,7 @@ config :prediction_analyzer, http_fetcher: HTTPoison
 config :prediction_analyzer, :api_base_url, "https://api-v3.mbta.com/"
 config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks.NoOp
 config :prediction_analyzer, :stop_name_fetcher, PredictionAnalyzer.StopNameFetcher
-config :prediction_analyzer, :timezone, System.get_env("TIMEZONE") || "America/New_York"
+config :prediction_analyzer, :timezone, "America/New_York"
 
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
