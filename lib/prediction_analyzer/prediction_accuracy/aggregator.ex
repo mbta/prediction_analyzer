@@ -2,7 +2,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
   use GenServer
   require Logger
   alias PredictionAnalyzer.PredictionAccuracy.Query
-  alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   alias PredictionAnalyzer.Filters
 
   def start_link(opts \\ []) do
