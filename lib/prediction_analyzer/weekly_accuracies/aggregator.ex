@@ -35,6 +35,8 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
       state[:backfill_time]
     )
 
+    Logger.info("Backfilling week of #{state[:backfill_time]}")
+
     next_backfill =
       state[:backfill_time]
       |> Timex.shift(days: -7)

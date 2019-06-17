@@ -1,6 +1,7 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
   use ExUnit.Case, async: true
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.Filters
   alias PredictionAnalyzer.Repo
 
   import Ecto.Query, only: [from: 2]
@@ -193,7 +194,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       stats =
         from(acc in PredictionAccuracy, [])
-        |> PredictionAccuracy.stats_by_environment_and_chart_range(%{"chart_range" => "Hourly"})
+        |> Filters.stats_by_environment_and_chart_range(%{
+          "chart_range" => "Hourly"
+        })
         |> Repo.all()
 
       assert stats == [
@@ -217,7 +220,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       stats =
         from(acc in PredictionAccuracy, [])
-        |> PredictionAccuracy.stats_by_environment_and_chart_range(%{"chart_range" => "Daily"})
+        |> Filters.stats_by_environment_and_chart_range(%{
+          "chart_range" => "Daily"
+        })
         |> Repo.all()
 
       assert stats == [

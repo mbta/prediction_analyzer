@@ -1,6 +1,6 @@
 defmodule PredictionAnalyzerWeb.AccuracyView do
   use PredictionAnalyzerWeb, :view
-  alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.Filters
 
   def accuracy_percentage(num_accurate, num_predictions)
       when is_integer(num_accurate) and is_integer(num_predictions) and num_predictions != 0 do
@@ -48,7 +48,7 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
 
   @spec bin_options() :: [String.t()]
   def bin_options() do
-    PredictionAccuracy.bins()
+    Filters.bins()
     |> Map.keys()
     |> Enum.sort_by(fn key ->
       String.split(key, "-", parts: 2)

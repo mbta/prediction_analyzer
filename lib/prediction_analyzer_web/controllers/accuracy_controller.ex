@@ -2,6 +2,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   use PredictionAnalyzerWeb, :controller
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   alias PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies
+  alias PredictionAnalyzer.Filters
 
   import Ecto.Query, only: [from: 2]
 
@@ -47,7 +48,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
       accuracies =
         relevant_accuracies
-        |> WeeklyAccuracies.stats_by_environment_and_chart_range(filter_params)
+        |> Filters.stats_by_environment_and_chart_range(filter_params)
         |> PredictionAnalyzer.Repo.all()
 
       render(
@@ -107,7 +108,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
       accuracies =
         relevant_accuracies
-        |> PredictionAccuracy.stats_by_environment_and_chart_range(filter_params)
+        |> Filters.stats_by_environment_and_chart_range(filter_params)
         |> PredictionAnalyzer.Repo.all()
 
       render(

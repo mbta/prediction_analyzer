@@ -3,6 +3,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
   require Logger
   alias PredictionAnalyzer.PredictionAccuracy.Query
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.Filters
 
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, [], opts)
@@ -21,8 +22,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
         timezone = Application.get_env(:prediction_analyzer, :timezone)
         current_time = Timex.now(timezone)
 
-        Enum.each(PredictionAccuracy.bins(), fn {bin_name,
-                                                 {bin_min, bin_max, bin_error_min, bin_error_max}} ->
+        Enum.each(Filters.bins(), fn {bin_name, {bin_min, bin_max, bin_error_min, bin_error_max}} ->
           {:ok, r} =
             Query.calculate_aggregate_accuracy(
               PredictionAnalyzer.Repo,

@@ -1,5 +1,6 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.Filters
   require Logger
 
   @drop_threshold 0.1
@@ -38,7 +39,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     yesterday_accs =
       yesterday_query
-      |> PredictionAccuracy.stats_by_environment_and_chart_range(%{
+      |> Filters.stats_by_environment_and_chart_range(%{
         "chart_range" => "Hourly"
       })
       |> PredictionAnalyzer.Repo.all()
@@ -52,7 +53,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     previous_day_accs =
       previous_day_query
-      |> PredictionAccuracy.stats_by_environment_and_chart_range(%{
+      |> Filters.stats_by_environment_and_chart_range(%{
         "chart_range" => "Hourly"
       })
       |> PredictionAnalyzer.Repo.all()
