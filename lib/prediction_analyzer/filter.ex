@@ -106,8 +106,6 @@ defmodule PredictionAnalyzer.Filters do
     end
   end
 
-  @spec filter_by_timeframe(Ecto.Query.t(), any(), any(), any(), any()) ::
-          {:ok, Ecto.Query.t()} | {:error, String.t()}
   def filter_by_timeframe(q, chart_range, _date, start_date, end_date)
       when chart_range == "Weekly" and is_binary(start_date) and is_binary(end_date) do
     case {Date.from_iso8601(start_date), Date.from_iso8601(end_date)} do

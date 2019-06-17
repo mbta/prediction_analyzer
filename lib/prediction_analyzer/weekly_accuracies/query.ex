@@ -59,7 +59,7 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Query do
     end
   end
 
-  @spec aggregate_week?(module(), DateTime.t()) :: boolean()
+  @spec aggregate_week?(module(), Date.t()) :: boolean()
   def aggregate_week?(repo_module, date) do
     query = "
       SELECT count(*)
