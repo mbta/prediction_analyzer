@@ -5,7 +5,6 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.QueryTest do
   alias PredictionAnalyzer.Repo
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   alias PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies
-  alias PredictionAnalyzer.Predictions.Prediction
   alias PredictionAnalyzer.WeeklyAccuracies.Query
 
   setup do
@@ -34,7 +33,7 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.QueryTest do
     test "selects the right predictions based on bin and grades them accurately" do
       PredictionAnalyzer.Repo.insert!(@prediction_accuracy)
 
-      {:ok, x} =
+      {:ok, _} =
         Query.calculate_weekly_accuracies(
           PredictionAnalyzer.Repo,
           Timex.shift(Timex.local(), days: 2)
