@@ -17,6 +17,7 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies do
     field(:num_accurate_predictions, :integer)
   end
 
+  @spec new_insert_changeset(map()) :: Ecto.Schema.t()
   def new_insert_changeset(params \\ %{}) do
     all_fields = [
       :week_start,
