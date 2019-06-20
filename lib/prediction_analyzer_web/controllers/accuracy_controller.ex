@@ -162,12 +162,18 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         filters["chart_range"] in ["Daily", "By Station"] ->
           %{
             "chart_range" => "Daily",
-            "daily_date_start" => Timex.local() |> Timex.shift(days: -14) |> Date.to_string(),
-            "daily_date_end" => Timex.local() |> Date.to_string()
+            "date_start" => Timex.local() |> Timex.shift(days: -14) |> Date.to_string(),
+            "date_end" => Timex.local() |> Date.to_string()
           }
 
         filters["chart_range"] == "Hourly" && filters["service_date"] ->
           Map.take(filters, ["chart_range", "service_date"])
+
+        filters["chart_range"] in ["Weekly"] ->
+          %{
+            "date_start" => Timex.local() |> Timex.shift(days: -70) |> Date.to_string(),
+            "date_end" => Timex.local() |> Date.to_string()
+          }
 
         true ->
           %{"chart_range" => "Hourly", "service_date" => Timex.local() |> Date.to_string()}
@@ -212,7 +218,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   @spec time_filters_present?(map()) :: boolean()
   defp time_filters_present?(filters) do
     (filters["chart_range"] == "Hourly" && filters["service_date"]) ||
-      (filters["chart_range"] in ["Weekly", "Daily", "By Station"] && filters["daily_date_start"] &&
-         filters["daily_date_end"])
+      (filters["chart_range"] in ["Weekly", "Daily", "By Station"] && filters["date_start"] &&
+         filters["date_end"])
   end
 end

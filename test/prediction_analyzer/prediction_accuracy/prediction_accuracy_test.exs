@@ -155,8 +155,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       {accs, nil} =
         PredictionAccuracy.filter(%{
           "chart_range" => "Daily",
-          "daily_date_start" => "2018-01-01",
-          "daily_date_end" => "2018-01-14"
+          "date_start" => "2018-01-01",
+          "date_end" => "2018-01-14"
         })
 
       q = from(acc in accs, [])
@@ -165,8 +165,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       {accs, nil} =
         PredictionAccuracy.filter(%{
           "chart_range" => "Daily",
-          "daily_date_start" => "2018-01-01",
-          "daily_date_end" => "2018-01-21"
+          "date_start" => "2018-01-01",
+          "date_end" => "2018-01-21"
         })
 
       q = from(acc in accs, [])
@@ -175,8 +175,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       assert {_accs, "Dates can't be more than 5 weeks apart"} =
                PredictionAccuracy.filter(%{
                  "chart_range" => "Daily",
-                 "daily_date_start" => "2018-01-01",
-                 "daily_date_end" => "2018-02-28"
+                 "date_start" => "2018-01-01",
+                 "date_end" => "2018-02-28"
                })
     end
   end

@@ -52,8 +52,8 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies do
              q,
              params["chart_range"],
              params["week_start"],
-             params["daily_date_start"],
-             params["daily_date_end"]
+             params["date_start"],
+             params["date_end"]
            ) do
       {q, nil}
     else

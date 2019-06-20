@@ -53,8 +53,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
              q,
              params["chart_range"],
              params["service_date"],
-             params["daily_date_start"],
-             params["daily_date_end"]
+             params["date_start"],
+             params["date_end"]
            ) do
       {q, nil}
     else

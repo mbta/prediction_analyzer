@@ -26,7 +26,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     environment: "prod",
     num_accurate_predictions: 327,
     num_predictions: 617,
-    route_id: "Blue",
+    route_id: "blue",
     stop_id: "70038"
   }
 
@@ -111,7 +111,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
       get(conn, "/accuracy", %{
         "filters" => %{
           "chart_range" => "Daily",
-          "daily_date_start" => "2019-01-01",
+          "date_start" => "2019-01-01",
           "route_ids" => "",
           "stop_id" => "",
           "direction_id" => "any",
@@ -124,8 +124,8 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
     assert response(conn, 302)
     assert redirected_to(conn) =~ "Daily"
-    assert redirected_to(conn) =~ "filters[daily_date_start]=2019-01-01"
-    assert redirected_to(conn) =~ "filters[daily_date_end]=#{today}"
+    assert redirected_to(conn) =~ "filters[date_start]=2019-01-01"
+    assert redirected_to(conn) =~ "filters[date_end]=#{today}"
   end
 
   test "GET /accuracy maintains service date when redirecting", %{conn: conn} do
@@ -166,8 +166,8 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
       get(conn, "/accuracy", %{
         "filters" => %{
           "chart_range" => "Daily",
-          "daily_date_start" => "2019-01-01",
-          "daily_date_end" => "2019-01-05"
+          "date_start" => "2019-01-01",
+          "date_end" => "2019-01-05"
         }
       })
 
@@ -182,8 +182,8 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
       get(conn, "/accuracy", %{
         "filters" => %{
           "chart_range" => "Daily",
-          "daily_date_start" => "2019-01-01",
-          "daily_date_end" => "invalid",
+          "date_start" => "2019-01-01",
+          "date_end" => "invalid",
           "route_ids" => "",
           "mode" => "subway",
           "stop_id" => "",
@@ -210,8 +210,8 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
           "direction_id" => "any",
           "mode" => "subway",
           "route_ids" => "",
-          "daily_date_start" => @today_str,
-          "daily_date_end" => @today_str,
+          "date_start" => @today_str,
+          "date_end" => @today_str,
           "stop_id" => ""
         }
       })
