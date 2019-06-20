@@ -52,7 +52,7 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.AggregatorTest do
 
     backfill_time = Timex.shift(Timex.now(), days: backfill_shift)
 
-    {:ok, pid} = Aggregator.start_link(%{backfull_time: backfill_time})
+    {:ok, pid} = Aggregator.start_link(%{backfill_time: backfill_time})
     state = :sys.get_state(pid)
     assert Timex.day(state.backfill_time) == backfill_time |> Timex.shift(days: -7) |> Timex.day()
     Kernel.send(pid, :backfill_weekly)

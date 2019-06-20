@@ -70,10 +70,12 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
     {:noreply, state}
   end
 
+  @spec schedule_backfill(pid()) :: reference()
   defp schedule_backfill(pid) do
     Process.send_after(pid, :backfill_weekly, 60_000)
   end
 
+  @spec schedule_next_week(pid()) :: reference()
   defp schedule_next_week(pid) do
     Process.send_after(pid, :aggregate_weekly, PredictionAnalyzer.Utilities.ms_to_next_week())
   end
