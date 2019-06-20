@@ -26,7 +26,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     environment: "prod",
     num_accurate_predictions: 327,
     num_predictions: 617,
-    route_id: "blue",
+    route_id: "Blue",
     stop_id: "70038"
   }
 
