@@ -1,6 +1,7 @@
 defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
   use PredictionAnalyzerWeb.ConnCase
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies
 
   @today DateTime.to_date(Timex.local())
   @today_str Date.to_string(@today)
@@ -15,6 +16,18 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     bin: "0-3 min",
     num_predictions: 40,
     num_accurate_predictions: 21
+  }
+
+  @weekly_accuracy %WeeklyAccuracies{
+    week_start: @today,
+    arrival_departure: "departure",
+    bin: "0-3 min",
+    direction_id: 1,
+    environment: "prod",
+    num_accurate_predictions: 327,
+    num_predictions: 617,
+    route_id: "Blue",
+    stop_id: "70038"
   }
 
   test "GET /accuracy returns a top-level summary of accuracy", %{conn: conn} do
@@ -34,14 +47,14 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
   end
 
   test "GET /accuracy aggregates the results by hour", %{conn: conn} do
-    insert_accuracy("prod", 10, 101, 99)
-    insert_accuracy("prod", 10, 108, 102)
-    insert_accuracy("prod", 11, 225, 211)
-    insert_accuracy("prod", 11, 270, 261)
-    insert_accuracy("dev-green", 10, 401, 399)
-    insert_accuracy("dev-green", 10, 408, 302)
-    insert_accuracy("dev-green", 11, 525, 411)
-    insert_accuracy("dev-green", 11, 570, 461)
+    insert_hourly_accuracy("prod", 10, 101, 99)
+    insert_hourly_accuracy("prod", 10, 108, 102)
+    insert_hourly_accuracy("prod", 11, 225, 211)
+    insert_hourly_accuracy("prod", 11, 270, 261)
+    insert_hourly_accuracy("dev-green", 10, 401, 399)
+    insert_hourly_accuracy("dev-green", 10, 408, 302)
+    insert_hourly_accuracy("dev-green", 11, 525, 411)
+    insert_hourly_accuracy("dev-green", 11, 570, 461)
 
     conn = get(conn, "/accuracy")
     conn = get(conn, redirected_to(conn))
@@ -98,7 +111,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
       get(conn, "/accuracy", %{
         "filters" => %{
           "chart_range" => "Daily",
-          "daily_date_start" => "2019-01-01",
+          "date_start" => "2019-01-01",
           "route_ids" => "",
           "stop_id" => "",
           "direction_id" => "any",
@@ -111,8 +124,8 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
     assert response(conn, 302)
     assert redirected_to(conn) =~ "Daily"
-    assert redirected_to(conn) =~ "filters[daily_date_start]=2019-01-01"
-    assert redirected_to(conn) =~ "filters[daily_date_end]=#{today}"
+    assert redirected_to(conn) =~ "filters[date_start]=2019-01-01"
+    assert redirected_to(conn) =~ "filters[date_end]=#{today}"
   end
 
   test "GET /accuracy maintains service date when redirecting", %{conn: conn} do
@@ -153,8 +166,8 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
       get(conn, "/accuracy", %{
         "filters" => %{
           "chart_range" => "Daily",
-          "daily_date_start" => "2019-01-01",
-          "daily_date_end" => "2019-01-05"
+          "date_start" => "2019-01-01",
+          "date_end" => "2019-01-05"
         }
       })
 
@@ -169,8 +182,8 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
       get(conn, "/accuracy", %{
         "filters" => %{
           "chart_range" => "Daily",
-          "daily_date_start" => "2019-01-01",
-          "daily_date_end" => "invalid",
+          "date_start" => "2019-01-01",
+          "date_end" => "invalid",
           "route_ids" => "",
           "mode" => "subway",
           "stop_id" => "",
@@ -182,6 +195,55 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
     response = html_response(conn, 200)
     assert response =~ "Can&#39;t parse start or end date."
+  end
+
+  test "GET /accuracy can be changed to weekly", %{conn: conn} do
+    insert_weekly_accuracy("prod", @today, 10, 9)
+    insert_weekly_accuracy("dev-green", @today, 10, 8)
+
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "arrival_departure" => "all",
+          "bin" => "All",
+          "chart_range" => "Weekly",
+          "direction_id" => "any",
+          "mode" => "subway",
+          "route_ids" => "",
+          "date_start" => @today_str,
+          "date_end" => @today_str,
+          "stop_id" => ""
+        }
+      })
+
+    response = html_response(conn, 200)
+
+    assert response =~ "<th>Week Start</th>"
+    refute response =~ "<th>Hour</th>"
+    refute response =~ "<th>Date</th>"
+  end
+
+  test "GET /accuracy redirects such that it has a date if it wasnt given dates on the weekly view",
+       %{conn: conn} do
+    insert_weekly_accuracy("prod", @today, 10, 9)
+    insert_weekly_accuracy("dev-green", @today, 10, 8)
+
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "arrival_departure" => "all",
+          "bin" => "All",
+          "chart_range" => "Weekly",
+          "direction_id" => "any",
+          "mode" => "subway",
+          "route_ids" => "",
+          "stop_id" => ""
+        }
+      })
+
+    response = html_response(conn, 302)
+
+    assert response =~ "redirected"
   end
 
   test "GET /accuracy/subway gets the index for subway mode", %{conn: conn} do
@@ -198,11 +260,21 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert conn.assigns[:mode] == :commuter_rail
   end
 
-  def insert_accuracy(env, hour, total, accurate) do
+  def insert_hourly_accuracy(env, hour, total, accurate) do
     PredictionAnalyzer.Repo.insert!(%{
       @prediction_accuracy
       | environment: env,
         hour_of_day: hour,
+        num_predictions: total,
+        num_accurate_predictions: accurate
+    })
+  end
+
+  def insert_weekly_accuracy(env, week_start, total, accurate) do
+    PredictionAnalyzer.Repo.insert!(%{
+      @weekly_accuracy
+      | environment: env,
+        week_start: week_start,
         num_predictions: total,
         num_accurate_predictions: accurate
     })

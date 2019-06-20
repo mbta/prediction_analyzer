@@ -1,10 +1,73 @@
 defmodule PredictionAnalyzerWeb.AccuracyController do
   use PredictionAnalyzerWeb, :controller
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies
+  alias PredictionAnalyzer.Filters
 
   import Ecto.Query, only: [from: 2]
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def index(
+        conn,
+        %{
+          "filters" =>
+            %{
+              "route_ids" => route_ids,
+              "stop_id" => stop_id,
+              "direction_id" => direction_id,
+              "arrival_departure" => arrival_departure,
+              "chart_range" => "Weekly",
+              "bin" => bin,
+              "mode" => mode
+            } = filter_params
+        } = params
+      )
+      when not is_nil(route_ids) and not is_nil(stop_id) and not is_nil(direction_id) and
+             byte_size(arrival_departure) > 0 and byte_size(bin) > 0 do
+    mode_atom = PredictionAnalyzer.Utilities.string_to_mode(mode)
+    routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
+
+    if time_filters_present?(filter_params) do
+      {relevant_accuracies, error_msg} = WeeklyAccuracies.filter(filter_params)
+
+      [prod_num_accurate, prod_num_predictions] =
+        from(
+          acc in relevant_accuracies,
+          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+          where: acc.environment == "prod" and acc.route_id in ^routes
+        )
+        |> PredictionAnalyzer.Repo.one!()
+
+      [dev_green_num_accurate, dev_green_num_predictions] =
+        from(
+          acc in relevant_accuracies,
+          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+          where: acc.environment == "dev-green" and acc.route_id in ^routes
+        )
+        |> PredictionAnalyzer.Repo.one!()
+
+      accuracies =
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range(filter_params)
+        |> PredictionAnalyzer.Repo.all()
+
+      render(
+        conn,
+        "index.html",
+        accuracies: accuracies,
+        chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
+        prod_num_accurate: prod_num_accurate,
+        prod_num_predictions: prod_num_predictions,
+        dev_green_num_accurate: dev_green_num_accurate,
+        dev_green_num_predictions: dev_green_num_predictions,
+        error_msg: error_msg,
+        mode: mode_atom
+      )
+    else
+      redirect_with_default_filters(conn, params)
+    end
+  end
+
   def index(
         conn,
         %{
@@ -45,7 +108,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
       accuracies =
         relevant_accuracies
-        |> PredictionAccuracy.stats_by_environment_and_chart_range(filter_params)
+        |> Filters.stats_by_environment_and_chart_range(filter_params)
         |> PredictionAnalyzer.Repo.all()
 
       render(
@@ -96,19 +159,21 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
     time_filters =
       cond do
-        filters["chart_range"] in ["Daily", "By Station"] && filters["daily_date_start"] &&
-            filters["daily_date_end"] ->
-          Map.take(filters, ["chart_range", "daily_date_start", "daily_date_end"])
-
         filters["chart_range"] in ["Daily", "By Station"] ->
           %{
             "chart_range" => "Daily",
-            "daily_date_start" => Timex.local() |> Timex.shift(days: -14) |> Date.to_string(),
-            "daily_date_end" => Timex.local() |> Date.to_string()
+            "date_start" => Timex.local() |> Timex.shift(days: -14) |> Date.to_string(),
+            "date_end" => Timex.local() |> Date.to_string()
           }
 
         filters["chart_range"] == "Hourly" && filters["service_date"] ->
           Map.take(filters, ["chart_range", "service_date"])
+
+        filters["chart_range"] in ["Weekly"] ->
+          %{
+            "date_start" => Timex.local() |> Timex.shift(days: -70) |> Date.to_string(),
+            "date_end" => Timex.local() |> Date.to_string()
+          }
 
         true ->
           %{"chart_range" => "Hourly", "service_date" => Timex.local() |> Date.to_string()}
@@ -153,7 +218,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   @spec time_filters_present?(map()) :: boolean()
   defp time_filters_present?(filters) do
     (filters["chart_range"] == "Hourly" && filters["service_date"]) ||
-      (filters["chart_range"] in ["Daily", "By Station"] && filters["daily_date_start"] &&
-         filters["daily_date_end"])
+      (filters["chart_range"] in ["Weekly", "Daily", "By Station"] && filters["date_start"] &&
+         filters["date_end"])
   end
 end

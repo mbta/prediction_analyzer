@@ -1,14 +1,13 @@
-defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
+defmodule PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies do
   use Ecto.Schema
 
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
   import PredictionAnalyzer.Filters
 
-  schema "prediction_accuracy" do
+  schema "weekly_accuracies" do
     field(:environment, :string)
-    field(:service_date, :date)
-    field(:hour_of_day, :integer)
+    field(:week_start, :date)
     field(:stop_id, :string)
     field(:route_id, :string)
     field(:direction_id, :integer)
@@ -18,10 +17,10 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     field(:num_accurate_predictions, :integer)
   end
 
+  @spec new_insert_changeset(map()) :: Ecto.Schema.t()
   def new_insert_changeset(params \\ %{}) do
     all_fields = [
-      :service_date,
-      :hour_of_day,
+      :week_start,
       :stop_id,
       :route_id,
       :direction_id,
@@ -52,7 +51,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
            filter_by_timeframe(
              q,
              params["chart_range"],
-             params["service_date"],
+             params["week_start"],
              params["date_start"],
              params["date_end"]
            ) do

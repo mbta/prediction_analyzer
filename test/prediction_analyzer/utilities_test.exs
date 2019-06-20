@@ -4,7 +4,8 @@ defmodule PredictionAnalyzer.UtilitiesTest do
 
   describe "service_date_info" do
     test "returns current date if after 3am" do
-      time = Timex.to_datetime(~D[2018-10-30], "America/New_York") |> Timex.set(hour: 10)
+      timezone = Application.get_env(:prediction_analyzer, :timezone)
+      time = Timex.to_datetime(~D[2018-10-30], timezone) |> Timex.set(hour: 10)
 
       assert {
                ~D[2018-10-30],
@@ -15,7 +16,8 @@ defmodule PredictionAnalyzer.UtilitiesTest do
     end
 
     test "returns previous date if before 3am" do
-      time = Timex.to_datetime(~D[2018-10-30], "America/New_York") |> Timex.set(hour: 1)
+      timezone = Application.get_env(:prediction_analyzer, :timezone)
+      time = Timex.to_datetime(~D[2018-10-30], timezone) |> Timex.set(hour: 1)
 
       assert {
                ~D[2018-10-29],
@@ -38,8 +40,10 @@ defmodule PredictionAnalyzer.UtilitiesTest do
 
   describe "ms_to_3am" do
     test "returns the milliseconds to 3am when 3am is tomorrow" do
+      timezone = Application.get_env(:prediction_analyzer, :timezone)
+
       time =
-        "America/New_York"
+        timezone
         |> Timex.now()
         |> Timex.set(hour: 23, minute: 59, second: 0, microsecond: {0, 6})
 
@@ -47,12 +51,39 @@ defmodule PredictionAnalyzer.UtilitiesTest do
     end
 
     test "returns the milliseconds to 3am when 3am is later today" do
+      timezone = Application.get_env(:prediction_analyzer, :timezone)
+
       time =
-        "America/New_York"
+        timezone
         |> Timex.now()
         |> Timex.set(hour: 2, minute: 59, second: 0, microsecond: {0, 6})
 
       assert Utilities.ms_to_3am(time) == 60_000
+    end
+  end
+
+  describe "get_week_range/1" do
+    test "gets the date of the given time and a date one week from the given time" do
+      timezone = Application.get_env(:prediction_analyzer, :timezone)
+      time = Timex.to_datetime(~D[2019-06-09], timezone) |> Timex.set(hour: 10)
+
+      assert {~D[2019-06-09], ~D[2019-06-15]} = Utilities.get_week_range(time)
+    end
+  end
+
+  describe "ms_to_next_week/1" do
+    test "gets how many ms until the end of the week as defined by Timex.days_to_end_of_week" do
+      timezone = Application.get_env(:prediction_analyzer, :timezone)
+      time = Timex.to_datetime(~D[2019-06-08], timezone) |> Timex.set(hour: 10)
+
+      assert Utilities.ms_to_next_week(time) == 572_400_000
+    end
+
+    test "when the days_to_end_of_week is 0, adds 7 days" do
+      timezone = Application.get_env(:prediction_analyzer, :timezone)
+      time = Timex.to_datetime(~D[2019-06-09], timezone) |> Timex.set(hour: 10)
+
+      assert Utilities.ms_to_next_week(time) == 486_000_000
     end
   end
 

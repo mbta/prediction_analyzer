@@ -27,6 +27,17 @@ defmodule PredictionAnalyzer.Utilities do
     {date, hour, beginning_of_hour_unix, end_of_hour_unix}
   end
 
+  @spec get_week_range(DateTime.t()) :: {Date.t(), Date.t()}
+  def get_week_range(timestamp) do
+    beginning_of_week =
+      timestamp
+      |> Timex.set(hour: 3, minute: 0, second: 0, microsecond: {0, 6})
+
+    end_of_week = Timex.shift(beginning_of_week, days: 6)
+
+    {DateTime.to_date(beginning_of_week), DateTime.to_date(end_of_week)}
+  end
+
   @doc """
   Returns the number of ms to the top of the next hour.
   """
@@ -36,6 +47,30 @@ defmodule PredictionAnalyzer.Utilities do
     |> Timex.shift(hours: 1)
     |> Timex.set(minute: 0, second: 30)
     |> Timex.diff(local_now, :milliseconds)
+  end
+
+  @doc """
+  Returns the ms until end of week
+  """
+  @spec ms_to_next_week(DateTime.t()) :: integer()
+  def ms_to_next_week(local_now \\ Timex.local()) do
+    days_to_end_of_week =
+      local_now
+      |> Timex.days_to_end_of_week(:sun)
+
+    case days_to_end_of_week do
+      0 ->
+        local_now
+        |> Timex.shift(days: 7)
+        |> Timex.set(hour: 1, minute: 0, second: 0)
+        |> Timex.diff(local_now, :milliseconds)
+
+      n ->
+        local_now
+        |> Timex.shift(days: n)
+        |> Timex.set(hour: 1, minute: 0, second: 0)
+        |> Timex.diff(local_now, :milliseconds)
+    end
   end
 
   @doc """

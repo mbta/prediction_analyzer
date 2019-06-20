@@ -1,6 +1,7 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
   use ExUnit.Case, async: true
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.Filters
   alias PredictionAnalyzer.Repo
 
   import Ecto.Query, only: [from: 2]
@@ -154,8 +155,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       {accs, nil} =
         PredictionAccuracy.filter(%{
           "chart_range" => "Daily",
-          "daily_date_start" => "2018-01-01",
-          "daily_date_end" => "2018-01-14"
+          "date_start" => "2018-01-01",
+          "date_end" => "2018-01-14"
         })
 
       q = from(acc in accs, [])
@@ -164,8 +165,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       {accs, nil} =
         PredictionAccuracy.filter(%{
           "chart_range" => "Daily",
-          "daily_date_start" => "2018-01-01",
-          "daily_date_end" => "2018-01-21"
+          "date_start" => "2018-01-01",
+          "date_end" => "2018-01-21"
         })
 
       q = from(acc in accs, [])
@@ -174,8 +175,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       assert {_accs, "Dates can't be more than 5 weeks apart"} =
                PredictionAccuracy.filter(%{
                  "chart_range" => "Daily",
-                 "daily_date_start" => "2018-01-01",
-                 "daily_date_end" => "2018-02-28"
+                 "date_start" => "2018-01-01",
+                 "date_end" => "2018-02-28"
                })
     end
   end
@@ -193,7 +194,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       stats =
         from(acc in PredictionAccuracy, [])
-        |> PredictionAccuracy.stats_by_environment_and_chart_range(%{"chart_range" => "Hourly"})
+        |> Filters.stats_by_environment_and_chart_range(%{
+          "chart_range" => "Hourly"
+        })
         |> Repo.all()
 
       assert stats == [
@@ -217,7 +220,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       stats =
         from(acc in PredictionAccuracy, [])
-        |> PredictionAccuracy.stats_by_environment_and_chart_range(%{"chart_range" => "Daily"})
+        |> Filters.stats_by_environment_and_chart_range(%{
+          "chart_range" => "Daily"
+        })
         |> Repo.all()
 
       assert stats == [
