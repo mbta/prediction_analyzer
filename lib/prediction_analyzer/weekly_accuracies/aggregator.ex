@@ -19,7 +19,7 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
       |> Timex.days_to_end_of_week()
 
     backfill_start =
-      case Map.get(opts, :backfill_start, nil) do
+      case Map.get(opts, :backfill_time, nil) do
         nil ->
           local_now
           |> Timex.shift(days: days_to_end_of_week)
