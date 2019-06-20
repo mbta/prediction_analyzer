@@ -76,14 +76,14 @@ defmodule PredictionAnalyzer.UtilitiesTest do
       timezone = Application.get_env(:prediction_analyzer, :timezone)
       time = Timex.to_datetime(~D[2019-06-08], timezone) |> Timex.set(hour: 10)
 
-      assert Utilities.ms_to_next_week(time) == 54_000_000
+      assert Utilities.ms_to_next_week(time) == 572_400_000
     end
 
     test "when the days_to_end_of_week is 0, adds 7 days" do
       timezone = Application.get_env(:prediction_analyzer, :timezone)
       time = Timex.to_datetime(~D[2019-06-09], timezone) |> Timex.set(hour: 10)
 
-      assert Utilities.ms_to_next_week(time) == 572_400_000
+      assert Utilities.ms_to_next_week(time) == 486_000_000
     end
   end
 

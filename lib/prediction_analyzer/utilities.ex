@@ -56,7 +56,7 @@ defmodule PredictionAnalyzer.Utilities do
   def ms_to_next_week(local_now \\ Timex.local()) do
     days_to_end_of_week =
       local_now
-      |> Timex.days_to_end_of_week()
+      |> Timex.days_to_end_of_week(:sun)
 
     case days_to_end_of_week do
       0 ->

@@ -48,7 +48,7 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.AggregatorTest do
   test "the :backfill_weekly handle_info sets the next backfill time for a week in the past" do
     backfill_shift =
       Timex.now()
-      |> Timex.days_to_end_of_week()
+      |> Timex.days_to_end_of_week(:sun)
 
     backfill_time = Timex.shift(Timex.now(), days: backfill_shift - 7)
 
