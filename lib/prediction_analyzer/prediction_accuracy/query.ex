@@ -133,7 +133,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         arrival_departure,
         bin,
         num_predictions,
-        num_accurate_predictions
+        num_accurate_predictions,
+        mean_error,
+        root_mean_squared_error
       ) (
       SELECT
         $11 AS environment,
@@ -152,7 +154,13 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
               AND ve.#{arrival_or_departure_time_column} - p.#{arrival_or_departure_time_column} < $8 THEN 1
             ELSE 0
           END
-        ) AS num_accurate_predictions
+        ) AS num_accurate_predictions,
+        AVG(ve.#{arrival_or_departure_time_column} - p.#{arrival_or_departure_time_column}) AS mean_error,
+        SQRT(
+          AVG(
+            (ve.#{arrival_or_departure_time_column} - p.#{arrival_or_departure_time_column})^2
+          )
+        ) AS root_mean_squared_error
       FROM predictions AS p
       LEFT JOIN vehicle_events AS ve ON ve.id = p.vehicle_event_id
       WHERE p.file_timestamp > $9
@@ -163,7 +171,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp >= $5
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp < $6
       GROUP BY p.route_id, p.stop_id, p.direction_id
-      )
+    )
     "
   end
 end
