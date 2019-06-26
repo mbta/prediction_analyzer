@@ -81,6 +81,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           route_id: "route1",
           stop_id: "stop1",
           # accurate
+          # 15 sec error
           arrival_time: arrival_time - 15,
           vehicle_event_id: ve_id
       })
@@ -91,6 +92,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           route_id: "route1",
           stop_id: "stop1",
           # inaccurate
+          # 45 sec error
           arrival_time: arrival_time - 45,
           vehicle_event_id: ve_id
       })
@@ -101,6 +103,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           route_id: "route1",
           stop_id: "stop1",
           # accurate
+          # -45 sec error
           arrival_time: arrival_time + 45,
           vehicle_event_id: ve_id
       })
@@ -111,6 +114,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           route_id: "route1",
           stop_id: "stop1",
           # inaccurate
+          # -65 sec error
           arrival_time: arrival_time + 65,
           vehicle_event_id: ve_id
       })
@@ -137,6 +141,13 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       assert pa.num_predictions == 4
       assert pa.num_accurate_predictions == 2
       assert pa.direction_id == 0
+      assert pa.mean_error == (15 + 45 + -45 + -65) / 4
+
+      assert_in_delta(
+        pa.root_mean_squared_error,
+        :math.sqrt((15 * 15 + 45 * 45 + 45 * 45 + 65 * 65) / 4),
+        0.001
+      )
     end
 
     test "selects the right predictions based on bin and grades them accurately, for departures" do
@@ -249,6 +260,82 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
 
       assert log =~ "[warn] " <> base_log_msg
       assert log =~ "[error] " <> base_log_msg
+    end
+
+    test "calculates mean error and root mean squared error correctly" do
+      bin_name = "6-12 min"
+      bin_min = 360
+      bin_max = 720
+      bin_error_min = -30
+      bin_error_max = 60
+
+      file_time = :os.system_time(:second) - 60 * 120
+      arrival_time = file_time + 60 * 7
+
+      %{id: ve_id} = Repo.insert!(%{@vehicle_event | arrival_time: arrival_time})
+
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # 15 seconds optimistic
+          arrival_time: arrival_time - 15,
+          vehicle_event_id: ve_id
+      })
+
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # 45 seconds optimistic
+          arrival_time: arrival_time - 45,
+          vehicle_event_id: ve_id
+      })
+
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # 45 seconds pessimistic
+          arrival_time: arrival_time + 45,
+          vehicle_event_id: ve_id
+      })
+
+      Repo.insert!(%{
+        @prediction
+        | file_timestamp: file_time,
+          route_id: "route1",
+          stop_id: "stop1",
+          # 65 seconds pessimistic
+          arrival_time: arrival_time + 65,
+          vehicle_event_id: ve_id
+      })
+
+      {:ok, _} =
+        Query.calculate_aggregate_accuracy(
+          PredictionAnalyzer.Repo,
+          Timex.local(),
+          "arrival",
+          bin_name,
+          bin_min,
+          bin_max,
+          bin_error_min,
+          bin_error_max,
+          "dev-green"
+        )
+
+      [pa] = Repo.all(from(pa in PredictionAccuracy, select: pa))
+
+      assert pa.stop_id == "stop1"
+      assert pa.route_id == "route1"
+      assert pa.arrival_departure == "arrival"
+      assert pa.bin == "6-12 min"
+      assert pa.num_predictions == 4
+      assert pa.num_accurate_predictions == 2
+      assert pa.direction_id == 0
     end
   end
 end

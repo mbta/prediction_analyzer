@@ -88,7 +88,9 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Query do
         arrival_departure,
         bin,
         num_predictions,
-        num_accurate_predictions
+        num_accurate_predictions,
+        mean_error,
+        root_mean_squared_error
       ) (
       SELECT
         environment,
@@ -99,7 +101,11 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Query do
         arrival_departure,
         bin,
         sum(num_predictions) as num_predictions,
-        sum(num_accurate_predictions) as num_accurate_predictions
+        sum(num_accurate_predictions) as num_accurate_predictions,
+        sum(mean_error * num_predictions) / sum(num_predictions) as mean_error,
+        sqrt(
+          sum(root_mean_squared_error^2 * num_predictions) / sum(num_predictions)
+        ) as root_mean_squared_error
       FROM prediction_accuracy
       WHERE service_date > $1
         AND service_date < $2

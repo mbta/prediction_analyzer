@@ -65,5 +65,44 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.QueryTest do
       assert log =~ "[warn] " <> base_log_msg
       assert log =~ "[error] " <> base_log_msg
     end
+
+    test "aggregates errors correctly" do
+      pa1 = %{
+        @prediction_accuracy
+        | mean_error: 100.0,
+          root_mean_squared_error: 100.0,
+          num_predictions: 10
+      }
+
+      pa2 = %{
+        @prediction_accuracy
+        | mean_error: -50.0,
+          root_mean_squared_error: 50.0,
+          num_predictions: 3
+      }
+
+      PredictionAnalyzer.Repo.insert!(pa1)
+      PredictionAnalyzer.Repo.insert!(pa2)
+
+      {:ok, _} =
+        Query.calculate_weekly_accuracies(
+          PredictionAnalyzer.Repo,
+          Timex.shift(Timex.local(), days: 2)
+        )
+
+      [pa] = Repo.all(from(pa in WeeklyAccuracies, select: pa))
+
+      assert_in_delta(
+        pa.mean_error,
+        (100.0 * 10 + -50.0 * 3) / (10 + 3),
+        0.001
+      )
+
+      assert_in_delta(
+        pa.root_mean_squared_error,
+        :math.sqrt((100 * 100 * 10 + 50 * 50 * 3) / (10 + 3)),
+        0.001
+      )
+    end
   end
 end

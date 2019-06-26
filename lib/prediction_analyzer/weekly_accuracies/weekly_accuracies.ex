@@ -15,6 +15,8 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies do
     field(:bin, :string)
     field(:num_predictions, :integer)
     field(:num_accurate_predictions, :integer)
+    field(:mean_error, :float)
+    field(:root_mean_squared_error, :float)
   end
 
   @spec new_insert_changeset(map()) :: Ecto.Schema.t()
