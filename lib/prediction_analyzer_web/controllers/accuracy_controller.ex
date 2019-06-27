@@ -6,68 +6,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   import Ecto.Query, only: [from: 2]
 
-  @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def index(
-        conn,
-        %{
-          "filters" =>
-            %{
-              "route_ids" => route_ids,
-              "stop_id" => stop_id,
-              "direction_id" => direction_id,
-              "arrival_departure" => arrival_departure,
-              "chart_range" => "Weekly",
-              "bin" => bin,
-              "mode" => mode
-            } = filter_params
-        } = params
-      )
-      when not is_nil(route_ids) and not is_nil(stop_id) and not is_nil(direction_id) and
-             byte_size(arrival_departure) > 0 and byte_size(bin) > 0 do
-    mode_atom = PredictionAnalyzer.Utilities.string_to_mode(mode)
-    routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
-
-    if time_filters_present?(filter_params) do
-      {relevant_accuracies, error_msg} = WeeklyAccuracies.filter(filter_params)
-
-      [prod_num_accurate, prod_num_predictions] =
-        from(
-          acc in relevant_accuracies,
-          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-          where: acc.environment == "prod" and acc.route_id in ^routes
-        )
-        |> PredictionAnalyzer.Repo.one!()
-
-      [dev_green_num_accurate, dev_green_num_predictions] =
-        from(
-          acc in relevant_accuracies,
-          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-          where: acc.environment == "dev-green" and acc.route_id in ^routes
-        )
-        |> PredictionAnalyzer.Repo.one!()
-
-      accuracies =
-        relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range(filter_params)
-        |> PredictionAnalyzer.Repo.all()
-
-      render(
-        conn,
-        "index.html",
-        accuracies: accuracies,
-        chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
-        prod_num_accurate: prod_num_accurate,
-        prod_num_predictions: prod_num_predictions,
-        dev_green_num_accurate: dev_green_num_accurate,
-        dev_green_num_predictions: dev_green_num_predictions,
-        error_msg: error_msg,
-        mode: mode_atom
-      )
-    else
-      redirect_with_default_filters(conn, params)
-    end
-  end
-
   def index(
         conn,
         %{
@@ -88,7 +26,12 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
 
     if time_filters_present?(filter_params) do
-      {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
+      {relevant_accuracies, error_msg} =
+        if filter_params["chart_range"] == "Weekly" do
+          WeeklyAccuracies.filter(filter_params)
+        else
+          PredictionAccuracy.filter(filter_params)
+        end
 
       [prod_num_accurate, prod_num_predictions] =
         from(
