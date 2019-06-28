@@ -39,7 +39,6 @@ defmodule PredictionAnalyzer.QueryUtilitiesTest do
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
-    # Ecto.Adapters.SQL.Sandbox.mode(PredictionAnalyzer.Repo, {:shared, self()})
   end
 
   describe "aggregate_mean_error/2" do
