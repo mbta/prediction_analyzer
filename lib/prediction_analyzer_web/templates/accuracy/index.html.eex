@@ -33,7 +33,7 @@
       </span>
     </div>
     <div class="dev-green-text">
-      <em>Err: <%= if @dev_green_mean_error, do: Float.round(@dev_green_mean_error, 2) %>, RMSE: <%= if @dev_green_rmse, do: Float.round(@dev_green_rmse, 2) %></em> <br>
+      <em>Err: <%= Float.round(@dev_green_mean_error || 0.0, 2) %>, RMSE: <%= Float.round(@dev_green_rmse || 0.0, 2) %></em> <br>
       From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
     </div>
   </div>
