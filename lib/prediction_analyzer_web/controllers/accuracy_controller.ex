@@ -7,6 +7,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   import Ecto.Query, only: [from: 2]
   import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
 
+  @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(
         conn,
         %{
