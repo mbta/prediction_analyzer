@@ -87,7 +87,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
   defp get_accuracy(query) do
     {total, accurate} =
-      Enum.reduce(query, {0, 0}, fn [_, prod_total, prod_accurate, _err, _rmse], {total, accurate} ->
+      Enum.reduce(query, {0, 0}, fn [_, prod_total, prod_accurate, _mean_err, _rmse],
+                                    {total, accurate} ->
         {total + prod_total, accurate + prod_accurate}
       end)
 
