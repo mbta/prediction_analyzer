@@ -17,6 +17,7 @@
       </span>
     </div>
     <div class="prod-text">
+      <em>Err: <%= Float.round(@prod_mean_error, 2) %>, RMSE: <%= Float.round(@prod_rmse, 2) %></em> <br>
       From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
     </div>
   </div>
@@ -32,6 +33,7 @@
       </span>
     </div>
     <div class="dev-green-text">
+      <em>Err: <%= Float.round(@dev_green_mean_error, 2) %>, RMSE: <%= Float.round(@dev_green_rmse, 2) %></em> <br>
       From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
     </div>
   </div>

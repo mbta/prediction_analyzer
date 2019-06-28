@@ -33,18 +33,28 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           PredictionAccuracy.filter(filter_params)
         end
 
-      [prod_num_accurate, prod_num_predictions] =
+      [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
         from(
           acc in relevant_accuracies,
-          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+          select: [
+            sum(acc.num_accurate_predictions),
+            sum(acc.num_predictions),
+            aggregate_mean_error(acc.mean_error, acc.num_predictions),
+            aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
+          ],
           where: acc.environment == "prod" and acc.route_id in ^routes
         )
         |> PredictionAnalyzer.Repo.one!()
 
-      [dev_green_num_accurate, dev_green_num_predictions] =
+      [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse] =
         from(
           acc in relevant_accuracies,
-          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+          select: [
+            sum(acc.num_accurate_predictions),
+            sum(acc.num_predictions),
+            aggregate_mean_error(acc.mean_error, acc.num_predictions),
+            aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
+          ],
           where: acc.environment == "dev-green" and acc.route_id in ^routes
         )
         |> PredictionAnalyzer.Repo.one!()
@@ -61,8 +71,12 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
         prod_num_accurate: prod_num_accurate,
         prod_num_predictions: prod_num_predictions,
+        prod_mean_error: prod_mean_error,
+        prod_rmse: prod_rmse,
         dev_green_num_accurate: dev_green_num_accurate,
         dev_green_num_predictions: dev_green_num_predictions,
+        dev_green_mean_error: dev_green_mean_error,
+        dev_green_rmse: dev_green_rmse,
         error_msg: error_msg,
         mode: mode_atom
       )
