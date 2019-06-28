@@ -5,6 +5,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   alias PredictionAnalyzer.Filters
 
   import Ecto.Query, only: [from: 2]
+  import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
 
   def index(
         conn,
@@ -59,10 +60,17 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         )
         |> PredictionAnalyzer.Repo.one!()
 
-      accuracies =
+      prod_accuracies =
         relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range(filter_params)
+        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all()
+
+      dev_green_accuracies =
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range("dev-green", filter_params)
+        |> PredictionAnalyzer.Repo.all()
+
+      accuracies = Enum.zip(prod_accuracies, dev_green_accuracies)
 
       render(
         conn,
@@ -149,13 +157,20 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   @spec set_up_accuracy_chart(list(), map()) :: map()
   defp set_up_accuracy_chart(accuracies, filter_params) do
-    Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: []}, fn [
-                                                                             bucket,
-                                                                             prod_total,
-                                                                             prod_accurate,
-                                                                             dg_total,
-                                                                             dg_accurate
-                                                                           ],
+    Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: []}, fn {[
+                                                                              bucket,
+                                                                              prod_total,
+                                                                              prod_accurate,
+                                                                              _prod_mean_error,
+                                                                              _prod_rmse
+                                                                            ],
+                                                                            [
+                                                                              _bucket,
+                                                                              dg_total,
+                                                                              dg_accurate,
+                                                                              _dg_mean_error,
+                                                                              _dg_rmse
+                                                                            ]},
                                                                            acc ->
       prod_accuracy = if prod_total == 0, do: [0], else: [prod_accurate / prod_total]
       dg_accuracy = if dg_total == 0, do: [0], else: [dg_accurate / dg_total]

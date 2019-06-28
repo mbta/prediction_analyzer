@@ -39,7 +39,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     yesterday_accs =
       yesterday_query
-      |> Filters.stats_by_environment_and_chart_range(%{
+      |> Filters.stats_by_environment_and_chart_range("prod", %{
         "chart_range" => "Hourly"
       })
       |> PredictionAnalyzer.Repo.all()
@@ -53,7 +53,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     previous_day_accs =
       previous_day_query
-      |> Filters.stats_by_environment_and_chart_range(%{
+      |> Filters.stats_by_environment_and_chart_range("prod", %{
         "chart_range" => "Hourly"
       })
       |> PredictionAnalyzer.Repo.all()
@@ -87,7 +87,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
   defp get_accuracy(query) do
     {total, accurate} =
-      Enum.reduce(query, {0, 0}, fn [_, prod_total, prod_accurate, _, _], {total, accurate} ->
+      Enum.reduce(query, {0, 0}, fn [_, prod_total, prod_accurate, _err, _rmse], {total, accurate} ->
         {total + prod_total, accurate + prod_accurate}
       end)
 

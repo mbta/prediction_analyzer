@@ -17,7 +17,7 @@
       </span>
     </div>
     <div class="prod-text">
-      <em>Err: <%= Float.round(@prod_mean_error, 2) %>, RMSE: <%= Float.round(@prod_rmse, 2) %></em> <br>
+      <em>Err: <%= Float.round(@prod_mean_error || 0.0, 2) %>, RMSE: <%= Float.round(@prod_rmse || 0.0, 2) %></em> <br>
       From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
     </div>
   </div>
@@ -33,7 +33,7 @@
       </span>
     </div>
     <div class="dev-green-text">
-      <em>Err: <%= Float.round(@dev_green_mean_error, 2) %>, RMSE: <%= Float.round(@dev_green_rmse, 2) %></em> <br>
+      <em>Err: <%= if @dev_green_mean_error, do: Float.round(@dev_green_mean_error, 2) %>, RMSE: <%= if @dev_green_rmse, do: Float.round(@dev_green_rmse, 2) %></em> <br>
       From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
     </div>
   </div>
@@ -145,16 +145,22 @@
           <tr>
             <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
             <th class="prod-text">Prod Accuracy</th>
-            <th class="prod-text">Prod Total</th>
+            <th class="prod-text">Err</th>
+            <th class="prod-text">RMSE</th>
+            <th class="prod-text">Count</th>
             <%= if show_download?(@conn.params) do %>
               <th>Raw Data</th>
             <% end %>
           </tr>
 
-          <%= for [row_scope, prod_total, prod_accurate, _dg_total, _dg_accurate] <- @accuracies do %>
+          <%= for {[row_scope, prod_total, prod_accurate, prod_err, prod_rmse], _dg} <- @accuracies do %>
             <tr>
               <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
-              <td class="prod-text"><%= accuracy_percentage(prod_accurate, prod_total) %>%</td>
+              <td class="prod-text">
+                <%= accuracy_percentage(prod_accurate, prod_total) %>% 
+              </td>
+              <td class="prod-text"><%= Float.round(prod_err || 0.0, 0) %></td>
+              <td class="prod-text"><%= Float.round(prod_rmse || 0.0, 0) %></td>
               <td class="prod-text"><%= prod_total %></td>
               <%= if show_download?(@conn.params) do %>
                 <th><%= link("csv", to: predictions_path_with_filters(@conn, row_scope)) %></th>
@@ -169,16 +175,20 @@
           <tr>
             <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
             <th class="dev-green-text">Dev-Green Accuracy</th>
-            <th class="dev-green-text">Dev-Green Total</th>
+            <th class="dev-green-text">Err</th>
+            <th class="dev-green-text">RMSE</th>
+            <th class="dev-green-text">Count</th>
             <%= if show_download?(@conn.params) do %>
               <th>Raw Data</th>
             <% end %>
           </tr>
 
-          <%= for [row_scope, _prod_total, _prod_accurate, dg_total, dg_accurate] <- @accuracies do %>
+          <%= for {_prod, [row_scope, dg_total, dg_accurate, dg_err, dg_rmse]} <- @accuracies do %>
             <tr>
               <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
               <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
+              <td class="dev-green-text"><%= Float.round(dg_err || 0.0, 0) %></td>
+              <td class="dev-green-text"><%= Float.round(dg_rmse || 0.0, 0) %></td>
               <td class="dev-green-text"><%= dg_total %></td>
               <%= if show_download?(@conn.params) do %>
                 <th><%= link("csv", to: predictions_path_with_filters(@conn, row_scope)) %></th>

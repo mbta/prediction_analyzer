@@ -19,7 +19,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     arrival_departure: "arrival",
     bin: "0-3 min",
     num_predictions: 10,
-    num_accurate_predictions: 5
+    num_accurate_predictions: 5,
+    mean_error: 0.0,
+    root_mean_squared_error: 0.0
   }
 
   describe "new_insert_changeset/1" do
@@ -181,7 +183,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     end
   end
 
-  describe "stats_by_environment_and_chart_range/2" do
+  describe "stats_by_environment_and_chart_range/3" do
     test "groups by environment and hour and sums" do
       insert_accuracy("prod", 10, 101, 99)
       insert_accuracy("prod", 10, 108, 102)
@@ -192,16 +194,28 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       insert_accuracy("dev-green", 11, 525, 411)
       insert_accuracy("dev-green", 11, 570, 461)
 
-      stats =
+      prod_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_environment_and_chart_range(%{
+        |> Filters.stats_by_environment_and_chart_range("prod", %{
           "chart_range" => "Hourly"
         })
         |> Repo.all()
 
-      assert stats == [
-               [10, 209, 201, 809, 701],
-               [11, 495, 472, 1095, 872]
+      dev_green_stats =
+        from(acc in PredictionAccuracy, [])
+        |> Filters.stats_by_environment_and_chart_range("dev-green", %{
+          "chart_range" => "Hourly"
+        })
+        |> Repo.all()
+
+      assert prod_stats == [
+               [10, 209, 201, 0.0, 0.0],
+               [11, 495, 472, 0.0, 0.0]
+             ]
+
+      assert dev_green_stats == [
+               [10, 809, 701, 0.0, 0.0],
+               [11, 1095, 872, 0.0, 0.0]
              ]
     end
 
@@ -218,16 +232,28 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       insert_accuracy("dev-green", 10, 525, 411, today)
       insert_accuracy("dev-green", 11, 570, 461, today)
 
-      stats =
+      prod_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_environment_and_chart_range(%{
+        |> Filters.stats_by_environment_and_chart_range("prod", %{
           "chart_range" => "Daily"
         })
         |> Repo.all()
 
-      assert stats == [
-               [yesterday, 209, 201, 809, 701],
-               [today, 495, 472, 1095, 872]
+      dev_green_stats =
+        from(acc in PredictionAccuracy, [])
+        |> Filters.stats_by_environment_and_chart_range("dev-green", %{
+          "chart_range" => "Daily"
+        })
+        |> Repo.all()
+
+      assert prod_stats == [
+               [yesterday, 209, 201, 0.0, 0.0],
+               [today, 495, 472, 0.0, 0.0]
+             ]
+
+      assert dev_green_stats == [
+               [yesterday, 809, 701, 0.0, 0.0],
+               [today, 1095, 872, 0.0, 0.0]
              ]
     end
   end
