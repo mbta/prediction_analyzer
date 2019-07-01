@@ -5,6 +5,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   alias PredictionAnalyzer.Filters
 
   import Ecto.Query, only: [from: 2]
+  import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(
@@ -16,7 +17,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
               "stop_id" => stop_id,
               "direction_id" => direction_id,
               "arrival_departure" => arrival_departure,
-              "chart_range" => "Weekly",
               "bin" => bin,
               "mode" => mode
             } = filter_params
@@ -28,28 +28,50 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
 
     if time_filters_present?(filter_params) do
-      {relevant_accuracies, error_msg} = WeeklyAccuracies.filter(filter_params)
+      {relevant_accuracies, error_msg} =
+        if filter_params["chart_range"] == "Weekly" do
+          WeeklyAccuracies.filter(filter_params)
+        else
+          PredictionAccuracy.filter(filter_params)
+        end
 
-      [prod_num_accurate, prod_num_predictions] =
+      [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
         from(
           acc in relevant_accuracies,
-          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+          select: [
+            sum(acc.num_accurate_predictions),
+            sum(acc.num_predictions),
+            aggregate_mean_error(acc.mean_error, acc.num_predictions),
+            aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
+          ],
           where: acc.environment == "prod" and acc.route_id in ^routes
         )
         |> PredictionAnalyzer.Repo.one!()
 
-      [dev_green_num_accurate, dev_green_num_predictions] =
+      [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse] =
         from(
           acc in relevant_accuracies,
-          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
+          select: [
+            sum(acc.num_accurate_predictions),
+            sum(acc.num_predictions),
+            aggregate_mean_error(acc.mean_error, acc.num_predictions),
+            aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
+          ],
           where: acc.environment == "dev-green" and acc.route_id in ^routes
         )
         |> PredictionAnalyzer.Repo.one!()
 
-      accuracies =
+      prod_accuracies =
         relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range(filter_params)
+        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all()
+
+      dev_green_accuracies =
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range("dev-green", filter_params)
+        |> PredictionAnalyzer.Repo.all()
+
+      accuracies = Enum.zip(prod_accuracies, dev_green_accuracies)
 
       render(
         conn,
@@ -58,68 +80,12 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
         prod_num_accurate: prod_num_accurate,
         prod_num_predictions: prod_num_predictions,
+        prod_mean_error: prod_mean_error,
+        prod_rmse: prod_rmse,
         dev_green_num_accurate: dev_green_num_accurate,
         dev_green_num_predictions: dev_green_num_predictions,
-        error_msg: error_msg,
-        mode: mode_atom
-      )
-    else
-      redirect_with_default_filters(conn, params)
-    end
-  end
-
-  def index(
-        conn,
-        %{
-          "filters" =>
-            %{
-              "route_ids" => route_ids,
-              "stop_id" => stop_id,
-              "direction_id" => direction_id,
-              "arrival_departure" => arrival_departure,
-              "bin" => bin,
-              "mode" => mode
-            } = filter_params
-        } = params
-      )
-      when not is_nil(route_ids) and not is_nil(stop_id) and not is_nil(direction_id) and
-             byte_size(arrival_departure) > 0 and byte_size(bin) > 0 do
-    mode_atom = PredictionAnalyzer.Utilities.string_to_mode(mode)
-    routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
-
-    if time_filters_present?(filter_params) do
-      {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
-
-      [prod_num_accurate, prod_num_predictions] =
-        from(
-          acc in relevant_accuracies,
-          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-          where: acc.environment == "prod" and acc.route_id in ^routes
-        )
-        |> PredictionAnalyzer.Repo.one!()
-
-      [dev_green_num_accurate, dev_green_num_predictions] =
-        from(
-          acc in relevant_accuracies,
-          select: [sum(acc.num_accurate_predictions), sum(acc.num_predictions)],
-          where: acc.environment == "dev-green" and acc.route_id in ^routes
-        )
-        |> PredictionAnalyzer.Repo.one!()
-
-      accuracies =
-        relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range(filter_params)
-        |> PredictionAnalyzer.Repo.all()
-
-      render(
-        conn,
-        "index.html",
-        accuracies: accuracies,
-        chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
-        prod_num_accurate: prod_num_accurate,
-        prod_num_predictions: prod_num_predictions,
-        dev_green_num_accurate: dev_green_num_accurate,
-        dev_green_num_predictions: dev_green_num_predictions,
+        dev_green_mean_error: dev_green_mean_error,
+        dev_green_rmse: dev_green_rmse,
         error_msg: error_msg,
         mode: mode_atom
       )
@@ -192,13 +158,20 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   @spec set_up_accuracy_chart(list(), map()) :: map()
   defp set_up_accuracy_chart(accuracies, filter_params) do
-    Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: []}, fn [
-                                                                             bucket,
-                                                                             prod_total,
-                                                                             prod_accurate,
-                                                                             dg_total,
-                                                                             dg_accurate
-                                                                           ],
+    Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: []}, fn {[
+                                                                              bucket,
+                                                                              prod_total,
+                                                                              prod_accurate,
+                                                                              _prod_mean_error,
+                                                                              _prod_rmse
+                                                                            ],
+                                                                            [
+                                                                              _bucket,
+                                                                              dg_total,
+                                                                              dg_accurate,
+                                                                              _dg_mean_error,
+                                                                              _dg_rmse
+                                                                            ]},
                                                                            acc ->
       prod_accuracy = if prod_total == 0, do: [0], else: [prod_accurate / prod_total]
       dg_accuracy = if dg_total == 0, do: [0], else: [dg_accurate / dg_total]

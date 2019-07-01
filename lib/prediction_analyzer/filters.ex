@@ -1,5 +1,6 @@
 defmodule PredictionAnalyzer.Filters do
   import Ecto.Query, only: [from: 2]
+  import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
 
   @doc """
   Defines the bins we consider for aggregate accuracy. Each bin has the
@@ -134,8 +135,8 @@ defmodule PredictionAnalyzer.Filters do
 
   hour | prod total | prod accurate | dev-green total | dev-green accurate
   """
-  @spec stats_by_environment_and_chart_range(Ecto.Query.t(), map()) :: Ecto.Query.t()
-  def stats_by_environment_and_chart_range(q, filters) do
+  @spec stats_by_environment_and_chart_range(Ecto.Query.t(), String.t(), map()) :: Ecto.Query.t()
+  def stats_by_environment_and_chart_range(q, environment, filters) do
     scope =
       case filters["chart_range"] do
         "Daily" -> :service_date
@@ -148,40 +149,13 @@ defmodule PredictionAnalyzer.Filters do
       acc in q,
       group_by: ^scope,
       order_by: ^scope,
+      where: acc.environment == ^environment,
       select: [
         field(acc, ^scope),
-        sum(
-          fragment(
-            "case when ? = ? then ? else 0 end",
-            acc.environment,
-            "prod",
-            acc.num_predictions
-          )
-        ),
-        sum(
-          fragment(
-            "case when ? = ? then ? else 0 end",
-            acc.environment,
-            "prod",
-            acc.num_accurate_predictions
-          )
-        ),
-        sum(
-          fragment(
-            "case when ? = ? then ? else 0 end",
-            acc.environment,
-            "dev-green",
-            acc.num_predictions
-          )
-        ),
-        sum(
-          fragment(
-            "case when ? = ? then ? else 0 end",
-            acc.environment,
-            "dev-green",
-            acc.num_accurate_predictions
-          )
-        )
+        sum(acc.num_predictions),
+        sum(acc.num_accurate_predictions),
+        aggregate_mean_error(acc.mean_error, acc.num_predictions),
+        aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
       ]
     )
   end
