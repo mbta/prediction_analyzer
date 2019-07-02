@@ -20,7 +20,15 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
   end
 
   test "bin_options/0 returns bin names in the proper order" do
-    assert AccuracyView.bin_options() == ["0-3 min", "3-6 min", "6-12 min", "12-30 min"]
+    assert AccuracyView.bin_options() == [
+             "0-3 min",
+             "3-6 min",
+             "6-8 min",
+             "8-10 min",
+             "10-12 min",
+             "12-30 min",
+             {"6-12 min", "6-8 min,8-10 min,10-12 min,6-12 min"}
+           ]
   end
 
   test "chart_range_scope_header/1 returns the proper value" do
