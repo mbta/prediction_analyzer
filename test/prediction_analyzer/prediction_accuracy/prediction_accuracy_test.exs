@@ -54,10 +54,11 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       acc2 = %{@prediction_accuracy | stop_id: "some_stop"}
       acc3 = %{@prediction_accuracy | route_id: "some_route"}
       acc4 = %{@prediction_accuracy | arrival_departure: "departure"}
-      acc5 = %{@prediction_accuracy | bin: "6-12 min"}
+      acc5 = %{@prediction_accuracy | bin: "6-8 min"}
       acc6 = %{@prediction_accuracy | direction_id: 1}
 
       base_params = %{
+        "bin" => "All",
         "chart_range" => "Hourly",
         "service_date" => Timex.local() |> Date.to_string()
       }
@@ -98,7 +99,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       q = from(acc in accs, [])
       assert [%{id: ^acc4_id}] = execute_query(q)
 
-      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"bin" => "6-12 min"}))
+      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"bin" => "6-8 min"}))
       q = from(acc in accs, [])
       assert [%{id: ^acc5_id}] = execute_query(q)
 
@@ -122,6 +123,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       {accs, nil} =
         PredictionAccuracy.filter(%{
+          "bin" => "All",
           "chart_range" => "Hourly",
           "service_date" => Date.to_string(yesterday)
         })
@@ -132,6 +134,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       {accs, nil} =
         PredictionAccuracy.filter(%{
+          "bin" => "All",
           "chart_range" => "Hourly",
           "service_date" => Date.to_string(day_before)
         })
@@ -141,7 +144,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       assert [%{id: ^acc2_id}] = execute_query(q)
 
       assert {_, "No start or end date given."} =
-               PredictionAccuracy.filter(%{"chart_range" => "Daily"})
+               PredictionAccuracy.filter(%{"bin" => "All", "chart_range" => "Daily"})
     end
 
     test "can customize range of date filter, with max of 4 weeks" do
@@ -156,6 +159,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       {accs, nil} =
         PredictionAccuracy.filter(%{
+          "bin" => "All",
           "chart_range" => "Daily",
           "date_start" => "2018-01-01",
           "date_end" => "2018-01-14"
@@ -166,6 +170,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       {accs, nil} =
         PredictionAccuracy.filter(%{
+          "bin" => "All",
           "chart_range" => "Daily",
           "date_start" => "2018-01-01",
           "date_end" => "2018-01-21"
@@ -176,6 +181,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       assert {_accs, "Dates can't be more than 5 weeks apart"} =
                PredictionAccuracy.filter(%{
+                 "bin" => "All",
                  "chart_range" => "Daily",
                  "date_start" => "2018-01-01",
                  "date_end" => "2018-02-28"

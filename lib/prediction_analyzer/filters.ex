@@ -12,7 +12,9 @@ defmodule PredictionAnalyzer.Filters do
     %{
       "0-3 min" => {-30, 180, -60, 60},
       "3-6 min" => {180, 360, -90, 120},
-      "6-12 min" => {360, 720, -150, 210},
+      "6-8 min" => {360, 720, -150, 210},
+      "8-10 min" => {360, 720, -150, 210},
+      "10-12 min" => {360, 720, -150, 210},
       "12-30 min" => {720, 1800, -240, 360}
     }
   end
@@ -65,13 +67,18 @@ defmodule PredictionAnalyzer.Filters do
 
   def filter_by_direction(q, _), do: {:ok, q}
 
-  @spec filter_by_bin(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
-  def filter_by_bin(q, bin) do
-    if Map.has_key?(bins(), bin) do
-      {:ok, from(acc in q, where: acc.bin == ^bin)}
-    else
-      {:ok, q}
-    end
+  @spec filter_by_bin(Ecto.Query.t(), String.t()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
+  def filter_by_bin(q, "All") do
+    {:ok, q}
+  end
+
+  def filter_by_bin(q, bins) when byte_size(bins) > 0 do
+    bins = String.split(bins, ",")
+    {:ok, from(acc in q, where: acc.bin in ^bins)}
+  end
+
+  def filter_by_bin(q, _bins) do
+    {:ok, q}
   end
 
   @spec filter_by_timeframe(Ecto.Query.t(), any(), any(), any(), any()) ::
