@@ -10,6 +10,8 @@ defmodule PredictionAnalyzer.Repo.Migrations.AddBucketsToAccuracyTables do
   end
 
   def down do
-    # can't easily remove an enum type value
+    # can't remove an enum type value without recreating type and
+    # updating all rows.
+    raise Ecto.MigrationError
   end
 end
