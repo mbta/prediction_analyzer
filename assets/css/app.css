@@ -111,3 +111,6 @@
 .sort-order-link {
   float: right;
 }
+
+#reminder-text .reminder-text{display:none;}
+#reminder-text .reminder-text:target {display:block;}

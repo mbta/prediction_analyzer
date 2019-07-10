@@ -20,7 +20,69 @@
       <em>Err: <%= Float.round(@prod_mean_error || 0.0, 2) %>, RMSE: <%= Float.round(@prod_rmse || 0.0, 2) %></em> <br>
       From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
     </div>
+    <div id='reminder-text'>
+      <div id='reminder-text-shown' class='reminder-text'>
+        <p>
+          <a href="#tab2" class="nav-tab nav-tab-active reminder-text-hidden">Hide</a>
+        </p>
+        <p>
+          A snapshot of all predictions is taken once per minute. Each prediction is matched to its corresponding
+          actual arrival or departure time based on the vehicle ID and GTFS trip ID, and passes or fails the
+          accuracy standard based on the below bins. If no match is found for the vehicle ID and GTFS trip ID, the
+          prediction is recorded as failing.
+        </p>
+
+        <table>
+          <tr>
+            <td>
+              Bin
+            </td>
+            <td>
+              Passing threshold (Actual - Predicted)
+            </td>
+          </tr>
+          <tr>
+            <td>
+              0-3 min
+            </td>
+            <td>
+              -60 sec to +60 sec
+            </td>
+          </tr>
+          <tr>
+            <td>
+              3-6 min
+            </td>
+            <td>
+              -120 sec to +180 sec
+            </td>
+          </tr>
+          <tr>
+            <td>
+              6-12 min
+            </td>
+            <td>
+              -150 sec to +210 sec
+            </td>
+          </tr>
+          <tr>
+            <td>
+              12-30
+            </td>
+            <td>
+              -240 sec to +360 sec
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div id='reminder-text-toggle'>
+      <div class="nav-tab-wrapper">
+        <a href="#reminder-text-shown" class="nav-tab reminder-text">How is accuracy calculated?</a>
+      </div>
+    </div>
   </div>
+
 
   <div class="col-xs-6" id="dev-green-accuracy-total">
     <span class="dev-green-text dev-green-text-header">Dev Green</span>
