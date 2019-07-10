@@ -20,7 +20,69 @@
       <em>Err: <%= Float.round(@prod_mean_error || 0.0, 2) %>, RMSE: <%= Float.round(@prod_rmse || 0.0, 2) %></em> <br>
       From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
     </div>
+    <div id='reminder-text'>
+      <div id='reminder-text-shown' class='reminder-text'>
+        <div class=reminder-text-button>
+          <a href="#reminder-text-hidden" class="nav-tab nav-tab-active">Hide</a>
+        </div>
+        <p>
+          A snapshot of all predictions is taken once per minute. Each prediction is matched to its corresponding
+          actual arrival or departure time based on the vehicle ID and GTFS trip ID, and passes or fails the
+          accuracy standard based on the below bins. If no match is found for the vehicle ID and GTFS trip ID, the
+          prediction is recorded as failing.
+        </p>
+
+        <table class="table">
+          <tr>
+            <th>
+              Bin
+            </th>
+            <th>
+              Passing threshold (Actual - Predicted)
+            </th>
+          </tr>
+          <tr>
+            <td>
+              0-3 min
+            </td>
+            <td>
+              -60 sec to +60 sec
+            </td>
+          </tr>
+          <tr>
+            <td>
+              3-6 min
+            </td>
+            <td>
+              -120 sec to +180 sec
+            </td>
+          </tr>
+          <tr>
+            <td>
+              6-12 min
+            </td>
+            <td>
+              -150 sec to +210 sec
+            </td>
+          </tr>
+          <tr>
+            <td>
+              12-30
+            </td>
+            <td>
+              -240 sec to +360 sec
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div id='reminder-text-toggle' class="reminder-text-button">
+      <div class="nav-tab-wrapper">
+        <a href="#reminder-text-shown" class="nav-tab">How is accuracy calculated?</a>
+      </div>
+    </div>
   </div>
+
 
   <div class="col-xs-6" id="dev-green-accuracy-total">
     <span class="dev-green-text dev-green-text-header">Dev Green</span>
@@ -157,7 +219,7 @@
             <tr>
               <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
               <td class="prod-text">
-                <%= accuracy_percentage(prod_accurate, prod_total) %>% 
+                <%= accuracy_percentage(prod_accurate, prod_total) %>%
               </td>
               <td class="prod-text"><%= Float.round(prod_err || 0.0, 0) %></td>
               <td class="prod-text"><%= Float.round(prod_rmse || 0.0, 0) %></td>

@@ -111,3 +111,11 @@
 .sort-order-link {
   float: right;
 }
+
+.reminder-text-button {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.reminder-text{display:none;}
+.reminder-text:target {display:block;}
