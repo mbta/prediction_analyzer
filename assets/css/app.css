@@ -112,5 +112,10 @@
   float: right;
 }
 
-#reminder-text .reminder-text{display:none;}
-#reminder-text .reminder-text:target {display:block;}
+.reminder-text-button {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.reminder-text{display:none;}
+.reminder-text:target {display:block;}

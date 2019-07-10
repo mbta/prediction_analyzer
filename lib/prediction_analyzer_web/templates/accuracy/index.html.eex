@@ -22,9 +22,9 @@
     </div>
     <div id='reminder-text'>
       <div id='reminder-text-shown' class='reminder-text'>
-        <p>
-          <a href="#tab2" class="nav-tab nav-tab-active reminder-text-hidden">Hide</a>
-        </p>
+        <div class=reminder-text-button>
+          <a href="#reminder-text-hidden" class="nav-tab nav-tab-active">Hide</a>
+        </div>
         <p>
           A snapshot of all predictions is taken once per minute. Each prediction is matched to its corresponding
           actual arrival or departure time based on the vehicle ID and GTFS trip ID, and passes or fails the
@@ -32,14 +32,14 @@
           prediction is recorded as failing.
         </p>
 
-        <table>
+        <table class="table">
           <tr>
-            <td>
+            <th>
               Bin
-            </td>
-            <td>
+            </th>
+            <th>
               Passing threshold (Actual - Predicted)
-            </td>
+            </th>
           </tr>
           <tr>
             <td>
@@ -76,9 +76,9 @@
         </table>
       </div>
     </div>
-    <div id='reminder-text-toggle'>
+    <div id='reminder-text-toggle' class="reminder-text-button">
       <div class="nav-tab-wrapper">
-        <a href="#reminder-text-shown" class="nav-tab reminder-text">How is accuracy calculated?</a>
+        <a href="#reminder-text-shown" class="nav-tab">How is accuracy calculated?</a>
       </div>
     </div>
   </div>
@@ -219,7 +219,7 @@
             <tr>
               <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
               <td class="prod-text">
-                <%= accuracy_percentage(prod_accurate, prod_total) %>% 
+                <%= accuracy_percentage(prod_accurate, prod_total) %>%
               </td>
               <td class="prod-text"><%= Float.round(prod_err || 0.0, 0) %></td>
               <td class="prod-text"><%= Float.round(prod_rmse || 0.0, 0) %></td>
