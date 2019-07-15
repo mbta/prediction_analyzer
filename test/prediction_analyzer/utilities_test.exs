@@ -38,30 +38,6 @@ defmodule PredictionAnalyzer.UtilitiesTest do
     end
   end
 
-  describe "ms_to_3am" do
-    test "returns the milliseconds to 3am when 3am is tomorrow" do
-      timezone = Application.get_env(:prediction_analyzer, :timezone)
-
-      time =
-        timezone
-        |> Timex.now()
-        |> Timex.set(hour: 23, minute: 59, second: 0, microsecond: {0, 6})
-
-      assert Utilities.ms_to_3am(time) == 10_860_000
-    end
-
-    test "returns the milliseconds to 3am when 3am is later today" do
-      timezone = Application.get_env(:prediction_analyzer, :timezone)
-
-      time =
-        timezone
-        |> Timex.now()
-        |> Timex.set(hour: 2, minute: 59, second: 0, microsecond: {0, 6})
-
-      assert Utilities.ms_to_3am(time) == 60_000
-    end
-  end
-
   describe "get_week_range/1" do
     test "gets the date of the given time and a date one week from the given time" do
       timezone = Application.get_env(:prediction_analyzer, :timezone)
