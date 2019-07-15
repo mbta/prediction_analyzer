@@ -1,7 +1,6 @@
 defmodule PredictionAnalyzer.Pruner do
   use GenServer
 
-  alias PredictionAnalyzer.Utilities
   alias PredictionAnalyzer.Repo
   alias PredictionAnalyzer.VehicleEvents.VehicleEvent
   alias PredictionAnalyzer.Predictions.Prediction
