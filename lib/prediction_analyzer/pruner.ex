@@ -25,7 +25,6 @@ defmodule PredictionAnalyzer.Pruner do
     unix_cutoff =
       Timex.local()
       |> Timex.shift(days: -28)
-      |> Timex.set(hour: 3, minute: 0, second: 0)
       |> DateTime.to_unix()
 
     {time, _} =
@@ -68,6 +67,6 @@ defmodule PredictionAnalyzer.Pruner do
   end
 
   defp schedule_next_run(pid) do
-    Process.send_after(pid, :prune, Utilities.ms_to_3am(Timex.local()) + 10 * 60 * 1_000)
+    Process.send_after(pid, :prune, (Timex.local() |> DateTime.to_unix()) + 12 * 60 * 60 * 1_000)
   end
 end
