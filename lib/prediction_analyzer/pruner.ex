@@ -67,6 +67,6 @@ defmodule PredictionAnalyzer.Pruner do
 
   @spec schedule_next_run(pid()) :: reference()
   defp schedule_next_run(pid) do
-    Process.send_after(pid, :prune, (Timex.local() |> DateTime.to_unix()) + 12 * 60 * 60 * 1_000)
+    Process.send_after(pid, :prune, (Timex.local() |> DateTime.to_unix()) + 12 * 60 * 60)
   end
 end
