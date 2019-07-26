@@ -65,13 +65,28 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         relevant_accuracies
         |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all()
+        |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
+          {scope, accuracy}
+        end)
 
       dev_green_accuracies =
         relevant_accuracies
         |> Filters.stats_by_environment_and_chart_range("dev-green", filter_params)
         |> PredictionAnalyzer.Repo.all()
+        |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
+          {scope, accuracy}
+        end)
 
-      accuracies = Enum.zip(prod_accuracies, dev_green_accuracies)
+      accuracies =
+        (Map.keys(prod_accuracies) ++ Map.keys(dev_green_accuracies))
+        |> Enum.uniq()
+        |> Enum.sort()
+        |> Enum.map(fn scope ->
+          prod_accuracy = prod_accuracies[scope] || [scope, 0, 0, nil, nil]
+          dev_green_accuracy = dev_green_accuracies[scope] || [scope, 0, 0, nil, nil]
+
+          {prod_accuracy, dev_green_accuracy}
+        end)
 
       render(
         conn,
