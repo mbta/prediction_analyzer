@@ -104,6 +104,124 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       Logger.configure(level: :warn)
     end
 
+    test "logs an error when there are multiple updates for a subway vehicle" do
+      vehicle = %{@vehicle | route_id: "Red"}
+
+      event1 = %PredictionAnalyzer.VehicleEvents.VehicleEvent{
+        vehicle_id: "1",
+        environment: "dev-green",
+        vehicle_label: "1000",
+        is_deleted: false,
+        route_id: "Red",
+        direction_id: 0,
+        trip_id: "trip1",
+        stop_id: "stop1",
+        arrival_time: vehicle.timestamp,
+        departure_time: nil
+      }
+
+      event2 = %PredictionAnalyzer.VehicleEvents.VehicleEvent{
+        vehicle_id: "1",
+        environment: "dev-green",
+        vehicle_label: "1000",
+        is_deleted: false,
+        route_id: "Red",
+        direction_id: 0,
+        trip_id: "trip1",
+        stop_id: "stop1",
+        arrival_time: vehicle.timestamp,
+        departure_time: nil
+      }
+
+      PredictionAnalyzer.Repo.insert(event1)
+      PredictionAnalyzer.Repo.insert(event2)
+
+      prediction = %{
+        @prediction
+        | trip_id: "trip1",
+          route_id: "route1",
+          vehicle_id: "1",
+          arrival_time: :os.system_time(:second),
+          stop_id: "stop1"
+      }
+
+      Repo.insert!(prediction)
+
+      old_vehicles = %{
+        "1" => %{vehicle | stop_id: "stop1", current_status: :STOPPED_AT}
+      }
+
+      new_vehicles = %{
+        "1" => %{vehicle | stop_id: "stop2", current_status: :IN_TRANSIT_TO}
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~ "One departure, multiple updates"
+    end
+
+    test "does not log an error when there are multiple updates for a commuter rail vehicle" do
+      vehicle = %{@vehicle | route_id: "CR-Fitchburg"}
+
+      event1 = %PredictionAnalyzer.VehicleEvents.VehicleEvent{
+        vehicle_id: "1",
+        environment: "dev-green",
+        vehicle_label: "1000",
+        is_deleted: false,
+        route_id: "CR-Fitchburg",
+        direction_id: 0,
+        trip_id: "trip1",
+        stop_id: "stop1",
+        arrival_time: vehicle.timestamp,
+        departure_time: nil
+      }
+
+      event2 = %PredictionAnalyzer.VehicleEvents.VehicleEvent{
+        vehicle_id: "1",
+        environment: "dev-green",
+        vehicle_label: "1000",
+        is_deleted: false,
+        route_id: "CR-Fitchburg",
+        direction_id: 0,
+        trip_id: "trip1",
+        stop_id: "stop1",
+        arrival_time: vehicle.timestamp,
+        departure_time: nil
+      }
+
+      PredictionAnalyzer.Repo.insert(event1)
+      PredictionAnalyzer.Repo.insert(event2)
+
+      prediction = %{
+        @prediction
+        | trip_id: "trip1",
+          route_id: "route1",
+          vehicle_id: "1",
+          arrival_time: :os.system_time(:second),
+          stop_id: "stop1"
+      }
+
+      Repo.insert!(prediction)
+
+      old_vehicles = %{
+        "1" => %{vehicle | stop_id: "stop1", current_status: :STOPPED_AT}
+      }
+
+      new_vehicles = %{
+        "1" => %{vehicle | stop_id: "stop2", current_status: :IN_TRANSIT_TO}
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      refute log =~ "One departure, multiple updates"
+    end
+
     test "updates relevant predictions" do
       prediction1 = %{
         @prediction
