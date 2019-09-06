@@ -20,21 +20,8 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
     trip_id: "trip1",
     route_id: "route1",
     direction_id: 0,
-    current_status: :in_transit_to,
-    stop_id: "stop1",
-    timestamp: :os.system_time(:second)
-  }
-
-  @cr_vehicle %Vehicle{
-    id: "2",
-    environment: "prod",
-    label: "1001",
-    is_deleted: false,
-    trip_id: "trip2",
-    route_id: "CR-Fitchburg",
-    direction_id: 0,
     current_status: :IN_TRANSIT_TO,
-    stop_id: "South Acton",
+    stop_id: "stop1",
     timestamp: :os.system_time(:second)
   }
 
