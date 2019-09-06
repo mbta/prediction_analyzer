@@ -9,6 +9,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
   alias PredictionAnalyzer.VehiclePositions.Vehicle
   alias PredictionAnalyzer.VehicleEvents.VehicleEvent
   alias PredictionAnalyzer.Predictions.Prediction
+  alias PredictionAnalyzer.Utilities
   alias PredictionAnalyzer.Repo
   import Ecto.Query, only: [from: 2]
 
@@ -107,7 +108,17 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
         associate_vehicle_event_with_predictions(ve)
 
       {_, _} ->
-        Logger.error("One departure, multiple updates for #{vehicle.label}")
+        cond do
+          vehicle.route_id in Utilities.routes_for_mode(:subway) ->
+            Logger.error(
+              "One departure, multiple updates for #{vehicle.label} on #{vehicle.route_id}"
+            )
+
+          vehicle.route_id in Utilities.routes_for_mode(:commuter_rail) ->
+            Logger.info(
+              "One departure, multiple updates for #{vehicle.label} on #{vehicle.route_id}"
+            )
+        end
     end
 
     nil
