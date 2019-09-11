@@ -21,10 +21,14 @@ defmodule PredictionAnalyzer.Pruner do
   def handle_info(:prune, state) do
     Logger.info("Beginning prune of DB")
 
-    unix_cutoff =
+    prediction_cutoff =
       Timex.local()
       |> Timex.shift(days: -28)
-      |> DateTime.to_unix()
+
+    vehicle_event_cutoff = Timex.shift(prediction_cutoff, minutes: 30)
+
+    prediction_cutoff_unix = DateTime.to_unix(prediction_cutoff)
+    vehicle_event_cutoff_unix = DateTime.to_unix(vehicle_event_cutoff)
 
     {time, _} =
       :timer.tc(fn ->
@@ -33,7 +37,7 @@ defmodule PredictionAnalyzer.Pruner do
         Repo.delete_all(
           from(
             p in Prediction,
-            where: p.file_timestamp < ^unix_cutoff
+            where: p.file_timestamp < ^prediction_cutoff_unix
           ),
           timeout: 600_000
         )
@@ -43,7 +47,7 @@ defmodule PredictionAnalyzer.Pruner do
         Repo.delete_all(
           from(
             ve in VehicleEvent,
-            where: ve.arrival_time < ^unix_cutoff
+            where: ve.arrival_time < ^vehicle_event_cutoff_unix
           ),
           timeout: 600_000
         )
@@ -53,7 +57,7 @@ defmodule PredictionAnalyzer.Pruner do
         Repo.delete_all(
           from(
             ve in VehicleEvent,
-            where: ve.departure_time < ^unix_cutoff
+            where: ve.departure_time < ^vehicle_event_cutoff_unix
           ),
           timeout: 600_000
         )

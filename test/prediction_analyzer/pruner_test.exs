@@ -50,16 +50,21 @@ defmodule PredictionAnalyzer.PrunerTest do
 
   test "prune deletes data that is longer than 28 days old and leaves new data alone" do
     days_ago_29 = Timex.local() |> Timex.shift(days: -29) |> DateTime.to_unix()
+
+    days_ago_just_under_28 =
+      Timex.local() |> Timex.shift(days: -28) |> Timex.shift(minutes: 15) |> DateTime.to_unix()
+
     days_ago_5 = Timex.local() |> Timex.shift(days: -5) |> DateTime.to_unix()
 
     %{id: ve1} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_29})
     %{id: ve2} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_5})
-    %{id: _ve3} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_29})
+    %{id: _ve3} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_just_under_28})
+    %{id: _ve4} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_29})
     %{id: _p1} = Repo.insert!(%{@prediction | file_timestamp: days_ago_29, vehicle_event_id: ve1})
     %{id: _p2} = Repo.insert!(%{@prediction | file_timestamp: days_ago_29})
     %{id: p3} = Repo.insert!(%{@prediction | file_timestamp: days_ago_5})
 
-    assert Repo.one(from(ve in VehicleEvent, select: fragment("count(*)"))) == 3
+    assert Repo.one(from(ve in VehicleEvent, select: fragment("count(*)"))) == 4
     assert Repo.one(from(p in Prediction, select: fragment("count(*)"))) == 3
 
     {:noreply, []} = Pruner.handle_info(:prune, [])
