@@ -42,22 +42,14 @@ defmodule PredictionAnalyzer.Pruner do
           timeout: 600_000
         )
 
-        Logger.info("deleting old vehicle events based on arrival")
+        Logger.info("deleting old vehicle events")
 
         Repo.delete_all(
           from(
             ve in VehicleEvent,
-            where: ve.arrival_time < ^vehicle_event_cutoff_unix
-          ),
-          timeout: 600_000
-        )
-
-        Logger.info("deleting old vehicle events based on departure")
-
-        Repo.delete_all(
-          from(
-            ve in VehicleEvent,
-            where: ve.departure_time < ^vehicle_event_cutoff_unix
+            where:
+              (is_nil(ve.arrival_time) or ve.arrival_time < ^vehicle_event_cutoff_unix) and
+                (is_nil(ve.departure_time) or ve.departure_time < ^vehicle_event_cutoff_unix)
           ),
           timeout: 600_000
         )
