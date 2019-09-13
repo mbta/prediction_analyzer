@@ -4,6 +4,16 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AggregatorTest do
 
   alias PredictionAnalyzer.PredictionAccuracy.Aggregator
 
+  defmodule FakeRepo do
+    def query(_query, _params) do
+      raise DBConnection.ConnectionError
+    end
+
+    def transaction(fun, _opts \\ []) do
+      fun.()
+    end
+  end
+
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
     Ecto.Adapters.SQL.Sandbox.mode(PredictionAnalyzer.Repo, {:shared, self()})
@@ -26,9 +36,42 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AggregatorTest do
 
     logs =
       capture_log(fn ->
-        {:noreply, []} = Aggregator.handle_info(:aggregate, [])
+        {:noreply, _state} =
+          Aggregator.handle_info(:aggregate, %{
+            repo: PredictionAnalyzer.Repo,
+            retry_time_fetcher: fn _ -> 0 end
+          })
       end)
 
     assert logs =~ "Finished prediction aggregations"
+  end
+
+  test "the :aggregate handle_info runs when aggregation fails" do
+    Logger.configure(level: :info)
+
+    log =
+      capture_log([level: :info], fn ->
+        {:noreply, _state} =
+          Aggregator.handle_info(:aggregate, %{
+            repo: FakeRepo,
+            retry_time_fetcher: fn n -> n * 10 end
+          })
+      end)
+
+    assert log =~ "retrying in 0.01 seconds"
+    assert log =~ "retrying in 0.02 seconds"
+    assert log =~ "retrying in 0.03 seconds"
+    assert log =~ "retrying in 0.04 seconds"
+
+    assert log =~ "Prediction aggregation failed, not retrying"
+  end
+
+  describe "retry_sleep_ms_per_attempt/1" do
+    test "returns the correct amount of time to sleep" do
+      assert Aggregator.retry_sleep_ms_per_attempt(4) == 10_000
+      assert Aggregator.retry_sleep_ms_per_attempt(3) == 60_000
+      assert Aggregator.retry_sleep_ms_per_attempt(2) == 600_000
+      assert Aggregator.retry_sleep_ms_per_attempt(1) == 1_800_000
+    end
   end
 end
