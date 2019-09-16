@@ -1,6 +1,5 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
   use ExUnit.Case, async: true
-  import ExUnit.CaptureLog
   import Ecto.Query, only: [from: 2]
   alias PredictionAnalyzer.Repo
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
@@ -43,12 +42,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
     arrival_time: nil,
     departure_time: nil
   }
-
-  defmodule FakeRepo do
-    def query(_query, _params) do
-      raise DBConnection.ConnectionError
-    end
-  end
 
   describe "calculate_aggregate_accuracy/9" do
     test "selects the right predictions based on bin and grades them accurately, for arrivals" do
@@ -236,30 +229,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       assert pa.num_predictions == 4
       assert pa.num_accurate_predictions == 2
       assert pa.direction_id == 0
-    end
-
-    test "handles database failure properly" do
-      log =
-        capture_log([level: :warn], fn ->
-          :error =
-            Query.calculate_aggregate_accuracy(
-              FakeRepo,
-              Timex.local(),
-              "departure",
-              "6-12 min",
-              360,
-              720,
-              -30,
-              60,
-              "dev-green"
-            )
-        end)
-
-      base_log_msg =
-        "Elixir.PredictionAnalyzer.PredictionAccuracy.Query do_calculate_aggregate_accuracy"
-
-      assert log =~ "[warn] " <> base_log_msg
-      assert log =~ "[error] " <> base_log_msg
     end
 
     test "calculates mean error and root mean squared error correctly" do
