@@ -9,6 +9,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   alias PredictionAnalyzer.VehiclePositions.Vehicle
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.FailedHTTPFetcher
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.NotModifiedHTTPFetcher
+  alias PredictionAnalyzer.VehiclePositions.TrackerTest.MalformedSubwayVehicleHTTPFetcher
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
@@ -103,6 +104,35 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         end)
 
       assert log =~ "Could not download subway vehicles"
+    end
+
+    test "logs failures to parse a given vehicle entity" do
+      state = %{
+        http_fetcher: MalformedSubwayVehicleHTTPFetcher,
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "prod",
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{},
+        commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT",
+        subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          assert Tracker.handle_info(:track_subway_vehicles, state) ==
+                   {:noreply,
+                    %{
+                      http_fetcher: MalformedSubwayVehicleHTTPFetcher,
+                      aws_vehicle_positions_url: "vehiclepositions",
+                      environment: "prod",
+                      subway_vehicles: %{},
+                      commuter_rail_vehicles: %{},
+                      commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT",
+                      subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
+                    }}
+        end)
+
+      assert log =~ "failed_to_parse_vehicle_entity"
     end
   end
 
@@ -279,6 +309,20 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
 
     def get(_, _, _) do
       %{status_code: 304}
+    end
+  end
+
+  defmodule MalformedSubwayVehicleHTTPFetcher do
+    def get(_url, _headers) do
+      data = %{
+        "entity" => [
+          %{
+            "foo" => "bar"
+          }
+        ]
+      }
+
+      {:ok, %{status_code: 200, body: Jason.encode!(data), headers: []}}
     end
   end
 end
