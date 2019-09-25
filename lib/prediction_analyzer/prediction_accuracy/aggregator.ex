@@ -74,69 +74,73 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
   @spec do_aggregation(DateTime.t(), Ecto.Repo.t()) :: :ok | :error
   defp do_aggregation(current_time, repo) do
     try do
-      repo.transaction(fn ->
-        Enum.each(Filters.bins(), fn {bin_name, {bin_min, bin_max, bin_error_min, bin_error_max}} ->
-          {:ok, r} =
-            Query.calculate_aggregate_accuracy(
-              repo,
-              current_time,
-              "arrival",
-              bin_name,
-              bin_min,
-              bin_max,
-              bin_error_min,
-              bin_error_max,
-              "prod"
-            )
+      repo.transaction(
+        fn ->
+          Enum.each(Filters.bins(), fn {bin_name,
+                                        {bin_min, bin_max, bin_error_min, bin_error_max}} ->
+            {:ok, r} =
+              Query.calculate_aggregate_accuracy(
+                repo,
+                current_time,
+                "arrival",
+                bin_name,
+                bin_min,
+                bin_max,
+                bin_error_min,
+                bin_error_max,
+                "prod"
+              )
 
-          Logger.info("prediction_accuracy_aggregator arrival prod result=#{inspect(r)}")
+            Logger.info("prediction_accuracy_aggregator arrival prod result=#{inspect(r)}")
 
-          {:ok, r} =
-            Query.calculate_aggregate_accuracy(
-              repo,
-              current_time,
-              "departure",
-              bin_name,
-              bin_min,
-              bin_max,
-              bin_error_min,
-              bin_error_max,
-              "prod"
-            )
+            {:ok, r} =
+              Query.calculate_aggregate_accuracy(
+                repo,
+                current_time,
+                "departure",
+                bin_name,
+                bin_min,
+                bin_max,
+                bin_error_min,
+                bin_error_max,
+                "prod"
+              )
 
-          Logger.info("prediction_accuracy_aggregator departure prod result=#{inspect(r)}")
+            Logger.info("prediction_accuracy_aggregator departure prod result=#{inspect(r)}")
 
-          {:ok, r} =
-            Query.calculate_aggregate_accuracy(
-              repo,
-              current_time,
-              "arrival",
-              bin_name,
-              bin_min,
-              bin_max,
-              bin_error_min,
-              bin_error_max,
-              "dev-green"
-            )
+            {:ok, r} =
+              Query.calculate_aggregate_accuracy(
+                repo,
+                current_time,
+                "arrival",
+                bin_name,
+                bin_min,
+                bin_max,
+                bin_error_min,
+                bin_error_max,
+                "dev-green"
+              )
 
-          Logger.info("prediction_accuracy_aggregator arrival dev_green result=#{inspect(r)}")
+            Logger.info("prediction_accuracy_aggregator arrival dev_green result=#{inspect(r)}")
 
-          {:ok, r} =
-            Query.calculate_aggregate_accuracy(
-              repo,
-              current_time,
-              "departure",
-              bin_name,
-              bin_min,
-              bin_max,
-              bin_error_min,
-              bin_error_max,
-              "dev-green"
-            )
+            {:ok, r} =
+              Query.calculate_aggregate_accuracy(
+                repo,
+                current_time,
+                "departure",
+                bin_name,
+                bin_min,
+                bin_max,
+                bin_error_min,
+                bin_error_max,
+                "dev-green"
+              )
 
-          Logger.info("prediction_accuracy_aggregator departure dev_green result=#{inspect(r)}")
-        end)
-      end)
+            Logger.info("prediction_accuracy_aggregator departure dev_green result=#{inspect(r)}")
+          end)
+        end,
+        timeout: 5 * 60 * 1_000
+      )
 
       :ok
     rescue
