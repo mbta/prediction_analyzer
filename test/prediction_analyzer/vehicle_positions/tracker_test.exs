@@ -50,6 +50,10 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
     end
 
     test "handles 304s (Not Modified) gracefully" do
+      old_level = Logger.level()
+      Logger.configure(level: :info)
+      on_exit(fn -> Logger.configure(level: old_level) end)
+
       state = %{
         http_fetcher: NotModifiedHTTPFetcher,
         aws_vehicle_positions_url: "vehiclepositions",
@@ -60,7 +64,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :info], fn ->
           assert Tracker.handle_info(:track_subway_vehicles, state) ==
                    {:noreply,
                     %{
@@ -169,6 +173,9 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
     end
 
     test "handles 304s (Not Modified) gracefully" do
+      old_level = Logger.level()
+      Logger.configure(level: :info)
+      on_exit(fn -> Logger.configure(level: old_level) end)
       reassign_env(:http_fetcher, NotModifiedHTTPFetcher)
 
       state = %{
@@ -180,7 +187,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :info], fn ->
           assert Tracker.handle_info(:track_commuter_rail_vehicles, state) ==
                    {:noreply,
                     %{
