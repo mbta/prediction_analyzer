@@ -32,7 +32,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AggregatorTest do
   end
 
   test "the :aggregate handle_info runs and logs its results" do
+    old_level = Logger.level()
     Logger.configure(level: :info)
+    on_exit(fn -> Logger.configure(level: old_level) end)
 
     logs =
       capture_log(fn ->
@@ -47,7 +49,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AggregatorTest do
   end
 
   test "the :aggregate handle_info runs when aggregation fails" do
+    old_level = Logger.level()
     Logger.configure(level: :info)
+    on_exit(fn -> Logger.configure(level: old_level) end)
 
     log =
       capture_log([level: :info], fn ->
