@@ -7,6 +7,7 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
+  secret_key_base: "local_secret_key_base_at_least_64_bytes_________________________________",
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
