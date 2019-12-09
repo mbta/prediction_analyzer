@@ -5,7 +5,7 @@ defmodule PredictionAnalyzer.Mixfile do
     [
       app: :prediction_analyzer,
       version: "0.0.1",
-      elixir: "~> 1.4",
+      elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -36,14 +36,13 @@ defmodule PredictionAnalyzer.Mixfile do
   defp deps do
     [
       {:dialyxir, "~> 1.0.0-rc.4", only: [:dev, :test], runtime: false},
-      {:distillery, "~> 2.0", runtime: false},
+      {:distillery, "~> 2.1.1", runtime: false},
       {:ecto, "~> 2.0"},
       {:excoveralls, "~> 0.5", only: :test},
       {:gettext, "~> 0.11"},
-      {:hackney, "~> 1.0"},
+      {:hackney, "~> 1.15.2"},
       {:httpoison, "~> 1.4.0"},
       {:jason, "~> 1.0"},
-      {:poison, "~> 2.0"},
       {:phoenix, "~> 1.3.4"},
       {:phoenix_ecto, "~> 3.2"},
       {:phoenix_html, "~> 2.10"},
