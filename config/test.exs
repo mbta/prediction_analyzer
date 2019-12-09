@@ -3,6 +3,7 @@ use Mix.Config
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
+  secret_key_base: "local_secret_key_base_at_least_64_bytes_________________________________",
   http: [port: 4001],
   server: false
 
