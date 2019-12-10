@@ -369,12 +369,13 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       }
 
       Comparator.compare(new_vehicles, old_vehicles)
+      timestamp = @vehicle.timestamp
 
       assert [
                %VehicleEvent{
                  id: event_id,
                  vehicle_id: "1",
-                 arrival_time: nil,
+                 arrival_time: ^timestamp,
                  departure_time: nil
                }
              ] = Repo.all(from(ve in VehicleEvent, select: ve))
@@ -385,7 +386,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
                %VehicleEvent{
                  id: ^event_id,
                  vehicle_id: "1",
-                 arrival_time: nil,
+                 arrival_time: ^timestamp,
                  departure_time: departure_time
                }
              ] = Repo.all(from(ve in VehicleEvent, select: ve))

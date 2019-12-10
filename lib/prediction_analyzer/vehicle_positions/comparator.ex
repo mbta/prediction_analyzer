@@ -50,7 +50,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
 
   defp compare_vehicle(%Vehicle{label: label, current_status: status} = vehicle, nil) do
     if status == :STOPPED_AT do
-      record_new_stopped_vehicle(vehicle)
+      record_arrival(vehicle)
     end
 
     Logger.info("Tracking new vehicle #{label}")
@@ -119,28 +119,6 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
               "One departure, multiple updates for #{vehicle.label} on #{vehicle.route_id}"
             )
         end
-    end
-
-    nil
-  end
-
-  @spec record_new_stopped_vehicle(Vehicle.t()) :: nil
-  defp record_new_stopped_vehicle(vehicle) do
-    params = vehicle |> vehicle_params()
-
-    %VehicleEvent{}
-    |> VehicleEvent.changeset(params)
-    |> Repo.insert()
-    |> case do
-      {:ok, vehicle_event} ->
-        Logger.info(
-          "Inserted vehicle event: #{vehicle.label} materialized stopped at #{vehicle.stop_id}"
-        )
-
-        associate_vehicle_event_with_predictions(vehicle_event)
-
-      {:error, changeset} ->
-        Logger.warn("Could not insert vehicle event: #{inspect(changeset)}")
     end
 
     nil
