@@ -21,14 +21,11 @@ defmodule PredictionAnalyzer.Pruner do
   def handle_info(:prune, state) do
     Logger.info("Beginning prune of DB")
 
-    prediction_cutoff =
-      Timex.local()
-      |> Timex.shift(days: -28)
+    prune_lookback_sec = Application.get_env(:prediction_analyzer, :prune_lookback_sec)
+    max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)
 
-    vehicle_event_cutoff = Timex.shift(prediction_cutoff, minutes: 30)
-
-    prediction_cutoff_unix = DateTime.to_unix(prediction_cutoff)
-    vehicle_event_cutoff_unix = DateTime.to_unix(vehicle_event_cutoff)
+    predictions_cutoff = System.system_time(:second) - prune_lookback_sec
+    vehicle_events_cutoff = predictions_cutoff - max_dwell_time_sec
 
     {time, _} =
       :timer.tc(fn ->
@@ -37,7 +34,7 @@ defmodule PredictionAnalyzer.Pruner do
         Repo.delete_all(
           from(
             p in Prediction,
-            where: p.file_timestamp < ^prediction_cutoff_unix
+            where: p.file_timestamp < ^predictions_cutoff
           ),
           timeout: 600_000
         )
@@ -47,9 +44,7 @@ defmodule PredictionAnalyzer.Pruner do
         Repo.delete_all(
           from(
             ve in VehicleEvent,
-            where:
-              (is_nil(ve.arrival_time) or ve.arrival_time < ^vehicle_event_cutoff_unix) and
-                (is_nil(ve.departure_time) or ve.departure_time < ^vehicle_event_cutoff_unix)
+            where: ve.arrival_time < ^vehicle_events_cutoff
           ),
           timeout: 600_000
         )

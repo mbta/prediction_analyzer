@@ -90,12 +90,14 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
 
   @spec record_departure(Vehicle.t()) :: nil
   defp record_departure(vehicle) do
+    max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)
+
     from(
       ve in VehicleEvent,
       where:
-        ve.environment == ^vehicle.environment and ve.vehicle_id == ^vehicle.id and
+        ve.environment == ^vehicle.environment and ve.trip_id == ^vehicle.trip_id and
           ve.stop_id == ^vehicle.stop_id and is_nil(ve.departure_time) and
-          (ve.arrival_time > ^(:os.system_time(:second) - 60 * 30) or is_nil(ve.arrival_time)),
+          ve.arrival_time > ^(System.system_time(:second) - max_dwell_time_sec),
       update: [set: [departure_time: ^vehicle.timestamp]]
     )
     |> Repo.update_all([], returning: true)
@@ -151,7 +153,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       where:
         p.vehicle_id == ^vehicle_event.vehicle_id and p.stop_id == ^vehicle_event.stop_id and
           p.environment == ^vehicle_event.environment and is_nil(p.vehicle_event_id) and
-          p.file_timestamp > ^(:os.system_time(:second) - 60 * 30),
+          p.file_timestamp > ^(System.system_time(:second) - 60 * 30),
       update: [set: [vehicle_event_id: ^vehicle_event.id]]
     )
     |> Repo.update_all([])
