@@ -48,39 +48,41 @@ defmodule PredictionAnalyzer.PrunerTest do
     assert Process.alive?(pid)
   end
 
-  test "prune deletes data that is longer than 28 days old and leaves new data alone" do
-    days_ago_29 = Timex.local() |> Timex.shift(days: -29) |> DateTime.to_unix()
+  test "prune deletes predictions that are older than 28 days old with dwell time grace period for vehicle events" do
+    max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)
+    prune_lookback_sec = Application.get_env(:prediction_analyzer, :prune_lookback_sec)
 
-    days_ago_just_under_28 =
-      Timex.local() |> Timex.shift(days: -28) |> Timex.shift(minutes: 15) |> DateTime.to_unix()
+    prune_cutoff = System.system_time(:second) - prune_lookback_sec
+    old_timestamp = prune_cutoff - max_dwell_time_sec - 15
+    grace_timestamp = prune_cutoff - max_dwell_time_sec + 15
+    new_timestamp = prune_cutoff + 15
 
-    days_ago_5 = Timex.local() |> Timex.shift(days: -5) |> DateTime.to_unix()
+    %{id: ve_old} = Repo.insert!(%{@vehicle_event | arrival_time: old_timestamp})
+    %{id: ve_grace} = Repo.insert!(%{@vehicle_event | arrival_time: grace_timestamp})
+    %{id: ve_new} = Repo.insert!(%{@vehicle_event | arrival_time: new_timestamp})
 
-    %{id: ve1} = Repo.insert!(%{@vehicle_event | arrival_time: days_ago_29})
+    %{id: p_old} =
+      Repo.insert!(%{@prediction | file_timestamp: old_timestamp, vehicle_event_id: ve_old})
 
-    %{id: ve2} =
-      Repo.insert!(%{@vehicle_event | arrival_time: days_ago_5, departure_time: days_ago_5})
+    %{id: p_grace} =
+      Repo.insert!(%{@prediction | file_timestamp: grace_timestamp, vehicle_event_id: ve_old})
 
-    %{id: _ve3} =
-      Repo.insert!(%{
-        @vehicle_event
-        | arrival_time: days_ago_just_under_28,
-          departure_time: days_ago_just_under_28
-      })
+    %{id: p_new} = Repo.insert!(%{@prediction | file_timestamp: new_timestamp})
 
-    %{id: _ve4} =
-      Repo.insert!(%{@vehicle_event | arrival_time: days_ago_29, departure_time: days_ago_29})
-
-    %{id: _p1} = Repo.insert!(%{@prediction | file_timestamp: days_ago_29, vehicle_event_id: ve1})
-    %{id: _p2} = Repo.insert!(%{@prediction | file_timestamp: days_ago_29})
-    %{id: p3} = Repo.insert!(%{@prediction | file_timestamp: days_ago_5})
-
-    assert Repo.one(from(ve in VehicleEvent, select: fragment("count(*)"))) == 4
+    assert Repo.one(from(ve in VehicleEvent, select: fragment("count(*)"))) == 3
     assert Repo.one(from(p in Prediction, select: fragment("count(*)"))) == 3
 
     {:noreply, []} = Pruner.handle_info(:prune, [])
 
-    assert [%{id: ^ve2}] = Repo.all(from(ve in VehicleEvent, select: ve))
-    assert [%{id: ^p3}] = Repo.all(from(p in Prediction, select: p))
+    vehicle_event_ids = Repo.all(from(ve in VehicleEvent, select: ve.id))
+    prediction_ids = Repo.all(from(p in Prediction, select: p.id))
+
+    refute ve_old in vehicle_event_ids
+    assert ve_grace in vehicle_event_ids
+    assert ve_new in vehicle_event_ids
+
+    refute p_old in prediction_ids
+    refute p_grace in prediction_ids
+    assert p_new in prediction_ids
   end
 end
