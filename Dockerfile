@@ -33,7 +33,7 @@ RUN mix local.hex --force && \
     mix do deps.get --only prod, compile --force
 
 WORKDIR /root/assets/
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm@latest  && \
     npm install -g brunch
