@@ -153,11 +153,15 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     {:noreply, state}
   end
 
+  @spec parse_vehicles(map(), String.t()) :: [Vehicle.t()]
   defp parse_vehicles(%{"entity" => entities}, environment) do
     Enum.flat_map(entities, fn e ->
       case Vehicle.from_json(e, environment) do
         {:ok, vehicle} ->
           [vehicle]
+
+        :ignore ->
+          []
 
         _ ->
           Logger.warn("failed_to_parse_vehicle_entity #{inspect(e)}")

@@ -10,6 +10,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.FailedHTTPFetcher
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.NotModifiedHTTPFetcher
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.MalformedSubwayVehicleHTTPFetcher
+  alias PredictionAnalyzer.VehiclePositions.TrackerTest.SubwayVehicleNoStopIDHTTPFetcher
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
@@ -137,6 +138,35 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         end)
 
       assert log =~ "failed_to_parse_vehicle_entity"
+    end
+
+    test "ignores a vehicle without a stop_id and doesn't log warning" do
+      state = %{
+        http_fetcher: SubwayVehicleNoStopIDHTTPFetcher,
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "prod",
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{},
+        commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT",
+        subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          assert Tracker.handle_info(:track_subway_vehicles, state) ==
+                   {:noreply,
+                    %{
+                      http_fetcher: SubwayVehicleNoStopIDHTTPFetcher,
+                      aws_vehicle_positions_url: "vehiclepositions",
+                      environment: "prod",
+                      subway_vehicles: %{},
+                      commuter_rail_vehicles: %{},
+                      commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT",
+                      subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
+                    }}
+        end)
+
+      refute log =~ "failed_to_parse_vehicle_entity"
     end
   end
 
@@ -330,6 +360,19 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       {:ok, %{status_code: 200, body: Jason.encode!(data), headers: []}}
+    end
+  end
+
+  defmodule SubwayVehicleNoStopIDHTTPFetcher do
+    def get(url, headers) do
+      {:ok, %{body: body} = response} = SubwayVehicle.get(url, headers)
+
+      new_body =
+        body
+        |> Jason.decode!()
+        |> put_in(["entity", Access.all(), "vehicle", "stop_id"], nil)
+
+      {:ok, %{response | body: Jason.encode!(new_body)}}
     end
   end
 end

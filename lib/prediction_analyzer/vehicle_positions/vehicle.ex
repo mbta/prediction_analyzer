@@ -32,7 +32,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
           timestamp: integer()
         }
 
-  @spec from_json(map(), String.t()) :: {:ok, t()} | :error
+  @spec from_json(map(), String.t()) :: {:ok, t()} | :ignore | :error
   def from_json(
         %{
           "is_deleted" => is_deleted,
@@ -53,24 +53,28 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
         },
         environment
       )
-      when is_boolean(is_deleted) and is_binary(stop_id) and is_binary(route_id) and
+      when is_boolean(is_deleted) and is_binary(route_id) and
              is_binary(trip_id) and is_binary(id) and is_binary(label) and direction_id in [0, 1] and
              current_status in ["INCOMING_AT", "IN_TRANSIT_TO", "STOPPED_AT"] and
              is_integer(timestamp) do
-    vehicle = %__MODULE__{
-      id: id,
-      environment: environment,
-      label: label,
-      is_deleted: is_deleted,
-      trip_id: trip_id,
-      route_id: route_id,
-      direction_id: direction_id,
-      current_status: status_atom(current_status),
-      stop_id: PredictionAnalyzer.Utilities.generic_stop_id(stop_id),
-      timestamp: timestamp
-    }
+    if is_binary(stop_id) do
+      vehicle = %__MODULE__{
+        id: id,
+        environment: environment,
+        label: label,
+        is_deleted: is_deleted,
+        trip_id: trip_id,
+        route_id: route_id,
+        direction_id: direction_id,
+        current_status: status_atom(current_status),
+        stop_id: PredictionAnalyzer.Utilities.generic_stop_id(stop_id),
+        timestamp: timestamp
+      }
 
-    {:ok, vehicle}
+      {:ok, vehicle}
+    else
+      :ignore
+    end
   end
 
   def from_json(_, _) do
