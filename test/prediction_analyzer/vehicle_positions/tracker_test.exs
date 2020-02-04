@@ -9,6 +9,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   alias PredictionAnalyzer.VehiclePositions.Vehicle
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.FailedHTTPFetcher
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.NotModifiedHTTPFetcher
+  alias PredictionAnalyzer.VehiclePositions.TrackerTest.ServerErrorHTTPFetcher
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.MalformedSubwayVehicleHTTPFetcher
   alias PredictionAnalyzer.VehiclePositions.TrackerTest.SubwayVehicleNoStopIDHTTPFetcher
 
@@ -109,6 +110,27 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         end)
 
       assert log =~ "Could not download subway vehicles"
+    end
+
+    test "handles AWS S3 500 responses gracefully" do
+      state = %{
+        http_fetcher: ServerErrorHTTPFetcher,
+        aws_vehicle_positions_url: "vehiclepositions",
+        environment: "prod",
+        subway_vehicles: %{},
+        commuter_rail_vehicles: %{},
+        commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT",
+        subway_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
+      }
+
+      log =
+        capture_log([level: :warn], fn ->
+          assert Tracker.handle_info(:track_subway_vehicles, state) ==
+                   {:noreply, state}
+        end)
+
+      assert log =~ "Could not download subway vehicles"
+      assert log =~ "status_code=500"
     end
 
     test "logs failures to parse a given vehicle entity" do
@@ -346,6 +368,16 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
 
     def get(_, _, _) do
       %{status_code: 304}
+    end
+  end
+
+  defmodule ServerErrorHTTPFetcher do
+    def get(_, _) do
+      {:ok, %{status_code: 500}}
+    end
+
+    def get(_, _, _) do
+      %{status_code: 500}
     end
   end
 
