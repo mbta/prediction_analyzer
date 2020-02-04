@@ -32,30 +32,4 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.AggregatorTest do
 
     assert logs =~ "Finished weekly prediction aggregations"
   end
-
-  test "the :backfill_weekly handle_info runs and logs its results" do
-    Logger.configure(level: :info)
-
-    logs =
-      capture_log(fn ->
-        {:ok, pid} = Aggregator.start_link()
-        Kernel.send(pid, :backfill_weekly)
-      end)
-
-    assert logs =~ "Backfilling weekly data"
-  end
-
-  test "the :backfill_weekly handle_info sets the next backfill time for a week in the past" do
-    backfill_shift =
-      Timex.now()
-      |> Timex.days_to_end_of_week(:sun)
-
-    backfill_time = Timex.shift(Timex.now(), days: backfill_shift - 7)
-
-    {:ok, pid} = Aggregator.start_link(%{backfill_time: backfill_time})
-    Kernel.send(pid, :backfill_weekly)
-    state = :sys.get_state(pid)
-
-    assert Timex.day(state.backfill_time) == backfill_time |> Timex.shift(days: -7) |> Timex.day()
-  end
 end
