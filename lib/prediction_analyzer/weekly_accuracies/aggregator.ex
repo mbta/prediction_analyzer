@@ -9,7 +9,6 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
 
   def init(opts) do
     schedule_next_week(self())
-    schedule_backfill(self())
 
     timezone = Application.get_env(:prediction_analyzer, :timezone)
     local_now = Timex.now(timezone)
@@ -33,24 +32,6 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
     {:ok, %{backfill_time: backfill_start}}
   end
 
-  def handle_info(:backfill_weekly, state) do
-    Logger.info("Backfilling weekly data")
-
-    Query.calculate_weekly_accuracies(
-      PredictionAnalyzer.Repo,
-      state[:backfill_time]
-    )
-
-    Logger.info("Backfilling week of #{state[:backfill_time]}")
-
-    next_backfill =
-      state[:backfill_time]
-      |> Timex.shift(days: -7)
-
-    schedule_backfill(self())
-    {:noreply, %{backfill_time: next_backfill}}
-  end
-
   def handle_info(:aggregate_weekly, state) do
     Logger.info("Calculating weekly prediction accuracies")
 
@@ -68,11 +49,6 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
     Logger.info("Finished weekly prediction aggregations in #{time / 1000} ms")
     schedule_next_week(self())
     {:noreply, state}
-  end
-
-  @spec schedule_backfill(pid()) :: reference()
-  defp schedule_backfill(pid) do
-    Process.send_after(pid, :backfill_weekly, 60_000)
   end
 
   @spec schedule_next_week(pid()) :: reference()
