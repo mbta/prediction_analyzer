@@ -87,6 +87,11 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
         {:noreply, state}
 
+      {:ok, %{status_code: code}} ->
+        :ok = Logger.warn(["Could not download subway vehicles. status_code=", inspect(code)])
+
+        {:noreply, state}
+
       {:error, e} ->
         Logger.warn("Could not download subway vehicles; received: #{inspect(e)}")
         {:noreply, state}
