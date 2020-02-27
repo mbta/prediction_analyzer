@@ -30,6 +30,11 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     stop_id: "70038"
   }
 
+  @last_of_month ~D[2020-01-31]
+  @last_of_month_str Date.to_string(@last_of_month)
+  @first_of_month ~D[2020-02-01]
+  @first_of_month_str Date.to_string(@first_of_month)
+
   test "GET /accuracy returns a top-level summary of accuracy", %{conn: conn} do
     a1 = %{@prediction_accuracy | num_accurate_predictions: 100, num_predictions: 100}
 
@@ -125,6 +130,30 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
     assert response =~ "<th>Date</th>"
     refute response =~ "<th>Hour</th>"
+  end
+
+  test "GET /accuracy for a daily range sorts table correctly across month boundaries", %{
+    conn: conn
+  } do
+    insert_hourly_accuracy("prod", 10, 101, 99, @last_of_month)
+    insert_hourly_accuracy("prod", 10, 201, 199, @first_of_month)
+
+    conn =
+      get(conn, "/accuracy", %{
+        "filters" => %{
+          "chart_range" => "Daily",
+          "date_start" => @last_of_month_str,
+          "date_end" => @first_of_month_str
+        }
+      })
+
+    conn = get(conn, redirected_to(conn))
+    response = html_response(conn, 200)
+
+    assert String.match?(
+             response,
+             Regex.compile!(@last_of_month_str <> ".*" <> @first_of_month_str)
+           )
   end
 
   test "GET /accuracy with partial daily range redirects to full range", %{conn: conn} do
@@ -281,14 +310,23 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert conn.assigns[:mode] == :commuter_rail
   end
 
-  def insert_hourly_accuracy(env, hour, total, accurate) do
-    PredictionAnalyzer.Repo.insert!(%{
+  def insert_hourly_accuracy(env, hour, total, accurate, service_date \\ nil) do
+    accuracy = %PredictionAccuracy{
       @prediction_accuracy
       | environment: env,
         hour_of_day: hour,
         num_predictions: total,
         num_accurate_predictions: accurate
-    })
+    }
+
+    accuracy =
+      if service_date do
+        %{accuracy | service_date: service_date}
+      else
+        accuracy
+      end
+
+    PredictionAnalyzer.Repo.insert!(accuracy)
   end
 
   def insert_weekly_accuracy(env, week_start, total, accurate) do

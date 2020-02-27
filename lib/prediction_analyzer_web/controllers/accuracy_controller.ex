@@ -77,10 +77,17 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           {scope, accuracy}
         end)
 
+      sort_function =
+        if filter_params["chart_range"] in ["Daily", "Weekly"] do
+          fn d1, d2 -> Date.compare(d1, d2) == :lt end
+        else
+          fn x, y -> x < y end
+        end
+
       accuracies =
         (Map.keys(prod_accuracies) ++ Map.keys(dev_green_accuracies))
         |> Enum.uniq()
-        |> Enum.sort()
+        |> Enum.sort(sort_function)
         |> Enum.map(fn scope ->
           prod_accuracy = prod_accuracies[scope] || [scope, 0, 0, nil, nil]
           dev_green_accuracy = dev_green_accuracies[scope] || [scope, 0, 0, nil, nil]
