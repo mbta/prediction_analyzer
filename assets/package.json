@@ -8,7 +8,7 @@
   "dependencies": {
     "@danielfarrell/bootstrap-combobox": "^1.1.8",
     "babel-brunch": "^7.0.1",
-    "brunch": "^2.10.17",
+    "brunch": "^3.0.0",
     "c3": "^0.6.12",
     "clean-css-brunch": "2.10.0",
     "growl": ">=1.10.0",
