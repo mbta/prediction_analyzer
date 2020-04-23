@@ -98,6 +98,18 @@ defmodule PredictionAnalyzer.Predictions.Download do
     {:noreply, predictions}
   end
 
+  def handle_info({:ssl_closed, _socket}, state) do
+    {:noreply, state}
+  end
+
+  def handle_info(msg, state) do
+    Logger.warn(
+      "PredictionAnalyzer.Predictions.Download event=unexpected_message message=#{inspect(msg)}"
+    )
+
+    {:noreply, state}
+  end
+
   @spec store_subway_predictions(map(), :dev_green | :prod) ::
           {integer(), nil | [term()]} | no_return()
   defp store_subway_predictions(

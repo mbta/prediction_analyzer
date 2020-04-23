@@ -35,6 +35,17 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
     assert_received({:get, "foo"})
   end
 
+  test "Handles :ssl_closed without a warning" do
+    {:ok, pid} = Tracker.start_link(environment: "dev-green", http_fetcher: NotifyGet)
+
+    log =
+      capture_log(fn ->
+        send(pid, {:ssl_closed, :socket})
+      end)
+
+    refute log =~ "unknown_message"
+  end
+
   describe "handle_info :track_subway_vehicles" do
     test "updates the state with new vehicles" do
       state = %{
