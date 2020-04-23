@@ -93,4 +93,38 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
              ]
     end
   end
+
+  describe "Handling messages" do
+    test "ignores :ssl_closed" do
+      {:ok, pid} =
+        Download.start_link(
+          initial_prod_fetch_ms: 10_000,
+          initial_dev_green_fetch_ms: 10_000,
+          initial_commuter_rail_fetch_ms: 10_000
+        )
+
+      log =
+        capture_log(fn ->
+          send(pid, {:ssl_closed, :socket})
+        end)
+
+      refute log =~ "unexpected_message"
+    end
+
+    test "handles but warns about unexpected message" do
+      {:ok, pid} =
+        Download.start_link(
+          initial_prod_fetch_ms: 10_000,
+          initial_dev_green_fetch_ms: 10_000,
+          initial_commuter_rail_fetch_ms: 10_000
+        )
+
+      log =
+        capture_log(fn ->
+          send(pid, :something_unexpected)
+        end)
+
+      assert log =~ "unexpected_message"
+    end
+  end
 end

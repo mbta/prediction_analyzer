@@ -153,8 +153,15 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     {:noreply, state}
   end
 
+  def handle_info({:ssl_closed, _socket}, state) do
+    {:noreply, state}
+  end
+
   def handle_info(msg, state) do
-    Logger.warn("PredictionAnalyzer.VehiclePositions.Tracker unknown_message: #{inspect(msg)}")
+    Logger.warn(
+      "PredictionAnalyzer.VehiclePositions.Tracker event=unknown_message: #{inspect(msg)}"
+    )
+
     {:noreply, state}
   end
 
