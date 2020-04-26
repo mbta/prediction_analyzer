@@ -77,7 +77,8 @@
   font-weight: bold;
 }
 
-.chart-range-link, .sort-order-link {
+.chart-range-link,
+.sort-order-link {
   background-color: #022441;
   border-color: #b6d8f5;
   border-radius: 3px;
@@ -117,5 +118,9 @@
   padding-bottom: 1em;
 }
 
-.reminder-text{display:none;}
-.reminder-text:target {display:block;}
+.reminder-text {
+  display: none;
+}
+.reminder-text:target {
+  display: block;
+}

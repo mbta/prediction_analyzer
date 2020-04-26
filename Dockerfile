@@ -29,17 +29,16 @@ RUN git config --global url.https://github.com/.insteadOf git://github.com/
 
 # Install hex and rebar
 RUN mix local.hex --force && \
-    mix local.rebar --force && \
-    mix do deps.get --only prod, compile --force
+  mix local.rebar --force && \
+  mix do deps.get --only prod, compile --force
 
 WORKDIR /root/assets/
 RUN curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g npm@latest  && \
-    npm install -g brunch
+  apt-get install -y nodejs && \
+  npm install -g npm@latest
 
-RUN npm install
-RUN brunch build --production
+RUN env NODE_ENV=development npm ci
+RUN npm run deploy
 
 WORKDIR /root
 RUN mix phx.digest
@@ -49,7 +48,7 @@ RUN mix distillery.release --verbose
 FROM debian:stretch
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libssl1.1 libsctp1 curl \
+  libssl1.1 libsctp1 curl \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root

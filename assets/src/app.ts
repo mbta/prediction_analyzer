@@ -7,6 +7,9 @@
 // in vendor, which are never wrapped in imports and
 // therefore are always executed.
 
+declare function require(name: string): string
+// tslint:disable-next-line
+require("../css/app.scss")
 
 // Import dependencies
 //
@@ -23,4 +26,4 @@ import "phoenix_html"
 
 import setupDashboard from "./chart"
 
-setupDashboard();
+setupDashboard()
