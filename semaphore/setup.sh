@@ -31,3 +31,4 @@ mix local.hex --force
 mix local.rebar --force
 mix deps.get --only test
 env MIX_ENV=test mix compile --force --warnings-as-errors
+npm --prefix assets ci
