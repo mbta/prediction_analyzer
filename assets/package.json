@@ -24,7 +24,7 @@
     "@typescript-eslint/eslint-plugin-tslint": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "copy-webpack-plugin": "^5.1.1",
-    "css-loader": "^3.5.1",
+    "css-loader": "^3.5.3",
     "eslint": "^6.8.0",
     "eslint-plugin-prefer-arrow": "^1.2.0",
     "mini-css-extract-plugin": "^0.9.0",
