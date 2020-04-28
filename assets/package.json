@@ -13,7 +13,7 @@
   "dependencies": {
     "@danielfarrell/bootstrap-combobox": "^1.1.8",
     "@types/c3": "^0.7.4",
-    "@types/jquery": "^3.3.34",
+    "@types/jquery": "^3.3.36",
     "c3": "^0.6.12",
     "jquery": "^3.4.1",
     "phoenix": "file:../deps/phoenix",
