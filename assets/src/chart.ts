@@ -23,7 +23,7 @@ export default () => {
       setupDashboard()
     }
 
-    jQuery("#show-dev-green-check").change(event => {
+    jQuery("#show-dev-green-check").change((event) => {
       event.preventDefault()
       const showDevGreen = jQuery("#show-dev-green-check")
       if (showDevGreen.is(":checked")) {
@@ -43,7 +43,7 @@ export default () => {
   })
 }
 
-const bindFormLinks = accuracyForm => {
+const bindFormLinks = (accuracyForm) => {
   const chartRangeInput = document.getElementById(
     "filters_chart_range"
   ) as HTMLInputElement
@@ -51,7 +51,7 @@ const bindFormLinks = accuracyForm => {
   const bindChartRangeLink = (linkId, inputValue) => {
     const link = document.getElementById(linkId)
     if (link) {
-      link.addEventListener("click", event => {
+      link.addEventListener("click", (event) => {
         event.preventDefault()
         chartRangeInput.value = inputValue
         accuracyForm.submit()
@@ -99,7 +99,7 @@ const renderDashboard = () => {
 
   window.dataPoints.sort(sortFunction)
 
-  window.dataPoints.forEach(dataPoint => {
+  window.dataPoints.forEach((dataPoint) => {
     sortedProdAccs.push(dataPoint.prodAcc)
     if (showDevGreen) {
       sortedDgAccs.push(dataPoint.dgAcc)
@@ -177,7 +177,7 @@ const renderDashboard = () => {
         min: 0,
         padding: { top: 0, bottom: 0 },
         tick: {
-          format: x => {
+          format: (x) => {
             return (x * 100).toString() + "%"
           },
         },
@@ -258,7 +258,7 @@ const setupDashboard = () => {
   renderDashboard()
 }
 
-const toggleSortOrder = event => {
+const toggleSortOrder = (event) => {
   event.preventDefault()
   if (window.sortOrderLink.getAttribute("data-sort-order") === "by_id") {
     window.sortOrderLink.innerText = "Sort By Route Order"
