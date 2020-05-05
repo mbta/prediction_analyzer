@@ -1,5 +1,5 @@
 import c3 from "c3"
-import jQuery from "jquery"
+import "@danielfarrell/bootstrap-combobox"
 
 interface DataPoint {
   id: number
@@ -214,6 +214,9 @@ const renderDashboard = () => {
 }
 
 const setupDashboard = () => {
+  const comboElement: any = jQuery(".combobox")
+  comboElement.combobox()
+
   const rawData = window.dataPredictionAccuracyJSON
   const prodAccs = rawData.prod_accs
   const showDevGreen = jQuery("#show-dev-green-check").is(":checked")

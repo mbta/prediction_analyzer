@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
+const { ProvidePlugin } = require("webpack")
 
 module.exports = (env, options) => ({
   resolve: {
@@ -49,6 +50,11 @@ module.exports = (env, options) => ({
   plugins: [
     new MiniCssExtractPlugin({ filename: "../css/app.css" }),
     new CopyWebpackPlugin([{ from: "static/", to: "../" }]),
+    new ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery",
+    }),
   ],
   devtool: "source-map",
   optimization: {
