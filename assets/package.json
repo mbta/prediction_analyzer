@@ -20,7 +20,7 @@
     "phoenix_html": "file:../deps/phoenix_html"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/eslint-plugin-tslint": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "copy-webpack-plugin": "^5.1.1",
