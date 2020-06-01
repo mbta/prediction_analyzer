@@ -3,9 +3,9 @@ defmodule PredictionAnalyzer.Repo.Migrations.AddFileTimestampToPredictions do
 
   def change do
     alter table("predictions") do
-      add :file_timestamp, :integer
+      add(:file_timestamp, :integer)
     end
 
-    create index("predictions", [:file_timestamp])
+    create(index("predictions", [:file_timestamp]))
   end
 end

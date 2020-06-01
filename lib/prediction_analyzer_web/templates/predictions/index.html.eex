@@ -5,7 +5,7 @@
 
   <div>Count: <%= length(@predictions) %> </div>
   <div>
-    <%= link("Download", to: predictions_path(@conn, :index, Map.put(@conn.params, "format", "csv"))) %>
+    <%= link("Download", to: Routes.predictions_path(@conn, :index, Map.put(@conn.params, "format", "csv"))) %>
   </div>
 
   <table class="table">

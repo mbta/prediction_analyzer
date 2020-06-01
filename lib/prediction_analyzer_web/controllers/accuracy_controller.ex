@@ -174,7 +174,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
     redirect(
       conn,
-      to: accuracy_path(conn, :index, %{"filters" => filters})
+      to: Routes.accuracy_path(conn, :index, %{"filters" => filters})
     )
   end
 

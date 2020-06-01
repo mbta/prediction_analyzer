@@ -133,7 +133,7 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
         %{params: %{"filters" => %{"stop_id" => stop_id, "service_date" => service_date}}} = conn,
         hour
       ) do
-    predictions_path(conn, :index, %{
+    Routes.predictions_path(conn, :index, %{
       "stop_id" => stop_id,
       "service_date" => service_date,
       "hour" => hour

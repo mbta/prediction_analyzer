@@ -1,5 +1,5 @@
 <%= for mode_id <- [:subway, :commuter_rail] do %>
-  <%= content_tag :a, mode_string(mode_id), class: button_class(@conn, mode_id), href: accuracy_path(@conn, mode_id) %>
+  <%= content_tag :a, mode_string(mode_id), class: button_class(@conn, mode_id), href: Routes.accuracy_path(@conn, mode_id) %>
 <% end %>
 <div class="">
   Show Dev Green results
@@ -103,7 +103,7 @@
 
 <hr class="accuracy-separator">
 
-<%= form_for @conn, accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
+<%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
   <%= hidden_input(f, :mode) %>
   <%= hidden_input(f, :chart_range) %>
 
