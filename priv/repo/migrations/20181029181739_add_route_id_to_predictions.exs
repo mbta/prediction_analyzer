@@ -3,7 +3,7 @@ defmodule PredictionAnalyzer.Repo.Migrations.AddRouteIdToPredictions do
 
   def change do
     alter table("predictions") do
-      add :route_id, :string
+      add(:route_id, :string)
     end
   end
 end

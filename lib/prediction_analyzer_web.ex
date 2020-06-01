@@ -21,7 +21,7 @@ defmodule PredictionAnalyzerWeb do
     quote do
       use Phoenix.Controller, namespace: PredictionAnalyzerWeb
       import Plug.Conn
-      import PredictionAnalyzerWeb.Router.Helpers
+      alias PredictionAnalyzerWeb.Router.Helpers, as: Routes
       import PredictionAnalyzerWeb.Gettext
     end
   end
@@ -38,7 +38,7 @@ defmodule PredictionAnalyzerWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import PredictionAnalyzerWeb.Router.Helpers
+      alias PredictionAnalyzerWeb.Router.Helpers, as: Routes
       import PredictionAnalyzerWeb.ErrorHelpers
       import PredictionAnalyzerWeb.Gettext
     end

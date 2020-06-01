@@ -1,7 +1,7 @@
 defmodule PredictionAnalyzerWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :prediction_analyzer
 
-  socket("/socket", PredictionAnalyzerWeb.UserSocket)
+  socket("/socket", PredictionAnalyzerWeb.UserSocket, websocket: true)
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -29,7 +29,7 @@ defmodule PredictionAnalyzerWeb.Endpoint do
     Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Jason
   )
 
   plug(Plug.MethodOverride)
