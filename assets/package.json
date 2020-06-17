@@ -14,7 +14,7 @@
     "@danielfarrell/bootstrap-combobox": "^1.1.8",
     "@types/c3": "^0.7.4",
     "@types/jquery": "^3.3.38",
-    "c3": "^0.7.15",
+    "c3": "^0.7.18",
     "jquery": "^3.5.1",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html"
