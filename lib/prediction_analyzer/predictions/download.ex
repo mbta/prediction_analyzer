@@ -133,16 +133,23 @@ defmodule PredictionAnalyzer.Predictions.Download do
         }
 
         if prediction["trip_update"]["stop_time_update"] != nil do
-          Enum.map(prediction["trip_update"]["stop_time_update"], fn update ->
-            Map.merge(trip_prediction, %{
-              arrival_time: update["arrival"]["time"],
-              departure_time: update["departure"]["time"],
-              boarding_status: update["boarding_status"],
-              schedule_relationship: update["schedule_relationship"],
-              stop_id: PredictionAnalyzer.Utilities.generic_stop_id(update["stop_id"]),
-              stop_sequence: update["stop_sequence"],
-              stops_away: update["stops_away"]
-            })
+          Enum.reduce(prediction["trip_update"]["stop_time_update"], [], fn update, acc ->
+            if is_nil(update["stops_away"]) do
+              acc
+            else
+              acc ++
+                [
+                  Map.merge(trip_prediction, %{
+                    arrival_time: update["arrival"]["time"],
+                    departure_time: update["departure"]["time"],
+                    boarding_status: update["boarding_status"],
+                    schedule_relationship: update["schedule_relationship"],
+                    stop_id: PredictionAnalyzer.Utilities.generic_stop_id(update["stop_id"]),
+                    stop_sequence: update["stop_sequence"],
+                    stops_away: update["stops_away"]
+                  })
+                ]
+            end
           end)
         end
       end)
