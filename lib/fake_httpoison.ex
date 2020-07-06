@@ -368,6 +368,23 @@ defmodule FakeHTTPoison do
                 "stop_id" => "70063",
                 "stop_sequence" => 30,
                 "stops_away" => 6
+              },
+              %{
+                "arrival" => %{
+                  "delay" => nil,
+                  "time" => 1_540_921_700,
+                  "uncertainty" => nil
+                },
+                "boarding_status" => nil,
+                "departure" => %{
+                  "delay" => nil,
+                  "time" => 1_540_921_745,
+                  "uncertainty" => nil
+                },
+                "schedule_relationship" => "SCHEDULED",
+                "stop_id" => "70063",
+                "stop_sequence" => 40,
+                "stops_away" => nil
               }
             ]
           }
