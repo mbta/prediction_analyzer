@@ -22,7 +22,7 @@
 
           Prediction analyzer
         </h1>
-        <%= render @view_module, @view_template, assigns %>
+        <%= @inner_content %>
       </main>
 
     </div> <!-- /container -->

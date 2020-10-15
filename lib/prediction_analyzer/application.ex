@@ -6,40 +6,35 @@ defmodule PredictionAnalyzer.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
-    import Supervisor.Spec
-
     set_runtime_config()
     # Define workers and child supervisors to be supervised
     supervisors = [
-      # Start the Ecto repository
-      supervisor(PredictionAnalyzer.Repo, []),
-      # Start the endpoint when the application starts
-      supervisor(PredictionAnalyzerWeb.Endpoint, [])
-      # Start your own worker by calling: PredictionAnalyzer.Worker.start_link(arg1, arg2, arg3)
-      # worker(PredictionAnalyzer.Worker, [arg1, arg2, arg3]),
+      PredictionAnalyzer.Repo,
+      {Phoenix.PubSub, name: PredictionAnalyzerWeb.PubSub},
+      PredictionAnalyzerWeb.Endpoint
     ]
 
     workers =
       if Application.get_env(:prediction_analyzer, :start_workers) do
         [
-          worker(
-            PredictionAnalyzer.VehiclePositions.Tracker,
-            [[environment: "dev-green"]],
+          Supervisor.child_spec(
+            {
+              PredictionAnalyzer.VehiclePositions.Tracker,
+              [environment: "dev-green"]
+            },
             id: DevGreenVehiclePositionsTracker
           ),
-          worker(
-            PredictionAnalyzer.VehiclePositions.Tracker,
-            [[environment: "prod"]],
+          Supervisor.child_spec(
+            {PredictionAnalyzer.VehiclePositions.Tracker, [environment: "prod"]},
             id: ProdVehiclePositionsTracker
           ),
-          worker(PredictionAnalyzer.Predictions.Download, [
-            [name: PredictionAnalyzer.Predictions.Download]
-          ]),
-          worker(PredictionAnalyzer.PredictionAccuracy.Aggregator, []),
-          worker(PredictionAnalyzer.WeeklyAccuracies.Aggregator, []),
-          worker(PredictionAnalyzer.PredictionAccuracy.AccuracyTracker, []),
-          worker(PredictionAnalyzer.StopNameFetcher, [[name: PredictionAnalyzer.StopNameFetcher]]),
-          worker(PredictionAnalyzer.Pruner, [])
+          {PredictionAnalyzer.Predictions.Download,
+           [name: PredictionAnalyzer.Predictions.Download]},
+          PredictionAnalyzer.PredictionAccuracy.Aggregator,
+          PredictionAnalyzer.WeeklyAccuracies.Aggregator,
+          PredictionAnalyzer.PredictionAccuracy.AccuracyTracker,
+          {PredictionAnalyzer.StopNameFetcher, [name: PredictionAnalyzer.StopNameFetcher]},
+          PredictionAnalyzer.Pruner
         ]
       else
         []
