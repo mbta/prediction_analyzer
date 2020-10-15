@@ -3,7 +3,7 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
   require Logger
   alias PredictionAnalyzer.WeeklyAccuracies.Query
 
-  def start_link(opts \\ %{}) do
+  def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, opts, [])
   end
 
@@ -18,7 +18,7 @@ defmodule PredictionAnalyzer.WeeklyAccuracies.Aggregator do
       |> Timex.days_to_end_of_week(:sun)
 
     backfill_start =
-      case Map.get(opts, :backfill_time, nil) do
+      case Keyword.get(opts, :backfill_time, nil) do
         nil ->
           local_now
           |> Timex.shift(days: days_to_end_of_week)

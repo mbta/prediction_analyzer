@@ -9,7 +9,7 @@ use Mix.Config
 config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: PredictionAnalyzerWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: PredictionAnalyzer.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: PredictionAnalyzerWeb.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,

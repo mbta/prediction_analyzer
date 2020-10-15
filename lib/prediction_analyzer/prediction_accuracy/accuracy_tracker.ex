@@ -1,4 +1,6 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
+  use GenServer
+
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   alias PredictionAnalyzer.Filters
   require Logger

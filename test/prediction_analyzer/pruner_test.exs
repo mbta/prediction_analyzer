@@ -43,7 +43,7 @@ defmodule PredictionAnalyzer.PrunerTest do
   }
 
   test "starts up with no issue" do
-    {:ok, pid} = Pruner.start_link()
+    {:ok, pid} = Pruner.start_link([])
     :timer.sleep(500)
     assert Process.alive?(pid)
   end
