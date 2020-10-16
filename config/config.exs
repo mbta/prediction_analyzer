@@ -33,9 +33,7 @@ config :prediction_analyzer, :timezone, "America/New_York"
 config :prediction_analyzer, :max_dwell_time_sec, 30 * 60
 config :prediction_analyzer, :prune_lookback_sec, 12 * 60 * 60
 
-config :prediction_analyzer, PredictionAnalyzer.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  database: "prediction_analyzer_repo"
+config :prediction_analyzer, PredictionAnalyzer.Repo, adapter: Ecto.Adapters.Postgres
 
 config :prediction_analyzer, start_workers: true
 
