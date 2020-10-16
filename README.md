@@ -22,8 +22,8 @@ To start your Phoenix server:
   * Install dependencies with `mix deps.get`
   * You'll need a copy of Postgres running locally. There's an easy-to-use [Mac OS app](https://postgresapp.com/) you can use.
 	Install the app and make sure it's running.
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Optionally, you can insert some randomized sample data for a few Red and Orange Line stations by running `mix ecto.reset`,
+  * Create your database with `mix ecto.create && mix ecto.load`
+  * Optionally, you can insert some randomized sample data for a few Red and Orange Line stations by running `mix run priv/repo/seeds.exs`,
 	supplying the environment variables given above, as in the example command.
   * Install Node.js dependencies with `cd assets && npm install`
   * Start Phoenix endpoint with `mix phx.server`, supplying the environment variables.
