@@ -114,27 +114,9 @@ defmodule PredictionAnalyzer.Filters do
     end
   end
 
-  def filter_by_timeframe(q, chart_range, _date, start_date, end_date)
-      when chart_range == "Weekly" and is_binary(start_date) and is_binary(end_date) do
-    case {Date.from_iso8601(start_date), Date.from_iso8601(end_date)} do
-      {{:ok, d1}, {:ok, d2}} ->
-        case Timex.diff(d2, d1, :days) do
-          n when n < 0 ->
-            {:error, "Start date is after end date"}
-
-          _ ->
-            {:ok, from(acc in q, where: acc.week_start >= ^d1 and acc.week_start <= ^d2)}
-        end
-
-      _ ->
-        {:error, "Can't parse start or end date."}
-    end
-  end
-
   def filter_by_timeframe(_q, "Hourly", _, _, _), do: {:error, "No service date given."}
   def filter_by_timeframe(_q, "Daily", _, _, _), do: {:error, "No start or end date given."}
   def filter_by_timeframe(_q, "By Station", _, _, _), do: {:error, "No start or end date given."}
-  def filter_by_timeframe(_q, "Weekly", _, _, _), do: {:error, "No start or end date given."}
 
   @doc """
   Takes a Queryable and groups and sums the results into
@@ -149,7 +131,6 @@ defmodule PredictionAnalyzer.Filters do
         "Daily" -> :service_date
         "By Station" -> :stop_id
         "Hourly" -> :hour_of_day
-        "Weekly" -> :week_start
       end
 
     from(

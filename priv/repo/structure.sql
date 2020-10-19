@@ -186,45 +186,6 @@ ALTER SEQUENCE public.vehicle_events_id_seq OWNED BY public.vehicle_events.id;
 
 
 --
--- Name: weekly_accuracies; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.weekly_accuracies (
-    id bigint NOT NULL,
-    week_start date NOT NULL,
-    stop_id character varying(255) NOT NULL,
-    route_id character varying(255) NOT NULL,
-    arrival_departure public.arrival_departure NOT NULL,
-    bin public.prediction_bin NOT NULL,
-    num_predictions integer NOT NULL,
-    num_accurate_predictions integer NOT NULL,
-    environment public.environment,
-    direction_id integer,
-    mean_error real,
-    root_mean_squared_error real
-);
-
-
---
--- Name: weekly_accuracies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.weekly_accuracies_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: weekly_accuracies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.weekly_accuracies_id_seq OWNED BY public.weekly_accuracies.id;
-
-
---
 -- Name: prediction_accuracy id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -243,13 +204,6 @@ ALTER TABLE ONLY public.predictions ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.vehicle_events ALTER COLUMN id SET DEFAULT nextval('public.vehicle_events_id_seq'::regclass);
-
-
---
--- Name: weekly_accuracies id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.weekly_accuracies ALTER COLUMN id SET DEFAULT nextval('public.weekly_accuracies_id_seq'::regclass);
 
 
 --
@@ -282,14 +236,6 @@ ALTER TABLE ONLY public.schema_migrations
 
 ALTER TABLE ONLY public.vehicle_events
     ADD CONSTRAINT vehicle_events_pkey PRIMARY KEY (id);
-
-
---
--- Name: weekly_accuracies weekly_accuracies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.weekly_accuracies
-    ADD CONSTRAINT weekly_accuracies_pkey PRIMARY KEY (id);
 
 
 --
@@ -342,13 +288,6 @@ CREATE INDEX vehicle_events_departure_time_index ON public.vehicle_events USING 
 
 
 --
--- Name: weekly_accuracies_week_start_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX weekly_accuracies_week_start_index ON public.weekly_accuracies USING btree (week_start);
-
-
---
 -- Name: predictions predictions_vehicle_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -360,5 +299,5 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220);
+INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956);
 

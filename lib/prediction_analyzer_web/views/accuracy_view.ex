@@ -63,7 +63,6 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     case chart_range do
       "Hourly" -> "Hour"
       "Daily" -> "Date"
-      "Weekly" -> "Week Start"
       "By Station" -> "Station"
     end
   end

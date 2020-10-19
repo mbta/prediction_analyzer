@@ -1,7 +1,6 @@
 defmodule PredictionAnalyzerWeb.AccuracyController do
   use PredictionAnalyzerWeb, :controller
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
-  alias PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies
   alias PredictionAnalyzer.Filters
 
   import Ecto.Query, only: [from: 2]
@@ -28,12 +27,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
 
     if time_filters_present?(filter_params) do
-      {relevant_accuracies, error_msg} =
-        if filter_params["chart_range"] == "Weekly" do
-          WeeklyAccuracies.filter(filter_params)
-        else
-          PredictionAccuracy.filter(filter_params)
-        end
+      {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
 
       [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
         from(
@@ -78,7 +72,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         end)
 
       sort_function =
-        if filter_params["chart_range"] in ["Daily", "Weekly"] do
+        if filter_params["chart_range"] == "Daily" do
           fn d1, d2 -> Date.compare(d1, d2) == :lt end
         else
           fn x, y -> x < y end
@@ -157,12 +151,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         filters["chart_range"] == "Hourly" && filters["service_date"] ->
           Map.take(filters, ["chart_range", "service_date"])
 
-        filters["chart_range"] in ["Weekly"] ->
-          %{
-            "date_start" => Timex.local() |> Timex.shift(days: -70) |> Date.to_string(),
-            "date_end" => Timex.local() |> Date.to_string()
-          }
-
         true ->
           %{"chart_range" => "Hourly", "service_date" => Timex.local() |> Date.to_string()}
       end
@@ -213,7 +201,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   @spec time_filters_present?(map()) :: boolean()
   defp time_filters_present?(filters) do
     (filters["chart_range"] == "Hourly" && filters["service_date"]) ||
-      (filters["chart_range"] in ["Weekly", "Daily", "By Station"] && filters["date_start"] &&
+      (filters["chart_range"] in ["Daily", "By Station"] && filters["date_start"] &&
          filters["date_end"])
   end
 end

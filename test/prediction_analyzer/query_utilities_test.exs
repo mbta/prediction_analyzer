@@ -5,27 +5,12 @@ defmodule PredictionAnalyzer.QueryUtilitiesTest do
   import PredictionAnalyzer.QueryUtilities
 
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
-  alias PredictionAnalyzer.WeeklyAccuracies.WeeklyAccuracies
   alias PredictionAnalyzer.Repo
 
   @prediction_accuracy %PredictionAccuracy{
     environment: "prod",
     service_date: ~D[2019-07-01],
     hour_of_day: 10,
-    stop_id: "stop1",
-    route_id: "route1",
-    direction_id: 0,
-    arrival_departure: "arrival",
-    bin: "0-3 min",
-    num_predictions: 1,
-    num_accurate_predictions: 1,
-    mean_error: 10.0,
-    root_mean_squared_error: 10.0
-  }
-
-  @weekly_accuracy %WeeklyAccuracies{
-    environment: "prod",
-    week_start: ~D[2019-07-01],
     stop_id: "stop1",
     route_id: "route1",
     direction_id: 0,
@@ -54,24 +39,6 @@ defmodule PredictionAnalyzer.QueryUtilitiesTest do
           from(
             pa in PredictionAccuracy,
             select: aggregate_mean_error(pa.mean_error, pa.num_predictions)
-          )
-        )
-
-      assert_in_delta(mean_error, (5.0 * 5 + -10.0 * 10) / (5 + 10), 0.001)
-    end
-
-    test "aggregates multiple mean errors into a correct overall mean error for weekly_accuracies" do
-      wa1 = %{@weekly_accuracy | mean_error: 5.0, num_predictions: 5}
-      wa2 = %{@weekly_accuracy | mean_error: -10.0, num_predictions: 10}
-
-      Repo.insert!(wa1)
-      Repo.insert!(wa2)
-
-      [mean_error] =
-        Repo.all(
-          from(
-            wa in WeeklyAccuracies,
-            select: aggregate_mean_error(wa.mean_error, wa.num_predictions)
           )
         )
 
@@ -115,24 +82,6 @@ defmodule PredictionAnalyzer.QueryUtilitiesTest do
           from(
             pa in PredictionAccuracy,
             select: aggregate_rmse(pa.root_mean_squared_error, pa.num_predictions)
-          )
-        )
-
-      assert_in_delta(rmse, :math.sqrt((5.0 * 5.0 * 5 + 10.0 * 10.0 * 10) / (5 + 10)), 0.001)
-    end
-
-    test "aggregates multiple mean errors into a correct overall mean error for weekly_accuracies" do
-      wa1 = %{@weekly_accuracy | root_mean_squared_error: 5.0, num_predictions: 5}
-      wa2 = %{@weekly_accuracy | root_mean_squared_error: 10.0, num_predictions: 10}
-
-      Repo.insert!(wa1)
-      Repo.insert!(wa2)
-
-      [rmse] =
-        Repo.all(
-          from(
-            wa in WeeklyAccuracies,
-            select: aggregate_rmse(wa.root_mean_squared_error, wa.num_predictions)
           )
         )
 

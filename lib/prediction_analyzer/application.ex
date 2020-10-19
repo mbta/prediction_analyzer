@@ -31,7 +31,6 @@ defmodule PredictionAnalyzer.Application do
           {PredictionAnalyzer.Predictions.Download,
            [name: PredictionAnalyzer.Predictions.Download]},
           PredictionAnalyzer.PredictionAccuracy.Aggregator,
-          PredictionAnalyzer.WeeklyAccuracies.Aggregator,
           PredictionAnalyzer.PredictionAccuracy.AccuracyTracker,
           {PredictionAnalyzer.StopNameFetcher, [name: PredictionAnalyzer.StopNameFetcher]},
           PredictionAnalyzer.Pruner
