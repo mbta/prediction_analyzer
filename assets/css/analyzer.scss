@@ -121,6 +121,18 @@
 .reminder-text {
   display: none;
 }
+
 .reminder-text:target {
   display: block;
+}
+
+/* Selectize: decouple dropdown width from input width */
+
+.selectize-dropdown {
+  width: auto !important;
+}
+
+.selectize-dropdown [data-selectable],
+.selectize-dropdown .optgroup-header {
+  white-space: nowrap;
 }

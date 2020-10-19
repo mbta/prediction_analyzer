@@ -82,18 +82,16 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
            })
   end
 
-  describe "stop_descriptions/1" do
-    test "returns subway stops" do
-      assert AccuracyView.stop_descriptions(:subway) == [
-               {"", ""},
-               {"Jane Roe St (67890)", "67890"},
-               {"John Doe Square (12345)", "12345"}
-             ]
+  describe "stop_filter_options/1" do
+    test "returns subway stops and groups" do
+      assert %{
+               "Groups" => [{"Trunk stops", "_trunk"} | _],
+               "Stops" => [{"Jane Roe St (67890)", "67890"}, {"John Doe Square (12345)", "12345"}]
+             } = AccuracyView.stop_filter_options(:subway)
     end
 
     test "returns commuter rail stops" do
-      assert AccuracyView.stop_descriptions(:commuter_rail) == [
-               {"", ""},
+      assert AccuracyView.stop_filter_options(:commuter_rail) == [
                {"No Description Stop", "No Description Stop"}
              ]
     end

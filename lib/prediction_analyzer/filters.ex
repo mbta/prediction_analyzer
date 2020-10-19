@@ -1,6 +1,7 @@
 defmodule PredictionAnalyzer.Filters do
   import Ecto.Query, only: [from: 2]
   import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
+  alias PredictionAnalyzer.Filters.StopGroups
 
   @doc """
   Defines the bins we consider for aggregate accuracy. Each bin has the
@@ -22,7 +23,6 @@ defmodule PredictionAnalyzer.Filters do
   @spec filter_by_route(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
   def filter_by_route(q, route_ids) when is_binary(route_ids) and route_ids != "" do
     route_id_list = String.split(route_ids, ",")
-
     {:ok, from(acc in q, where: acc.route_id in ^route_id_list)}
   end
 
@@ -44,12 +44,15 @@ defmodule PredictionAnalyzer.Filters do
 
   def filter_by_mode(q, _), do: {:ok, q}
 
-  @spec filter_by_stop(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
-  def filter_by_stop(q, stop_id) when is_binary(stop_id) and stop_id != "" do
-    {:ok, from(acc in q, where: acc.stop_id == ^stop_id)}
+  @spec filter_by_stop(Ecto.Query.t(), [String.t()]) ::
+          {:ok, Ecto.Query.t()} | {:error, String.t()}
+  def filter_by_stop(q, [_ | _] = stop_ids) do
+    expanded_stop_ids = StopGroups.expand_groups(stop_ids)
+    {:ok, from(acc in q, where: acc.stop_id in ^expanded_stop_ids)}
   end
 
-  def filter_by_stop(q, _), do: {:ok, q}
+  def filter_by_stop(q, []), do: {:ok, q}
+  def filter_by_stop(q, nil), do: {:ok, q}
 
   @spec filter_by_arrival_departure(Ecto.Query.t(), any()) ::
           {:ok, Ecto.Query.t()} | {:error, String.t()}
