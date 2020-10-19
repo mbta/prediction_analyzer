@@ -123,8 +123,8 @@
 
         <%= if f.params["chart_range"] != "By Station" do %>
           <div class="form-group">
-            <%= label(f, :stop_id, "Stop ID") %>
-            <%= select(f, :stop_id, stop_descriptions(@mode), class: 'combobox form-control') %>
+            <%= label(f, :stop_ids, "Stops") %>
+            <%= multiple_select(f, :stop_ids, stop_filter_options(@mode), class: 'form-control') %>
           </div>
         <% end %>
 

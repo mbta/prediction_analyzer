@@ -45,7 +45,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     q = from(acc in __MODULE__, [])
 
     with {:ok, q} <- filter_by_route(q, params["route_ids"]),
-         {:ok, q} <- filter_by_stop(q, params["stop_id"]),
+         {:ok, q} <- filter_by_stop(q, params["stop_ids"]),
          {:ok, q} <- filter_by_direction(q, params["direction_id"]),
          {:ok, q} <- filter_by_arrival_departure(q, params["arrival_departure"]),
          {:ok, q} <- filter_by_bin(q, params["bin"]),

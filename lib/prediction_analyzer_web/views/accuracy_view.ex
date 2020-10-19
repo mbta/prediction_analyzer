@@ -107,26 +107,24 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     false
   end
 
-  @spec stop_descriptions(PredictionAnalyzer.Utilities.mode()) :: [{String.t(), String.t()}]
-  def stop_descriptions(mode) do
-    stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
-
-    description_pairs =
-      stop_name_fetcher.get_stop_descriptions(mode)
-      |> Enum.map(&stop_description/1)
+  @spec stop_filter_options(PredictionAnalyzer.Utilities.mode()) ::
+          %{String.t() => [{String.t(), String.t()}]} | [{String.t(), String.t()}]
+  def stop_filter_options(mode) do
+    stop_options =
+      Application.get_env(:prediction_analyzer, :stop_name_fetcher).get_stop_descriptions(mode)
+      |> Enum.map(&stop_option/1)
       |> Enum.sort()
 
-    [{"", ""} | description_pairs]
-  end
-
-  @spec stop_description({String.t(), String.t()}) :: {String.t(), String.t()}
-  defp stop_description({id, description}) do
-    if description do
-      {"#{description} (#{id})", id}
-    else
-      {id, id}
+    # Groups are currently not applicable to Commuter Rail
+    case mode do
+      :commuter_rail -> stop_options
+      :subway -> %{"Groups" => Filters.StopGroups.group_names(), "Stops" => stop_options}
     end
   end
+
+  @spec stop_option({String.t(), String.t() | nil}) :: {String.t(), String.t()}
+  defp stop_option({id, nil}), do: {id, id}
+  defp stop_option({id, description}), do: {"#{description} (#{id})", id}
 
   def predictions_path_with_filters(
         %{params: %{"filters" => %{"stop_id" => stop_id, "service_date" => service_date}}} = conn,

@@ -49,6 +49,14 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
   end
 
   describe "filter/1" do
+    defp base_params do
+      %{
+        "bin" => "All",
+        "chart_range" => "Hourly",
+        "service_date" => Timex.local() |> Date.to_string()
+      }
+    end
+
     test "filters work" do
       acc1 = %{@prediction_accuracy | service_date: ~D[2018-01-01]}
       acc2 = %{@prediction_accuracy | stop_id: "some_stop"}
@@ -57,55 +65,87 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       acc5 = %{@prediction_accuracy | bin: "6-8 min"}
       acc6 = %{@prediction_accuracy | direction_id: 1}
 
-      base_params = %{
-        "bin" => "All",
-        "chart_range" => "Hourly",
-        "service_date" => Timex.local() |> Date.to_string()
-      }
-
       [acc1_id, acc2_id, acc3_id, acc4_id, acc5_id, acc6_id] =
         Enum.map([acc1, acc2, acc3, acc4, acc5, acc6], fn acc ->
           %{id: id} = Repo.insert!(acc)
           id
         end)
 
-      {accs, nil} = PredictionAccuracy.filter(base_params)
+      {accs, nil} = PredictionAccuracy.filter(base_params())
       q = from(acc in accs, [])
 
       assert [%{id: ^acc2_id}, %{id: ^acc3_id}, %{id: ^acc4_id}, %{id: ^acc5_id}, %{id: ^acc6_id}] =
                execute_query(q)
 
       {accs, nil} =
-        PredictionAccuracy.filter(Map.merge(base_params, %{"service_date" => "2018-01-01"}))
+        PredictionAccuracy.filter(Map.merge(base_params(), %{"service_date" => "2018-01-01"}))
 
       q = from(acc in accs, [])
       assert [%{id: ^acc1_id}] = execute_query(q)
 
-      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"stop_id" => "some_stop"}))
+      {accs, nil} =
+        PredictionAccuracy.filter(Map.merge(base_params(), %{"stop_ids" => ["some_stop"]}))
+
       q = from(acc in accs, [])
       assert [%{id: ^acc2_id}] = execute_query(q)
 
       {accs, nil} =
-        PredictionAccuracy.filter(
-          Map.merge(base_params, %{"route_ids" => "some_route,some_other_route"})
-        )
+        PredictionAccuracy.filter(Map.merge(base_params(), %{"route_ids" => "some_route"}))
 
       q = from(acc in accs, [])
       assert [%{id: ^acc3_id}] = execute_query(q)
 
       {accs, nil} =
-        PredictionAccuracy.filter(Map.merge(base_params, %{"arrival_departure" => "departure"}))
+        PredictionAccuracy.filter(Map.merge(base_params(), %{"arrival_departure" => "departure"}))
 
       q = from(acc in accs, [])
       assert [%{id: ^acc4_id}] = execute_query(q)
 
-      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"bin" => "6-8 min"}))
+      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params(), %{"bin" => "6-8 min"}))
       q = from(acc in accs, [])
       assert [%{id: ^acc5_id}] = execute_query(q)
 
-      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params, %{"direction_id" => "1"}))
+      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params(), %{"direction_id" => "1"}))
       q = from(acc in accs, [])
       assert [%{id: ^acc6_id}] = execute_query(q)
+    end
+
+    test "can filter by multiple routes" do
+      Repo.insert!(%{@prediction_accuracy | route_id: "route1"})
+      Repo.insert!(%{@prediction_accuracy | route_id: "route2"})
+      Repo.insert!(%{@prediction_accuracy | route_id: "route3"})
+
+      {accs, nil} =
+        PredictionAccuracy.filter(Map.merge(base_params(), %{"route_ids" => "route1,route3"}))
+
+      query = from(acc in accs, [])
+      assert [%{route_id: "route1"}, %{route_id: "route3"}] = execute_query(query)
+    end
+
+    test "can filter by multiple stops" do
+      Repo.insert!(%{@prediction_accuracy | stop_id: "stop1"})
+      Repo.insert!(%{@prediction_accuracy | stop_id: "stop2"})
+      Repo.insert!(%{@prediction_accuracy | stop_id: "stop3"})
+
+      {accs, nil} =
+        PredictionAccuracy.filter(Map.merge(base_params(), %{"stop_ids" => ~w(stop1 stop3)}))
+
+      query = from(acc in accs, [])
+      assert [%{stop_id: "stop1"}, %{stop_id: "stop3"}] = execute_query(query)
+    end
+
+    test "can filter using stop groups" do
+      Repo.insert!(%{@prediction_accuracy | stop_id: "70061"})
+      Repo.insert!(%{@prediction_accuracy | stop_id: "70085"})
+      Repo.insert!(%{@prediction_accuracy | stop_id: "70001"})
+
+      {accs, nil} =
+        PredictionAccuracy.filter(
+          Map.merge(base_params(), %{"stop_ids" => ~w(70001 _ashmont_branch)})
+        )
+
+      query = from(acc in accs, [])
+      assert [%{stop_id: "70085"}, %{stop_id: "70001"}] = execute_query(query)
     end
 
     test "can filter by single date or more" do

@@ -11,15 +11,16 @@
     "check": "tsc --noEmit && npm run lint:check && npm run format:check"
   },
   "dependencies": {
-    "@danielfarrell/bootstrap-combobox": "^1.1.8",
     "@types/c3": "^0.7.4",
     "@types/jquery": "^3.5.1",
     "c3": "^0.7.20",
     "jquery": "^3.5.1",
     "phoenix": "file:../deps/phoenix",
-    "phoenix_html": "file:../deps/phoenix_html"
+    "phoenix_html": "file:../deps/phoenix_html",
+    "selectize": "^0.12.4"
   },
   "devDependencies": {
+    "@types/selectize": "^0.12.34",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/eslint-plugin-tslint": "^3.10.1",
     "@typescript-eslint/parser": "^2.34.0",

@@ -1,5 +1,6 @@
 import c3 from "c3"
-import "@danielfarrell/bootstrap-combobox"
+import "selectize/dist/js/standalone/selectize.js"
+import "selectize/dist/css/selectize.bootstrap3.css"
 
 interface DataPoint {
   id: number
@@ -204,8 +205,11 @@ const renderDashboard = () => {
 }
 
 const setupDashboard = () => {
-  const comboElement: any = jQuery(".combobox")
-  comboElement.combobox()
+  jQuery("#filters_stop_ids").selectize({
+    dropdownParent: "body",
+    placeholder: "Type to search...",
+    scrollDuration: 0,
+  })
 
   const rawData = window.dataPredictionAccuracyJSON
   const prodAccs = rawData.prod_accs
