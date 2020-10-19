@@ -25,7 +25,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
       )
 
     aws_vehicle_positions_url =
-      get_env_vehicle_positions_url(environment) || args[:aws_vehicle_positions_url]
+      args[:aws_vehicle_positions_url] || get_env_vehicle_positions_url(environment)
 
     http_fetcher =
       Keyword.get(args, :http_fetcher, Application.get_env(:prediction_analyzer, :http_fetcher))
