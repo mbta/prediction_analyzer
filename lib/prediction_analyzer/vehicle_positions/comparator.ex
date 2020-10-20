@@ -95,7 +95,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     from(
       ve in VehicleEvent,
       where:
-        ve.environment == ^vehicle.environment and ve.trip_id == ^vehicle.trip_id and
+        ve.environment == ^vehicle.environment and ve.vehicle_id == ^vehicle.id and
           ve.stop_id == ^vehicle.stop_id and is_nil(ve.departure_time) and
           ve.arrival_time > ^(System.system_time(:second) - max_dwell_time_sec),
       update: [set: [departure_time: ^vehicle.timestamp]]
