@@ -246,6 +246,13 @@ CREATE INDEX prediction_accuracy_service_date_index ON public.prediction_accurac
 
 
 --
+-- Name: prediction_accuracy_stop_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_stop_id_index ON public.prediction_accuracy USING btree (stop_id);
+
+
+--
 -- Name: predictions_file_timestamp_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -253,10 +260,10 @@ CREATE INDEX predictions_file_timestamp_index ON public.predictions USING btree 
 
 
 --
--- Name: predictions_trip_id_index; Type: INDEX; Schema: public; Owner: -
+-- Name: predictions_stop_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX predictions_trip_id_index ON public.predictions USING btree (trip_id) WHERE (vehicle_event_id IS NULL);
+CREATE INDEX predictions_stop_id_index ON public.predictions USING btree (stop_id) WHERE (vehicle_event_id IS NULL);
 
 
 --
@@ -270,7 +277,7 @@ CREATE INDEX predictions_vehicle_event_id_index ON public.predictions USING btre
 -- Name: predictions_vehicle_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX predictions_vehicle_id_index ON public.predictions USING btree (vehicle_id);
+CREATE INDEX predictions_vehicle_id_index ON public.predictions USING btree (vehicle_id) WHERE (vehicle_event_id IS NULL);
 
 
 --
@@ -288,6 +295,20 @@ CREATE INDEX vehicle_events_departure_time_index ON public.vehicle_events USING 
 
 
 --
+-- Name: vehicle_events_stop_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX vehicle_events_stop_id_index ON public.vehicle_events USING btree (stop_id) WHERE (departure_time IS NULL);
+
+
+--
+-- Name: vehicle_events_vehicle_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX vehicle_events_vehicle_id_index ON public.vehicle_events USING btree (vehicle_id) WHERE (departure_time IS NULL);
+
+
+--
 -- Name: predictions predictions_vehicle_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -299,5 +320,5 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956);
+INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956), (20201022151038);
 
