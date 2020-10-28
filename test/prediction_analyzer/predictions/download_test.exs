@@ -48,18 +48,19 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
   end
 
   describe "get_subway_predictions/1" do
-    test "downloads and stores prod predictions" do
+    test "downloads and stores predictions" do
       Download.get_subway_predictions(:prod)
       Download.get_subway_predictions(:dev_green)
-      query = from(p in Prediction, select: [p.environment, p.stop_id, p.direction_id])
+      query = from(p in Prediction, select: [p.environment, p.stop_id, p.direction_id, p.kind])
 
       preds = PredictionAnalyzer.Repo.all(query)
 
+      # See FakeHTTPoison
       assert preds == [
-               ["prod", "70061", 1],
-               ["prod", "70063", 1],
-               ["dev-green", "70061", 1],
-               ["dev-green", "70063", 1]
+               ["prod", "70061", 1, "mid_trip"],
+               ["prod", "70063", 1, "mid_trip"],
+               ["dev-green", "70061", 1, "mid_trip"],
+               ["dev-green", "70063", 1, "mid_trip"]
              ]
     end
   end

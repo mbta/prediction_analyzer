@@ -90,6 +90,9 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     end)
   end
 
+  @spec kind_filter_options() :: [{String.t(), String.t()}]
+  def kind_filter_options, do: Filters.kind_labels()
+
   @spec stop_filter_options(PredictionAnalyzer.Utilities.mode()) ::
           %{String.t() => [{String.t(), String.t()}]} | [{String.t(), String.t()}]
   def stop_filter_options(mode) do

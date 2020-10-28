@@ -27,7 +27,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
     direction_id: 0,
     stop_sequence: 10,
     stops_away: 2,
-    vehicle_event_id: nil
+    vehicle_event_id: nil,
+    kind: "mid_trip"
   }
 
   @vehicle_event %VehicleEvent{
@@ -43,7 +44,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
     departure_time: nil
   }
 
-  describe "calculate_aggregate_accuracy/9" do
+  describe "calculate_aggregate_accuracy/10" do
     test "selects the right predictions based on bin and grades them accurately, for arrivals" do
       bin_name = "6-12 min"
       bin_min = 360
@@ -66,6 +67,12 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
         @prediction
         | # too early to be considered
           file_timestamp: file_time - 60 * 90
+      })
+
+      Repo.insert!(%{
+        @prediction
+        | # different kind, should not be considered
+          kind: "at_terminal"
       })
 
       Repo.insert!(%{
@@ -117,6 +124,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           PredictionAnalyzer.Repo,
           Timex.local(),
           "arrival",
+          "mid_trip",
           bin_name,
           bin_min,
           bin_max,
@@ -131,6 +139,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       assert pa.route_id == "route1"
       assert pa.arrival_departure == "arrival"
       assert pa.bin == "6-12 min"
+      assert pa.kind == "mid_trip"
       assert pa.num_predictions == 4
       assert pa.num_accurate_predictions == 2
       assert pa.direction_id == 0
@@ -212,6 +221,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           PredictionAnalyzer.Repo,
           Timex.local(),
           "departure",
+          "mid_trip",
           bin_name,
           bin_min,
           bin_max,
@@ -288,6 +298,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           PredictionAnalyzer.Repo,
           Timex.local(),
           "arrival",
+          "mid_trip",
           bin_name,
           bin_min,
           bin_max,

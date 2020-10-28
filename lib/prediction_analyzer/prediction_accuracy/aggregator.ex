@@ -76,68 +76,30 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
     try do
       repo.transaction(
         fn ->
-          Enum.each(Filters.bins(), fn {bin_name,
-                                        {bin_min, bin_max, bin_error_min, bin_error_max}} ->
+          for environment <- ~w(prod dev-green),
+              arrival_departure <- ~w(arrival departure),
+              kind <- [nil | Map.values(Filters.kinds())],
+              {bin_name, {bin_min, bin_max, bin_error_min, bin_error_max}} <- Filters.bins() do
             {:ok, r} =
               Query.calculate_aggregate_accuracy(
                 repo,
                 current_time,
-                "arrival",
+                arrival_departure,
+                kind,
                 bin_name,
                 bin_min,
                 bin_max,
                 bin_error_min,
                 bin_error_max,
-                "prod"
+                environment
               )
 
-            Logger.info("prediction_accuracy_aggregator arrival prod result=#{inspect(r)}")
-
-            {:ok, r} =
-              Query.calculate_aggregate_accuracy(
-                repo,
-                current_time,
-                "departure",
-                bin_name,
-                bin_min,
-                bin_max,
-                bin_error_min,
-                bin_error_max,
-                "prod"
-              )
-
-            Logger.info("prediction_accuracy_aggregator departure prod result=#{inspect(r)}")
-
-            {:ok, r} =
-              Query.calculate_aggregate_accuracy(
-                repo,
-                current_time,
-                "arrival",
-                bin_name,
-                bin_min,
-                bin_max,
-                bin_error_min,
-                bin_error_max,
-                "dev-green"
-              )
-
-            Logger.info("prediction_accuracy_aggregator arrival dev_green result=#{inspect(r)}")
-
-            {:ok, r} =
-              Query.calculate_aggregate_accuracy(
-                repo,
-                current_time,
-                "departure",
-                bin_name,
-                bin_min,
-                bin_max,
-                bin_error_min,
-                bin_error_max,
-                "dev-green"
-              )
-
-            Logger.info("prediction_accuracy_aggregator departure dev_green result=#{inspect(r)}")
-          end)
+            Logger.info(
+              "prediction_accuracy_aggregator #{environment} #{arrival_departure} #{kind} #{
+                bin_name
+              } result=#{inspect(r)}"
+            )
+          end
         end,
         timeout: 5 * 60 * 1_000
       )

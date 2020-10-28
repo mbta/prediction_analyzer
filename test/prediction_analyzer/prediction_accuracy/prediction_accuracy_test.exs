@@ -17,6 +17,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     route_id: "route1",
     direction_id: 0,
     arrival_departure: "arrival",
+    kind: "mid_trip",
     bin: "0-3 min",
     num_predictions: 10,
     num_accurate_predictions: 5,
@@ -108,6 +109,19 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params(), %{"direction_id" => "1"}))
       q = from(acc in accs, [])
       assert [%{id: ^acc6_id}] = execute_query(q)
+    end
+
+    test "can filter by kinds" do
+      Repo.insert!(%{@prediction_accuracy | kind: nil})
+      Repo.insert!(%{@prediction_accuracy | kind: "at_terminal"})
+      Repo.insert!(%{@prediction_accuracy | kind: "mid_trip"})
+      Repo.insert!(%{@prediction_accuracy | kind: "reverse"})
+
+      {accs, nil} =
+        PredictionAccuracy.filter(Map.merge(base_params(), %{"kinds" => ~w(mid_trip reverse)}))
+
+      query = from(acc in accs, [])
+      assert [%{kind: "mid_trip"}, %{kind: "reverse"}] = execute_query(query)
     end
 
     test "can filter by multiple routes" do
