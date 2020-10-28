@@ -51,6 +51,17 @@ CREATE TYPE public.prediction_bin AS ENUM (
 );
 
 
+--
+-- Name: prediction_kind; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.prediction_kind AS ENUM (
+    'at_terminal',
+    'mid_trip',
+    'reverse'
+);
+
+
 SET default_tablespace = '';
 
 --
@@ -70,7 +81,8 @@ CREATE TABLE public.prediction_accuracy (
     environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
     direction_id integer,
     mean_error real,
-    root_mean_squared_error real
+    root_mean_squared_error real,
+    kind public.prediction_kind
 );
 
 
@@ -114,7 +126,8 @@ CREATE TABLE public.predictions (
     route_id character varying(255) NOT NULL,
     environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
     vehicle_id character varying(255) NOT NULL,
-    direction_id integer
+    direction_id integer,
+    kind public.prediction_kind
 );
 
 
@@ -320,5 +333,5 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956), (20201022151038);
+INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956), (20201022151038), (20201027201115);
 
