@@ -18,7 +18,6 @@ defmodule PredictionAnalyzerWeb.Router do
     pipe_through(:browser)
 
     get("/", PageController, :index)
-    get("/predictions", PredictionsController, :index)
     get("/vehicle_events", VehicleEventsController, :index)
     get("/accuracy", AccuracyController, :index)
     get("/_health", HealthController, :index)
