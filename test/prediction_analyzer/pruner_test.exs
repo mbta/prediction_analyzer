@@ -48,7 +48,7 @@ defmodule PredictionAnalyzer.PrunerTest do
     assert Process.alive?(pid)
   end
 
-  test "prune deletes predictions that are older than 28 days old with dwell time grace period for vehicle events" do
+  test "prune deletes predictions that are older than lookback period with dwell time grace period for vehicle events" do
     max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)
     prune_lookback_sec = Application.get_env(:prediction_analyzer, :prune_lookback_sec)
 
