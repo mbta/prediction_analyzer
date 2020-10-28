@@ -68,20 +68,6 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
              ]
   end
 
-  test "show_download?/1" do
-    assert AccuracyView.show_download?(%{
-             "filters" => %{
-               "stop_id" => "123",
-               "service_date" => "2018-10-10",
-               "chart_range" => "Hourly"
-             }
-           })
-
-    refute AccuracyView.show_download?(%{
-             "filters" => %{"stop_id" => "", "service_date" => "", "chart_range" => "Daily"}
-           })
-  end
-
   describe "stop_filter_options/1" do
     test "returns subway stops and groups" do
       assert %{
@@ -95,24 +81,6 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
                {"No Description Stop", "No Description Stop"}
              ]
     end
-  end
-
-  test "predictions_path_with_filters/2" do
-    conn =
-      build_conn(:get, "/accuracy", %{
-        "filters" => %{"stop_id" => "123", "service_date" => "2018-10-10"}
-      })
-
-    path =
-      AccuracyView.predictions_path_with_filters(
-        conn,
-        10
-      )
-
-    assert path =~ "hour=10"
-    assert path =~ "service_date=2018-10-10"
-
-    assert AccuracyView.predictions_path_with_filters(%{}, 5) == "#"
   end
 
   test "chart_range_class/2" do

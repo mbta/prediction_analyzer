@@ -90,23 +90,6 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
     end)
   end
 
-  @spec show_download?(map()) :: boolean()
-  def show_download?(%{
-        "filters" => %{
-          "stop_id" => stop_id,
-          "service_date" => service_date,
-          "chart_range" => "Hourly"
-        }
-      })
-      when not is_nil(stop_id) and stop_id != "" and not is_nil(service_date) and
-             service_date != "" do
-    true
-  end
-
-  def show_download?(_params) do
-    false
-  end
-
   @spec stop_filter_options(PredictionAnalyzer.Utilities.mode()) ::
           %{String.t() => [{String.t(), String.t()}]} | [{String.t(), String.t()}]
   def stop_filter_options(mode) do
@@ -125,21 +108,6 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   @spec stop_option({String.t(), String.t() | nil}) :: {String.t(), String.t()}
   defp stop_option({id, nil}), do: {id, id}
   defp stop_option({id, description}), do: {"#{description} (#{id})", id}
-
-  def predictions_path_with_filters(
-        %{params: %{"filters" => %{"stop_id" => stop_id, "service_date" => service_date}}} = conn,
-        hour
-      ) do
-    Routes.predictions_path(conn, :index, %{
-      "stop_id" => stop_id,
-      "service_date" => service_date,
-      "hour" => hour
-    })
-  end
-
-  def predictions_path_with_filters(_params, _hour) do
-    "#"
-  end
 
   @spec button_class(map(), atom()) :: String.t()
   def button_class(%{params: %{"filters" => %{"mode" => mode_id}}}, mode) do

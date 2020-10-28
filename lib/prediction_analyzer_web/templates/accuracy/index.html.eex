@@ -210,9 +210,6 @@
             <th class="prod-text">Err</th>
             <th class="prod-text">RMSE</th>
             <th class="prod-text">Count</th>
-            <%= if show_download?(@conn.params) do %>
-              <th>Raw Data</th>
-            <% end %>
           </tr>
 
           <%= for {[row_scope, prod_total, prod_accurate, prod_err, prod_rmse], _dg} <- @accuracies do %>
@@ -224,9 +221,6 @@
               <td class="prod-text"><%= Float.round(prod_err || 0.0, 0) %></td>
               <td class="prod-text"><%= Float.round(prod_rmse || 0.0, 0) %></td>
               <td class="prod-text"><%= prod_total %></td>
-              <%= if show_download?(@conn.params) do %>
-                <th><%= link("csv", to: predictions_path_with_filters(@conn, row_scope)) %></th>
-              <% end %>
             </tr>
           <% end %>
         </table>
@@ -240,9 +234,6 @@
             <th class="dev-green-text">Err</th>
             <th class="dev-green-text">RMSE</th>
             <th class="dev-green-text">Count</th>
-            <%= if show_download?(@conn.params) do %>
-              <th>Raw Data</th>
-            <% end %>
           </tr>
 
           <%= for {_prod, [row_scope, dg_total, dg_accurate, dg_err, dg_rmse]} <- @accuracies do %>
@@ -252,9 +243,6 @@
               <td class="dev-green-text"><%= Float.round(dg_err || 0.0, 0) %></td>
               <td class="dev-green-text"><%= Float.round(dg_rmse || 0.0, 0) %></td>
               <td class="dev-green-text"><%= dg_total %></td>
-              <%= if show_download?(@conn.params) do %>
-                <th><%= link("csv", to: predictions_path_with_filters(@conn, row_scope)) %></th>
-              <% end %>
             </tr>
           <% end %>
         </table>
