@@ -9,6 +9,8 @@ defmodule PredictionAnalyzer.Pruner do
 
   require Logger
 
+  @prune_interval_ms 6 * 60 * 60 * 1_000
+
   def start_link(_args) do
     GenServer.start_link(__MODULE__, [])
   end
@@ -58,6 +60,6 @@ defmodule PredictionAnalyzer.Pruner do
 
   @spec schedule_next_run(pid()) :: reference()
   defp schedule_next_run(pid) do
-    Process.send_after(pid, :prune, 12 * 60 * 60 * 1_000)
+    Process.send_after(pid, :prune, @prune_interval_ms)
   end
 end
