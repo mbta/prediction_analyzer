@@ -345,7 +345,7 @@ defmodule FakeHTTPoison do
                 "departure" => %{
                   "delay" => nil,
                   "time" => 1_540_921_502,
-                  "uncertainty" => nil
+                  "uncertainty" => 60
                 },
                 "schedule_relationship" => "SCHEDULED",
                 "stop_id" => "Alewife-01",
@@ -356,13 +356,13 @@ defmodule FakeHTTPoison do
                 "arrival" => %{
                   "delay" => nil,
                   "time" => 1_540_921_600,
-                  "uncertainty" => nil
+                  "uncertainty" => 60
                 },
                 "boarding_status" => nil,
                 "departure" => %{
                   "delay" => nil,
                   "time" => 1_540_921_645,
-                  "uncertainty" => nil
+                  "uncertainty" => 60
                 },
                 "schedule_relationship" => "SCHEDULED",
                 "stop_id" => "70063",
@@ -373,13 +373,13 @@ defmodule FakeHTTPoison do
                 "arrival" => %{
                   "delay" => nil,
                   "time" => 1_540_921_700,
-                  "uncertainty" => nil
+                  "uncertainty" => 60
                 },
                 "boarding_status" => nil,
                 "departure" => %{
                   "delay" => nil,
                   "time" => 1_540_921_745,
-                  "uncertainty" => nil
+                  "uncertainty" => 60
                 },
                 "schedule_relationship" => "SCHEDULED",
                 "stop_id" => "70063",

@@ -210,6 +210,11 @@ const setupDashboard = () => {
     placeholder: "Type to search...",
     scrollDuration: 0,
   })
+  jQuery("#filters_kinds").selectize({
+    dropdownParent: "body",
+    placeholder: "(all kinds)",
+    scrollDuration: 0,
+  })
 
   const rawData = window.dataPredictionAccuracyJSON
   const prodAccs = rawData.prod_accs

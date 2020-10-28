@@ -116,10 +116,10 @@
           </div>
         <% end %>
 
-	<div class="form-group">
-	    <%= label(f, :route_ids, "Route") %>
-	    <%= select(f, :route_ids, route_options(@mode), class: "form-control") %>
-	</div>
+      	<div class="form-group">
+      	    <%= label(f, :route_ids, "Route") %>
+      	    <%= select(f, :route_ids, route_options(@mode), class: "form-control") %>
+      	</div>
 
         <%= if f.params["chart_range"] != "By Station" do %>
           <div class="form-group">
@@ -142,21 +142,28 @@
           <% end %>
         </div>
 
-	<div class="form-group">
-	  <div><strong>Direction ID</strong></div>
+      	<div class="form-group">
+      	  <div><strong>Direction ID</strong></div>
 
-	  <%= label class: "radio-inline" do %>
-	    <%= radio_button(f, :direction_id, "0") %> 0
-	  <% end %>
+      	  <%= label class: "radio-inline" do %>
+      	    <%= radio_button(f, :direction_id, "0") %> 0
+      	  <% end %>
 
-	  <%= label class: "radio-inline" do %>
-	    <%= radio_button(f, :direction_id, "1") %> 1
-	  <% end %>
+      	  <%= label class: "radio-inline" do %>
+      	    <%= radio_button(f, :direction_id, "1") %> 1
+      	  <% end %>
 
-	  <%= label class: "radio-inline" do %>
-	    <%= radio_button(f, :direction_id, "any") %> Any
-	  <% end %>
-	</div>
+      	  <%= label class: "radio-inline" do %>
+      	    <%= radio_button(f, :direction_id, "any") %> Any
+      	  <% end %>
+      	</div>
+
+        <%= if @mode == :subway do %>
+          <div class="form-group">
+            <%= label(f, :kinds, "Kinds") %>
+            <%= multiple_select(f, :kinds, kind_filter_options(), class: 'form-control') %>
+          </div>
+        <% end %>
 
         <div class="form-group">
           <%= label(f, :bin, "Bin") %>

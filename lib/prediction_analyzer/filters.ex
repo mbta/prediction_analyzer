@@ -8,7 +8,7 @@ defmodule PredictionAnalyzer.Filters do
   window of predictions that it applies to (e.g. arriving within 3-6 minutes)
   and the tolerance in seconds for which a prediction is considered accurate.
   """
-  @spec bins() :: map()
+  @spec bins() :: %{String.t() => {integer(), integer(), integer(), integer()}}
   def bins do
     %{
       "0-3 min" => {-30, 180, -60, 60},
@@ -19,6 +19,23 @@ defmodule PredictionAnalyzer.Filters do
       "12-30 min" => {720, 1800, -240, 360}
     }
   end
+
+  @kinds [
+    {60, "mid_trip", "mid-trip"},
+    {120, "at_terminal", "at terminal"},
+    {360, "reverse", "reverse trip"}
+  ]
+  @kind_values @kinds
+               |> Enum.map(fn {uncertainty, kind, _label} -> {uncertainty, kind} end)
+               |> Enum.into(%{})
+  @kind_labels @kinds |> Enum.map(fn {_uncertainty, kind, label} -> {label, kind} end)
+
+  @doc "Map of numeric uncertainty values to kinds of predictions published by RTR."
+  @spec kinds() :: %{integer() => String.t()}
+  def kinds, do: @kind_values
+
+  @spec kind_labels() :: [{String.t(), String.t()}]
+  def kind_labels, do: @kind_labels
 
   @spec filter_by_route(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
   def filter_by_route(q, route_ids) when is_binary(route_ids) and route_ids != "" do
@@ -83,6 +100,14 @@ defmodule PredictionAnalyzer.Filters do
   def filter_by_bin(q, _bins) do
     {:ok, q}
   end
+
+  @spec filter_by_kind(Ecto.Query.t(), [nil | String.t()]) :: {:ok, Ecto.Query.t()}
+  def filter_by_kind(q, [_ | _] = kinds) do
+    {:ok, from(acc in q, where: acc.kind in ^kinds)}
+  end
+
+  def filter_by_kind(q, []), do: {:ok, q}
+  def filter_by_kind(q, nil), do: {:ok, q}
 
   @spec filter_by_timeframe(Ecto.Query.t(), any(), any(), any(), any()) ::
           {:ok, Ecto.Query.t()} | {:error, String.t()}

@@ -2,7 +2,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
   use GenServer
 
   require Logger
-  alias PredictionAnalyzer.Predictions.Prediction
+  alias PredictionAnalyzer.{Filters, Predictions.Prediction}
 
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, opts, opts)
@@ -143,6 +143,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
                     arrival_time: update["arrival"]["time"],
                     departure_time: update["departure"]["time"],
                     boarding_status: update["boarding_status"],
+                    kind: kind_from_stop_time_update(update),
                     schedule_relationship: update["schedule_relationship"],
                     stop_id: PredictionAnalyzer.Utilities.generic_stop_id(update["stop_id"]),
                     stop_sequence: update["stop_sequence"],
@@ -159,6 +160,11 @@ defmodule PredictionAnalyzer.Predictions.Download do
 
   defp store_subway_predictions(_, _) do
     nil
+  end
+
+  @spec kind_from_stop_time_update(%{String.t() => any()}) :: nil | String.t()
+  defp kind_from_stop_time_update(%{"arrival" => arrival, "departure" => departure}) do
+    Filters.kinds() |> Map.get(arrival["uncertainty"] || departure["uncertainty"])
   end
 
   defp store_commuter_rail_predictions(%{"data" => data}, last_modified) do

@@ -9,6 +9,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
           DateTime.t(),
           String.t(),
           String.t(),
+          String.t(),
           integer(),
           integer(),
           integer(),
@@ -19,6 +20,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         repo_module,
         current_time,
         arrival_departure,
+        kind,
         bin_name,
         bin_min,
         bin_max,
@@ -44,7 +46,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       bin_error_max,
       min_unix,
       max_unix,
-      environment
+      environment,
+      kind
     ])
   end
 
@@ -66,6 +69,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         direction_id,
         arrival_departure,
         bin,
+        kind,
         num_predictions,
         num_accurate_predictions,
         mean_error,
@@ -80,6 +84,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         p.direction_id AS direction_id,
         $3 AS arrival_departure,
         $4 AS bin,
+        $12 AS kind,
         COUNT(*) AS num_predictions,
         SUM(
           CASE
@@ -100,6 +105,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       WHERE p.file_timestamp > $9
         AND p.file_timestamp < $10
         AND p.environment = $11
+        AND p.kind = $12
         AND p.#{arrival_or_departure_time_column} IS NOT NULL
         AND p.#{arrival_or_departure_time_column} > p.file_timestamp
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp >= $5

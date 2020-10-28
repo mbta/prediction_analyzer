@@ -13,6 +13,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     field(:route_id, :string)
     field(:direction_id, :integer)
     field(:arrival_departure, :string)
+    field(:kind, :string)
     field(:bin, :string)
     field(:num_predictions, :integer)
     field(:num_accurate_predictions, :integer)
@@ -28,6 +29,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
       :route_id,
       :direction_id,
       :arrival_departure,
+      :kind,
       :bin,
       :num_predictions,
       :num_accurate_predictions
@@ -35,8 +37,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
 
     %__MODULE__{}
     |> cast(params, all_fields)
-    |> validate_required(all_fields)
+    |> validate_required(all_fields -- [:kind])
     |> validate_inclusion(:arrival_departure, ["arrival", "departure"])
+    |> validate_inclusion(:kind, Map.values(kinds()))
     |> validate_inclusion(:bin, Map.keys(bins()))
   end
 
@@ -49,6 +52,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
          {:ok, q} <- filter_by_direction(q, params["direction_id"]),
          {:ok, q} <- filter_by_arrival_departure(q, params["arrival_departure"]),
          {:ok, q} <- filter_by_bin(q, params["bin"]),
+         {:ok, q} <- filter_by_kind(q, params["kinds"]),
          {:ok, q} <- filter_by_mode(q, params["mode"]),
          {:ok, q} <-
            filter_by_timeframe(
