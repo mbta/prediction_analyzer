@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 11.9
--- Dumped by pg_dump version 13.0
+-- Dumped by pg_dump version 11.9
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -64,6 +64,8 @@ CREATE TYPE public.prediction_kind AS ENUM (
 
 SET default_tablespace = '';
 
+SET default_with_oids = false;
+
 --
 -- Name: prediction_accuracy; Type: TABLE; Schema: public; Owner: -
 --
@@ -82,7 +84,8 @@ CREATE TABLE public.prediction_accuracy (
     direction_id integer,
     mean_error real,
     root_mean_squared_error real,
-    kind public.prediction_kind
+    kind public.prediction_kind,
+    in_next_two boolean
 );
 
 
@@ -127,7 +130,8 @@ CREATE TABLE public.predictions (
     environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
     vehicle_id character varying(255) NOT NULL,
     direction_id integer,
-    kind public.prediction_kind
+    kind public.prediction_kind,
+    nth_at_stop integer
 );
 
 
@@ -333,5 +337,5 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956), (20201022151038), (20201027201115);
+INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956), (20201022151038), (20201027201115), (20201103215547);
 
