@@ -109,6 +109,11 @@ defmodule PredictionAnalyzer.Filters do
   def filter_by_kind(q, []), do: {:ok, q}
   def filter_by_kind(q, nil), do: {:ok, q}
 
+  @spec filter_by_in_next_two(Ecto.Query.t(), String.t() | nil) :: {:ok, Ecto.Query.t()}
+  def filter_by_in_next_two(q, "true"), do: {:ok, from(acc in q, where: acc.in_next_two)}
+  def filter_by_in_next_two(q, "false"), do: {:ok, from(acc in q, where: not acc.in_next_two)}
+  def filter_by_in_next_two(q, _value), do: {:ok, q}
+
   @spec filter_by_timeframe(Ecto.Query.t(), any(), any(), any(), any()) ::
           {:ok, Ecto.Query.t()} | {:error, String.t()}
   def filter_by_timeframe(q, chart_range, _date, start_date, end_date)
