@@ -19,6 +19,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     field(:num_accurate_predictions, :integer)
     field(:mean_error, :float)
     field(:root_mean_squared_error, :float)
+    field(:in_next_two, :boolean)
   end
 
   def new_insert_changeset(params \\ %{}) do
@@ -53,6 +54,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
          {:ok, q} <- filter_by_arrival_departure(q, params["arrival_departure"]),
          {:ok, q} <- filter_by_bin(q, params["bin"]),
          {:ok, q} <- filter_by_kind(q, params["kinds"]),
+         {:ok, q} <- filter_by_in_next_two(q, params["in_next_two"]),
          {:ok, q} <- filter_by_mode(q, params["mode"]),
          {:ok, q} <-
            filter_by_timeframe(
