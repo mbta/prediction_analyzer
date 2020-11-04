@@ -334,7 +334,7 @@ defmodule FakeHTTPoison do
               "id" => "vehicle_id"
             },
             "trip" => %{
-              "trip_id" => "TEST_TRIP",
+              "trip_id" => "TEST_TRIP_1",
               "route_id" => "Red",
               "direction_id" => 1
             },
@@ -385,6 +385,130 @@ defmodule FakeHTTPoison do
                 "stop_id" => "70063",
                 "stop_sequence" => 40,
                 "stops_away" => nil
+              }
+            ]
+          }
+        },
+        %{
+          "alert" => nil,
+          "id" => "1540920791_ADDED-1540403419",
+          "is_deleted" => false,
+          "trip_update" => %{
+            "delay" => nil,
+            "vehicle" => %{
+              "id" => "vehicle_id"
+            },
+            "trip" => %{
+              "trip_id" => "TEST_TRIP_2",
+              "route_id" => "Red",
+              "direction_id" => 1
+            },
+            "stop_time_update" => [
+              %{
+                "arrival" => nil,
+                "boarding_status" => nil,
+                "departure" => %{
+                  "delay" => nil,
+                  "time" => 1_540_921_562,
+                  "uncertainty" => 60
+                },
+                "schedule_relationship" => "SCHEDULED",
+                "stop_id" => "Alewife-01",
+                "stop_sequence" => 10,
+                "stops_away" => 0
+              },
+              %{
+                "arrival" => %{
+                  "delay" => nil,
+                  "time" => 1_540_921_660,
+                  "uncertainty" => 60
+                },
+                "boarding_status" => nil,
+                "departure" => %{
+                  "delay" => nil,
+                  "time" => 1_540_921_705,
+                  "uncertainty" => 60
+                },
+                "schedule_relationship" => "SCHEDULED",
+                "stop_id" => "70063",
+                "stop_sequence" => 20,
+                "stops_away" => 1
+              }
+            ]
+          }
+        },
+        %{
+          "alert" => nil,
+          "id" => "1540920791_ADDED-1540403419",
+          "is_deleted" => false,
+          "trip_update" => %{
+            "delay" => nil,
+            "vehicle" => %{
+              "id" => "vehicle_id"
+            },
+            "trip" => %{
+              "trip_id" => "TEST_TRIP_3",
+              "route_id" => "Red",
+              "direction_id" => 1
+            },
+            "stop_time_update" => nil
+          }
+        },
+        %{
+          "alert" => nil,
+          "id" => "1540920791_ADDED-1540403419",
+          "is_deleted" => false,
+          "trip_update" => %{
+            "delay" => nil,
+            "vehicle" => %{
+              "id" => "vehicle_id"
+            },
+            "trip" => %{
+              "trip_id" => "TEST_TRIP_4",
+              "route_id" => "Red",
+              "direction_id" => 1
+            },
+            "stop_time_update" => [
+              %{
+                "arrival" => nil,
+                "boarding_status" => nil,
+                "departure" => %{
+                  "delay" => nil,
+                  "time" => 1_540_921_562,
+                  "uncertainty" => 60
+                },
+                "schedule_relationship" => "SCHEDULED",
+                "stop_id" => nil,
+                "stop_sequence" => 10,
+                "stops_away" => 0
+              }
+            ]
+          }
+        },
+        %{
+          "alert" => nil,
+          "id" => "1540920791_ADDED-1540403419",
+          "is_deleted" => false,
+          "trip_update" => %{
+            "delay" => nil,
+            "vehicle" => %{
+              "id" => "vehicle_id"
+            },
+            "trip" => %{
+              "trip_id" => "TEST_TRIP_5",
+              "route_id" => "Red",
+              "direction_id" => 1
+            },
+            "stop_time_update" => [
+              %{
+                "arrival" => nil,
+                "boarding_status" => nil,
+                "departure" => nil,
+                "passthrough_time" => 1_540_921_705,
+                "schedule_relationship" => "SKIPPED",
+                "stop_id" => "70063",
+                "stop_sequence" => 20,
+                "stops_away" => 1
               }
             ]
           }

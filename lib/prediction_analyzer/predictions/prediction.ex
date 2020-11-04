@@ -19,6 +19,7 @@ defmodule PredictionAnalyzer.Predictions.Prediction do
     field(:stops_away, :integer)
     field(:direction_id, :integer)
     field(:kind, :string)
+    field(:nth_at_stop, :integer)
     belongs_to(:vehicle_event, VehicleEvent)
   end
 end

@@ -117,49 +117,75 @@ defmodule PredictionAnalyzer.Predictions.Download do
          env
        ) do
     predictions =
-      Enum.flat_map(entities, fn prediction ->
-        trip_prediction = %{
-          file_timestamp: timestamp,
-          environment:
-            case env do
-              :prod -> "prod"
-              :dev_green -> "dev-green"
-            end,
-          trip_id: prediction["trip_update"]["trip"]["trip_id"],
-          vehicle_id: prediction["trip_update"]["vehicle"]["id"],
-          route_id: prediction["trip_update"]["trip"]["route_id"],
-          direction_id: prediction["trip_update"]["trip"]["direction_id"],
-          is_deleted: prediction["is_deleted"]
-        }
-
-        if prediction["trip_update"]["stop_time_update"] != nil do
-          Enum.reduce(prediction["trip_update"]["stop_time_update"], [], fn update, acc ->
-            if is_nil(update["stops_away"]) do
-              acc
-            else
-              acc ++
-                [
-                  Map.merge(trip_prediction, %{
-                    arrival_time: update["arrival"]["time"],
-                    departure_time: update["departure"]["time"],
-                    boarding_status: update["boarding_status"],
-                    kind: kind_from_stop_time_update(update),
-                    schedule_relationship: update["schedule_relationship"],
-                    stop_id: PredictionAnalyzer.Utilities.generic_stop_id(update["stop_id"]),
-                    stop_sequence: update["stop_sequence"],
-                    stops_away: update["stops_away"]
-                  })
-                ]
-            end
-          end)
-        end
-      end)
+      entities
+      |> predictions_from_entites(timestamp, env)
+      |> calculate_nth_at_stop()
 
     {_, _} = PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
   end
 
   defp store_subway_predictions(_, _) do
     nil
+  end
+
+  @spec predictions_from_entites([map()], integer(), :prod | :dev_green) :: [map()]
+  defp predictions_from_entites(entities, timestamp, env) do
+    Enum.flat_map(entities, fn prediction ->
+      trip_prediction = %{
+        file_timestamp: timestamp,
+        environment:
+          case env do
+            :prod -> "prod"
+            :dev_green -> "dev-green"
+          end,
+        trip_id: prediction["trip_update"]["trip"]["trip_id"],
+        vehicle_id: prediction["trip_update"]["vehicle"]["id"],
+        route_id: prediction["trip_update"]["trip"]["route_id"],
+        direction_id: prediction["trip_update"]["trip"]["direction_id"],
+        is_deleted: prediction["is_deleted"],
+        nth_at_stop: nil
+      }
+
+      Enum.reduce(prediction["trip_update"]["stop_time_update"] || [], [], fn update, acc ->
+        if is_nil(update["stops_away"]) ||
+             (is_nil(get_in(update, ["arrival", "time"])) &&
+                is_nil(get_in(update, ["departure", "time"]))) do
+          acc
+        else
+          acc ++
+            [
+              Map.merge(trip_prediction, %{
+                arrival_time: update["arrival"]["time"],
+                departure_time: update["departure"]["time"],
+                boarding_status: update["boarding_status"],
+                kind: kind_from_stop_time_update(update),
+                schedule_relationship: update["schedule_relationship"],
+                stop_id: PredictionAnalyzer.Utilities.generic_stop_id(update["stop_id"]),
+                stop_sequence: update["stop_sequence"],
+                stops_away: update["stops_away"]
+              })
+            ]
+        end
+      end)
+    end)
+  end
+
+  @spec calculate_nth_at_stop([map()]) :: [map()]
+  defp calculate_nth_at_stop(predictions) do
+    predictions
+    |> Enum.group_by(& &1.stop_id)
+    |> Enum.flat_map(fn {stop_id, predictions} ->
+      if !is_nil(stop_id) do
+        predictions
+        |> Enum.sort_by(
+          &{if(&1.stops_away == 0, do: 0, else: 1), &1.arrival_time || &1.departure_time}
+        )
+        |> Enum.with_index(1)
+        |> Enum.map(fn {prediction, index} -> %{prediction | nth_at_stop: index} end)
+      else
+        predictions
+      end
+    end)
   end
 
   @spec kind_from_stop_time_update(%{String.t() => any()}) :: nil | String.t()
