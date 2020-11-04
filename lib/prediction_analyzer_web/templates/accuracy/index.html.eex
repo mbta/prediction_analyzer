@@ -190,6 +190,13 @@
           </div>
         <% end %>
 
+        <%= if @mode == :subway do %>
+            <div class="form-group">
+                <%= checkbox(f, :in_next_two, unchecked_value: "") %>
+                <%= label(f, :in_next_two, "Only what riders see in stations") %>
+            </div>
+        <% end %>
+
         <div class="form-group">
           <%= submit "Filter", class: "btn btn-default" %>
         </div>
