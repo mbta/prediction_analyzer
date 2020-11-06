@@ -79,13 +79,15 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
           for environment <- ~w(prod dev-green),
               arrival_departure <- ~w(arrival departure),
               kind <- [nil | Map.values(Filters.kinds())],
-              {bin_name, {bin_min, bin_max, bin_error_min, bin_error_max}} <- Filters.bins() do
+              {bin_name, {bin_min, bin_max, bin_error_min, bin_error_max}} <- Filters.bins(),
+              in_next_two? <- [true, false] do
             {:ok, r} =
               Query.calculate_aggregate_accuracy(
                 repo,
                 current_time,
                 arrival_departure,
                 kind,
+                in_next_two?,
                 bin_name,
                 bin_min,
                 bin_max,
