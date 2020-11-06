@@ -28,7 +28,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
     stop_sequence: 10,
     stops_away: 2,
     vehicle_event_id: nil,
-    kind: "mid_trip"
+    kind: "mid_trip",
+    nth_at_stop: 5
   }
 
   @vehicle_event %VehicleEvent{
@@ -44,7 +45,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
     departure_time: nil
   }
 
-  describe "calculate_aggregate_accuracy/10" do
+  describe "calculate_aggregate_accuracy/11" do
     test "selects the right predictions based on bin and grades them accurately, for arrivals" do
       bin_name = "6-12 min"
       bin_min = 360
@@ -125,6 +126,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           Timex.local(),
           "arrival",
           "mid_trip",
+          false,
           bin_name,
           bin_min,
           bin_max,
@@ -222,6 +224,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           Timex.local(),
           "departure",
           "mid_trip",
+          false,
           bin_name,
           bin_min,
           bin_max,
@@ -299,6 +302,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           Timex.local(),
           "arrival",
           "mid_trip",
+          false,
           bin_name,
           bin_min,
           bin_max,
@@ -317,5 +321,100 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       assert pa.num_accurate_predictions == 2
       assert pa.direction_id == 0
     end
+  end
+
+  test "handles in_next_two correctly, including NULL nth_at_stop" do
+    bin_name = "6-12 min"
+    bin_min = 360
+    bin_max = 720
+    bin_error_min = -30
+    bin_error_max = 60
+    file_time = :os.system_time(:second) - 60 * 120
+    arrival_time = file_time + 60 * 7
+    departure_time = file_time + 60 * 7
+
+    %{id: ve_id} = Repo.insert!(%{@vehicle_event | departure_time: departure_time})
+
+    # nth at stop 1, is in_next_two
+    Repo.insert!(%{
+      @prediction
+      | file_timestamp: file_time,
+        route_id: "route1",
+        stop_id: "stop1",
+        arrival_time: arrival_time,
+        vehicle_event_id: ve_id,
+        nth_at_stop: 1
+    })
+
+    # nth at stop 2, is in_next_two
+    Repo.insert!(%{
+      @prediction
+      | file_timestamp: file_time,
+        route_id: "route1",
+        stop_id: "stop1",
+        arrival_time: arrival_time,
+        vehicle_event_id: ve_id,
+        nth_at_stop: 2
+    })
+
+    # nth at stop 3, not in_next_two
+    Repo.insert!(%{
+      @prediction
+      | file_timestamp: file_time,
+        route_id: "route1",
+        stop_id: "stop1",
+        arrival_time: arrival_time,
+        vehicle_event_id: ve_id,
+        nth_at_stop: 3
+    })
+
+    # nth at stop null, not in_next_two
+    Repo.insert!(%{
+      @prediction
+      | file_timestamp: file_time,
+        route_id: "route1",
+        stop_id: "stop1",
+        arrival_time: arrival_time,
+        vehicle_event_id: ve_id,
+        nth_at_stop: nil
+    })
+
+    {:ok, _} =
+      Query.calculate_aggregate_accuracy(
+        PredictionAnalyzer.Repo,
+        Timex.local(),
+        "arrival",
+        "mid_trip",
+        false,
+        bin_name,
+        bin_min,
+        bin_max,
+        bin_error_min,
+        bin_error_max,
+        "dev-green"
+      )
+
+    {:ok, _} =
+      Query.calculate_aggregate_accuracy(
+        PredictionAnalyzer.Repo,
+        Timex.local(),
+        "arrival",
+        "mid_trip",
+        true,
+        bin_name,
+        bin_min,
+        bin_max,
+        bin_error_min,
+        bin_error_max,
+        "dev-green"
+      )
+
+    [pa_in_two] = Repo.all(from(pa in PredictionAccuracy, select: pa, where: pa.in_next_two))
+
+    [pa_not_in_two] =
+      Repo.all(from(pa in PredictionAccuracy, select: pa, where: not pa.in_next_two))
+
+    assert pa_in_two.num_predictions == 2
+    assert pa_not_in_two.num_predictions == 2
   end
 end

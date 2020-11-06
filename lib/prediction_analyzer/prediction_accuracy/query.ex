@@ -9,6 +9,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
           DateTime.t(),
           String.t(),
           String.t(),
+          boolean(),
           String.t(),
           integer(),
           integer(),
@@ -21,6 +22,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         current_time,
         arrival_departure,
         kind,
+        in_next_two?,
         bin_name,
         bin_min,
         bin_max,
@@ -47,7 +49,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       min_unix,
       max_unix,
       environment,
-      kind
+      kind,
+      in_next_two?
     ])
   end
 
@@ -70,6 +73,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         arrival_departure,
         bin,
         kind,
+        in_next_two,
         num_predictions,
         num_accurate_predictions,
         mean_error,
@@ -85,6 +89,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         $3 AS arrival_departure,
         $4 AS bin,
         $12 AS kind,
+        $13 AS in_next_two,
         COUNT(*) AS num_predictions,
         SUM(
           CASE
@@ -110,6 +115,11 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         AND p.#{arrival_or_departure_time_column} > p.file_timestamp
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp >= $5
         AND p.#{arrival_or_departure_time_column} - p.file_timestamp < $6
+        AND (
+          ($13 AND (p.nth_at_stop IN (1, 2)))
+          OR
+          ((NOT $13) AND (p.nth_at_stop NOT IN (1, 2) OR p.nth_at_stop IS NULL))
+        )
       GROUP BY p.route_id, p.stop_id, p.direction_id
     )
     "
