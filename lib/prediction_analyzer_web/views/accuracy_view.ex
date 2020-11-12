@@ -55,7 +55,6 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
       |> hd
       |> String.to_integer()
     end)
-    |> Kernel.++([{"6-12 min", "6-8 min,8-10 min,10-12 min,6-12 min"}])
   end
 
   @spec chart_range_scope_header(String.t()) :: String.t()
