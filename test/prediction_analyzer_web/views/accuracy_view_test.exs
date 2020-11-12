@@ -23,11 +23,8 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
     assert AccuracyView.bin_options() == [
              "0-3 min",
              "3-6 min",
-             "6-8 min",
-             "8-10 min",
-             "10-12 min",
-             "12-30 min",
-             {"6-12 min", "6-8 min,8-10 min,10-12 min,6-12 min"}
+             "6-12 min",
+             "12-30 min"
            ]
   end
 
