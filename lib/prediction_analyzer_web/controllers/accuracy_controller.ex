@@ -102,7 +102,13 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         dev_green_mean_error: dev_green_mean_error,
         dev_green_rmse: dev_green_rmse,
         error_msg: error_msg,
-        mode: mode_atom
+        mode: mode_atom,
+        bins:
+          Filters.bins()
+          |> Enum.map(fn {bin, {bin_min, _bin_max, bin_error_min, bin_error_max}} ->
+            {bin, bin_min, bin_error_min, bin_error_max}
+          end)
+          |> Enum.sort_by(fn {_, bin_min, _, _} -> bin_min end)
       )
     else
       redirect_with_default_filters(conn, params)
