@@ -41,38 +41,16 @@
               Passing threshold (Actual - Predicted)
             </th>
           </tr>
-          <tr>
-            <td>
-              0-3 min
-            </td>
-            <td>
-              -60 sec to +60 sec
-            </td>
-          </tr>
-          <tr>
-            <td>
-              3-6 min
-            </td>
-            <td>
-              -120 sec to +180 sec
-            </td>
-          </tr>
-          <tr>
-            <td>
-              6-12 min
-            </td>
-            <td>
-              -150 sec to +210 sec
-            </td>
-          </tr>
-          <tr>
-            <td>
-              12-30
-            </td>
-            <td>
-              -240 sec to +360 sec
-            </td>
-          </tr>
+          <%= for {range, _bin_min, bin_error_min, bin_error_max} <- @bins do %>
+            <tr>
+              <td>
+                <%= range %>
+              </td>
+              <td>
+                <%= bin_error_min %> sec to <%= bin_error_max %> sec
+              </td>
+            </tr>
+          <% end %>
         </table>
       </div>
     </div>

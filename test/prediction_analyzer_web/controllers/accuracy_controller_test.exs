@@ -244,6 +244,16 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert conn.assigns[:mode] == :commuter_rail
   end
 
+  test "GET /accuracy includes a summary of the bins", %{conn: conn} do
+    conn = get(conn, "/accuracy")
+    conn = get(conn, redirected_to(conn))
+
+    response = html_response(conn, 200)
+
+    assert response =~
+             ~r/0-3 min[[:blank:]]+<\/td>\n[[:blank:]]+<td>\n[[:blank:]]+-60 sec to 60 sec/
+  end
+
   def insert_hourly_accuracy(env, hour, total, accurate, service_date \\ nil) do
     accuracy = %PredictionAccuracy{
       @prediction_accuracy
