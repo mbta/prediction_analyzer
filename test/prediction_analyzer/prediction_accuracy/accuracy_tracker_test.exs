@@ -84,7 +84,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
         stop_id: "stop1",
         route_id: "Red",
         direction_id: 1,
-        arrival_departure: "arrival",
         bin: "0-3 min",
         num_predictions: 100,
         num_accurate_predictions: yesterday_accurate
@@ -99,7 +98,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
         stop_id: "stop1",
         route_id: "Red",
         direction_id: 1,
-        arrival_departure: "arrival",
         bin: "0-3 min",
         num_predictions: 100,
         num_accurate_predictions: previous_day_accurate

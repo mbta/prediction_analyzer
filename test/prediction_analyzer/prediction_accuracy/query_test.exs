@@ -45,14 +45,13 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
     departure_time: nil
   }
 
-  describe "calculate_aggregate_accuracy/11" do
-    test "selects the right predictions based on bin and grades them accurately, for arrivals" do
+  describe "calculate_aggregate_accuracy/10" do
+    test "selects the right predictions based on bin and grades them accurately" do
       bin_name = "6-12 min"
       bin_min = 360
       bin_max = 720
       bin_error_min = -30
       bin_error_max = 60
-
       file_time = :os.system_time(:second) - 60 * 120
       arrival_time = file_time + 60 * 7
 
@@ -124,7 +123,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
         Query.calculate_aggregate_accuracy(
           PredictionAnalyzer.Repo,
           Timex.local(),
-          "arrival",
           "mid_trip",
           false,
           bin_name,
@@ -139,7 +137,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
 
       assert pa.stop_id == "stop1"
       assert pa.route_id == "route1"
-      assert pa.arrival_departure == "arrival"
       assert pa.bin == "6-12 min"
       assert pa.kind == "mid_trip"
       assert pa.num_predictions == 4
@@ -154,36 +151,41 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       )
     end
 
-    test "selects the right predictions based on bin and grades them accurately, for departures" do
+    test "grades only the predicted arrival time if available, otherwise the departure time" do
       bin_name = "6-12 min"
       bin_min = 360
       bin_max = 720
       bin_error_min = -30
-      bin_error_max = 60
-
+      bin_error_max = 30
       file_time = :os.system_time(:second) - 60 * 120
-      departure_time = file_time + 60 * 7
+      arrival_time = file_time + 60 * 7
+      departure_time = file_time + 60 * 8
 
-      %{id: ve_id} = Repo.insert!(%{@vehicle_event | departure_time: departure_time})
+      %{id: ve_id} =
+        Repo.insert!(%{
+          @vehicle_event
+          | arrival_time: arrival_time,
+            departure_time: departure_time
+        })
 
       Repo.insert!(%{
         @prediction
-        | # too late to be considered
-          file_timestamp: file_time + 60 * 90
-      })
-
-      Repo.insert!(%{
-        @prediction
-        | # too early to be considered
-          file_timestamp: file_time - 60 * 90
+        | file_timestamp: file_time,
+          route_id: "route",
+          stop_id: "stop",
+          # accurate arrival (10), inaccurate departure; should be graded accurate
+          arrival_time: arrival_time - 10,
+          departure_time: departure_time - 40,
+          vehicle_event_id: ve_id
       })
 
       Repo.insert!(%{
         @prediction
         | file_timestamp: file_time,
-          route_id: "route1",
-          stop_id: "stop1",
-          # accurate
+          route_id: "route",
+          stop_id: "stop",
+          # inaccurate arrival (45), accurate departure; should be graded inaccurate
+          arrival_time: arrival_time - 45,
           departure_time: departure_time - 15,
           vehicle_event_id: ve_id
       })
@@ -191,30 +193,10 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       Repo.insert!(%{
         @prediction
         | file_timestamp: file_time,
-          route_id: "route1",
-          stop_id: "stop1",
-          # inaccurate
-          departure_time: departure_time - 45,
-          vehicle_event_id: ve_id
-      })
-
-      Repo.insert!(%{
-        @prediction
-        | file_timestamp: file_time,
-          route_id: "route1",
-          stop_id: "stop1",
-          # accurate
-          departure_time: departure_time + 45,
-          vehicle_event_id: ve_id
-      })
-
-      Repo.insert!(%{
-        @prediction
-        | file_timestamp: file_time,
-          route_id: "route1",
-          stop_id: "stop1",
-          # inaccurate
-          departure_time: departure_time + 65,
+          route_id: "route",
+          stop_id: "stop",
+          # no predicted arrival, accurate departure (25); should be graded accurate
+          departure_time: departure_time - 25,
           vehicle_event_id: ve_id
       })
 
@@ -222,7 +204,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
         Query.calculate_aggregate_accuracy(
           PredictionAnalyzer.Repo,
           Timex.local(),
-          "departure",
           "mid_trip",
           false,
           bin_name,
@@ -235,13 +216,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
 
       [pa] = Repo.all(from(pa in PredictionAccuracy, select: pa))
 
-      assert pa.stop_id == "stop1"
-      assert pa.route_id == "route1"
-      assert pa.arrival_departure == "departure"
-      assert pa.bin == "6-12 min"
-      assert pa.num_predictions == 4
+      assert pa.num_predictions == 3
       assert pa.num_accurate_predictions == 2
-      assert pa.direction_id == 0
+      assert_in_delta(pa.mean_error, (10 + 45 + 25) / 3, 0.000001)
     end
 
     test "handles in_next_two correctly, including NULL nth_at_stop" do
@@ -304,7 +281,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
         Query.calculate_aggregate_accuracy(
           PredictionAnalyzer.Repo,
           Timex.local(),
-          "arrival",
           "mid_trip",
           false,
           bin_name,
@@ -319,7 +295,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
         Query.calculate_aggregate_accuracy(
           PredictionAnalyzer.Repo,
           Timex.local(),
-          "arrival",
           "mid_trip",
           true,
           bin_name,

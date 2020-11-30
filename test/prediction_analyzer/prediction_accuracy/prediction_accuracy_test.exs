@@ -16,7 +16,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     stop_id: "stop1",
     route_id: "route1",
     direction_id: 0,
-    arrival_departure: "arrival",
     kind: "mid_trip",
     bin: "0-3 min",
     num_predictions: 10,
@@ -35,7 +34,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
           stop_id: "stop1",
           route_id: "route1",
           direction_id: 1,
-          arrival_departure: "arrival",
           bin: "0-3 min",
           num_predictions: 100,
           num_accurate_predictions: 80
@@ -63,13 +61,12 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       acc1 = %{@prediction_accuracy | service_date: ~D[2018-01-01]}
       acc2 = %{@prediction_accuracy | stop_id: "some_stop"}
       acc3 = %{@prediction_accuracy | route_id: "some_route"}
-      acc4 = %{@prediction_accuracy | arrival_departure: "departure"}
-      acc5 = %{@prediction_accuracy | bin: "6-8 min"}
-      acc6 = %{@prediction_accuracy | direction_id: 1}
-      acc7 = %{@prediction_accuracy | in_next_two: true}
+      acc4 = %{@prediction_accuracy | bin: "6-8 min"}
+      acc5 = %{@prediction_accuracy | direction_id: 1}
+      acc6 = %{@prediction_accuracy | in_next_two: true}
 
-      [acc1_id, acc2_id, acc3_id, acc4_id, acc5_id, acc6_id, acc7_id] =
-        Enum.map([acc1, acc2, acc3, acc4, acc5, acc6, acc7], fn acc ->
+      [acc1_id, acc2_id, acc3_id, acc4_id, acc5_id, acc6_id] =
+        Enum.map([acc1, acc2, acc3, acc4, acc5, acc6], fn acc ->
           %{id: id} = Repo.insert!(acc)
           id
         end)
@@ -82,8 +79,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
                %{id: ^acc3_id},
                %{id: ^acc4_id},
                %{id: ^acc5_id},
-               %{id: ^acc6_id},
-               %{id: ^acc7_id}
+               %{id: ^acc6_id}
              ] = execute_query(q)
 
       {accs, nil} =
@@ -104,32 +100,26 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       q = from(acc in accs, [])
       assert [%{id: ^acc3_id}] = execute_query(q)
 
-      {accs, nil} =
-        PredictionAccuracy.filter(Map.merge(base_params(), %{"arrival_departure" => "departure"}))
-
+      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params(), %{"bin" => "6-8 min"}))
       q = from(acc in accs, [])
       assert [%{id: ^acc4_id}] = execute_query(q)
 
-      {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params(), %{"bin" => "6-8 min"}))
-      q = from(acc in accs, [])
-      assert [%{id: ^acc5_id}] = execute_query(q)
-
       {accs, nil} = PredictionAccuracy.filter(Map.merge(base_params(), %{"direction_id" => "1"}))
       q = from(acc in accs, [])
-      assert [%{id: ^acc6_id}] = execute_query(q)
+      assert [%{id: ^acc5_id}] = execute_query(q)
 
       {accs, nil} =
         PredictionAccuracy.filter(Map.merge(base_params(), %{"in_next_two" => "true"}))
 
       q = from(acc in accs, [])
-      assert [%{id: ^acc7_id}] = execute_query(q)
+      assert [%{id: ^acc6_id}] = execute_query(q)
 
       {accs, nil} =
         PredictionAccuracy.filter(Map.merge(base_params(), %{"in_next_two" => "false"}))
 
       q = from(acc in accs, [])
 
-      assert [%{id: ^acc2_id}, %{id: ^acc3_id}, %{id: ^acc4_id}, %{id: ^acc5_id}, %{id: ^acc6_id}] =
+      assert [%{id: ^acc2_id}, %{id: ^acc3_id}, %{id: ^acc4_id}, %{id: ^acc5_id}] =
                execute_query(q)
     end
 

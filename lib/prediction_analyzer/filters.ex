@@ -69,14 +69,6 @@ defmodule PredictionAnalyzer.Filters do
   def filter_by_stop(q, []), do: {:ok, q}
   def filter_by_stop(q, nil), do: {:ok, q}
 
-  @spec filter_by_arrival_departure(Ecto.Query.t(), any()) ::
-          {:ok, Ecto.Query.t()} | {:error, String.t()}
-  def filter_by_arrival_departure(q, arr_dep) when arr_dep in ["arrival", "departure"] do
-    {:ok, from(acc in q, where: acc.arrival_departure == ^arr_dep)}
-  end
-
-  def filter_by_arrival_departure(q, _), do: {:ok, q}
-
   @spec filter_by_direction(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
   def filter_by_direction(q, direction_id) when direction_id in ["0", "1"] do
     {direction_id_int, _} = Integer.parse(direction_id)

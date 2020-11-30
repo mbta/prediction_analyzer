@@ -11,7 +11,6 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     hour_of_day: 11,
     stop_id: "70120",
     route_id: "Green-B",
-    arrival_departure: "departure",
     bin: "0-3 min",
     num_predictions: 40,
     num_accurate_predictions: 21
@@ -94,7 +93,6 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
              "filters[service_date]" => @today_str,
              "filters[route_ids]" => "",
              "filters[direction_id]" => "any",
-             "filters[arrival_departure]" => "all",
              "filters[bin]" => "All",
              "filters[mode]" => "subway"
            } ==
@@ -150,7 +148,6 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
           "date_start" => "2019-01-01",
           "route_ids" => "",
           "direction_id" => "any",
-          "arrival_departure" => "all",
           "bin" => "All"
         }
       })
@@ -185,7 +182,6 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
         "filters" => %{
           "route_ids" => "",
           "direction_id" => "any",
-          "arrival_departure" => "all",
           "bin" => "All",
           "mode" => "subway"
         }
@@ -221,7 +217,6 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
           "route_ids" => "",
           "mode" => "subway",
           "direction_id" => "any",
-          "arrival_departure" => "all",
           "bin" => "All"
         }
       })

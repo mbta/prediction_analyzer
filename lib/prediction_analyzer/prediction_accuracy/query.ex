@@ -8,7 +8,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
           module(),
           DateTime.t(),
           String.t(),
-          String.t(),
           boolean(),
           String.t(),
           integer(),
@@ -20,7 +19,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
   def calculate_aggregate_accuracy(
         repo_module,
         current_time,
-        arrival_departure,
         kind,
         in_next_two?,
         bin_name,
@@ -35,12 +33,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       |> Timex.shift(hours: -2)
       |> PredictionAnalyzer.Utilities.service_date_info()
 
-    query = query_template(arrival_departure)
-
-    repo_module.query(query, [
+    repo_module.query(insert_accuracy_query(), [
       service_date,
       hour_of_day,
-      arrival_departure,
       bin_name,
       bin_min,
       bin_max,
@@ -54,74 +49,84 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
     ])
   end
 
-  @spec query_template(String.t()) :: String.t()
-  defp query_template(arrival_departure) do
-    arrival_or_departure_time_column =
-      case arrival_departure do
-        "arrival" -> "arrival_time"
-        "departure" -> "departure_time"
-      end
-
-    "
-      INSERT INTO prediction_accuracy (
-        environment,
-        service_date,
-        hour_of_day,
-        route_id,
-        stop_id,
-        direction_id,
-        arrival_departure,
-        bin,
-        kind,
-        in_next_two,
-        num_predictions,
-        num_accurate_predictions,
-        mean_error,
-        root_mean_squared_error
-      ) (
+  @spec insert_accuracy_query() :: String.t()
+  defp insert_accuracy_query do
+    """
+    INSERT INTO prediction_accuracy (
+      environment,
+      service_date,
+      hour_of_day,
+      route_id,
+      stop_id,
+      direction_id,
+      bin,
+      kind,
+      in_next_two,
+      num_predictions,
+      num_accurate_predictions,
+      mean_error,
+      root_mean_squared_error
+    ) (
       SELECT
-        $11 AS environment,
+        $10 AS environment,
         $1 AS service_date,
         $2 AS hour_of_day,
         p.route_id AS route_id,
         p.stop_id AS stop_id,
         p.direction_id AS direction_id,
-        $3 AS arrival_departure,
-        $4 AS bin,
-        $12 AS kind,
-        $13 AS in_next_two,
+        $3 AS bin,
+        $11 AS kind,
+        $12 AS in_next_two,
         COUNT(*) AS num_predictions,
         SUM(
           CASE
-            WHEN
-              ve.#{arrival_or_departure_time_column} - p.#{arrival_or_departure_time_column} > $7
-              AND ve.#{arrival_or_departure_time_column} - p.#{arrival_or_departure_time_column} < $8 THEN 1
+            WHEN p.arrival_time IS NOT NULL
+              AND ve.arrival_time - p.arrival_time > $6
+              AND ve.arrival_time - p.arrival_time < $7
+              THEN 1
+            WHEN p.arrival_time IS NULL
+              AND ve.departure_time - p.departure_time > $6
+              AND ve.departure_time - p.departure_time < $7
+              THEN 1
             ELSE 0
           END
         ) AS num_accurate_predictions,
-        AVG(ve.#{arrival_or_departure_time_column} - p.#{arrival_or_departure_time_column}) AS mean_error,
+        AVG(
+          CASE
+            WHEN p.arrival_time IS NOT NULL
+              THEN ve.arrival_time - p.arrival_time
+            ELSE ve.departure_time - p.departure_time
+          END
+        ) AS mean_error,
         SQRT(
           AVG(
-            (ve.#{arrival_or_departure_time_column} - p.#{arrival_or_departure_time_column})^2
+            CASE
+              WHEN p.arrival_time IS NOT NULL
+                THEN (ve.arrival_time - p.arrival_time)^2
+              ELSE (ve.departure_time - p.departure_time)^2
+            END
           )
         ) AS root_mean_squared_error
-      FROM predictions AS p
+      FROM (
+        SELECT *,
+          COALESCE(arrival_time, departure_time) AS arrival_or_departure_time FROM predictions
+      ) AS p
       LEFT JOIN vehicle_events AS ve ON ve.id = p.vehicle_event_id
-      WHERE p.file_timestamp > $9
-        AND p.file_timestamp < $10
-        AND p.environment = $11
-        AND p.kind = $12
-        AND p.#{arrival_or_departure_time_column} IS NOT NULL
-        AND p.#{arrival_or_departure_time_column} > p.file_timestamp
-        AND p.#{arrival_or_departure_time_column} - p.file_timestamp >= $5
-        AND p.#{arrival_or_departure_time_column} - p.file_timestamp < $6
+      WHERE p.file_timestamp > $8
+        AND p.file_timestamp < $9
+        AND p.environment = $10
+        AND p.kind = $11
+        AND p.arrival_or_departure_time IS NOT NULL
+        AND p.arrival_or_departure_time > p.file_timestamp
+        AND p.arrival_or_departure_time - p.file_timestamp >= $4
+        AND p.arrival_or_departure_time - p.file_timestamp < $5
         AND (
-          ($13 AND (p.nth_at_stop IN (1, 2)))
+          ($12 AND (p.nth_at_stop IN (1, 2)))
           OR
-          ((NOT $13) AND (p.nth_at_stop NOT IN (1, 2) OR p.nth_at_stop IS NULL))
+          ((NOT $12) AND (p.nth_at_stop NOT IN (1, 2) OR p.nth_at_stop IS NULL))
         )
       GROUP BY p.route_id, p.stop_id, p.direction_id
     )
-    "
+    """
   end
 end
