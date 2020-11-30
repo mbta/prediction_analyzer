@@ -14,7 +14,6 @@ defmodule PredictionAnalyzer.QueryUtilitiesTest do
     stop_id: "stop1",
     route_id: "route1",
     direction_id: 0,
-    arrival_departure: "arrival",
     bin: "0-3 min",
     num_predictions: 1,
     num_accurate_predictions: 1,

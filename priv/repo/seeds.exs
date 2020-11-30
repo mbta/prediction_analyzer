@@ -45,7 +45,6 @@ for env <- ["prod", "dev-green"],
     service_date <- service_dates,
     hour_of_day <- 4..25,
     {route_id, stop_id, direction_id, kind} <- stops,
-    a_d <- ["arrival", "departure"],
     bin <- Map.keys(Filters.bins()) do
   num_predictions = :rand.uniform(100)
   num_accurate_predictions = num_predictions - :rand.uniform(num_predictions)
@@ -57,7 +56,6 @@ for env <- ["prod", "dev-green"],
     stop_id: stop_id,
     route_id: route_id,
     direction_id: direction_id,
-    arrival_departure: a_d,
     bin: bin,
     kind: kind,
     num_predictions: num_predictions,

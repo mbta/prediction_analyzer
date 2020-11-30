@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.9
--- Dumped by pg_dump version 11.9
+-- Dumped from database version 11.10
+-- Dumped by pg_dump version 13.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -64,8 +64,6 @@ CREATE TYPE public.prediction_kind AS ENUM (
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
-
 --
 -- Name: prediction_accuracy; Type: TABLE; Schema: public; Owner: -
 --
@@ -76,7 +74,7 @@ CREATE TABLE public.prediction_accuracy (
     hour_of_day integer NOT NULL,
     stop_id character varying(255) NOT NULL,
     route_id character varying(255) NOT NULL,
-    arrival_departure public.arrival_departure NOT NULL,
+    arrival_departure public.arrival_departure,
     bin public.prediction_bin NOT NULL,
     num_predictions integer NOT NULL,
     num_accurate_predictions integer NOT NULL,
@@ -337,5 +335,5 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956), (20201022151038), (20201027201115), (20201103215547), (20201112161111);
+INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956), (20201022151038), (20201027201115), (20201103215547), (20201112161111), (20201130194309);
 
