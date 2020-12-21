@@ -40,7 +40,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:ecto, "~> 2.0"},
       {:excoveralls, "~> 0.5", only: :test},
       {:gettext, "~> 0.11"},
-      {:hackney, "~> 1.16.0"},
+      {:hackney, "~> 1.17.0"},
       {:httpoison, "~> 1.7.0"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.5.0"},
