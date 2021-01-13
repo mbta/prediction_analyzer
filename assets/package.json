@@ -11,8 +11,8 @@
     "check": "tsc --noEmit && npm run lint:check && npm run format:check"
   },
   "dependencies": {
-    "@types/c3": "^0.7.4",
-    "@types/jquery": "^3.5.1",
+    "@types/c3": "^0.7.5",
+    "@types/jquery": "^3.5.5",
     "c3": "^0.7.20",
     "jquery": "^3.5.1",
     "phoenix": "file:../deps/phoenix",
@@ -24,22 +24,22 @@
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/eslint-plugin-tslint": "^3.10.1",
     "@typescript-eslint/parser": "^2.34.0",
-    "copy-webpack-plugin": "^6.1.1",
+    "copy-webpack-plugin": "^6.4.1",
     "css-loader": "^3.6.0",
     "eslint": "^6.8.0",
     "eslint-plugin-prefer-arrow": "^1.2.2",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.14.1",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.1",
     "sass-loader": "^8.0.2",
-    "source-map-loader": "^1.1.0",
+    "source-map-loader": "^1.1.3",
     "terser-webpack-plugin": "^3.1.0",
     "ts-loader": "^7.0.5",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.9.7",
-    "webpack": "^4.44.2",
+    "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   }
 }
