@@ -23,7 +23,7 @@ RUN mix local.hex --force && \
 
 WORKDIR /root/assets/
 RUN curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
-  apt-get install -y nodejs && \
+  apt-get install -y nodejs npm && \
   npm install -g npm@latest
 
 RUN env NODE_ENV=development npm ci
