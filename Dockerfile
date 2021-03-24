@@ -1,4 +1,4 @@
-FROM elixir:1.10.3 as builder
+FROM hexpm/elixir:1.10.3-erlang-22.3.4-debian-buster-20200224 as builder
 
 ENV MIX_ENV=prod
 ENV NODE_ENV=production
