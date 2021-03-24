@@ -11,7 +11,7 @@ WORKDIR /root
 ADD . .
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  curl git
+  ca-certificates curl git
 
 # Configure Git to use HTTPS in order to avoid issues with the internal MBTA network
 RUN git config --global url.https://github.com/.insteadOf git://github.com/
@@ -23,7 +23,7 @@ RUN mix local.hex --force && \
 
 WORKDIR /root/assets/
 RUN curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
-  apt-get install -y nodejs npm && \
+  apt-get install -y nodejs && \
   npm install -g npm@latest
 
 RUN env NODE_ENV=development npm ci
