@@ -10,6 +10,9 @@ RUN if test -z $ERL_COOKIE; then (>&2 echo "No ERL_COOKIE"); exit 1; fi
 WORKDIR /root
 ADD . .
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  git
+
 # Configure Git to use HTTPS in order to avoid issues with the internal MBTA network
 RUN git config --global url.https://github.com/.insteadOf git://github.com/
 
