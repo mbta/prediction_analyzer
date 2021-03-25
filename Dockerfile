@@ -1,4 +1,4 @@
-FROM elixir:1.10.3 as builder
+FROM hexpm/elixir:1.10.3-erlang-22.3.4-debian-buster-20200224 as builder
 
 ENV MIX_ENV=prod
 ENV NODE_ENV=production
@@ -9,6 +9,9 @@ RUN if test -z $ERL_COOKIE; then (>&2 echo "No ERL_COOKIE"); exit 1; fi
 
 WORKDIR /root
 ADD . .
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  ca-certificates curl git
 
 # Configure Git to use HTTPS in order to avoid issues with the internal MBTA network
 RUN git config --global url.https://github.com/.insteadOf git://github.com/
