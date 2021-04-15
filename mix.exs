@@ -35,7 +35,7 @@ defmodule PredictionAnalyzer.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:distillery, "~> 2.1.1", runtime: false},
       {:ecto, "~> 2.0"},
       {:excoveralls, "~> 0.5", only: :test},
