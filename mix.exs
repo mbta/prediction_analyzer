@@ -9,7 +9,7 @@ defmodule PredictionAnalyzer.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
-      test_coverage: [tool: ExCoveralls],
+      test_coverage: [tool: LcovEx],
       dialyzer: [plt_add_apps: [:ex_unit]],
       aliases: aliases(),
       deps: deps()
@@ -38,7 +38,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:distillery, "~> 2.1.1", runtime: false},
       {:ecto, "~> 2.0"},
-      {:excoveralls, "~> 0.5", only: :test},
+      {:lcov_ex, "~> 0.2", only: :test, runtime: false},
       {:gettext, "~> 0.11"},
       {:hackney, "~> 1.17.0"},
       {:httpoison, "~> 1.8.0"},
