@@ -87,8 +87,8 @@ jobs:
         run: mix compile --force --warnings-as-errors
       - name: Check formatting
         run: mix format --check-formatted
-      - name: Credo
-        run: mix credo --strict
+      # - name: Credo
+      #   run: mix credo --strict
       - name: Run tests
         env:
           DATABASE_ROOT_URL: postgres://${{env.DATABASE_USER}}:${{env.DATABASE_PASSWORD}}@localhost:5432
