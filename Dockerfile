@@ -1,49 +1,74 @@
-FROM hexpm/elixir:1.10.3-erlang-22.3.4-debian-buster-20200224 as builder
+# First, get the elixir dependencies within an elixir container
+FROM hexpm/elixir:1.10.3-erlang-22.3.4-alpine-3.13.1 AS elixir-builder
 
-ENV MIX_ENV=prod
-ENV NODE_ENV=production
+ENV LANG="C.UTF-8" MIX_ENV=prod
+
+WORKDIR /root
+# Install hex, rebar, and deps
+RUN mix local.hex --force && \
+  mix local.rebar --force
+
+ADD mix.lock mix.lock
+ADD mix.exs mix.exs
+ADD config config
+
+RUN mix do deps.get --only prod
+
+# Next, build the frontend assets within a node.js container
+FROM node:14.17-alpine as assets-builder
+
+WORKDIR /root
+# Copy in elixir deps required to build node modules for phoenix
+COPY --from=elixir-builder /root/deps ./deps
+
+ADD assets assets
+RUN npm --prefix assets ci
+RUN npm --prefix assets run deploy
+
+# Now, build the application back in the elixir container
+FROM elixir-builder as app-builder
 
 ARG ERL_COOKIE
 ENV ERL_COOKIE=${ERL_COOKIE}
 RUN if test -z $ERL_COOKIE; then (>&2 echo "No ERL_COOKIE"); exit 1; fi
 
-WORKDIR /root
-ADD . .
+# Add Elixir code
+ADD lib lib
+ADD priv priv
+ADD rel rel
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  ca-certificates curl git
+RUN mix compile
 
-# Configure Git to use HTTPS in order to avoid issues with the internal MBTA network
-RUN git config --global url.https://github.com/.insteadOf git://github.com/
+# Add frontend assets compiled in node container, required by phx.digest
+COPY --from=assets-builder /root/priv/static ./priv/static
 
-# Install hex and rebar
-RUN mix local.hex --force && \
-  mix local.rebar --force && \
-  mix do deps.get --only prod, compile --force
+RUN mix do phx.digest, release
 
-WORKDIR /root/assets/
-RUN curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
-  apt-get install -y nodejs && \
-  npm install -g npm@latest
+# Finally, use an Alpine container for the runtime environment
+FROM alpine:3.13.1
 
-RUN env NODE_ENV=development npm ci
-RUN npm run deploy
+RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
+  && rm -rf /var/cache/apk
 
-WORKDIR /root
-RUN mix phx.digest
-RUN mix distillery.release --verbose
+# Create non-root user
+RUN addgroup -S prediction_analyzer && adduser -S -G prediction_analyzer prediction_analyzer
+USER prediction_analyzer
+WORKDIR /home/prediction_analyzer
 
-# the one the elixir image was built with
-FROM debian:buster
+# Set environment
+ENV MIX_ENV=prod TERM=xterm LANG="C.UTF-8" PORT=4000 REPLACE_OS_VARS=true
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  libssl1.1 libsctp1 curl \
-  && rm -rf /var/lib/apt/lists/*
+# Add frontend assets with manifests from app-builder container
+COPY --from=app-builder --chown=prediction_analyzer:prediction_analyzer /root/priv/static ./priv/static
 
-WORKDIR /root
+# Add application artifact compiled in app-builder container
+COPY --from=app-builder --chown=prediction_analyzer:prediction_analyzer /root/_build/prod/rel/prediction_analyzer .
+
 EXPOSE 4000
-ENV MIX_ENV=prod TERM=xterm LANG="C.UTF-8" PORT=4000
 
-COPY --from=builder /root/_build/prod/rel/prediction_analyzer/releases/current/prediction_analyzer.tar.gz .
-RUN tar -xzf prediction_analyzer.tar.gz
-CMD ["bin/prediction_analyzer", "foreground"]
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+# Health Check
+HEALTHCHECK CMD ["bin/prediction_analyzer", "rpc", "1 + 1"]
+# Run the application
+CMD ["bin/prediction_analyzer", "start"]
