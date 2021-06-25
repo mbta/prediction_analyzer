@@ -13,6 +13,7 @@ jobs:
     concurrency: dev
     env:
       AWS_REGION: us-east-1
+      DOCKER_BUILDKIT: 1
       ELASTICBEANSTALK_APPLICATION_NAME: prediction-analyzer
       ELASTICBEANSTALK_ENVIRONMENT_NAME: prediction-analyzer-dev
 
