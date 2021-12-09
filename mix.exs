@@ -43,7 +43,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:hackney, "~> 1.17.0"},
       {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.0"},
-      {:phoenix, "~> 1.5.0"},
+      {:phoenix, "~> 1.6.4"},
       {:phoenix_ecto, "~> 3.2"},
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
