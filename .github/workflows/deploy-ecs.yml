@@ -1,0 +1,19 @@
+name: Deploy to ECS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: master
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: dev
+    concurrency: dev
+    env:
+      ECS_CLUSTER: prediction-analyzer
+      ECS_SERVICE: prediction-analyzer-dev
+
+    steps:
+      - uses: actions/checkout@v2
