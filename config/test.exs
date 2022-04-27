@@ -13,7 +13,9 @@ config :logger, level: :warn
 # Configure your database
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   url: "#{System.get_env("DATABASE_ROOT_URL")}/prediction_analyzer_test",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  # debug errors in test
+  show_sensitive_data_on_connection_error: true
 
 config :prediction_analyzer,
   http_fetcher: FakeHTTPoison,

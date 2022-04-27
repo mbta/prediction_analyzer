@@ -21,9 +21,7 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
 
 config :logger, level: :debug
 
-config :prediction_analyzer, PredictionAnalyzer.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  pool_size: 15
+config :prediction_analyzer, PredictionAnalyzer.Repo, pool_size: 15
 
 config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks
 
