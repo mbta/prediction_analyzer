@@ -14,7 +14,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.asdf
-          key: ${{ runner.os }}-asdf-v2-${{ hashFiles('.tool-versions') }}
+          key: ${{ runner.os }}-asdf-${{ hashFiles('.tool-versions') }}-${{ secrets.CACHE_UUID}}
         id: asdf-cache
       # only run `asdf install` if we didn't hit the cache
       - uses: asdf-vm/actions/install@v1
@@ -30,7 +30,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.asdf
-          key: ${{ runner.os }}-asdf-v2-${{ hashFiles('.tool-versions') }}
+          key: ${{ runner.os }}-asdf-${{ hashFiles('.tool-versions') }}-${{ secrets.CACHE_UUID}}
         id: asdf-cache
       - uses: mbta/actions/reshim-asdf@v1
       - name: Restore dependencies cache
@@ -38,8 +38,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ runner.os }}-mix-
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}-${{ secrets.CACHE_UUID}}
       - name: Install dependencies
         run: |
           mix local.rebar --force
@@ -69,7 +68,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.asdf
-          key: ${{ runner.os }}-asdf-v2-${{ hashFiles('.tool-versions') }}
+          key: ${{ runner.os }}-asdf-${{ hashFiles('.tool-versions') }}-${{ secrets.CACHE_UUID}}
         id: asdf-cache
       - uses: mbta/actions/reshim-asdf@v1
       - name: Restore dependencies cache
@@ -77,8 +76,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ runner.os }}-mix-
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}-${{ secrets.CACHE_UUID}}
       - name: Install dependencies
         run: |
           mix local.rebar --force
@@ -115,7 +113,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.asdf
-          key: ${{ runner.os }}-asdf-v2-${{ hashFiles('.tool-versions') }}
+          key: ${{ runner.os }}-asdf-${{ hashFiles('.tool-versions') }}-${{ secrets.CACHE_UUID}}
         id: asdf-cache
       - uses: mbta/actions/reshim-asdf@v1
       - name: Restore dependencies cache
@@ -123,8 +121,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ runner.os }}-mix-
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}-${{ secrets.CACHE_UUID}}
       - name: Install NPM assets
         run: npm --prefix assets ci
       - name: Check JS formatting
