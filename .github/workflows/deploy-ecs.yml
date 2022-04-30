@@ -2,18 +2,23 @@ name: Deploy to ECS
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        required: true
+        default: dev
   push:
     branches: master
 
 jobs:
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    environment: dev
-    concurrency: dev
-    env:
-      ECS_CLUSTER: prediction-analyzer
-      ECS_SERVICE: prediction-analyzer-dev
-
-    steps:
-      - uses: actions/checkout@v2
+  call-workflow:
+    uses: mbta/prediction_analyzer/.github/workflows/ctd-deploy-ecs.yml@gjd-deploy-ecs-reusable
+    with:
+      app-name: prediction-analyzer
+      environment: ${{ github.event.inputs.environment }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      docker-repo: ${{ secrets.DOCKER_REPO }}
+      erl-cookie: ${{ secrets.ERL_COOKIE }}
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
