@@ -1,5 +1,5 @@
 # First, get the elixir dependencies within an elixir container
-FROM hexpm/elixir:1.10.3-erlang-22.3.4-alpine-3.13.1 AS elixir-builder
+FROM hexpm/elixir:1.11.4-erlang-24.3.4-alpine-3.14.5 AS elixir-builder
 
 ENV LANG="C.UTF-8" MIX_ENV=prod
 
@@ -15,7 +15,7 @@ ADD config config
 RUN mix do deps.get --only prod
 
 # Next, build the frontend assets within a node.js container
-FROM node:14.17-alpine as assets-builder
+FROM node:16.15.0-alpine3.14 as assets-builder
 
 WORKDIR /root
 # Copy in elixir deps required to build node modules for phoenix
@@ -45,7 +45,7 @@ COPY --from=assets-builder /root/priv/static ./priv/static
 RUN mix do phx.digest, release
 
 # Finally, use an Alpine container for the runtime environment
-FROM alpine:3.13.1
+FROM alpine:3.14.5
 
 RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
   && rm -rf /var/cache/apk
