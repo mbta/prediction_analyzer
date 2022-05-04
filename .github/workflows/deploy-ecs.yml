@@ -12,7 +12,7 @@ on:
 
 jobs:
   call-workflow:
-    uses: mbta/prediction_analyzer/.github/workflows/ctd-deploy-ecs.yml@gjd-deploy-ecs-reusable-2
+    uses: mbta/prediction_analyzer/.github/workflows/ctd-deploy-ecs.yml@master
     with:
       app-name: prediction-analyzer
       environment: ${{ github.event.inputs.environment }}
