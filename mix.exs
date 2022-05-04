@@ -36,7 +36,6 @@ defmodule PredictionAnalyzer.Mixfile do
   defp deps do
     [
       {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
-      {:distillery, "~> 2.1.1", runtime: false},
       {:ecto, "~> 2.0"},
       {:lcov_ex, "~> 0.2", only: :test, runtime: false},
       {:gettext, "~> 0.11"},

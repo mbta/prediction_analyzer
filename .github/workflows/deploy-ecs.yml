@@ -12,7 +12,7 @@ on:
 
 jobs:
   call-workflow:
-    uses: mbta/prediction_analyzer/.github/workflows/ctd-deploy-ecs.yml@gjd-deploy-ecs-reusable
+    uses: mbta/prediction_analyzer/.github/workflows/ctd-deploy-ecs.yml@gjd-deploy-ecs-reusable-2
     with:
       app-name: prediction-analyzer
       environment: ${{ github.event.inputs.environment }}
@@ -20,5 +20,4 @@ jobs:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       docker-repo: ${{ secrets.DOCKER_REPO }}
-      erl-cookie: ${{ secrets.ERL_COOKIE }}
       slack-webhook: ${{ secrets.SLACK_WEBHOOK }}

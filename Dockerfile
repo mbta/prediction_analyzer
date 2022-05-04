@@ -28,14 +28,9 @@ RUN npm --prefix assets run deploy
 # Now, build the application back in the elixir container
 FROM elixir-builder as app-builder
 
-ARG ERL_COOKIE
-ENV ERL_COOKIE=${ERL_COOKIE}
-RUN if test -z $ERL_COOKIE; then (>&2 echo "No ERL_COOKIE"); exit 1; fi
-
 # Add Elixir code
 ADD lib lib
 ADD priv priv
-ADD rel rel
 
 RUN mix compile
 
