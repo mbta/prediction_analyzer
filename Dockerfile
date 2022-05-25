@@ -1,5 +1,5 @@
 # First, get the elixir dependencies within an elixir container
-FROM hexpm/elixir:1.10.3-erlang-22.3.4-alpine-3.13.1 AS elixir-builder
+FROM hexpm/elixir:1.10.4-erlang-22.3.4-alpine-3.13.1 AS elixir-builder
 
 ENV LANG="C.UTF-8" MIX_ENV=prod
 
