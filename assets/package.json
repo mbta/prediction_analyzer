@@ -11,7 +11,7 @@
     "check": "tsc --noEmit && npm run lint:check && npm run format:check"
   },
   "dependencies": {
-    "@types/c3": "^0.7.5",
+    "@types/c3": "^0.7.8",
     "@types/jquery": "^3.5.5",
     "c3": "^0.7.20",
     "jquery": "^3.6.0",
