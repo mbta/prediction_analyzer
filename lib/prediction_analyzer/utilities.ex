@@ -82,6 +82,7 @@ defmodule PredictionAnalyzer.Utilities do
   def generic_stop_id("Forest Hills-02"), do: "70001"
   def generic_stop_id("Oak Grove-01"), do: "70036"
   def generic_stop_id("Oak Grove-02"), do: "70036"
+  def generic_stop_id("Union Square-" <> _), do: "70503"
   def generic_stop_id(stop_id), do: stop_id
 
   @spec routes_for_mode(atom()) :: [String.t()]
