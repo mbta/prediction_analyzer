@@ -22,7 +22,7 @@
   "devDependencies": {
     "@types/selectize": "^0.12.34",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^3.10.1",
+    "@typescript-eslint/eslint-plugin-tslint": "^5.29.0",
     "@typescript-eslint/parser": "^2.34.0",
     "copy-webpack-plugin": "^6.4.1",
     "css-loader": "^5.2.7",
