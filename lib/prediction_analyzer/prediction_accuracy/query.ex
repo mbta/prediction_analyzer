@@ -115,7 +115,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       WHERE p.file_timestamp > $8
         AND p.file_timestamp < $9
         AND p.environment = $10
-        AND p.kind = $11
+        AND ((p.kind IS NULL) OR (p.kind = $11))
         AND p.arrival_or_departure_time IS NOT NULL
         AND p.arrival_or_departure_time > p.file_timestamp
         AND p.arrival_or_departure_time - p.file_timestamp >= $4
