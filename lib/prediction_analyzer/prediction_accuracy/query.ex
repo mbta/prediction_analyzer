@@ -33,7 +33,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       |> Timex.shift(hours: -2)
       |> PredictionAnalyzer.Utilities.service_date_info()
 
-    repo_module.query(insert_accuracy_query(), [
+    repo_module.query(insert_accuracy_query(kind), [
       service_date,
       hour_of_day,
       bin_name,
@@ -49,8 +49,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
     ])
   end
 
-  @spec insert_accuracy_query() :: String.t()
-  defp insert_accuracy_query do
+  @spec insert_accuracy_query(String.t()) :: String.t()
+  defp insert_accuracy_query(kind) do
     """
     INSERT INTO prediction_accuracy (
       environment,
@@ -115,7 +115,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       WHERE p.file_timestamp > $8
         AND p.file_timestamp < $9
         AND p.environment = $10
-        AND p.kind = $11
+        AND #{kind_clause(kind)}
         AND p.arrival_or_departure_time IS NOT NULL
         AND p.arrival_or_departure_time > p.file_timestamp
         AND p.arrival_or_departure_time - p.file_timestamp >= $4
@@ -129,4 +129,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
     )
     """
   end
+
+  defp kind_clause(nil), do: "p.kind IS NULL"
+  defp kind_clause(_), do: "p.kind = $11"
 end
