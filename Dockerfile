@@ -1,5 +1,5 @@
 # First, get the elixir dependencies within an elixir container
-FROM hexpm/elixir:1.10.4-erlang-22.3.4-alpine-3.13.1 AS elixir-builder
+FROM hexpm/elixir:1.14.2-erlang-25.2-alpine-3.17.0 AS elixir-builder
 
 ENV LANG="C.UTF-8" MIX_ENV=prod
 
@@ -40,7 +40,7 @@ COPY --from=assets-builder /root/priv/static ./priv/static
 RUN mix do phx.digest, release
 
 # Finally, use an Alpine container for the runtime environment
-FROM alpine:3.13.1
+FROM alpine:3.17.0
 
 RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
   && rm -rf /var/cache/apk
