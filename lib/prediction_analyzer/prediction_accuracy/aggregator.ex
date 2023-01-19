@@ -95,9 +95,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
               )
 
             Logger.info(
-              "prediction_accuracy_aggregator #{environment} #{kind} #{bin_name} result=#{
-                inspect(r)
-              }"
+              "prediction_accuracy_aggregator #{environment} #{kind} #{bin_name} result=#{inspect(r)}"
             )
           end
         end,
