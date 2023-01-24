@@ -245,8 +245,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
     response = html_response(conn, 200)
 
-    assert response =~
-             ~r/0-3 min[[:blank:]]+<\/td>\n[[:blank:]]+<td>\n[[:blank:]]+-60 sec to 60 sec/
+    assert response =~ "<td>\n0-3 min\n              </td>\n              <td>\n-60 sec to 60 sec"
   end
 
   def insert_hourly_accuracy(env, hour, total, accurate, service_date \\ nil) do
