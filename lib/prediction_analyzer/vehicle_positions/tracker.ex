@@ -80,9 +80,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
       {:ok, %{status_code: 304}} ->
         Logger.info(
-          "Subway vehicle positions not modified since last request at #{
-            state.subway_last_modified
-          }"
+          "Subway vehicle positions not modified since last request at #{state.subway_last_modified}"
         )
 
         {:noreply, state}
@@ -138,9 +136,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
         {:error, %{status_code: 304}} ->
           Logger.info(
-            "Commuter rail vehicle positions not modified since last request at #{
-              state.commuter_rail_last_modified
-            }"
+            "Commuter rail vehicle positions not modified since last request at #{state.commuter_rail_last_modified}"
           )
 
           state

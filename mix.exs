@@ -7,7 +7,7 @@ defmodule PredictionAnalyzer.Mixfile do
       version: "0.0.1",
       elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: LcovEx],
       dialyzer: [plt_add_apps: [:ex_unit]],
