@@ -42,7 +42,7 @@ RUN mix do phx.digest, release
 # Finally, use an Alpine container for the runtime environment
 FROM alpine:3.17.0
 
-RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
+RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init libstdc++ libgcc \
   && rm -rf /var/cache/apk
 
 # Create non-root user
