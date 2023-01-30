@@ -15,7 +15,7 @@ ADD config config
 RUN mix do deps.get --only prod
 
 # Next, build the frontend assets within a node.js container
-FROM node:14.17-alpine as assets-builder
+FROM node:14.17 as assets-builder
 
 WORKDIR /root
 # Copy in elixir deps required to build node modules for phoenix
@@ -42,7 +42,7 @@ RUN mix do phx.digest, release
 # Finally, use an Alpine container for the runtime environment
 FROM alpine:3.17.0
 
-RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init \
+RUN apk add --update libssl1.1 ncurses-libs bash curl dumb-init libstdc++ libgcc \
   && rm -rf /var/cache/apk
 
 # Create non-root user
