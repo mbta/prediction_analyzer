@@ -4,6 +4,7 @@ is_prod? = config_env() == :prod
 
 if is_prod? do
   sentry_env = System.fetch_env!("SENTRY_ENV")
+
   config :sentry,
     dsn: System.fetch_env!("SENTRY_DSN"),
     environment_name: sentry_env,

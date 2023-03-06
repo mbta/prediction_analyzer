@@ -19,7 +19,9 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true
 
-config :logger, level: :debug
+config :logger,
+  backends: [:console, Sentry.LoggerBackend],
+  level: :debug
 
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
