@@ -2,10 +2,6 @@ defmodule PredictionAnalyzer.Repo do
   use Ecto.Repo, otp_app: :prediction_analyzer
   require Logger
 
-  def init(_, opts) do
-    {:ok, Keyword.put_new(opts, :url, System.get_env("DATABASE_URL"))}
-  end
-
   @doc """
   Set via the `:configure` option in the PredictionAnalyzer.Repo configuration, a function
   invoked prior to each DB connection. `config` is the configured connection values
