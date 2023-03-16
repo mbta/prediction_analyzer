@@ -24,6 +24,7 @@ config :logger, :console,
 # here (which is why it is important to import them last).
 #
 
+config :prediction_analyzer, aws_rds_mod: ExAws.RDS
 config :prediction_analyzer, ecto_repos: [PredictionAnalyzer.Repo]
 config :prediction_analyzer, http_fetcher: HTTPoison
 config :prediction_analyzer, :api_base_url, "https://api-v3.mbta.com/"
