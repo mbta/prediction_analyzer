@@ -13,7 +13,10 @@ defmodule PredictionAnalyzer.Repo do
   """
   def before_connect(config) do
     case Keyword.fetch(config, :url) do
-      :error ->
+      {:ok, url} when url != nil ->
+        config
+
+      _ ->
         :ok = Logger.info("generating_aws_rds_iam_auth_token")
         username = Keyword.fetch!(config, :username)
         hostname = Keyword.fetch!(config, :hostname)
@@ -24,9 +27,6 @@ defmodule PredictionAnalyzer.Repo do
         :ok = Logger.info("generated_aws_rds_iam_auth_token")
 
         Keyword.put(config, :password, token)
-
-      _ ->
-        config
     end
   end
 end
