@@ -24,7 +24,9 @@ defmodule PredictionAnalyzer.Repo do
         :ok = Logger.info("generated_aws_rds_iam_auth_token")
 
         Keyword.put(config, :password, token)
-      _ -> config
+
+      _ ->
+        config
     end
   end
 end

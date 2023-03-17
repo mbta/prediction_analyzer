@@ -17,7 +17,15 @@ defmodule PredictionAnalyzer.RepoTest do
 
     test "uses url if present" do
       reassign_env(:aws_rds_mod, FakeAwsRds)
-      config = PredictionAnalyzer.Repo.before_connect(url: "test_url", username: "u", hostname: "h", port: 4000)
+
+      config =
+        PredictionAnalyzer.Repo.before_connect(
+          url: "test_url",
+          username: "u",
+          hostname: "h",
+          port: 4000
+        )
+
       assert :error = Keyword.fetch(config, :password)
       assert {:ok, "test_url"} = Keyword.fetch(config, :url)
     end
