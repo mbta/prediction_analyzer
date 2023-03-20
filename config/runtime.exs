@@ -7,7 +7,11 @@ if config_env() == :prod do
       val -> String.to_integer(val)
     end
 
-  port = System.get_env("DATABASE_PORT") |> String.to_integer()
+  port =
+    case System.get_env("DATABASE_PORT") do
+      nil -> nil
+      val -> String.to_integer(val)
+    end
 
   config :arrow, PredictionAnalyzer.Repo,
     username: System.get_env("DATABASE_USER"),
