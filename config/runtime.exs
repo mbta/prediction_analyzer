@@ -3,8 +3,10 @@ require Logger
 
 Logger.info("Begin runtime.exs")
 Logger.info(config_env())
+
 if config_env() == :prod do
   Logger.info("Begin prod config init")
+
   pool_size =
     case System.get_env("DATABASE_POOL_SIZE") do
       nil -> 10
@@ -16,6 +18,7 @@ if config_env() == :prod do
       nil -> nil
       val -> String.to_integer(val)
     end
+
   Logger.info(inspect(pool_size))
   Logger.info(inspect(port))
 
