@@ -1,6 +1,8 @@
 import Config
 require Logger
 
+Logger.info("Begin runtime.exs")
+Logger.info(config_env())
 if config_env() == :prod do
   Logger.info("Begin prod config init")
   pool_size =
