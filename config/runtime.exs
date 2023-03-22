@@ -22,7 +22,7 @@ if config_env() == :prod do
   Logger.info(inspect(pool_size))
   Logger.info(inspect(port))
 
-  config :arrow, PredictionAnalyzer.Repo,
+  config :prediction_analyzer, PredictionAnalyzer.Repo,
     username: System.get_env("DATABASE_USER"),
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
