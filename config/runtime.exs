@@ -3,7 +3,7 @@ import Config
 if config_env() == :prod do
   pool_size =
     case System.get_env("DATABASE_POOL_SIZE") do
-      nil -> 10
+      nil -> 15
       val -> String.to_integer(val)
     end
 
@@ -13,7 +13,7 @@ if config_env() == :prod do
       val -> String.to_integer(val)
     end
 
-  config :arrow, PredictionAnalyzer.Repo,
+  config :prediction_analyzer, PredictionAnalyzer.Repo,
     username: System.get_env("DATABASE_USER"),
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
