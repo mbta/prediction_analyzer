@@ -25,7 +25,8 @@ config :logger,
 
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   adapter: Ecto.Adapters.Postgres,
-  pool_size: 15
+  pool_size: 15,
+  ssl: true
 
 config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks
 

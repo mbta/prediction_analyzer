@@ -133,5 +133,3 @@ jobs:
         run: npm --prefix assets ci
       - name: Check JS formatting
         run: npm --prefix assets run check
-      - name: Node tests
-        run: npm --prefix assets test

@@ -15,7 +15,7 @@ ADD config config
 RUN mix do deps.get --only prod
 
 # Next, build the frontend assets within a node.js container
-FROM node:14.17-alpine as assets-builder
+FROM node:18.15-alpine as assets-builder
 
 WORKDIR /root
 # Copy in elixir deps required to build node modules for phoenix
