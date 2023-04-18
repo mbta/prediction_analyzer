@@ -51,7 +51,8 @@ defmodule PredictionAnalyzer.Mixfile do
       {:plug_cowboy, "~> 2.1"},
       {:plug, "~> 1.10"},
       {:postgrex, ">= 0.0.0"},
-      {:timex, "~> 3.1"}
+      {:timex, "~> 3.1"},
+      {:sentry, "~> 8.0"}
     ]
   end
 

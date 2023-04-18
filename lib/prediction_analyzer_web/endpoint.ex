@@ -1,4 +1,5 @@
 defmodule PredictionAnalyzerWeb.Endpoint do
+  use Sentry.PlugCapture
   use Phoenix.Endpoint, otp_app: :prediction_analyzer
 
   socket("/socket", PredictionAnalyzerWeb.UserSocket, websocket: true)
@@ -31,6 +32,9 @@ defmodule PredictionAnalyzerWeb.Endpoint do
     pass: ["*/*"],
     json_decoder: Jason
   )
+
+  # Sentry must be invoked after Plug.Parsers:
+  plug(Sentry.PlugContext)
 
   plug(Plug.MethodOverride)
   plug(Plug.Head)
