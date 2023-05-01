@@ -81,7 +81,7 @@
 
 <hr class="accuracy-separator">
 
-<%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
+<%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn f -> %>
   <%= hidden_input(f, :mode) %>
   <%= hidden_input(f, :chart_range) %>
 
@@ -121,7 +121,6 @@
       	    <%= radio_button(f, :direction_id, "any") %> Any
       	  <% end %>
       	</div>
-
         <%= if @mode == :subway do %>
           <div class="form-group">
             <%= label(f, :kinds, "Kinds") %>
@@ -162,7 +161,7 @@
         <% end %>
 
         <div class="form-group">
-          <%= submit "Filter", class: "btn btn-default" %>
+          <%= submit "Filter", id: "filter-submit-btn", class: "btn btn-default" %>
         </div>
 
       </div>
@@ -174,6 +173,10 @@
           <%= content_tag :a, chart_range, class: chart_range_class(@conn, chart_range), id: chart_range_id(chart_range), href: "#" %>
         <% end %>
       </div>
+
+      <%= if @mode == :subway do %>
+        <%= content_tag :a, "Download CSV", id: "download-report-csv", class: "download-report-csv", href: "#" %>
+      <% end %>
 
       <%= if f.params["chart_range"] == "By Station" do %>
         <%= content_tag :a, "Sort By Accuracy", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
@@ -230,5 +233,52 @@
 <% end %>
 
 <script>
+  function downloadReport(urlParams) {
+    // Get values from query params:
+    const reportType = urlParams.get('filters[chart_range]');
+    const dateRange = reportType == 'Daily' ? `${urlParams.get('filters[date_start]')}_${urlParams.get('filters[date_end]')}` : urlParams.get('filters[service_date]')
+    // Transform table to CSV:
+    const table = document.getElementById("prod-data-table");
+    const rows = table.querySelectorAll("tr");
+    const csvContent = [];
+    for (const row of rows) {
+      const cols = row.querySelectorAll("td, th");
+      const csvRow = [];
+      for (const col of cols) {
+        csvRow.push(col.innerText.trim());
+      }
+      csvContent.push(csvRow.join(","));
+    }
+    // Download the file:
+    const blob = new Blob([csvContent.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${new Date().toISOString()}_PredictionAnalyzer_${dateRange}_${reportType}_export.csv`;
+    link.click();
+  }
+  var urlParams = new URLSearchParams(window.location.search);
+  let downloadReportBtn = document.getElementById('download-report-csv');
+  if (downloadReportBtn != null) {
+    downloadReportBtn.addEventListener("click", (e) => {
+      e.preventDefault()
+      // Create a hidden input that triggers download on next page load:
+      var csvDownloadTrigger = document.createElement("input");
+      csvDownloadTrigger.type = "hidden";
+      csvDownloadTrigger.value = "true";
+      csvDownloadTrigger.name = "downloadCsv";
+      document.getElementById("accuracy-form").appendChild(csvDownloadTrigger);
+      // Trigger the filter form to ensure latest user selections are applied:
+      document.getElementById("filter-submit-btn").click()
+    });
+  }
+  if (urlParams.get('downloadCsv')) {
+    // Download the report:
+    console.info("downloadCsv: query param supplied, triggering local download...")
+    downloadReport(urlParams)
+    // Cover refresh corner case by modifying browser location:
+    let url = new URL(location.href);
+    url.searchParams.delete('downloadCsv');
+    window.history.pushState({}, document.title, url);
+  }
   window.dataPredictionAccuracyJSON = <%= raw(@chart_data) %>
 </script>
