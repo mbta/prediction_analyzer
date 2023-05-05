@@ -81,7 +81,7 @@
 
 <hr class="accuracy-separator">
 
-<%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
+<%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn f -> %>
   <%= hidden_input(f, :mode) %>
   <%= hidden_input(f, :chart_range) %>
 
@@ -121,7 +121,6 @@
       	    <%= radio_button(f, :direction_id, "any") %> Any
       	  <% end %>
       	</div>
-
         <%= if @mode == :subway do %>
           <div class="form-group">
             <%= label(f, :kinds, "Kinds") %>
@@ -162,7 +161,7 @@
         <% end %>
 
         <div class="form-group">
-          <%= submit "Filter", class: "btn btn-default" %>
+          <%= submit "Filter", id: "filter-submit-btn", class: "btn btn-default" %>
         </div>
 
       </div>
@@ -174,6 +173,10 @@
           <%= content_tag :a, chart_range, class: chart_range_class(@conn, chart_range), id: chart_range_id(chart_range), href: "#" %>
         <% end %>
       </div>
+
+      <%= if @mode == :subway and f.params["chart_range"] == "Daily" do %>
+        <%= content_tag :a, "OPMI CSV", id: "download-report-csv", class: "download-report-csv", href: "/accuracy/csv/opmi?" <> Plug.Conn.Query.encode(@conn.params) %>
+      <% end %>
 
       <%= if f.params["chart_range"] == "By Station" do %>
         <%= content_tag :a, "Sort By Accuracy", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
