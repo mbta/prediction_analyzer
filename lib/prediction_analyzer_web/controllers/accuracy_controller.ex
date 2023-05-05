@@ -182,7 +182,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     end
   end
 
-  def opmi_csv(conn, params) do
+  def opmi_csv(conn, _) do
     conn
     |> redirect_with_default_filters(
       %{"filters" => %{"mode" => "subway", "chart_range" => "Daily"}},
