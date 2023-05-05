@@ -127,7 +127,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         conn,
         %{
           "filters" => filter_params
-        } = params
+        }
       ) do
     columns = [
       :service_date,
@@ -139,7 +139,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       :num_accurate_predictions
     ]
 
-    {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
+    {relevant_accuracies, _} = PredictionAccuracy.filter(filter_params)
 
     query_result =
       from(acc in relevant_accuracies,
