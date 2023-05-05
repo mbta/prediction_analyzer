@@ -127,7 +127,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         conn,
         %{
           "filters" => filter_params
-        }
+        } = params
       ) do
     columns = [
       :service_date,
@@ -139,39 +139,54 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       :num_accurate_predictions
     ]
 
-    {relevant_accuracies, _} = PredictionAccuracy.filter(filter_params)
+    if time_filters_present?(filter_params) do
+      {relevant_accuracies, _} = PredictionAccuracy.filter(filter_params)
 
-    query_result =
-      from(acc in relevant_accuracies,
-        select: [
-          fragment("to_char(date_trunc('week', service_date), 'MM/DD/YYYY') as service_date"),
-          fragment("'subway' as mode"),
-          acc.route_id,
-          fragment("'' as arrival_departure"),
-          acc.bin,
-          sum(acc.num_predictions),
-          sum(acc.num_accurate_predictions)
-        ],
-        where: acc.environment == "prod",
-        group_by: [fragment("date_trunc('week', service_date)"), acc.route_id, acc.bin]
+      query_result =
+        from(acc in relevant_accuracies,
+          select: [
+            fragment("to_char(date_trunc('week', service_date), 'MM/DD/YYYY') as service_date"),
+            fragment("'subway' as mode"),
+            acc.route_id,
+            fragment("'' as arrival_departure"),
+            acc.bin,
+            sum(acc.num_predictions),
+            sum(acc.num_accurate_predictions)
+          ],
+          where: acc.environment == "prod",
+          group_by: [fragment("date_trunc('week', service_date)"), acc.route_id, acc.bin]
+        )
+        |> PredictionAnalyzer.Repo.all()
+
+      filename =
+        "#{DateTime.utc_now() |> DateTime.to_iso8601()}_PredictionAnalyzer_#{filter_params["date_start"]}_#{filter_params["date_end"]}_#{filter_params["mode"]}_export.csv"
+
+      send_download(
+        conn,
+        {:binary,
+         query_result
+         |> Enum.map(fn row ->
+           Enum.zip(columns, row) |> Map.new()
+         end)
+         |> CSV.encode(headers: true)
+         |> Enum.to_list()
+         |> Enum.reduce("", fn line, acc -> "#{acc}#{line}" end)},
+        content_type: "application/csv",
+        filename: filename
       )
-      |> PredictionAnalyzer.Repo.all()
+    else
+      redirect_with_default_filters(conn, %{
+        params
+        | filters: %{filter_params | mode: "subway", chart_range: "Daily"}
+      })
+    end
+  end
 
-    filename =
-      "#{DateTime.utc_now() |> DateTime.to_iso8601()}_PredictionAnalyzer_#{filter_params["date_start"]}_#{filter_params["date_end"]}_#{filter_params["mode"]}_export.csv"
-
-    send_download(
-      conn,
-      {:binary,
-       query_result
-       |> Enum.map(fn row ->
-         Enum.zip(columns, row) |> Map.new()
-       end)
-       |> CSV.encode(headers: true)
-       |> Enum.to_list()
-       |> Enum.reduce("", fn line, acc -> "#{acc}#{line}" end)},
-      content_type: "application/csv",
-      filename: filename
+  def opmi_csv(conn, params) do
+    conn
+    |> redirect_with_default_filters(
+      %{"filters" => %{"mode" => "subway", "chart_range" => "Daily"}},
+      :opmi_csv
     )
   end
 
@@ -181,8 +196,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     |> index(params)
   end
 
-  @spec redirect_with_default_filters(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  defp redirect_with_default_filters(conn, params) do
+  @spec redirect_with_default_filters(Plug.Conn.t(), map(), atom) :: Plug.Conn.t()
+  defp redirect_with_default_filters(conn, params, redirect_target \\ :index) do
     filters = params["filters"] || %{}
 
     default_filters = %{
@@ -215,7 +230,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
     redirect(
       conn,
-      to: Routes.accuracy_path(conn, :index, %{"filters" => filters})
+      to: Routes.accuracy_path(conn, redirect_target, %{"filters" => filters})
     )
   end
 
