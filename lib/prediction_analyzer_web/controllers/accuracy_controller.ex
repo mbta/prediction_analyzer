@@ -170,19 +170,12 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         filename: filename
       )
     else
-      redirect_with_default_filters(conn, %{
-        params
-        | filters: %{filter_params | mode: "subway", chart_range: "Daily"}
-      })
+      redirect_with_default_filters(conn, params, :csv)
     end
   end
 
-  def csv(conn, _) do
-    conn
-    |> redirect_with_default_filters(
-      %{"filters" => %{"mode" => "subway", "chart_range" => "Daily"}},
-      :csv
-    )
+  def csv(conn, params) do
+    redirect_with_default_filters(conn, params, :csv)
   end
 
   def commuter_rail(conn, params) do
