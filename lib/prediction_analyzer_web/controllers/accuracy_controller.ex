@@ -161,7 +161,9 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         conn,
         {:binary,
          prod_accuracies
-         |> CSV.encode(headers: true)
+         |> CSV.encode(
+           headers: [filter_params["chart_range"], "Prod Accuracy", "Err", "RMSE", "Count"]
+         )
          |> Enum.to_list()
          |> Enum.reduce("", fn line, acc -> "#{acc}#{line}" end)},
         content_type: "application/csv",
