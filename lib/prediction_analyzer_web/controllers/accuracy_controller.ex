@@ -123,40 +123,36 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     |> index(params)
   end
 
-  def opmi_csv(
+  def csv(
         conn,
         %{
           "filters" => filter_params
         } = params
       ) do
-    columns = [
-      :service_date,
-      :mode,
-      :route_id,
-      :arrival_departure,
-      :bin,
-      :num_predictions,
-      :num_accurate_predictions
-    ]
-
     if time_filters_present?(filter_params) do
       {relevant_accuracies, _} = PredictionAccuracy.filter(filter_params)
 
-      query_result =
-        from(acc in relevant_accuracies,
-          select: [
-            fragment("to_char(date_trunc('week', service_date), 'MM/DD/YYYY') as service_date"),
-            fragment("'subway' as mode"),
-            acc.route_id,
-            fragment("'' as arrival_departure"),
-            acc.bin,
-            sum(acc.num_predictions),
-            sum(acc.num_accurate_predictions)
-          ],
-          where: acc.environment == "prod",
-          group_by: [fragment("date_trunc('week', service_date)"), acc.route_id, acc.bin]
-        )
+      prod_accuracies =
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all()
+        |> Enum.map(fn row ->
+          %{
+            filter_params["chart_range"] =>
+              PredictionAnalyzerWeb.AccuracyView.formatted_row_scope(
+                filter_params,
+                Enum.at(row, 0)
+              ),
+            "Prod Accuracy" =>
+              PredictionAnalyzerWeb.AccuracyView.accuracy_percentage(
+                Enum.at(row, 2),
+                Enum.at(row, 1)
+              ),
+            "Err" => Float.round(Enum.at(row, 3) || 0.0, 0),
+            "RMSE" => Float.round(Enum.at(row, 4) || 0.0, 0),
+            "Count" => Enum.at(row, 1)
+          }
+        end)
 
       filename =
         "#{DateTime.utc_now() |> DateTime.to_iso8601()}_PredictionAnalyzer_#{filter_params["date_start"]}_#{filter_params["date_end"]}_#{filter_params["mode"]}_export.csv"
@@ -164,10 +160,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       send_download(
         conn,
         {:binary,
-         query_result
-         |> Enum.map(fn row ->
-           Enum.zip(columns, row) |> Map.new()
-         end)
+         prod_accuracies
          |> CSV.encode(headers: true)
          |> Enum.to_list()
          |> Enum.reduce("", fn line, acc -> "#{acc}#{line}" end)},
@@ -182,11 +175,11 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     end
   end
 
-  def opmi_csv(conn, _) do
+  def csv(conn, _) do
     conn
     |> redirect_with_default_filters(
       %{"filters" => %{"mode" => "subway", "chart_range" => "Daily"}},
-      :opmi_csv
+      :csv
     )
   end
 

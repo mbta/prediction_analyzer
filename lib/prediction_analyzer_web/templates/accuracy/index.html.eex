@@ -174,9 +174,7 @@
         <% end %>
       </div>
 
-      <%= if @mode == :subway and f.params["chart_range"] == "Daily" do %>
-        <%= content_tag :a, "OPMI CSV", id: "download-report-csv", class: "download-report-csv", href: "/accuracy/csv/opmi?" <> Plug.Conn.Query.encode(@conn.params) %>
-      <% end %>
+      <%= content_tag :a, "Download as CSV", id: "download-report-csv", class: "download-report-csv", href: "/accuracy/csv?" <> Plug.Conn.Query.encode(@conn.params) %>
 
       <%= if f.params["chart_range"] == "By Station" do %>
         <%= content_tag :a, "Sort By Accuracy", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
