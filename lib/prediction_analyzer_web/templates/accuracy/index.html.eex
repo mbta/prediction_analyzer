@@ -162,6 +162,8 @@
 
         <div class="form-group">
           <%= submit "Filter", id: "filter-submit-btn", class: "btn btn-default" %>
+          <%= submit "Download as CSV", id: "csv-submit-btn", class: "btn btn-default", formaction: "/accuracy/csv" %>
+
         </div>
 
       </div>
@@ -173,8 +175,6 @@
           <%= content_tag :a, chart_range, class: chart_range_class(@conn, chart_range), id: chart_range_id(chart_range), href: "#" %>
         <% end %>
       </div>
-
-      <%= content_tag :a, "Download as CSV", id: "download-report-csv", class: "download-report-csv", href: "/accuracy/csv?" <> Plug.Conn.Query.encode(@conn.params) %>
 
       <%= if f.params["chart_range"] == "By Station" do %>
         <%= content_tag :a, "Sort By Accuracy", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
