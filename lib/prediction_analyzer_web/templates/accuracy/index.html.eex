@@ -249,7 +249,6 @@
       form.target = default_target
       form.action = default_action
       form.submit()
-
     })
   }, { once: true });
 
