@@ -259,7 +259,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert headers["content-type"] == "application/csv"
 
     assert conn.resp_body =~
-             "Daily,Prod Accuracy,Err,RMSE,Count"
+             "Hourly,Prod Accuracy,Err,RMSE,Count"
   end
 
   def insert_hourly_accuracy(env, hour, total, accurate, service_date \\ nil) do
