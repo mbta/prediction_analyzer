@@ -232,4 +232,25 @@
 
 <script>
   window.dataPredictionAccuracyJSON = <%= raw(@chart_data) %>
+  // Handle filter reload on CSV download if values changed:
+  var form = document.getElementById("accuracy-form");
+  form.addEventListener("input", function () {
+    var csv_submit = document.getElementById('csv-submit-btn')
+    csv_submit.addEventListener('click', function (event) {
+      // Stop the default load:
+      event.preventDefault()
+      // Open CSV download in new tab:
+      default_target = form.target
+      default_action = form.action
+      form.target = "_blank";
+      form.action = "/accuracy/csv"
+      form.submit()
+      // Reload filters:
+      form.target = default_target
+      form.action = default_action
+      form.submit()
+
+    })
+  }, { once: true });
+
 </script>
