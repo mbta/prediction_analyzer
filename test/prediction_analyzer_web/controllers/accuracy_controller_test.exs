@@ -248,6 +248,20 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert response =~ "<td>\n0-3 min\n              </td>\n              <td>\n-60 sec to 60 sec"
   end
 
+  test "GET /accuracy/csv provides a valid csv", %{conn: conn} do
+    insert_hourly_accuracy("prod", 10, 101, 99)
+    insert_hourly_accuracy("prod", 10, 108, 102)
+    insert_hourly_accuracy("prod", 11, 225, 211)
+    insert_hourly_accuracy("prod", 11, 270, 261)
+    conn = get(conn, "/accuracy/csv")
+    conn = get(conn, redirected_to(conn))
+    headers = Enum.into(conn.resp_headers, %{})
+    assert headers["content-type"] == "application/csv"
+
+    assert conn.resp_body =~
+             "Hourly,Prod Accuracy,Err,RMSE,Count"
+  end
+
   def insert_hourly_accuracy(env, hour, total, accurate, service_date \\ nil) do
     accuracy = %PredictionAccuracy{
       @prediction_accuracy

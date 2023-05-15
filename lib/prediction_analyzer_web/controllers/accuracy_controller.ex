@@ -123,14 +123,69 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     |> index(params)
   end
 
+  def csv(
+        conn,
+        %{
+          "filters" => filter_params
+        } = params
+      ) do
+    if time_filters_present?(filter_params) do
+      {relevant_accuracies, _} = PredictionAccuracy.filter(filter_params)
+
+      prod_accuracies =
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
+        |> PredictionAnalyzer.Repo.all()
+        |> Enum.map(fn [row_scope, prod_total, prod_accurate, prod_err, prod_rmse] ->
+          %{
+            filter_params["chart_range"] =>
+              PredictionAnalyzerWeb.AccuracyView.formatted_row_scope(
+                filter_params,
+                row_scope
+              ),
+            "Prod Accuracy" =>
+              PredictionAnalyzerWeb.AccuracyView.accuracy_percentage(
+                prod_accurate,
+                prod_total
+              ),
+            "Err" => Float.round(prod_err || 0.0, 0),
+            "RMSE" => Float.round(prod_rmse || 0.0, 0),
+            "Count" => prod_total
+          }
+        end)
+
+      filename =
+        "#{DateTime.utc_now() |> DateTime.to_iso8601()}_PredictionAnalyzer_#{filter_params["date_start"]}_#{filter_params["date_end"]}_#{filter_params["mode"]}_export.csv"
+
+      send_download(
+        conn,
+        {:binary,
+         prod_accuracies
+         |> CSV.encode(
+           headers: [filter_params["chart_range"], "Prod Accuracy", "Err", "RMSE", "Count"]
+         )
+         |> Enum.to_list()
+         |> Enum.join()},
+        content_type: "application/csv",
+        filename: filename
+      )
+    else
+      redirect_with_default_filters(conn, params, :csv)
+    end
+  end
+
+  def csv(conn, params) do
+    redirect_with_default_filters(conn, params, :csv)
+  end
+
   def commuter_rail(conn, params) do
     conn
     |> assign(:mode, :commuter_rail)
     |> index(params)
   end
 
-  @spec redirect_with_default_filters(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  defp redirect_with_default_filters(conn, params) do
+  @spec redirect_with_default_filters(Plug.Conn.t(), map(), atom) :: Plug.Conn.t()
+  defp redirect_with_default_filters(conn, params, redirect_target \\ :index) do
     filters = params["filters"] || %{}
 
     default_filters = %{
@@ -163,7 +218,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
     redirect(
       conn,
-      to: Routes.accuracy_path(conn, :index, %{"filters" => filters})
+      to: Routes.accuracy_path(conn, redirect_target, %{"filters" => filters})
     )
   end
 

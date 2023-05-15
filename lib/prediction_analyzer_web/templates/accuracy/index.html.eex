@@ -81,7 +81,7 @@
 
 <hr class="accuracy-separator">
 
-<%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form"], fn f -> %>
+<%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn f -> %>
   <%= hidden_input(f, :mode) %>
   <%= hidden_input(f, :chart_range) %>
 
@@ -121,7 +121,6 @@
       	    <%= radio_button(f, :direction_id, "any") %> Any
       	  <% end %>
       	</div>
-
         <%= if @mode == :subway do %>
           <div class="form-group">
             <%= label(f, :kinds, "Kinds") %>
@@ -162,7 +161,9 @@
         <% end %>
 
         <div class="form-group">
-          <%= submit "Filter", class: "btn btn-default" %>
+          <%= submit "Filter", id: "filter-submit-btn", class: "btn btn-default" %>
+          <%= submit "Download as CSV", id: "csv-submit-btn", class: "btn btn-default", formaction: "/accuracy/csv" %>
+
         </div>
 
       </div>
@@ -231,4 +232,24 @@
 
 <script>
   window.dataPredictionAccuracyJSON = <%= raw(@chart_data) %>
+  // Handle filter reload on CSV download if values changed:
+  var form = document.getElementById("accuracy-form");
+  form.addEventListener("input", function () {
+    var csv_submit = document.getElementById('csv-submit-btn')
+    csv_submit.addEventListener('click', function (event) {
+      // Stop the default load:
+      event.preventDefault()
+      // Open CSV download in new tab:
+      default_target = form.target
+      default_action = form.action
+      form.target = "_blank";
+      form.action = "/accuracy/csv"
+      form.submit()
+      // Reload filters:
+      form.target = default_target
+      form.action = default_action
+      form.submit()
+    })
+  }, { once: true });
+
 </script>
