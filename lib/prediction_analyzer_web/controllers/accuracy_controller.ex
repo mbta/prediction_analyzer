@@ -136,21 +136,21 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         relevant_accuracies
         |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all()
-        |> Enum.map(fn row ->
+        |> Enum.map(fn [row_scope, prod_total, prod_accurate, prod_err, prod_rmse] ->
           %{
             filter_params["chart_range"] =>
               PredictionAnalyzerWeb.AccuracyView.formatted_row_scope(
                 filter_params,
-                Enum.at(row, 0)
+                row_scope
               ),
             "Prod Accuracy" =>
               PredictionAnalyzerWeb.AccuracyView.accuracy_percentage(
-                Enum.at(row, 2),
-                Enum.at(row, 1)
+                prod_accurate,
+                prod_total
               ),
-            "Err" => Float.round(Enum.at(row, 3) || 0.0, 0),
-            "RMSE" => Float.round(Enum.at(row, 4) || 0.0, 0),
-            "Count" => Enum.at(row, 1)
+            "Err" => Float.round(prod_err || 0.0, 0),
+            "RMSE" => Float.round(prod_rmse || 0.0, 0),
+            "Count" => prod_total
           }
         end)
 
@@ -165,7 +165,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
            headers: [filter_params["chart_range"], "Prod Accuracy", "Err", "RMSE", "Count"]
          )
          |> Enum.to_list()
-         |> Enum.reduce("", fn line, acc -> "#{acc}#{line}" end)},
+         |> Enum.join()},
         content_type: "application/csv",
         filename: filename
       )
