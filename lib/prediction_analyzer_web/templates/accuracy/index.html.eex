@@ -168,7 +168,6 @@
 
       </div>
     </div>
-
     <div class="col-xs-9">
       <div class="chart-range-links">
         <%= for chart_range <- ["Hourly", "Daily", "By Station"] do %>
@@ -181,11 +180,13 @@
       <% end %>
 
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
+      <br />
       <div class="col-xs-6">
+        <span class="prod-text prod-text-header">Prod</span>
         <table class="table" id="prod-data-table">
           <tr>
             <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
-            <th class="prod-text">Prod Accuracy</th>
+            <th class="prod-text">Accuracy</th>
             <th class="prod-text">Err</th>
             <th class="prod-text">RMSE</th>
             <th class="prod-text">Count</th>
@@ -206,10 +207,11 @@
       </div>
 
       <div class="col-xs-6">
+        <span class="dev-green-text dev-green-text-header">Dev Green</span>
         <table class="table" id="dev-green-data-table">
           <tr>
             <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
-            <th class="dev-green-text">Dev-Green Accuracy</th>
+            <th class="dev-green-text">Accuracy</th>
             <th class="dev-green-text">Err</th>
             <th class="dev-green-text">RMSE</th>
             <th class="dev-green-text">Count</th>
@@ -234,22 +236,20 @@
   window.dataPredictionAccuracyJSON = <%= raw(@chart_data) %>
   // Handle filter reload on CSV download if values changed:
   var form = document.getElementById("accuracy-form");
-  form.addEventListener("input", function () {
-    var csv_submit = document.getElementById('csv-submit-btn')
-    csv_submit.addEventListener('click', function (event) {
-      // Stop the default load:
-      event.preventDefault()
-      // Open CSV download in new tab:
-      default_target = form.target
-      default_action = form.action
-      form.target = "_blank";
-      form.action = "/accuracy/csv"
-      form.submit()
-      // Reload filters:
-      form.target = default_target
-      form.action = default_action
-      form.submit()
-    })
-  }, { once: true });
+  var csv_submit = document.getElementById('csv-submit-btn')
+  csv_submit.addEventListener('click', function (event) {
+    // Stop the default load:
+    event.preventDefault()
+    // Open CSV download in new tab:
+    default_target = form.target
+    default_action = form.action
+    form.target = "_blank";
+    form.action = "/accuracy/csv"
+    form.submit()
+    // Reload filters:
+    form.target = default_target
+    form.action = default_action
+    form.submit()
+  })
 
 </script>

@@ -174,7 +174,7 @@ const renderDashboard = () => {
         },
       },
       x: {
-        height: 200,
+        height: 60,
         label: {
           text: xAxisText,
           position: "outer-center",
