@@ -154,8 +154,13 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           }
         end)
 
+      date_for_filename =
+        if Map.has_key?(filter_params, "date_start"),
+          do: "#{filter_params["date_start"]}_#{filter_params["date_end"]}",
+          else: filter_params["service_date"]
+
       filename =
-        "#{Timex.now("America/New_York") |> DateTime.to_iso8601()}_PredictionAnalyzer_#{filter_params["date_start"]}_#{filter_params["date_end"]}_#{filter_params["mode"]}_export.csv"
+        "#{Timex.now("America/New_York") |> DateTime.to_iso8601()}_PredictionAnalyzer_#{date_for_filename}_#{filter_params["mode"]}_export.csv"
 
       send_download(
         conn,
