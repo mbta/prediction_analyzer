@@ -155,7 +155,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         end)
 
       filename =
-        "#{DateTime.utc_now() |> DateTime.to_iso8601()}_PredictionAnalyzer_#{filter_params["date_start"]}_#{filter_params["date_end"]}_#{filter_params["mode"]}_export.csv"
+        "#{Timex.now("America/New_York") |> DateTime.to_iso8601()}_PredictionAnalyzer_#{filter_params["date_start"]}_#{filter_params["date_end"]}_#{filter_params["mode"]}_export.csv"
 
       send_download(
         conn,
