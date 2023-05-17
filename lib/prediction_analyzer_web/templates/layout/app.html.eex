@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Prediction analyzer</title>
+    <title>Prediction Analyzer</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
   </head>
 
@@ -20,7 +20,7 @@
         <h1 class="prediction-analyzer-app-title">
           <svg class="mbta-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path d="m499.9953 976.58345c-262.65627 0-475.574-212.92713-475.574-475.58345s212.9177-475.58345 475.574-475.58345 475.58345 212.92716 475.58345 475.58345-212.92713 475.58345-475.58345 475.58345" fill="#022441"/><path d="m500 0c-276.14 0-500 223.853-500 500s223.86 500 500 500 500-223.86 500-500-223.853-500-500-500m0 955.7c-251.675 0-455.691-204.025-455.691-455.7s204.016-455.7 455.691-455.7 455.7 204.025 455.7 455.7-204.02495 455.7-455.7 455.7" fill="#fff"/><path d="m420.89 824.363h158.228v-389.234h236.545v-158.228h-631.325v158.228h236.552z" fill="#fff"/></svg>
 
-          Prediction analyzer
+          Prediction Analyzer
         </h1>
         <%= @inner_content %>
       </main>
