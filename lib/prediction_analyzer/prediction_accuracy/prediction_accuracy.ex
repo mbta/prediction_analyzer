@@ -19,12 +19,14 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
     field(:mean_error, :float)
     field(:root_mean_squared_error, :float)
     field(:in_next_two, :boolean)
+    field(:minute_of_hour, :integer)
   end
 
   def new_insert_changeset(params \\ %{}) do
     all_fields = [
       :service_date,
       :hour_of_day,
+      :minute_of_hour,
       :stop_id,
       :route_id,
       :direction_id,
