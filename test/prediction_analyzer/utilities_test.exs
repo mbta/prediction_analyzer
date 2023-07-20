@@ -31,7 +31,9 @@ defmodule PredictionAnalyzer.UtilitiesTest do
 
     test "returns start of current 5m block" do
       timezone = Application.get_env(:prediction_analyzer, :timezone)
-      time = Timex.to_datetime(~D[2018-10-30], timezone) |> Timex.set(hour: 10) |> Timex.set(minute: 7)
+
+      time =
+        Timex.to_datetime(~D[2018-10-30], timezone) |> Timex.set(hour: 10) |> Timex.set(minute: 7)
 
       assert {
                ~D[2018-10-30],
@@ -48,8 +50,8 @@ defmodule PredictionAnalyzer.UtilitiesTest do
       soon = Timex.now() |> Timex.set(minute: 5, second: 12, microsecond: {0, 6})
       late = Timex.now() |> Timex.set(minute: 0, second: 28, microsecond: {0, 6})
 
-      assert Utilities.ms_to_next_5m(soon) == 318000
-      assert Utilities.ms_to_next_5m(late) == 302000
+      assert Utilities.ms_to_next_5m(soon) == 318_000
+      assert Utilities.ms_to_next_5m(late) == 302_000
     end
   end
 

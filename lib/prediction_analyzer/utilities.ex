@@ -6,7 +6,8 @@ defmodule PredictionAnalyzer.Utilities do
   date extends to 3am of the following day, so the hour can range
   from 3 - 26
   """
-  @spec service_date_info(DateTime.t()) :: {Date.t(), non_neg_integer(), non_neg_integer(), integer(), integer()}
+  @spec service_date_info(DateTime.t()) ::
+          {Date.t(), non_neg_integer(), non_neg_integer(), integer(), integer()}
   def service_date_info(timestamp) do
     minute = start_of_current_5m_block(timestamp)
 
@@ -129,6 +130,6 @@ defmodule PredictionAnalyzer.Utilities do
   def string_to_mode(_), do: :subway
 
   defp start_of_current_5m_block(%DateTime{minute: minute}) do
-      trunc(minute / 5) * 5
+    trunc(minute / 5) * 5
   end
 end

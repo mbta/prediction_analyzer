@@ -360,7 +360,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       prod_stats =
         from(acc in PredictionAccuracy, [])
         |> Filters.stats_by_environment_and_chart_range("prod", %{
-          "chart_range" => "Hourly",
+          "chart_range" => "Hourly"
         })
         |> Repo.all()
 
@@ -368,7 +368,6 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
                [10, 4224, 4038, 0.0, 0.0],
                [11, 4224, 4038, 0.0, 0.0]
              ]
-
     end
   end
 
@@ -383,7 +382,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
         hour_of_day: hour,
         minute_of_hour: minute,
         num_predictions: total,
-        num_accurate_predictions: accurate,
+        num_accurate_predictions: accurate
     }
 
     accuracy =
