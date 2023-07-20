@@ -257,14 +257,14 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
   describe "stats_by_environment_and_chart_range/3" do
     test "groups by environment and hour and sums" do
-      insert_accuracy("prod", 10, 101, 99)
-      insert_accuracy("prod", 10, 108, 102)
-      insert_accuracy("prod", 11, 225, 211)
-      insert_accuracy("prod", 11, 270, 261)
-      insert_accuracy("dev-green", 10, 401, 399)
-      insert_accuracy("dev-green", 10, 408, 302)
-      insert_accuracy("dev-green", 11, 525, 411)
-      insert_accuracy("dev-green", 11, 570, 461)
+      insert_accuracy("prod", 10, 0, 101, 99)
+      insert_accuracy("prod", 10, 0, 108, 102)
+      insert_accuracy("prod", 11, 0, 225, 211)
+      insert_accuracy("prod", 11, 0, 270, 261)
+      insert_accuracy("dev-green", 10, 0, 401, 399)
+      insert_accuracy("dev-green", 10, 0, 408, 302)
+      insert_accuracy("dev-green", 11, 0, 525, 411)
+      insert_accuracy("dev-green", 11, 0, 570, 461)
 
       prod_stats =
         from(acc in PredictionAccuracy, [])
@@ -295,14 +295,14 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
       today = Timex.local() |> DateTime.to_date()
       yesterday = Timex.local() |> Timex.shift(days: -1) |> DateTime.to_date()
 
-      insert_accuracy("prod", 10, 101, 99, yesterday)
-      insert_accuracy("prod", 11, 108, 102, yesterday)
-      insert_accuracy("prod", 10, 225, 211, today)
-      insert_accuracy("prod", 11, 270, 261, today)
-      insert_accuracy("dev-green", 10, 401, 399, yesterday)
-      insert_accuracy("dev-green", 11, 408, 302, yesterday)
-      insert_accuracy("dev-green", 10, 525, 411, today)
-      insert_accuracy("dev-green", 11, 570, 461, today)
+      insert_accuracy("prod", 10, 0, 101, 99, yesterday)
+      insert_accuracy("prod", 11, 0, 108, 102, yesterday)
+      insert_accuracy("prod", 10, 0, 225, 211, today)
+      insert_accuracy("prod", 11, 0, 270, 261, today)
+      insert_accuracy("dev-green", 10, 0, 401, 399, yesterday)
+      insert_accuracy("dev-green", 11, 0, 408, 302, yesterday)
+      insert_accuracy("dev-green", 10, 0, 525, 411, today)
+      insert_accuracy("dev-green", 11, 0, 570, 461, today)
 
       prod_stats =
         from(acc in PredictionAccuracy, [])
@@ -328,19 +328,62 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
                [today, 1095, 872, 0.0, 0.0]
              ]
     end
+
+    test "groups by environment and sub-hour increments and sums" do
+      insert_accuracy("prod", 10, 0, 101, 99)
+      insert_accuracy("prod", 10, 0, 108, 102)
+      insert_accuracy("prod", 10, 5, 225, 211)
+      insert_accuracy("prod", 10, 5, 270, 261)
+      insert_accuracy("prod", 10, 10, 101, 99)
+      insert_accuracy("prod", 10, 10, 108, 102)
+      insert_accuracy("prod", 10, 15, 225, 211)
+      insert_accuracy("prod", 10, 15, 270, 261)
+      insert_accuracy("prod", 10, 20, 101, 99)
+      insert_accuracy("prod", 10, 20, 108, 102)
+      insert_accuracy("prod", 10, 25, 225, 211)
+      insert_accuracy("prod", 10, 25, 270, 261)
+      insert_accuracy("prod", 10, 30, 101, 99)
+      insert_accuracy("prod", 10, 30, 108, 102)
+      insert_accuracy("prod", 10, 35, 225, 211)
+      insert_accuracy("prod", 10, 35, 270, 261)
+      insert_accuracy("prod", 10, 40, 101, 99)
+      insert_accuracy("prod", 10, 40, 108, 102)
+      insert_accuracy("prod", 10, 45, 225, 211)
+      insert_accuracy("prod", 10, 45, 270, 261)
+      insert_accuracy("prod", 10, 50, 101, 99)
+      insert_accuracy("prod", 10, 50, 108, 102)
+      insert_accuracy("prod", 10, 55, 225, 211)
+      insert_accuracy("prod", 10, 55, 270, 261)
+      # old style entry for backwards compatibility
+      insert_accuracy("prod", 11, 0, 4224, 4038)
+
+      prod_stats =
+        from(acc in PredictionAccuracy, [])
+        |> Filters.stats_by_environment_and_chart_range("prod", %{
+          "chart_range" => "Hourly",
+        })
+        |> Repo.all()
+
+      assert prod_stats == [
+               [10, 4224, 4038, 0.0, 0.0],
+               [11, 4224, 4038, 0.0, 0.0]
+             ]
+
+    end
   end
 
   defp execute_query(q) do
     Repo.all(from(acc in q, order_by: :id))
   end
 
-  defp insert_accuracy(env, hour, total, accurate, service_date \\ nil) do
+  defp insert_accuracy(env, hour, minute, total, accurate, service_date \\ nil) do
     accuracy = %{
       @prediction_accuracy
       | environment: env,
         hour_of_day: hour,
+        minute_of_hour: minute,
         num_predictions: total,
-        num_accurate_predictions: accurate
+        num_accurate_predictions: accurate,
     }
 
     accuracy =
