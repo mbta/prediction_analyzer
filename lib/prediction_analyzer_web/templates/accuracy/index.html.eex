@@ -173,6 +173,11 @@
         <%= for chart_range <- ["Hourly", "Daily", "By Station"] do %>
           <%= content_tag :a, chart_range, class: chart_range_class(@conn, chart_range), id: chart_range_id(chart_range), href: "#" %>
         <% end %>
+        <div class="activity-indicator-container">
+          <div class="activity-indicator" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
       </div>
 
       <%= if f.params["chart_range"] == "By Station" do %>
