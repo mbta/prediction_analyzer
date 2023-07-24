@@ -2,18 +2,21 @@ defmodule PredictionAnalyzer.Utilities do
   @type mode() :: :subway | :commuter_rail
 
   @doc """
-  Returns the current service date and hour. The service
+  Returns the current service date, hour, and 5m increment. The service
   date extends to 3am of the following day, so the hour can range
   from 3 - 26
   """
-  @spec service_date_info(DateTime.t()) :: {Date.t(), non_neg_integer(), integer(), integer()}
+  @spec service_date_info(DateTime.t()) ::
+          {Date.t(), non_neg_integer(), non_neg_integer(), integer(), integer()}
   def service_date_info(timestamp) do
-    beginning_of_hour_unix =
+    minute = start_of_current_5m_block(timestamp)
+
+    beginning_of_5m_unix =
       timestamp
-      |> Timex.set(minute: 0, second: 0, microsecond: {0, 6})
+      |> Timex.set(minute: minute, second: 0, microsecond: {0, 6})
       |> DateTime.to_unix()
 
-    end_of_hour_unix = beginning_of_hour_unix + 60 * 60
+    end_of_5m_unix = beginning_of_5m_unix + 300
 
     {date, hour} =
       if timestamp.hour < 3 do
@@ -24,7 +27,7 @@ defmodule PredictionAnalyzer.Utilities do
         {DateTime.to_date(timestamp), timestamp.hour}
       end
 
-    {date, hour, beginning_of_hour_unix, end_of_hour_unix}
+    {date, hour, minute, beginning_of_5m_unix, end_of_5m_unix}
   end
 
   @spec get_week_range(DateTime.t()) :: {Date.t(), Date.t()}
@@ -36,6 +39,20 @@ defmodule PredictionAnalyzer.Utilities do
     end_of_week = Timex.shift(beginning_of_week, days: 6)
 
     {DateTime.to_date(beginning_of_week), DateTime.to_date(end_of_week)}
+  end
+
+  @doc """
+  Returns the number of ms to the top of the next 5m segment.
+  """
+  def ms_to_next_5m(local_now \\ Timex.local()) do
+    %{minute: current_minute} = local_now
+
+    minute_shift = 5 - rem(current_minute, 5)
+
+    local_now
+    |> Timex.shift(minutes: minute_shift)
+    |> Timex.set(second: 30)
+    |> Timex.diff(local_now, :milliseconds)
   end
 
   @doc """
@@ -111,4 +128,8 @@ defmodule PredictionAnalyzer.Utilities do
   @spec string_to_mode(String.t()) :: :subway | :commuter_rail
   def string_to_mode("commuter_rail"), do: :commuter_rail
   def string_to_mode(_), do: :subway
+
+  defp start_of_current_5m_block(%DateTime{minute: minute}) do
+    trunc(minute / 5) * 5
+  end
 end

@@ -10,8 +10,9 @@ defmodule PredictionAnalyzer.UtilitiesTest do
       assert {
                ~D[2018-10-30],
                10,
+               0,
                1_540_908_000,
-               1_540_911_600
+               1_540_908_300
              } = Utilities.service_date_info(time)
     end
 
@@ -22,9 +23,35 @@ defmodule PredictionAnalyzer.UtilitiesTest do
       assert {
                ~D[2018-10-29],
                25,
+               0,
                1_540_875_600,
-               1_540_879_200
+               1_540_875_900
              } = Utilities.service_date_info(time)
+    end
+
+    test "returns start of current 5m block" do
+      timezone = Application.get_env(:prediction_analyzer, :timezone)
+
+      time =
+        Timex.to_datetime(~D[2018-10-30], timezone) |> Timex.set(hour: 10) |> Timex.set(minute: 7)
+
+      assert {
+               ~D[2018-10-30],
+               10,
+               5,
+               1_540_908_300,
+               1_540_908_600
+             } = Utilities.service_date_info(time)
+    end
+  end
+
+  describe "ms_to_next_5m" do
+    test "returns the number of milliseconds to the next 5m segment" do
+      soon = Timex.now() |> Timex.set(minute: 5, second: 12, microsecond: {0, 6})
+      late = Timex.now() |> Timex.set(minute: 0, second: 28, microsecond: {0, 6})
+
+      assert Utilities.ms_to_next_5m(soon) == 318_000
+      assert Utilities.ms_to_next_5m(late) == 302_000
     end
   end
 

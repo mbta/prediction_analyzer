@@ -111,7 +111,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
   end
 
   defp schedule_next_run(pid) do
-    Process.send_after(pid, :aggregate, PredictionAnalyzer.Utilities.ms_to_next_hour())
+    Process.send_after(pid, :aggregate, PredictionAnalyzer.Utilities.ms_to_next_5m())
   end
 
   @spec retry_sleep_ms_per_attempt(integer()) :: integer()

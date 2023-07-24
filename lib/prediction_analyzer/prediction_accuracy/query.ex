@@ -28,7 +28,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         bin_error_max,
         environment
       ) do
-    {service_date, hour_of_day, min_unix, max_unix} =
+    {service_date, hour_of_day, minute_of_hour, min_unix, max_unix} =
       current_time
       |> Timex.shift(hours: -2)
       |> PredictionAnalyzer.Utilities.service_date_info()
@@ -45,7 +45,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       max_unix,
       environment,
       kind,
-      in_next_two?
+      in_next_two?,
+      minute_of_hour
     ])
   end
 
@@ -62,6 +63,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       bin,
       kind,
       in_next_two,
+      minute_of_hour,
       num_predictions,
       num_accurate_predictions,
       mean_error,
@@ -77,6 +79,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         $3 AS bin,
         $11 AS kind,
         $12 AS in_next_two,
+        $13 AS minute_of_hour,
         COUNT(*) AS num_predictions,
         SUM(
           CASE
