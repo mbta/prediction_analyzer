@@ -64,6 +64,10 @@ const bindFormLinks = (accuracyForm) => {
     }
   }
 
+  jQuery(".mode-button").on("click", () => {
+    jQuery(".activity-indicator-container").show()
+  })
+
   bindChartRangeLink("link-hourly", "Hourly")
   bindChartRangeLink("link-daily", "Daily")
   bindChartRangeLink("link-by_station", "By Station")
