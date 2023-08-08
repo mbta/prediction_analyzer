@@ -31,6 +31,7 @@ if config_env() == :prod do
     hostname: System.get_env("DATABASE_HOST"),
     port: port,
     pool_size: pool_size,
+    timeout: 60_000,
     # password set by `configure` callback below
     configure: {PredictionAnalyzer.Repo, :before_connect, []}
 end
