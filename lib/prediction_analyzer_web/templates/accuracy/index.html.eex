@@ -173,11 +173,18 @@
         <%= for chart_range <- ["Hourly", "Daily", "By Station"] do %>
           <%= content_tag :a, chart_range, class: chart_range_class(@conn, chart_range), id: chart_range_id(chart_range), href: "#" %>
         <% end %>
-      </div>
 
-      <%= if f.params["chart_range"] == "By Station" do %>
-        <%= content_tag :a, "Sort By Accuracy", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
-      <% end %>
+        <%= if f.params["chart_range"] == "By Station" do %>
+          <%= content_tag :a, "Sort By Accuracy", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
+        <% end %>
+
+        <div class="activity-indicator-container">
+          <div class="activity-indicator" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <span>Fetching new data</span>
+        </div>
+      </div>
 
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <br />

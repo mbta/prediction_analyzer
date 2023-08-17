@@ -40,6 +40,9 @@ export default () => {
     const accuracyForm = document.getElementsByClassName("accuracy-form")[0]
     if (accuracyForm) {
       bindFormLinks(accuracyForm)
+      accuracyForm.addEventListener("submit", () => {
+        jQuery(".activity-indicator-container").show()
+      })
     }
   })
 }
@@ -53,12 +56,17 @@ const bindFormLinks = (accuracyForm) => {
     const link = document.getElementById(linkId)
     if (link) {
       link.addEventListener("click", (event) => {
+        jQuery(".activity-indicator-container").show()
         event.preventDefault()
         chartRangeInput.value = inputValue
         accuracyForm.submit()
       })
     }
   }
+
+  jQuery(".mode-button").on("click", () => {
+    jQuery(".activity-indicator-container").show()
+  })
 
   bindChartRangeLink("link-hourly", "Hourly")
   bindChartRangeLink("link-daily", "Daily")

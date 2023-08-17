@@ -106,7 +106,7 @@
 .chart-range-links {
   display: inline-block;
   margin-bottom: 1em;
-  width: 50%;
+  width: 100%;
 }
 
 .sort-order-link {
@@ -135,4 +135,33 @@
 .selectize-dropdown [data-selectable],
 .selectize-dropdown .optgroup-header {
   white-space: nowrap;
+}
+
+.activity-indicator-container {
+  display: none;
+  float: right;
+}
+
+.activity-indicator,
+.activity-indicator:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.activity-indicator {
+  font-size: 4px;
+  border-top: 1em solid rgba(255, 255, 255, 0.2);
+  border-right: 1em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1em solid rgba(255, 255, 255, 0.2);
+  border-left: 1em solid #ffffff;
+  transform: translateZ(0);
+  animation: activity-spin 1s infinite linear;
+}
+@keyframes activity-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
