@@ -132,8 +132,9 @@ const renderDashboard = () => {
       xFormat = "%H:%M"
       xTickFormat = x => {
         const dateOffset = x.getHours() < 3 ? 1 : 0;
-        let tempDate = new Date();
+        const tempDate = new Date();
         const date = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() + dateOffset, x.getHours(), x.getMinutes())
+
         return date.toLocaleTimeString('en-US');
       }
       break
@@ -168,9 +169,9 @@ const renderDashboard = () => {
   const xData = ["x"].concat(sortedBucketNames)
   let data
   if (showDevGreen) {
-    data = { x: "x", columns: [xData, col1, col2], type: dataType, xFormat: xFormat }
+    data = { x: "x", columns: [xData, col1, col2], type: dataType, xFormat }
   } else {
-    data = { x: "x", columns: [xData, col1], type: dataType, xFormat: xFormat }
+    data = { x: "x", columns: [xData, col1], type: dataType, xFormat }
   }
 
   c3.generate({
