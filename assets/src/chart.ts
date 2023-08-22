@@ -110,7 +110,10 @@ const renderDashboard = () => {
     sortedBucketNames.push(dataPoint.bucket)
   })
 
-  const chartType = window.chartType === "Hourly" && window.timeframeResolution !== "60" ? "SubHourly": window.chartType;
+  const chartType =
+    window.chartType === "Hourly" && window.timeframeResolution !== "60"
+      ? "SubHourly"
+      : window.chartType
 
   switch (chartType) {
     case "Hourly": {
@@ -130,12 +133,18 @@ const renderDashboard = () => {
       xAxisType = "timeseries"
       xAxisRotation = 90
       xFormat = "%H:%M"
-      xTickFormat = x => {
-        const dateOffset = x.getHours() < 3 ? 1 : 0;
-        const tempDate = new Date();
-        const date = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() + dateOffset, x.getHours(), x.getMinutes())
+      xTickFormat = (x) => {
+        const dateOffset = x.getHours() < 3 ? 1 : 0
+        const tempDate = new Date()
+        const date = new Date(
+          tempDate.getFullYear(),
+          tempDate.getMonth(),
+          tempDate.getDate() + dateOffset,
+          x.getHours(),
+          x.getMinutes()
+        )
 
-        return date.toLocaleTimeString('en-US');
+        return date.toLocaleTimeString("en-US")
       }
       break
     }
