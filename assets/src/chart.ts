@@ -15,6 +15,7 @@ declare global {
     dataPoints: DataPoint[]
     dataPredictionAccuracyJSON: any
     chartType: string
+    timeframeResolution: string
   }
 }
 
@@ -74,6 +75,8 @@ const renderDashboard = () => {
   let xAxisRotation
   let sortFunction
   let sortOrder
+  let xTickFormat
+  let xFormat
 
   const showDevGreen = jQuery("#show-dev-green-check").is(":checked")
 
@@ -107,7 +110,9 @@ const renderDashboard = () => {
     sortedBucketNames.push(dataPoint.bucket)
   })
 
-  switch (window.chartType) {
+  const chartType = window.chartType === "Hourly" && window.timeframeResolution !== "60" ? "SubHourly": window.chartType;
+
+  switch (chartType) {
     case "Hourly": {
       chartHeight = 540
       dataType = "line"
@@ -115,6 +120,22 @@ const renderDashboard = () => {
       xAxisText = "Hour of Day"
       xAxisType = "indexed"
       xAxisRotation = 0
+      break
+    }
+    case "SubHourly": {
+      chartHeight = 540
+      dataType = "line"
+      rotateAxes = false
+      xAxisText = "Hour of Day"
+      xAxisType = "timeseries"
+      xAxisRotation = 90
+      xFormat = "%H:%M"
+      xTickFormat = x => {
+        const dateOffset = x.getHours() < 3 ? 1 : 0;
+        let tempDate = new Date();
+        const date = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() + dateOffset, x.getHours(), x.getMinutes())
+        return date.toLocaleTimeString('en-US');
+      }
       break
     }
     case "Daily": {
@@ -147,10 +168,11 @@ const renderDashboard = () => {
   const xData = ["x"].concat(sortedBucketNames)
   let data
   if (showDevGreen) {
-    data = { x: "x", columns: [xData, col1, col2], type: dataType }
+    data = { x: "x", columns: [xData, col1, col2], type: dataType, xFormat: xFormat }
   } else {
-    data = { x: "x", columns: [xData, col1], type: dataType }
+    data = { x: "x", columns: [xData, col1], type: dataType, xFormat: xFormat }
   }
+
   c3.generate({
     bindto: "#chart-prediction-accuracy",
     data,
@@ -181,6 +203,7 @@ const renderDashboard = () => {
         },
         type: xAxisType,
         tick: {
+          format: xTickFormat,
           multiline: false,
           rotate: xAxisRotation,
           culling: false,
@@ -229,6 +252,7 @@ const setupDashboard = () => {
   let i
 
   window.chartType = rawData.chart_type
+  window.timeframeResolution = rawData.timeframe_resolution
   window.dataPoints = []
 
   window.sortOrderLink = document.getElementById(

@@ -67,6 +67,12 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   end
 
   @spec formatted_row_scope(map(), String.t()) :: String.t()
+  def formatted_row_scope(_, {hour_of_day, minute_of_hour}) do
+    hour = hour_of_day |> Integer.to_string() |> String.pad_leading(2, "0")
+    minute = minute_of_hour |> Integer.to_string() |> String.pad_leading(2, "0")
+
+    "#{hour}:#{minute}"
+  end
   def formatted_row_scope(filter_params, row_scope) do
     if filter_params["chart_range"] == "By Station" do
       stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
@@ -136,5 +142,14 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
       |> String.downcase()
 
     "link-#{normalized_chart_range}"
+  end
+
+  def time_resolution_options() do
+    [
+      {"10 minutes", "10"},
+      {"15 minutes", "15"},
+      {"30 minutes", "30"},
+      {"60 minutes", "60"}
+    ]
   end
 end

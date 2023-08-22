@@ -210,10 +210,12 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           }
 
         filters["chart_range"] == "Hourly" && filters["service_date"] ->
-          Map.take(filters, ["chart_range", "service_date"])
+          filters
+          |> Map.take(["chart_range", "service_date", "timeframe_resolution"])
+          |> Map.put_new("timeframe_resolution", "60")
 
         true ->
-          %{"chart_range" => "Hourly", "service_date" => Timex.local() |> Date.to_string()}
+          %{"chart_range" => "Hourly", "service_date" => Timex.local() |> Date.to_string(), "timeframe_resolution" => "60"}
       end
 
     filters =
@@ -257,6 +259,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
     end)
     |> Map.put(:chart_type, filter_params["chart_range"] || "Hourly")
+    |> Map.put(:timeframe_resolution, filter_params["timeframe_resolution"] || "60")
   end
 
   @spec time_filters_present?(map()) :: boolean()
