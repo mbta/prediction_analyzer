@@ -215,7 +215,11 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           |> Map.put_new("timeframe_resolution", "60")
 
         true ->
-          %{"chart_range" => "Hourly", "service_date" => Timex.local() |> Date.to_string(), "timeframe_resolution" => "60"}
+          %{
+            "chart_range" => "Hourly",
+            "service_date" => Timex.local() |> Date.to_string(),
+            "timeframe_resolution" => "60"
+          }
       end
 
     filters =

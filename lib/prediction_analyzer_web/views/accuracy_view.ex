@@ -73,6 +73,7 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
 
     "#{hour}:#{minute}"
   end
+
   def formatted_row_scope(filter_params, row_scope) do
     if filter_params["chart_range"] == "By Station" do
       stop_name_fetcher = Application.get_env(:prediction_analyzer, :stop_name_fetcher)
