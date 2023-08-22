@@ -20,4 +20,15 @@ defmodule PredictionAnalyzer.QueryUtilities do
       )
     end
   end
+
+  defmacro resolution_bucket(minute_of_hour, timeframe_resolution) do
+    quote do
+      fragment(
+        "(? / ?) * ? AS resolution_bucket",
+        unquote(minute_of_hour),
+        unquote(timeframe_resolution),
+        unquote(timeframe_resolution)
+      )
+    end
+  end
 end
