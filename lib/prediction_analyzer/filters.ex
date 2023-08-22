@@ -1,6 +1,6 @@
 defmodule PredictionAnalyzer.Filters do
   import Ecto.Query, only: [from: 2]
-  import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
+  import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2, resolution_bucket: 2]
   alias PredictionAnalyzer.Filters.StopGroups
 
   @doc """
@@ -148,6 +148,21 @@ defmodule PredictionAnalyzer.Filters do
   hour | prod total | prod accurate | dev-green total | dev-green accurate
   """
   @spec stats_by_environment_and_chart_range(Ecto.Query.t(), String.t(), map()) :: Ecto.Query.t()
+  def stats_by_environment_and_chart_range(q, environment, %{"chart_range" => "Hourly", "timeframe_resolution" => tr}) when tr != "60" do
+    from(
+      acc in q,
+      group_by: [:hour_of_day, fragment("resolution_bucket")],
+      order_by: [:hour_of_day, fragment("resolution_bucket")],
+      where: acc.environment == ^environment,
+      select: [
+        {acc.hour_of_day, resolution_bucket(acc.minute_of_hour, ^String.to_integer(tr))},
+        sum(acc.num_predictions),
+        sum(acc.num_accurate_predictions),
+        aggregate_mean_error(acc.mean_error, acc.num_predictions),
+        aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
+      ]
+    )
+  end
   def stats_by_environment_and_chart_range(q, environment, filters) do
     scope =
       case filters["chart_range"] do
