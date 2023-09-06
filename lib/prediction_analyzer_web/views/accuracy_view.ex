@@ -131,9 +131,11 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   @spec chart_range_class(map(), String.t()) :: String.t()
   def chart_range_class(%{params: %{"filters" => %{"chart_range" => "Hourly"}}}, "Single Day"),
     do: "chart-range-link chart-range-link-active"
-    def chart_range_class(%{params: %{"filters" => %{"chart_range" => "Daily"}}}, "Multi-Day"),
+
+  def chart_range_class(%{params: %{"filters" => %{"chart_range" => "Daily"}}}, "Multi-Day"),
     do: "chart-range-link chart-range-link-active"
-    def chart_range_class(%{params: %{"filters" => %{"chart_range" => chart_range}}}, chart_range),
+
+  def chart_range_class(%{params: %{"filters" => %{"chart_range" => chart_range}}}, chart_range),
     do: "chart-range-link chart-range-link-active"
 
   def chart_range_class(_, _), do: "chart-range-link"
@@ -141,6 +143,7 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   @spec chart_range_id(String.t()) :: String.t()
   def chart_range_id("Single Day"), do: "link-hourly"
   def chart_range_id("Multi-Day"), do: "link-daily"
+
   def chart_range_id(chart_range) do
     normalized_chart_range =
       chart_range
