@@ -102,7 +102,7 @@
         <%= if f.params["chart_range"] != "By Station" do %>
           <div class="form-group">
             <%= label(f, :stop_ids, "Stops") %>
-            <%= multiple_select(f, :stop_ids, stop_filter_options(@mode), class: 'form-control') %>
+            <%= multiple_select(f, :stop_ids, stop_filter_options(@mode), class: "form-control") %>
           </div>
         <% end %>
 
@@ -124,7 +124,7 @@
         <%= if @mode == :subway do %>
           <div class="form-group">
             <%= label(f, :kinds, "Kinds") %>
-            <%= multiple_select(f, :kinds, kind_filter_options(), class: 'form-control') %>
+            <%= multiple_select(f, :kinds, kind_filter_options(), class: "form-control") %>
           </div>
         <% end %>
 
@@ -138,6 +138,11 @@
             <%= label(f, :service_date, "Service Date") %>
             <small>(YYYY-MM-DD)</small>
             <%= text_input(f, :service_date, class: "form-control") %>
+          </div>
+
+          <div class="form-group">
+            <%= label(f, :timeframe_resolution) %>
+            <%= select(f, :timeframe_resolution, time_resolution_options(), selected: "60", class: "form-control") %>
           </div>
         <% else %>
           <div class="form-group">

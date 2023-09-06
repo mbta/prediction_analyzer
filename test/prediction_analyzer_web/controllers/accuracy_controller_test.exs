@@ -90,6 +90,7 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
     assert %{
              "filters[chart_range]" => "Hourly",
+             "filters[timeframe_resolution]" => "60",
              "filters[service_date]" => @today_str,
              "filters[route_ids]" => "",
              "filters[direction_id]" => "any",
