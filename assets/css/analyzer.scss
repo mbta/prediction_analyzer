@@ -165,3 +165,30 @@
     transform: rotate(360deg);
   }
 }
+
+.explainer {
+  position: relative;
+  display: inline-block;
+}
+
+.explainer .explainer-text {
+  visibility: hidden;
+  min-width: 200px;
+  background-color: black;
+  color: #fff;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 10;
+  top: -5px;
+  left: 105%;
+}
+
+.explainer:hover .explainer-text {
+  visibility: visible;
+}
+
+.explainer:after {
+  content: "\24D8";
+  font-size: 80%;
+}
