@@ -30,7 +30,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       ) do
     {service_date, hour_of_day, minute_of_hour, min_unix, max_unix} =
       current_time
-      |> Timex.shift(hours: -2)
+      |> Timex.shift(minutes: -40)
       |> PredictionAnalyzer.Utilities.service_date_info()
 
     repo_module.query(insert_accuracy_query(kind), [
