@@ -154,7 +154,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> Repo.update_all([])
     |> case do
       {n, _} ->
-        Logger.info("vehicle_event_type=glides Associated vehicle_event with #{n} prediction(s)")
+        if n > 0, do: Logger.info("vehicle_event_type=glides Associated vehicle_event with #{n} prediction(s)")
     end
 
     # Handle normal events:
