@@ -33,6 +33,7 @@ config :prediction_analyzer, :stop_name_fetcher, PredictionAnalyzer.StopNameFetc
 config :prediction_analyzer, :timezone, "America/New_York"
 config :prediction_analyzer, :max_dwell_time_sec, 30 * 60
 config :prediction_analyzer, :prune_lookback_sec, 7 * 24 * 60 * 60
+config :prediction_analyzer, :analysis_lookback_min, 40
 
 config :prediction_analyzer, PredictionAnalyzer.Repo, adapter: Ecto.Adapters.Postgres
 
