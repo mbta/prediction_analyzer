@@ -135,40 +135,11 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
   end
 
   @spec associate_vehicle_event_with_predictions(VehicleEvent.t()) :: nil
-  def associate_vehicle_event_with_predictions(vehicle_event) do
-    # Handle Glides terminal predictions:
-    from(
-      p in Prediction,
-      # Use trip_id in case where vehicle_id is nil:
-      # Rest is the same:
-      # More flexible for backfilling vehicle_event_ids:
-      where:
-        p.trip_id == ^vehicle_event.trip_id and
-          p.direction_id == ^vehicle_event.direction_id and
-          is_nil(p.vehicle_id) and
-          p.stop_id == ^vehicle_event.stop_id and
-          p.environment == ^vehicle_event.environment and
-          is_nil(p.vehicle_event_id) and
-          p.file_timestamp >= ^(System.system_time(:second) - 60 * 240),
-      update: [set: [vehicle_event_id: ^vehicle_event.id, vehicle_id: ^vehicle_event.vehicle_id]]
-    )
-    |> Repo.update_all([])
-    |> case do
-      {n, _} ->
-        if n > 0,
-          do:
-            Logger.info(
-              "vehicle_event_type=glides Associated vehicle_event with #{n} prediction(s)"
-            )
-    end
-
-    # Handle normal events:
+  defp associate_vehicle_event_with_predictions(vehicle_event) do
     from(
       p in Prediction,
       where:
-        p.vehicle_id == ^vehicle_event.vehicle_id and
-          not is_nil(p.vehicle_id) and
-          p.stop_id == ^vehicle_event.stop_id and
+        p.vehicle_id == ^vehicle_event.vehicle_id and p.stop_id == ^vehicle_event.stop_id and
           p.environment == ^vehicle_event.environment and is_nil(p.vehicle_event_id) and
           p.file_timestamp > ^(System.system_time(:second) - 60 * 30),
       update: [set: [vehicle_event_id: ^vehicle_event.id]]
@@ -177,15 +148,11 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> case do
       {0, _} ->
         unless vehicle_event.departure_time do
-          Logger.warn(
-            "vehicle_event_type=standard Created vehicle_event with no associated prediction: #{vehicle_event.id}"
-          )
+          Logger.warn("Created vehicle_event with no associated prediction: #{vehicle_event.id}")
         end
 
       {n, _} ->
-        Logger.info(
-          "vehicle_event_type=standard Associated vehicle_event with #{n} prediction(s)"
-        )
+        Logger.info("Associated vehicle_event with #{n} prediction(s)")
     end
 
     nil
