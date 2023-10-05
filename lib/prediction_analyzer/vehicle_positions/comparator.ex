@@ -149,7 +149,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
           p.stop_id == ^vehicle_event.stop_id and
           p.environment == ^vehicle_event.environment and
           is_nil(p.vehicle_event_id) and
-          p.file_timestamp >= ^(System.system_time(:second) - 60 * 240),
+          p.file_timestamp >= ^(System.system_time(:second) - 60 * 40),
       update: [set: [vehicle_event_id: ^vehicle_event.id, vehicle_id: ^vehicle_event.vehicle_id]]
     )
     |> Repo.update_all([])
