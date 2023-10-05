@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.3
--- Dumped by pg_dump version 15.3
+-- Dumped from database version 15.4
+-- Dumped by pg_dump version 15.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -129,7 +129,7 @@ CREATE TABLE public.predictions (
     file_timestamp integer NOT NULL,
     route_id character varying(255) NOT NULL,
     environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
-    vehicle_id character varying(255) NOT NULL,
+    vehicle_id character varying(255),
     direction_id integer,
     kind public.prediction_kind,
     nth_at_stop integer
@@ -285,6 +285,13 @@ CREATE INDEX predictions_stop_id_index ON public.predictions USING btree (stop_i
 
 
 --
+-- Name: predictions_trip_id_direction_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX predictions_trip_id_direction_id_index ON public.predictions USING btree (trip_id, direction_id) WHERE (vehicle_event_id IS NULL);
+
+
+--
 -- Name: predictions_vehicle_event_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -338,5 +345,5 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956), (20201022151038), (20201027201115), (20201103215547), (20201112161111), (20201130194309), (20230717150451);
+INSERT INTO public."schema_migrations" (version) VALUES (20181017190602), (20181022210113), (20181025152446), (20181026133153), (20181026135330), (20181026160237), (20181029181739), (20181029192143), (20181029203022), (20181106155014), (20181112161231), (20181130203837), (20181203152039), (20190114210649), (20190315155432), (20190528184413), (20190624192925), (20190701174220), (20201019175956), (20201022151038), (20201027201115), (20201103215547), (20201112161111), (20201130194309), (20230717150451), (20230914092018), (20231005191442);
 
