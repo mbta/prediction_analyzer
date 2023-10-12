@@ -224,6 +224,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
       })
 
       ve = Repo.insert!(%{@glides_vehicle_event | arrival_time: arrival_time})
+
       Comparator.associate_vehicle_event_with_predictions(ve)
 
       {:ok, _} =
