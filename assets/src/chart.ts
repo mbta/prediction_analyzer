@@ -252,7 +252,9 @@ const setupDatePickers = () => {
     input.value = value
   }
 
-  const serviceDateInput = document.querySelector("#filters_service_date")
+  const serviceDateInput = <HTMLInputElement>(
+    document.querySelector("#filters_service_date")
+  )
   if (serviceDateInput) {
     datepicker(serviceDateInput, {
       dateSelected: new Date(serviceDateInput.value),
@@ -261,8 +263,12 @@ const setupDatePickers = () => {
     }).calendarContainer.style.setProperty("font-size", "1.5rem")
   }
 
-  const dateStartInput = document.querySelector("#filters_date_start")
-  const dateEndInput = document.querySelector("#filters_date_end")
+  const dateStartInput = <HTMLInputElement>(
+    document.querySelector("#filters_date_start")
+  )
+  const dateEndInput = <HTMLInputElement>(
+    document.querySelector("#filters_date_end")
+  )
   if (dateStartInput && dateEndInput) {
     datepicker(dateStartInput, {
       dateSelected: new Date(dateStartInput.value),
