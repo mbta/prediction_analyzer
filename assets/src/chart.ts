@@ -1,6 +1,7 @@
 import c3 from "c3"
 import "selectize/dist/js/standalone/selectize.js"
 import "selectize/dist/css/selectize.bootstrap3.css"
+import datepicker from 'js-datepicker'
 
 interface DataPoint {
   id: number
@@ -245,7 +246,34 @@ const renderDashboard = () => {
   })
 }
 
+const setupDatePickers = () => {
+  const dateFormatter = (input, date) => {
+    const value = date.toISOString().split("T")[0]
+    input.value = value 
+  }
+
+  const serviceDateInput = document.querySelector("#filters_service_date")
+  if (serviceDateInput) {
+    datepicker(serviceDateInput, {
+      formatter: dateFormatter
+    }).calendarContainer.style.setProperty('font-size', '1.5rem')
+  }
+
+  const dateStartInput = document.querySelector("#filters_date_start")
+  const dateEndInput = document.querySelector("#filters_date_end")
+  if (dateStartInput && dateEndInput) {
+    datepicker(dateStartInput, {
+      formatter: dateFormatter
+    }).calendarContainer.style.setProperty('font-size', '1.5rem')
+    datepicker(dateEndInput, {
+      formatter: dateFormatter
+    }).calendarContainer.style.setProperty('font-size', '1.5rem')
+  }
+}
+
 const setupDashboard = () => {
+  setupDatePickers()
+
   jQuery("#filters_stop_ids").selectize({
     dropdownParent: "body",
     placeholder: "Type to search...",
