@@ -255,7 +255,9 @@ const setupDatePickers = () => {
   const serviceDateInput = document.querySelector("#filters_service_date")
   if (serviceDateInput) {
     datepicker(serviceDateInput, {
-      formatter: dateFormatter
+      dateSelected: new Date(serviceDateInput.value),
+      formatter: dateFormatter,
+      showAllDates: true
     }).calendarContainer.style.setProperty('font-size', '1.5rem')
   }
 
@@ -263,10 +265,14 @@ const setupDatePickers = () => {
   const dateEndInput = document.querySelector("#filters_date_end")
   if (dateStartInput && dateEndInput) {
     datepicker(dateStartInput, {
-      formatter: dateFormatter
+      dateSelected: new Date(dateStartInput.value),
+      formatter: dateFormatter,
+      showAllDates: true
     }).calendarContainer.style.setProperty('font-size', '1.5rem')
     datepicker(dateEndInput, {
-      formatter: dateFormatter
+      dateSelected: new Date(dateEndInput.value),
+      formatter: dateFormatter,
+      showAllDates: true
     }).calendarContainer.style.setProperty('font-size', '1.5rem')
   }
 }
