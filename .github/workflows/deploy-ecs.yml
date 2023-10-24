@@ -12,12 +12,11 @@ on:
 
 jobs:
   call-workflow:
-    uses: mbta/workflows/.github/workflows/deploy-ecs.yml@main
+    uses: mbta/workflows/.github/workflows/deploy-ecs.yml@v2
     with:
       app-name: prediction-analyzer
       environment: ${{ github.event.inputs.environment || 'dev' }}
     secrets:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws-role-arn: ${{ secrets.AWS_ROLE_ARN }}
       docker-repo: ${{ secrets.DOCKER_REPO }}
       slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
