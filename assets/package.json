@@ -15,6 +15,7 @@
     "@types/jquery": "^3.5.5",
     "c3": "^0.7.20",
     "jquery": "^3.6.0",
+    "js-datepicker": "^5.18.2",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "selectize": "^0.12.4"
