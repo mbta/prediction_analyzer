@@ -260,7 +260,7 @@ const setupDatePickers = () => {
       dateSelected: new Date(serviceDateInput.value),
       formatter: dateFormatter,
       showAllDates: true,
-    }).calendarContainer.style.setProperty("font-size", "1.5rem")
+    })
   }
 
   const dateStartInput = document.querySelector(
@@ -274,12 +274,12 @@ const setupDatePickers = () => {
       dateSelected: new Date(dateStartInput.value),
       formatter: dateFormatter,
       showAllDates: true,
-    }).calendarContainer.style.setProperty("font-size", "1.5rem")
+    })
     datepicker(dateEndInput, {
       dateSelected: new Date(dateEndInput.value),
       formatter: dateFormatter,
       showAllDates: true,
-    }).calendarContainer.style.setProperty("font-size", "1.5rem")
+    })
   }
 }
 
