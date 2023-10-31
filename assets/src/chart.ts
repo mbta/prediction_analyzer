@@ -258,10 +258,10 @@ const setupDatePickers = () => {
   }
 
   const normalizeSelectedDate = (value) => {
-    const offset = new Date().getTimezoneOffset()
     const newDate = new Date(value)
+    const offset = newDate.getTimezoneOffset()
 
-    if (newDate.getHours() != 0) {
+    if (newDate.getHours() !== 0) {
       newDate.setHours(newDate.getHours() + offset / 60)
       newDate.setMinutes(newDate.getMinutes() + (offset % 60))
     }
