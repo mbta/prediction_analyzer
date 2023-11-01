@@ -247,9 +247,26 @@ const renderDashboard = () => {
 }
 
 const setupDatePickers = () => {
+  const padZero = (value) => (value < 10 ? `0${value}` : value)
+
   const dateFormatter = (input, date) => {
-    const value = date.toISOString().split("T")[0]
-    input.value = value
+    const year = date.getFullYear()
+    const month = padZero(date.getMonth() + 1)
+    const day = padZero(date.getDate())
+
+    input.value = `${year}-${month}-${day}`
+  }
+
+  const normalizeSelectedDate = (value) => {
+    const newDate = new Date(value)
+    const offset = newDate.getTimezoneOffset()
+
+    if (newDate.getHours() !== 0) {
+      newDate.setHours(newDate.getHours() + offset / 60)
+      newDate.setMinutes(newDate.getMinutes() + (offset % 60))
+    }
+
+    return newDate
   }
 
   const serviceDateInput = document.querySelector(
@@ -257,7 +274,7 @@ const setupDatePickers = () => {
   ) as HTMLInputElement
   if (serviceDateInput) {
     datepicker(serviceDateInput, {
-      dateSelected: new Date(serviceDateInput.value),
+      dateSelected: normalizeSelectedDate(serviceDateInput.value),
       formatter: dateFormatter,
       showAllDates: true,
     })
@@ -271,12 +288,12 @@ const setupDatePickers = () => {
   ) as HTMLInputElement
   if (dateStartInput && dateEndInput) {
     datepicker(dateStartInput, {
-      dateSelected: new Date(dateStartInput.value),
+      dateSelected: normalizeSelectedDate(dateStartInput.value),
       formatter: dateFormatter,
       showAllDates: true,
     })
     datepicker(dateEndInput, {
-      dateSelected: new Date(dateEndInput.value),
+      dateSelected: normalizeSelectedDate(dateEndInput.value),
       formatter: dateFormatter,
       showAllDates: true,
     })
