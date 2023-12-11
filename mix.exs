@@ -46,7 +46,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:phoenix, "~> 1.5.0"},
       {:phoenix_ecto, "~> 3.2"},
       {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:phoenix_live_reload, "~> 1.4", only: :dev},
       {:phoenix_pubsub, "~> 2.0"},
       {:plug_cowboy, "~> 2.1"},
       {:plug, "~> 1.10"},
