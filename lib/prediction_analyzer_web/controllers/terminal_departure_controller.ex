@@ -4,21 +4,22 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   alias PredictionAnalyzer.Predictions.Prediction
   alias PredictionAnalyzer.VehicleEvents.VehicleEvent
 
-  def index(conn, _params) do
-    #     select route_id, count(*) as cnt
-    # from vehicle_events
-    # where not exists(
-    #     select id
-    #     from predictions
-    #     where predictions.vehicle_event_id = vehicle_events.id
-    #     and predictions.file_timestamp < vehicle_events.departure_time
-    # )
-    # and environment='prod'
-    # and trip_id is not null
-    # and departure_time is not null
-    # and not is_deleted
-    # group by route_id
-    # order by cnt desc;
+  defp parse_date(nil), do: Date.utc_today()
+
+  defp parse_date(date_str) do
+    case Date.from_iso8601(date_str) do
+      {:ok, date} -> date
+      {:error, _} -> Date.utc_today()
+    end
+  end
+
+  def index(conn, params) do
+    date = parse_date(params["date"])
+    env = params["env"] || "prod"
+
+    min_time = date |> Timex.to_datetime() |> Timex.beginning_of_day() |> DateTime.to_unix()
+    max_time = date |> Timex.to_datetime() |> Timex.end_of_day() |> DateTime.to_unix()
+
     query =
       from(ve in VehicleEvent,
         as: :vehicle_event,
@@ -26,7 +27,9 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
           not is_nil(ve.trip_id) and
             not is_nil(ve.departure_time) and
             not ve.is_deleted and
-            ve.environment == "prod" and
+            ve.environment == ^env and
+            ve.departure_time >= ^min_time and
+            ve.departure_time <= ^max_time and
             not exists(
               from(p in Prediction,
                 where:
@@ -41,6 +44,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
 
     results = PredictionAnalyzer.Repo.all(query)
 
-    render(conn, "index.html", results: results)
+    render(conn, "index.html", results: results, date: date, env: env)
   end
 end

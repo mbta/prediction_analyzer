@@ -1,4 +1,12 @@
 <div id="content">
+<form method="get" action="/terminal_departure">
+  <input type="date" name="date" value="<%= @date %>">
+  <select name="env">
+  <option value="prod" <%= if @env == "prod", do: "selected" %>>Prod</option>
+  <option value="dev-green" <%= if @env == "dev-green", do: "selected" %>>Dev Green</option>
+  </select>
+  <input type="submit" value="Submit">
+</form>
   <table>
     <thead>
       <tr>
