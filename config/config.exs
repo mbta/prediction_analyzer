@@ -35,8 +35,6 @@ config :prediction_analyzer, :max_dwell_time_sec, 30 * 60
 config :prediction_analyzer, :prune_lookback_sec, 7 * 24 * 60 * 60
 config :prediction_analyzer, :analysis_lookback_min, 40
 
-config :prediction_analyzer, PredictionAnalyzer.Repo, adapter: Ecto.Adapters.Postgres
-
 config :prediction_analyzer, start_workers: true
 
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase

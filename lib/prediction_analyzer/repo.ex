@@ -1,5 +1,5 @@
 defmodule PredictionAnalyzer.Repo do
-  use Ecto.Repo, otp_app: :prediction_analyzer
+  use Ecto.Repo, otp_app: :prediction_analyzer, adapter: Ecto.Adapters.Postgres
   require Logger
 
   @doc """
