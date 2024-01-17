@@ -1,0 +1,18 @@
+<div id="content">
+  <table>
+    <thead>
+      <tr>
+        <th>Route</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for {route, count} <- @results do %>
+      <tr>
+        <td><%= route %></td>
+        <td><%= count %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
