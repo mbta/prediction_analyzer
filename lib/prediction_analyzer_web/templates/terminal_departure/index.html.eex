@@ -1,26 +1,111 @@
 <div id="content">
 <form method="get" action="/terminal_departure">
-  <input type="date" name="date" value="<%= @date %>">
+
+  <input type="date" class="form-control" name="date" value="<%= @date %>">
   <select name="env">
   <option value="prod" <%= if @env == "prod", do: "selected" %>>Prod</option>
   <option value="dev-green" <%= if @env == "dev-green", do: "selected" %>>Dev Green</option>
   </select>
   <input type="submit" value="Submit">
 </form>
-  <table>
-    <thead>
-      <tr>
-        <th>Route</th>
-        <th>Count</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= for {route, count} <- @results do %>
-      <tr>
-        <td><%= route %></td>
-        <td><%= count %></td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="container">
+  <div class=row>
+    <%= cond do %>
+    <% assigns[:missing_departures_details] -> %>
+    <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missing_route"))) %>
+    <div class="col-sm-12">
+      <h3>Missing Departures</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Route</th>
+            <th>Trip</th>
+            <th>Stop</th>
+            <th>Departure Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for {route, trip_id, stop_id, departure_time} <- @missing_departures_details do %>
+          <tr>
+            <td><%= route %></td>
+            <td><%= trip_id %></td>
+            <td><%= stop_id %></td>
+            <td><%= format_unix(departure_time) %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% assigns[:missed_departures_details] -> %>
+    <% IO.inspect(assigns[:missed_departures_details]) %>
+    <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missed_route"))) %>
+    <div class="col-sm-12">
+      <h3>Missed Departures</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Route</th>
+            <th>Trip</th>
+            <th>Stop</th>
+            <th>Departure Time</th>
+            <th>Min File Time</th>
+            <th>Max File Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for {route, trip_id, stop_id, departure_time, min_file_time, max_file_time} <- @missed_departures_details do %>
+          <tr>
+            <td><%= route %></td>
+            <td><%= trip_id %></td>
+            <td><%= stop_id %></td>
+            <td><%= format_unix(departure_time) %></td>
+            <td><%= format_unix(min_file_time) %></td>
+            <td><%= format_unix(max_file_time) %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% true -> %>
+    <div class="col-sm-6">
+    <h3>Upredicted Departures</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Route</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for {route, count} <- @unpredicted_departures do %>
+        <tr>
+          <td><%= link(route, to: Routes.terminal_departure_path(@conn, :index, Map.put(@query_params, "missing_route", route))) %></td>
+          <td><%= count %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="col-sm-6">
+    <h3>Missed Departures</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Route</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for {route, count} <- @missed_departures do %>
+        <tr>
+          <td><%= link(route, to: Routes.terminal_departure_path(@conn, :index, Map.put(@query_params, "missed_route", route))) %></td>
+          <td><%= count %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    </div>
+    <% end %>
+  </div>
+</div>
 </div>
