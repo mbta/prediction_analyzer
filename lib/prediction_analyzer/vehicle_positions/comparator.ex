@@ -92,9 +92,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
         ve.environment == ^vehicle.environment and ve.vehicle_id == ^vehicle.id and
           ve.stop_id == ^vehicle.stop_id and is_nil(ve.departure_time) and
           ve.arrival_time > ^(System.system_time(:second) - max_dwell_time_sec),
-      update: [set: [departure_time: ^vehicle.timestamp]]
+      update: [set: [departure_time: ^vehicle.timestamp]],
+      select: ve
     )
-    |> Repo.update_all([], returning: true)
+    |> Repo.update_all([])
     |> case do
       {0, _} ->
         Logger.warn("Tried to update departure time, but no arrival for #{vehicle.label}")

@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # For production, we often load configuration from external
 # sources, such as your system environment. For this reason,
@@ -24,7 +24,6 @@ config :logger,
   level: :debug
 
 config :prediction_analyzer, PredictionAnalyzer.Repo,
-  adapter: Ecto.Adapters.Postgres,
   pool_size: 15,
   ssl: true
 

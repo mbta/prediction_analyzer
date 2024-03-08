@@ -174,7 +174,7 @@
     </div>
     <div class="col-xs-9">
       <div class="chart-range-links">
-        <%= for chart_range <- ["Single Day", "Multi-Day", "By Station"] do %>
+        <%= for chart_range <- ["Single Day", "Multi-Day", "By Station", "Terminal Departures"] do %>
           <%= content_tag :a, chart_range, class: chart_range_class(@conn, chart_range), id: chart_range_id(chart_range), href: "#" %>
         <% end %>
 
