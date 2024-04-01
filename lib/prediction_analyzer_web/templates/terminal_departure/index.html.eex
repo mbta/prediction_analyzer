@@ -37,7 +37,6 @@
       </table>
     </div>
     <% assigns[:missed_departures_details] -> %>
-    <% IO.inspect(assigns[:missed_departures_details]) %>
     <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missed_route"))) %>
     <div class="col-sm-12">
       <h3>Missed Departures</h3>

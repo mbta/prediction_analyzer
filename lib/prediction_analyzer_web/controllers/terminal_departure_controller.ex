@@ -111,7 +111,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   end
 
   defp load_data(params) do
-    IO.inspect(params, label: "load_data")
     %{env: env, min_time: min_time, max_time: max_time} = params
 
     unpredicted_departures_query =
@@ -162,12 +161,9 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   end
 
   def index(conn, params) do
-    IO.inspect(params, label: "params")
-
     assigns =
       params
       |> base_params()
-      |> IO.inspect(label: "base_params")
       |> load_data()
 
     render(conn, "index.html", assigns)
