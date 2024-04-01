@@ -6,7 +6,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
 
-  # TODO: % vs overall number of predictions
   # TODO: Use vehicle_ids instead of trip_ids
 
   defp terminal_stops() do
@@ -123,17 +122,31 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
             ve.environment == ^env and
             ve.departure_time >= ^min_time and
             ve.departure_time <= ^max_time and
-            ve.stop_id in ^terminal_stops() and
-            not exists(
-              from(p in Prediction,
-                where:
-                  p.vehicle_event_id == parent_as(:vehicle_event).id and
-                    p.file_timestamp < parent_as(:vehicle_event).departure_time
-              )
-            ),
+            ve.stop_id in ^terminal_stops(),
         group_by: ve.route_id,
         order_by: [desc: count(ve.id)],
-        select: {ve.route_id, count(ve.id)}
+        select:
+          {ve.route_id,
+           count(ve.id)
+           |> filter(
+             not exists(
+               from(p in Prediction,
+                 where:
+                   p.vehicle_event_id == parent_as(:vehicle_event).id and
+                     p.file_timestamp < parent_as(:vehicle_event).departure_time
+               )
+             )
+           ),
+           (count(ve.id)
+            |> filter(
+              not exists(
+                from(p in Prediction,
+                  where:
+                    p.vehicle_event_id == parent_as(:vehicle_event).id and
+                      p.file_timestamp < parent_as(:vehicle_event).departure_time
+                )
+              )
+            )) * 100.0 / count(ve.id)}
       )
 
     unpredicted_departures = PredictionAnalyzer.Repo.all(unpredicted_departures_query)
@@ -145,11 +158,12 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
             p.file_timestamp >= ^min_time and
             p.file_timestamp <= ^max_time and
             not is_nil(p.departure_time) and
-            is_nil(p.vehicle_event_id) and
             p.stop_id in ^terminal_stops(),
         group_by: p.route_id,
         order_by: [desc: count(p.id)],
-        select: {p.route_id, count(p.id)}
+        select:
+          {p.route_id, count(p.id) |> filter(is_nil(p.vehicle_event_id)),
+           (count(p.id) |> filter(is_nil(p.vehicle_event_id))) * 100.0 / count(p.id)}
       )
 
     missed_departures = PredictionAnalyzer.Repo.all(missed_departures_query)
