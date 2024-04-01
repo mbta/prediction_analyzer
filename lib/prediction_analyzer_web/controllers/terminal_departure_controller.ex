@@ -6,8 +6,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
 
-  # TODO: Use vehicle_ids instead of trip_ids
-
   defp terminal_stops() do
     StopGroups.expand_groups(["_terminal"])
   end
@@ -70,7 +68,7 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
               )
             ),
         order_by: [asc: ve.departure_time],
-        select: {ve.route_id, ve.trip_id, ve.stop_id, ve.departure_time}
+        select: {ve.route_id, ve.vehicle_id, ve.trip_id, ve.stop_id, ve.departure_time}
       )
 
     unpredicted_departures =
@@ -94,10 +92,10 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
             not is_nil(p.departure_time) and
             is_nil(p.vehicle_event_id) and
             p.stop_id in ^terminal_stops(),
-        group_by: [p.route_id, p.trip_id, p.stop_id, p.departure_time],
-        order_by: [p.trip_id, p.stop_id, p.departure_time],
+        group_by: [p.route_id, p.vehicle_id, p.stop_id, p.departure_time],
+        order_by: [p.vehicle_id, p.stop_id, p.departure_time],
         select:
-          {p.route_id, p.trip_id, p.stop_id, p.departure_time, min(p.file_timestamp),
+          {p.route_id, p.vehicle_id, p.stop_id, p.departure_time, min(p.file_timestamp),
            max(p.file_timestamp)}
       )
 

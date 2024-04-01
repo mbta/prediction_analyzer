@@ -19,15 +19,17 @@
         <thead>
           <tr>
             <th>Route</th>
+            <th>Vehicle</th>
             <th>Trip</th>
             <th>Stop</th>
             <th>Departure Time</th>
           </tr>
         </thead>
         <tbody>
-          <%= for {route, trip_id, stop_id, departure_time} <- @missing_departures_details do %>
+          <%= for {route, vehicle_id, trip_id, stop_id, departure_time} <- @missing_departures_details do %>
           <tr>
             <td><%= route %></td>
+            <td><%= vehicle_id %></td>
             <td><%= trip_id %></td>
             <td><%= stop_id %></td>
             <td><%= format_unix(departure_time) %></td>
@@ -44,7 +46,7 @@
         <thead>
           <tr>
             <th>Route</th>
-            <th>Trip</th>
+            <th>Vehicle ID</th>
             <th>Stop</th>
             <th>Departure Time</th>
             <th>Min File Time</th>
