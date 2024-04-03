@@ -1,10 +1,4 @@
-<%= for mode_id <- [:subway, :commuter_rail] do %>
-  <%= content_tag :a, mode_string(mode_id), class: button_class(@conn, mode_id), href: Routes.accuracy_path(@conn, mode_id) %>
-<% end %>
-<div class="">
-  Show Dev Green results
-  <input type="checkbox" id="show-dev-green-check" checked>
-</div>
+<%= render(PredictionAnalyzerWeb.PartialsView, "header.html", assigns) %>
 <div class="row accuracy-summary-header">
   <div class="col-xs-6" id="prod-accuracy-total">
     <span class="prod-text prod-text-header">Prod</span>

@@ -1,13 +1,23 @@
+<%= render(PredictionAnalyzerWeb.PartialsView, "header.html", assigns) %>
+<hr class="accuracy-separator">
 <div id="content">
-<form method="get" action="/terminal_departure">
 
-  <input type="date" class="form-control" name="date" value="<%= @date %>">
-  <select name="env">
-  <option value="prod" <%= if @env == "prod", do: "selected" %>>Prod</option>
-  <option value="dev-green" <%= if @env == "dev-green", do: "selected" %>>Dev Green</option>
-  </select>
-  <input type="submit" value="Submit">
-</form>
+<%= form_for @conn, Routes.terminal_departure_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn f -> %>
+<div class="row">
+  <div class="col-xs-3">
+    <div class="accuracy-form-filters">
+
+      <input type="date" class="form-control" name="date" value="<%= @date %>">
+      <select name="env">
+        <option value="prod" <%= if @env == "prod", do: "selected" %>>Prod</option>
+        <option value="dev-green" <%= if @env == "dev-green", do: "selected" %>>Dev Green</option>
+      </select>
+      <input type="submit" value="Submit">
+    </div>
+  </div>
+</div>
+<% end %>
+
 <div class="container">
   <div class=row>
     <%= cond do %>
@@ -68,20 +78,22 @@
       </table>
     <% true -> %>
     <div class="col-sm-6">
-    <h3>Upredicted Departures</h3>
+    <h3>Unpredicted Departures</h3>
     <table class="table">
       <thead>
         <tr>
           <th>Route</th>
-          <th>Count</th>
+          <th>Total Departures</th>
+          <th>Unpredicted Departures</th>
           <th>Percentage</th>
         </tr>
       </thead>
       <tbody>
-        <%= for {route, count, pct} <- @unpredicted_departures do %>
+        <%= for {route, total, unpredicted, pct} <- @unpredicted_departures do %>
         <tr>
           <td><%= link(route, to: Routes.terminal_departure_path(@conn, :index, Map.put(@query_params, "missing_route", route))) %></td>
-          <td><%= count %></td>
+          <td><%= total %></td>
+          <td><%= unpredicted %></td>
           <td><%= :erlang.float_to_binary(pct, [decimals: 2]) %></td>
         </tr>
         <% end %>
@@ -95,15 +107,17 @@
       <thead>
         <tr>
           <th>Route</th>
-          <th>Count</th>
+          <th>Total Predictions</th>
+          <th>Total Unrealized</th>
           <th>Percentage</th>
         </tr>
       </thead>
       <tbody>
-        <%= for {route, count, pct} <- @missed_departures do %>
+        <%= for {route, total, unrealized, pct} <- @missed_departures do %>
         <tr>
           <td><%= link(route, to: Routes.terminal_departure_path(@conn, :index, Map.put(@query_params, "missed_route", route))) %></td>
-          <td><%= count %></td>
+          <td><%= total %></td>
+          <td><%= unrealized %></td>
           <td><%= :erlang.float_to_binary(pct, [decimals: 2]) %></td>
         </tr>
         <% end %>

@@ -6,6 +6,15 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
 
+  # TODO stop id and names in both detail views
+  # TODO date filtering should be by service date (4am to 2am the following day). Ensure timezone is ET.
+  # TODO full count of events in addition to percentages
+  # TODO missed departures -> unrealized departure predictions
+  # TODO Better labels on summary view
+  # TODO 3 stage drill -> route -> route, stop -> full data
+  # TODO Remove exit only
+  # TODO rollup Missed Departures by trip
+  # TODO totals rows
   defp terminal_stops() do
     StopGroups.expand_groups(["_terminal"])
   end
@@ -35,13 +44,13 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
     })
   end
 
-  defp replace_stop_names(data) do
+  defp replace_stop_names(data, idx) do
     stop_dict = StopNameFetcher.get_stop_descriptions(:subway)
 
     Enum.map(data, fn row ->
-      stop_id = elem(row, 2)
+      stop_id = elem(row, idx)
       stop_name = Map.get(stop_dict, stop_id, stop_id)
-      put_elem(row, 2, stop_name)
+      put_elem(row, idx, stop_name)
     end)
   end
 
@@ -64,7 +73,8 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
               from(p in Prediction,
                 where:
                   p.vehicle_event_id == parent_as(:vehicle_event).id and
-                    p.file_timestamp < parent_as(:vehicle_event).departure_time
+                    p.file_timestamp < parent_as(:vehicle_event).departure_time and
+                    not is_nil(p.departure_time)
               )
             ),
         order_by: [asc: ve.departure_time],
@@ -74,7 +84,7 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
     unpredicted_departures =
       unpredicted_departures_query
       |> PredictionAnalyzer.Repo.all()
-      |> replace_stop_names()
+      |> replace_stop_names(2)
 
     Map.merge(params, %{missing_departures_details: unpredicted_departures})
   end
@@ -102,7 +112,7 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
     missed_departures =
       missed_departures_query
       |> PredictionAnalyzer.Repo.all()
-      |> replace_stop_names()
+      |> replace_stop_names(2)
 
     Map.merge(params, %{missed_departures_details: missed_departures})
   end
@@ -122,16 +132,17 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
             ve.departure_time <= ^max_time and
             ve.stop_id in ^terminal_stops(),
         group_by: ve.route_id,
-        order_by: [desc: count(ve.id)],
+        order_by: ve.route_id,
         select:
-          {ve.route_id,
+          {ve.route_id, count(ve.id),
            count(ve.id)
            |> filter(
              not exists(
                from(p in Prediction,
                  where:
                    p.vehicle_event_id == parent_as(:vehicle_event).id and
-                     p.file_timestamp < parent_as(:vehicle_event).departure_time
+                     p.file_timestamp < parent_as(:vehicle_event).departure_time and
+                     not is_nil(p.departure_time)
                )
              )
            ),
@@ -141,7 +152,8 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
                 from(p in Prediction,
                   where:
                     p.vehicle_event_id == parent_as(:vehicle_event).id and
-                      p.file_timestamp < parent_as(:vehicle_event).departure_time
+                      p.file_timestamp < parent_as(:vehicle_event).departure_time and
+                      not is_nil(p.departure_time)
                 )
               )
             )) * 100.0 / count(ve.id)}
@@ -160,7 +172,7 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
         group_by: p.route_id,
         order_by: [desc: count(p.id)],
         select:
-          {p.route_id, count(p.id) |> filter(is_nil(p.vehicle_event_id)),
+          {p.route_id, count(p.id), count(p.id) |> filter(is_nil(p.vehicle_event_id)),
            (count(p.id) |> filter(is_nil(p.vehicle_event_id))) * 100.0 / count(p.id)}
       )
 
