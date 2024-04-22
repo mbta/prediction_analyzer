@@ -8,9 +8,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
 
   # TODO stop id and names in both detail views
   # TODO date filtering should be by service date (4am to 2am the following day). Ensure timezone is ET.
-  # TODO full count of events in addition to percentages
-  # TODO missed departures -> unrealized departure predictions
-  # TODO Better labels on summary view
   # TODO 3 stage drill -> route -> route, stop -> full data
   # TODO Remove exit only
   # TODO rollup Missed Departures by trip

@@ -51,7 +51,7 @@
     <% assigns[:missed_departures_details] -> %>
     <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missed_route"))) %>
     <div class="col-sm-12">
-      <h3>Missed Departures</h3>
+      <h3>Unrealized Departure Predictions</h3>
       <table class="table">
         <thead>
           <tr>
@@ -102,7 +102,7 @@
     </div>
 
     <div class="col-sm-6">
-    <h3>Missed Departures</h3>
+    <h3>Unrealized Departure Predictions</h3>
     <table class="table">
       <thead>
         <tr>
