@@ -6,7 +6,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
 
-  # TODO stop id and names in both detail views
   # TODO date filtering should be by service date (4am to 2am the following day). Ensure timezone is ET.
   # TODO 3 stage drill -> route -> route, stop -> full data
   # TODO Remove exit only
@@ -41,13 +40,13 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
     })
   end
 
-  defp replace_stop_names(data, idx) do
+  defp add_stop_names(data, idx) do
     stop_dict = StopNameFetcher.get_stop_descriptions(:subway)
 
     Enum.map(data, fn row ->
       stop_id = elem(row, idx)
       stop_name = Map.get(stop_dict, stop_id, stop_id)
-      put_elem(row, idx, stop_name)
+      Tuple.insert_at(row, idx + 1, stop_name)
     end)
   end
 
@@ -81,7 +80,7 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
     unpredicted_departures =
       unpredicted_departures_query
       |> PredictionAnalyzer.Repo.all()
-      |> replace_stop_names(2)
+      |> add_stop_names(3)
 
     Map.merge(params, %{missing_departures_details: unpredicted_departures})
   end
@@ -109,7 +108,7 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
     missed_departures =
       missed_departures_query
       |> PredictionAnalyzer.Repo.all()
-      |> replace_stop_names(2)
+      |> add_stop_names(2)
 
     Map.merge(params, %{missed_departures_details: missed_departures})
   end
