@@ -6,7 +6,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
 
-  # TODO date filtering should be by service date (4am to 2am the following day). Ensure timezone is ET.
   # TODO 3 stage drill -> route -> route, stop -> full data
   # TODO Remove exit only
   # TODO rollup Missed Departures by trip
@@ -20,16 +19,26 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   defp parse_date(date_str) do
     case Date.from_iso8601(date_str) do
       {:ok, date} -> date
-      {:error, _} -> Date.utc_today()
+      {:error, _} -> DateTime.now("America/New_York") |> DateTime.to_date()
     end
+  end
+
+  defp service_times(date) do
+    start_time = Time.new!(4, 0, 0)
+    {:ok, start_date_time} = DateTime.new(date, start_time, "America/New_York")
+
+    end_time = Time.new!(2, 0, 0)
+    tomorrow = Date.add(date, 1)
+    {:ok, end_date_time} = DateTime.new(tomorrow, end_time, "America/New_York")
+
+    {start_date_time |> DateTime.to_unix(), end_date_time |> DateTime.to_unix()}
   end
 
   defp base_params(params) do
     date = parse_date(params["date"])
     env = params["env"] || "prod"
 
-    min_time = date |> Timex.to_datetime() |> Timex.beginning_of_day() |> DateTime.to_unix()
-    max_time = date |> Timex.to_datetime() |> Timex.end_of_day() |> DateTime.to_unix()
+    {min_time, max_time} = service_times(date)
 
     Map.merge(params, %{
       date: date,
