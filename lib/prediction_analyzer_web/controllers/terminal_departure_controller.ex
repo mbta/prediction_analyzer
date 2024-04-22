@@ -107,11 +107,11 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
             not is_nil(p.departure_time) and
             is_nil(p.vehicle_event_id) and
             p.stop_id in ^terminal_stops(),
-        group_by: [p.route_id, p.vehicle_id, p.stop_id, p.departure_time],
-        order_by: [p.vehicle_id, p.stop_id, p.departure_time],
+        group_by: [p.route_id, p.vehicle_id, p.stop_id, p.trip_id],
+        order_by: [p.vehicle_id, p.stop_id, min(p.departure_time)],
         select:
-          {p.route_id, p.vehicle_id, p.stop_id, p.departure_time, min(p.file_timestamp),
-           max(p.file_timestamp)}
+          {p.route_id, p.vehicle_id, p.stop_id, p.trip_id, min(p.departure_time),
+           max(p.departure_time), min(p.file_timestamp), max(p.file_timestamp), count(p.id)}
       )
 
     missed_departures =
@@ -175,10 +175,12 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
             not is_nil(p.departure_time) and
             p.stop_id in ^terminal_stops(),
         group_by: p.route_id,
-        order_by: [desc: count(p.id)],
+        order_by: [desc: count(p.trip_id, :distinct)],
         select:
-          {p.route_id, count(p.id), count(p.id) |> filter(is_nil(p.vehicle_event_id)),
-           (count(p.id) |> filter(is_nil(p.vehicle_event_id))) * 100.0 / count(p.id)}
+          {p.route_id, count(p.trip_id, :distinct),
+           count(p.trip_id, :distinct) |> filter(is_nil(p.vehicle_event_id)),
+           (count(p.trip_id, :distinct) |> filter(is_nil(p.vehicle_event_id))) * 100.0 /
+             count(p.trip_id, :distinct)}
       )
 
     missed_departures = PredictionAnalyzer.Repo.all(missed_departures_query)
