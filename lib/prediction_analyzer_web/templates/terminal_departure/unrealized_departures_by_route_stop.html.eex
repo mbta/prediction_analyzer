@@ -1,0 +1,30 @@
+<div class="col-sm-12">
+    <h3>Unrealized Departure Predictions</h3>
+    <h4><%= @route %> - <%= @stop_name %> (<%= @stop_id %>)</h4>
+    <table class="table">
+    <thead>
+        <tr>
+        <th>Vehicle ID</th>
+        <th>Trip ID</th>
+        <th>Min Departure Time</th>
+        <th>Max Departure Time</th>
+        <th>Min File Time</th>
+        <th>Max File Time</th>
+        <th>Total Predictions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= for {vehicle_id, trip_id, min_departure_time, max_departure_time, min_file_time, max_file_time, predictions} <- @unrealized_departures_by_route_stop do %>
+        <tr>
+        <td><%= vehicle_id %></td>
+        <td><%= trip_id %></td>
+        <td><%= format_unix(min_departure_time) %></td>
+        <td><%= format_unix(max_departure_time) %></td>
+        <td><%= format_unix(min_file_time) %></td>
+        <td><%= format_unix(max_file_time) %></td>
+        <td><%= predictions %></td>
+        </tr>
+        <% end %>
+    </tbody>
+    </table>
+</div>

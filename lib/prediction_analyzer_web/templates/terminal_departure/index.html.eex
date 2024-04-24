@@ -27,6 +27,9 @@
     <% assigns[:missing_departures_by_route] -> %>
       <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missing_route"))) %>
       <%= render("missing_departures_by_route.html", assigns) %>
+    <% assigns[:unrealized_departures_by_route_stop] -> %>
+      <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, @query_params |> Map.delete("missed_route") |> Map.delete("stop_id"))) %>
+      <%= render("unrealized_departures_by_route_stop.html", assigns) %>
     <% assigns[:unrealized_departures_by_route] -> %>
       <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missed_route"))) %>
       <%= render("unrealized_departures_by_route.html", assigns) %>

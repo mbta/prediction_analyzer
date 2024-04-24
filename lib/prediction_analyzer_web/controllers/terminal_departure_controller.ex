@@ -151,8 +151,11 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
     Map.merge(params, %{missing_departures_by_route: unpredicted_departures, route: missing_route})
   end
 
-  defp load_data(%{"missed_route" => missed_route} = params) when not is_nil(missed_route) do
+  defp load_data(%{"missed_route" => missed_route, "stop_id" => stop_id} = params)
+       when not is_nil(missed_route) do
     %{env: env, min_time: min_time, max_time: max_time} = params
+
+    stop_name = StopNameFetcher.get_stop_name(:subway, stop_id)
 
     missed_departures_query =
       from(p in Prediction,
@@ -163,20 +166,50 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
             p.route_id == ^missed_route and
             not is_nil(p.departure_time) and
             is_nil(p.vehicle_event_id) and
-            p.stop_id in ^terminal_stops(),
-        group_by: [p.route_id, p.vehicle_id, p.stop_id, p.trip_id],
-        order_by: [p.vehicle_id, p.stop_id, min(p.departure_time)],
+            p.stop_id == ^stop_id and
+            p.route_id == ^missed_route,
+        group_by: [p.vehicle_id, p.trip_id],
+        order_by: [p.vehicle_id, min(p.departure_time)],
         select:
-          {p.route_id, p.vehicle_id, p.stop_id, p.trip_id, min(p.departure_time),
-           max(p.departure_time), min(p.file_timestamp), max(p.file_timestamp), count(p.id)}
+          {p.vehicle_id, p.trip_id, min(p.departure_time), max(p.departure_time),
+           min(p.file_timestamp), max(p.file_timestamp), count(p.id)}
       )
 
-    missed_departures =
-      missed_departures_query
-      |> PredictionAnalyzer.Repo.all()
-      |> add_stop_names(2)
+    missed_departures = missed_departures_query |> PredictionAnalyzer.Repo.all()
 
-    Map.merge(params, %{unrealized_departures_by_route: missed_departures})
+    Map.merge(params, %{
+      unrealized_departures_by_route_stop: missed_departures,
+      route: missed_route,
+      stop_id: stop_id,
+      stop_name: stop_name
+    })
+  end
+
+  defp load_data(%{"missed_route" => missed_route} = params)
+       when not is_nil(missed_route) do
+    %{env: env, min_time: min_time, max_time: max_time} = params
+
+    missed_departures_query =
+      from(p in Prediction,
+        where:
+          p.environment == ^env and
+            p.file_timestamp >= ^min_time and
+            p.file_timestamp <= ^max_time and
+            not is_nil(p.departure_time) and
+            p.route_id == ^missed_route and
+            p.stop_id in ^terminal_stops(),
+        group_by: p.stop_id,
+        order_by: [desc: count(p.trip_id, :distinct)],
+        select:
+          {p.stop_id, count(p.trip_id, :distinct),
+           count(p.trip_id, :distinct) |> filter(is_nil(p.vehicle_event_id)),
+           (count(p.trip_id, :distinct) |> filter(is_nil(p.vehicle_event_id))) * 100.0 /
+             count(p.trip_id, :distinct)}
+      )
+
+    missed_departures = PredictionAnalyzer.Repo.all(missed_departures_query) |> add_stop_names(0)
+
+    Map.merge(params, %{unrealized_departures_by_route: missed_departures, route: missed_route})
   end
 
   defp load_data(params) do
