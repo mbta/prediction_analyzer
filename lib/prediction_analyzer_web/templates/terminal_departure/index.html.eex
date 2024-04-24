@@ -21,119 +21,14 @@
 <div class="container">
   <div class=row>
     <%= cond do %>
-    <% assigns[:missing_departures_details] -> %>
-    <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missing_route"))) %>
-    <div class="col-sm-12">
-      <h3>Missing Departures</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Route</th>
-            <th>Vehicle</th>
-            <th>Trip</th>
-            <th>Stop ID</th>
-            <th>Stop Name</th>
-            <th>Departure Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= for {route, vehicle_id, trip_id, stop_id, stop_name, departure_time} <- @missing_departures_details do %>
-          <tr>
-            <td><%= route %></td>
-            <td><%= vehicle_id %></td>
-            <td><%= trip_id %></td>
-            <td><%= stop_id %></td>
-            <td><%= stop_name %></td>
-            <td><%= format_unix(departure_time) %></td>
-          </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    <% assigns[:missed_departures_details] -> %>
-    <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missed_route"))) %>
-    <div class="col-sm-12">
-      <h3>Unrealized Departure Predictions</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Route</th>
-            <th>Vehicle ID</th>
-            <th>Trip ID</th>
-            <th>Stop ID</th>
-            <th>Stop Name</th>
-            <th>Min Departure Time</th>
-            <th>Max Departure Time</th>
-            <th>Min File Time</th>
-            <th>Max File Time</th>
-            <th>Total Predictions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= for {route, vehicle_id, stop_id, stop_name, trip_id, min_departure_time, max_departure_time, min_file_time, max_file_time, predictions} <- @missed_departures_details do %>
-          <tr>
-            <td><%= route %></td>
-            <td><%= vehicle_id %></td>
-            <td><%= trip_id %></td>
-            <td><%= stop_id %></td>
-            <td><%= stop_name %></td>
-            <td><%= format_unix(min_departure_time) %></td>
-            <td><%= format_unix(max_departure_time) %></td>
-            <td><%= format_unix(min_file_time) %></td>
-            <td><%= format_unix(max_file_time) %></td>
-            <td><%= predictions %></td>
-          </tr>
-          <% end %>
-        </tbody>
-      </table>
+    <% assigns[:missing_departures_by_route] -> %>
+      <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missing_route"))) %>
+      <%= render("missing_departures_by_route.html", assigns) %>
+    <% assigns[:unrealized_departures_by_route] -> %>
+      <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missed_route"))) %>
+      <%= render("unrealized_departures_by_route.html", assigns) %>
     <% true -> %>
-    <div class="col-sm-6">
-    <h3>Unpredicted Departures</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Route</th>
-          <th>Total Departures</th>
-          <th>Unpredicted Departures</th>
-          <th>Percentage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= for {route, total, unpredicted, pct} <- @unpredicted_departures do %>
-        <tr>
-          <td><%= link(route, to: Routes.terminal_departure_path(@conn, :index, Map.put(@query_params, "missing_route", route))) %></td>
-          <td><%= total %></td>
-          <td><%= unpredicted %></td>
-          <td><%= :erlang.float_to_binary(pct, [decimals: 2]) %></td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
-    </div>
-
-    <div class="col-sm-6">
-    <h3>Unrealized Departure Predictions</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Route</th>
-          <th>Total Predictions</th>
-          <th>Total Unrealized</th>
-          <th>Percentage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= for {route, total, unrealized, pct} <- @missed_departures do %>
-        <tr>
-          <td><%= link(route, to: Routes.terminal_departure_path(@conn, :index, Map.put(@query_params, "missed_route", route))) %></td>
-          <td><%= total %></td>
-          <td><%= unrealized %></td>
-          <td><%= :erlang.float_to_binary(pct, [decimals: 2]) %></td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
-    </div>
+      <%= render("summary_tables.html", assigns) %>
     <% end %>
   </div>
 </div>

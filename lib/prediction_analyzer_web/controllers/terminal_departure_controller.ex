@@ -8,7 +8,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
 
   # TODO 3 stage drill -> route -> route, stop -> full data
   # TODO Remove exit only
-  # TODO rollup Missed Departures by trip
   # TODO totals rows
   defp terminal_stops() do
     StopGroups.expand_groups(["_terminal"])
@@ -91,7 +90,7 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
       |> PredictionAnalyzer.Repo.all()
       |> add_stop_names(3)
 
-    Map.merge(params, %{missing_departures_details: unpredicted_departures})
+    Map.merge(params, %{missing_departures_by_route: unpredicted_departures})
   end
 
   defp load_data(%{"missed_route" => missed_route} = params) when not is_nil(missed_route) do
@@ -119,7 +118,7 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
       |> PredictionAnalyzer.Repo.all()
       |> add_stop_names(2)
 
-    Map.merge(params, %{missed_departures_details: missed_departures})
+    Map.merge(params, %{unrealized_departures_by_route: missed_departures})
   end
 
   defp load_data(params) do
