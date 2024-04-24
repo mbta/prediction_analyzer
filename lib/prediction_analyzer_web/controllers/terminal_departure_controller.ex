@@ -58,6 +58,48 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
     end)
   end
 
+  defp load_data(%{"missing_route" => missing_route, "stop_id" => stop_id} = params)
+       when not is_nil(missing_route) do
+    %{env: env, min_time: min_time, max_time: max_time} = params
+
+    stop_name = StopNameFetcher.get_stop_name(:subway, stop_id)
+
+    unpredicted_departures_query =
+      from(ve in VehicleEvent,
+        as: :vehicle_event,
+        where:
+          not is_nil(ve.trip_id) and
+            not is_nil(ve.departure_time) and
+            not ve.is_deleted and
+            ve.environment == ^env and
+            ve.departure_time >= ^min_time and
+            ve.departure_time <= ^max_time and
+            ve.route_id == ^missing_route and
+            ve.stop_id == ^stop_id and
+            not exists(
+              from(p in Prediction,
+                where:
+                  p.vehicle_event_id == parent_as(:vehicle_event).id and
+                    p.file_timestamp < parent_as(:vehicle_event).departure_time and
+                    not is_nil(p.departure_time)
+              )
+            ),
+        order_by: [asc: ve.departure_time],
+        select: {ve.vehicle_id, ve.trip_id, ve.departure_time}
+      )
+
+    unpredicted_departures =
+      unpredicted_departures_query
+      |> PredictionAnalyzer.Repo.all()
+
+    Map.merge(params, %{
+      missing_departures_by_route_stop: unpredicted_departures,
+      stop_name: stop_name,
+      stop_id: stop_id,
+      route: missing_route
+    })
+  end
+
   defp load_data(%{"missing_route" => missing_route} = params) when not is_nil(missing_route) do
     %{env: env, min_time: min_time, max_time: max_time} = params
 
@@ -71,26 +113,42 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
             ve.environment == ^env and
             ve.departure_time >= ^min_time and
             ve.departure_time <= ^max_time and
-            ve.route_id == ^missing_route and
             ve.stop_id in ^terminal_stops() and
-            not exists(
-              from(p in Prediction,
-                where:
-                  p.vehicle_event_id == parent_as(:vehicle_event).id and
-                    p.file_timestamp < parent_as(:vehicle_event).departure_time and
-                    not is_nil(p.departure_time)
+            ve.route_id == ^missing_route,
+        group_by: ve.stop_id,
+        order_by: ve.stop_id,
+        select:
+          {ve.stop_id, count(ve.id),
+           count(ve.id)
+           |> filter(
+             not exists(
+               from(p in Prediction,
+                 where:
+                   p.vehicle_event_id == parent_as(:vehicle_event).id and
+                     p.file_timestamp < parent_as(:vehicle_event).departure_time and
+                     not is_nil(p.departure_time)
+               )
+             )
+           ),
+           (count(ve.id)
+            |> filter(
+              not exists(
+                from(p in Prediction,
+                  where:
+                    p.vehicle_event_id == parent_as(:vehicle_event).id and
+                      p.file_timestamp < parent_as(:vehicle_event).departure_time and
+                      not is_nil(p.departure_time)
+                )
               )
-            ),
-        order_by: [asc: ve.departure_time],
-        select: {ve.route_id, ve.vehicle_id, ve.trip_id, ve.stop_id, ve.departure_time}
+            )) * 100.0 / count(ve.id)}
       )
 
     unpredicted_departures =
       unpredicted_departures_query
       |> PredictionAnalyzer.Repo.all()
-      |> add_stop_names(3)
+      |> add_stop_names(0)
 
-    Map.merge(params, %{missing_departures_by_route: unpredicted_departures})
+    Map.merge(params, %{missing_departures_by_route: unpredicted_departures, route: missing_route})
   end
 
   defp load_data(%{"missed_route" => missed_route} = params) when not is_nil(missed_route) do
