@@ -18,6 +18,15 @@
         <td><%= :erlang.float_to_binary(pct, [decimals: 2]) %></td>
     </tr>
     <% end %>
+    <tr>
+        <% total_departures = @unpredicted_departures |>  Enum.map(&(elem(&1, 1))) |> Enum.sum() %>
+        <% total_unpredicted = @unpredicted_departures |>  Enum.map(&(elem(&1, 2))) |> Enum.sum() %>
+        <% total_pct = (total_unpredicted / total_departures) * 100 %>
+        <td><strong>Total</strong></td>
+        <td><strong><%= total_departures %></strong></td>
+        <td><strong><%= total_unpredicted %></strong></td>
+        <td><strong><%= :erlang.float_to_binary(total_pct, [decimals: 2]) %></strong></td>
+    </tr>
     </tbody>
 </table>
 </div>
@@ -42,6 +51,15 @@
         <td><%= :erlang.float_to_binary(pct, [decimals: 2]) %></td>
     </tr>
     <% end %>
+    <tr>
+        <% total_trips = @missed_departures |>  Enum.map(&(elem(&1, 1))) |> Enum.sum() %>
+        <% total_unrealized = @missed_departures |>  Enum.map(&(elem(&1, 2))) |> Enum.sum() %>
+        <% total_pct = (total_unrealized / total_trips) * 100 %>
+        <td><strong>Total</strong></td>
+        <td><strong><%= total_trips %></strong></td>
+        <td><strong><%= total_unrealized %></strong></td>
+        <td><strong><%= :erlang.float_to_binary(total_pct, [decimals: 2]) %></strong></td>
+    </tr>
     </tbody>
 </table>
 </div>

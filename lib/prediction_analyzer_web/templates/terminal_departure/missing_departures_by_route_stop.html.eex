@@ -12,9 +12,9 @@
     <tbody>
         <%= for {vehicle_id, trip_id, departure_time} <- @missing_departures_by_route_stop do %>
         <tr>
-        <td><%= vehicle_id %></td>
-        <td><%= trip_id %></td>
-        <td><%= format_unix(departure_time) %></td>
+            <td><%= vehicle_id %></td>
+            <td><%= trip_id %></td>
+            <td><%= format_unix(departure_time) %></td>
         </tr>
         <% end %>
     </tbody>

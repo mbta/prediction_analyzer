@@ -6,7 +6,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
 
-  # TODO totals rows
   defp terminal_stops() do
     StopGroups.expand_groups(["_terminal"])
   end
