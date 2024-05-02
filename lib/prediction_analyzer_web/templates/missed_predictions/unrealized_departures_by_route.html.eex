@@ -14,8 +14,8 @@
     <tbody>
     <%= for {stop_id, stop_name, total, unrealized, pct} <- @unrealized_departures_by_route do %>
     <tr>
-        <td><%= link(stop_id, to: Routes.terminal_departure_path(@conn, :index, Map.put(@query_params, "stop_id", stop_id))) %></td>
-        <td><%= link(stop_name, to: Routes.terminal_departure_path(@conn, :index, Map.put(@query_params, "stop_id", stop_id))) %></td>
+        <td><%= link(stop_id, to: Routes.missed_predictions_path(@conn, :index, Map.put(@query_params, "stop_id", stop_id))) %></td>
+        <td><%= link(stop_name, to: Routes.missed_predictions_path(@conn, :index, Map.put(@query_params, "stop_id", stop_id))) %></td>
         <td><%= total %></td>
         <td><%= unrealized %></td>
         <td><%= :erlang.float_to_binary(pct, [decimals: 2]) %></td>

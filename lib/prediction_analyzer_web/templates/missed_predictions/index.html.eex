@@ -2,7 +2,7 @@
 <hr class="accuracy-separator">
 <div id="content">
 
-<%= form_for @conn, Routes.terminal_departure_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn _f -> %>
+<%= form_for @conn, Routes.missed_predictions_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn _f -> %>
 <div class="row">
   <div class="col-xs-3">
     <div class="accuracy-form-filters">
@@ -22,16 +22,16 @@
   <div class=row>
     <%= cond do %>
     <% assigns[:missing_departures_by_route_stop] -> %>
-      <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, @query_params |> Map.delete("missing_route") |> Map.delete("stop_id"))) %>
+      <%= link("Back to overview", to: Routes.missed_predictions_path(@conn, :index, @query_params |> Map.delete("missing_route") |> Map.delete("stop_id"))) %>
       <%= render("missing_departures_by_route_stop.html", assigns) %>
     <% assigns[:missing_departures_by_route] -> %>
-      <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missing_route"))) %>
+      <%= link("Back to overview", to: Routes.missed_predictions_path(@conn, :index, Map.delete(@query_params, "missing_route"))) %>
       <%= render("missing_departures_by_route.html", assigns) %>
     <% assigns[:unrealized_departures_by_route_stop] -> %>
-      <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, @query_params |> Map.delete("missed_route") |> Map.delete("stop_id"))) %>
+      <%= link("Back to overview", to: Routes.missed_predictions_path(@conn, :index, @query_params |> Map.delete("missed_route") |> Map.delete("stop_id"))) %>
       <%= render("unrealized_departures_by_route_stop.html", assigns) %>
     <% assigns[:unrealized_departures_by_route] -> %>
-      <%= link("Back to overview", to: Routes.terminal_departure_path(@conn, :index, Map.delete(@query_params, "missed_route"))) %>
+      <%= link("Back to overview", to: Routes.missed_predictions_path(@conn, :index, Map.delete(@query_params, "missed_route"))) %>
       <%= render("unrealized_departures_by_route.html", assigns) %>
     <% true -> %>
       <%= render("summary_tables.html", assigns) %>

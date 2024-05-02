@@ -1,4 +1,4 @@
-defmodule PredictionAnalyzerWeb.TerminalDepartureController do
+defmodule PredictionAnalyzerWeb.MissedPredictionsController do
   use PredictionAnalyzerWeb, :controller
   import Ecto.Query, only: [from: 2]
   alias PredictionAnalyzer.Predictions.Prediction
