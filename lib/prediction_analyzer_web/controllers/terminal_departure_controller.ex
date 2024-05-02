@@ -6,8 +6,6 @@ defmodule PredictionAnalyzerWeb.TerminalDepartureController do
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
 
-  # TODO 3 stage drill -> route -> route, stop -> full data
-  # TODO Remove exit only
   # TODO totals rows
   defp terminal_stops() do
     StopGroups.expand_groups(["_terminal"])
