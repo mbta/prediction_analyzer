@@ -15,7 +15,7 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
   defp parse_date(date_str) do
     case Date.from_iso8601(date_str) do
       {:ok, date} -> date
-      {:error, _} -> DateTime.now("America/New_York") |> DateTime.to_date()
+      {:error, _} -> DateTime.now!("America/New_York") |> DateTime.to_date()
     end
   end
 
