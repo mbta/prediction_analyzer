@@ -47,6 +47,8 @@ defmodule PredictionAnalyzerWeb.ViewHelpers do
   defp explainer_text(:route_ids), do: "Limit results to a single route or route type"
   defp explainer_text(:stop_ids), do: "Limit results to a single stop or set of stops"
   defp explainer_text(:direction_id), do: "Limit results to a single direction"
+  defp explainer_text(:date), do: "Lmit results to a service date"
+  defp explainer_text(:env), do: "Select the environment to query"
 
   defp explainer_text(:kinds),
     do: [

@@ -21,7 +21,7 @@
     <tr>
         <% total_departures = @unpredicted_departures |>  Enum.map(&(elem(&1, 1))) |> Enum.sum() %>
         <% total_unpredicted = @unpredicted_departures |>  Enum.map(&(elem(&1, 2))) |> Enum.sum() %>
-        <% total_pct = (total_unpredicted / total_departures) * 100 %>
+        <% total_pct = if total_departures > 0, do: (total_unpredicted / total_departures) * 100, else: 0.0 %>
         <td><strong>Total</strong></td>
         <td><strong><%= total_departures %></strong></td>
         <td><strong><%= total_unpredicted %></strong></td>
@@ -54,7 +54,7 @@
     <tr>
         <% total_trips = @missed_departures |>  Enum.map(&(elem(&1, 1))) |> Enum.sum() %>
         <% total_unrealized = @missed_departures |>  Enum.map(&(elem(&1, 2))) |> Enum.sum() %>
-        <% total_pct = (total_unrealized / total_trips) * 100 %>
+        <% total_pct = if total_trips > 0, do: (total_unrealized / total_trips) * 100, else: 0.0 %>
         <td><strong>Total</strong></td>
         <td><strong><%= total_trips %></strong></td>
         <td><strong><%= total_unrealized %></strong></td>

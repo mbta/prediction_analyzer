@@ -6,6 +6,8 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
 
+  # Order heavy/light rail
+  # Rename link "Unpredicted/Unrealized Departures"
   defp terminal_stops() do
     StopGroups.expand_groups(["_terminal"])
   end

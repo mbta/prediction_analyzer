@@ -2,16 +2,18 @@
 <hr class="accuracy-separator">
 <div id="content">
 
-<%= form_for @conn, Routes.missed_predictions_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn _f -> %>
+<%= form_for @conn, Routes.missed_predictions_path(@conn, :index), [method: :get, class: "accuracy-form", id: "accuracy-form"], fn f -> %>
 <div class="row">
   <div class="col-xs-3">
     <div class="accuracy-form-filters">
-
-      <input type="date" class="form-control" name="date" value="<%= @date %>">
-      <select name="env">
-        <option value="prod" <%= if @env == "prod", do: "selected" %>>Prod</option>
-        <option value="dev-green" <%= if @env == "dev-green", do: "selected" %>>Dev Green</option>
-      </select>
+      <div class="form-group">
+        <%= explainer_label(f, :date, "Date") %>
+        <%= date_input(f, :date, class: "form-control") %>
+      </div>
+      <div class="form-group">
+        <%= explainer_label(f, :env, "Environment") %>
+        <%= select(f, :env, ["Prod": "prod", "Dev Green": "dev-green"], class: "form-control") %>
+      </div>
       <input type="submit" value="Submit">
     </div>
   </div>
