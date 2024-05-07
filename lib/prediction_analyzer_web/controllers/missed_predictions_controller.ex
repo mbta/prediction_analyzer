@@ -7,7 +7,6 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
   alias PredictionAnalyzer.StopNameFetcher
 
   # Order heavy/light rail
-  # Rename link "Unpredicted/Unrealized Departures"
   defp terminal_stops() do
     StopGroups.expand_groups(["_terminal"])
   end
@@ -285,6 +284,13 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
       params
       |> base_params()
       |> load_data()
+
+    conn =
+      put_in(
+        conn,
+        [Access.key(:params, %{}), Access.key("filters", %{}), Access.key("chart_range", %{})],
+        "Missed/Missing Predictions"
+      )
 
     render(conn, "index.html", assigns)
   end

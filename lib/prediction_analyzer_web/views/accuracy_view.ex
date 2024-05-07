@@ -109,32 +109,6 @@ defmodule PredictionAnalyzerWeb.AccuracyView do
   defp stop_option({id, nil}), do: {id, id}
   defp stop_option({id, description}), do: {"#{description} (#{id})", id}
 
-  @spec chart_range_class(map(), String.t()) :: String.t()
-  def chart_range_class(%{params: %{"filters" => %{"chart_range" => "Hourly"}}}, "Single Day"),
-    do: "chart-range-link chart-range-link-active"
-
-  def chart_range_class(%{params: %{"filters" => %{"chart_range" => "Daily"}}}, "Multi-Day"),
-    do: "chart-range-link chart-range-link-active"
-
-  def chart_range_class(%{params: %{"filters" => %{"chart_range" => chart_range}}}, chart_range),
-    do: "chart-range-link chart-range-link-active"
-
-  def chart_range_class(_, _), do: "chart-range-link"
-
-  @spec chart_range_id(String.t()) :: String.t()
-  def chart_range_id("Single Day"), do: "link-hourly"
-  def chart_range_id("Multi-Day"), do: "link-daily"
-
-  def chart_range_id(chart_range) do
-    normalized_chart_range =
-      chart_range
-      |> String.downcase()
-      |> String.replace(~r/\s+/, "_")
-      |> String.downcase()
-
-    "link-#{normalized_chart_range}"
-  end
-
   def time_resolution_options() do
     [
       {"10 minutes", "10"},

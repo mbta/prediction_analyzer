@@ -79,25 +79,4 @@ defmodule PredictionAnalyzerWeb.AccuracyViewTest do
              ]
     end
   end
-
-  test "chart_range_class/2" do
-    matching_conn =
-      build_conn(:get, "/accuracy", %{
-        "filters" => %{"chart_range" => "some_range"}
-      })
-
-    unmatching_conn =
-      build_conn(:get, "/accuracy", %{
-        "filters" => %{"chart_range" => "other_range"}
-      })
-
-    assert AccuracyView.chart_range_class(matching_conn, "some_range") ==
-             "chart-range-link chart-range-link-active"
-
-    assert AccuracyView.chart_range_class(unmatching_conn, "some_range") == "chart-range-link"
-  end
-
-  test "chart_range_id/1" do
-    assert AccuracyView.chart_range_id("SomeRange") == "link-somerange"
-  end
 end

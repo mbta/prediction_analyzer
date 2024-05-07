@@ -1,9 +1,8 @@
 <%= render(PredictionAnalyzerWeb.PartialsView, "header.html", assigns) %>
 <hr class="accuracy-separator">
-<div id="content">
+<div id="content" class="row">
 
-<%= form_for @conn, Routes.missed_predictions_path(@conn, :index), [method: :get, class: "accuracy-form", id: "accuracy-form"], fn f -> %>
-<div class="row">
+<%= form_for @conn, Routes.missed_predictions_path(@conn, :index), [method: :get, class: "filters-form", id: "filter-form"], fn f -> %>
   <div class="col-xs-3">
     <div class="accuracy-form-filters">
       <div class="form-group">
@@ -14,13 +13,15 @@
         <%= explainer_label(f, :env, "Environment") %>
         <%= select(f, :env, ["Prod": "prod", "Dev Green": "dev-green"], class: "form-control") %>
       </div>
-      <input type="submit" value="Submit">
+      <%= submit "Filter", id: "filter-submit-btn", class: "btn btn-default" %>
     </div>
   </div>
-</div>
 <% end %>
 
-<div class="container">
+<div class="col-xs-9">
+  <%= form_for @conn, Routes.missed_predictions_path(@conn, :index), [as: "filters", method: :get, class: "accuracy-form", id: "accuracy-form", action: "/accuracy"], fn f -> %>
+  <%= render(PredictionAnalyzerWeb.PartialsView, "chart_selection_boxes.html", %{f: f, conn: @conn}) %>
+  <% end %>
   <div class=row>
     <%= cond do %>
     <% assigns[:missing_departures_by_route_stop] -> %>
