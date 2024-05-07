@@ -6,7 +6,6 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
 
-  # Order heavy/light rail
   defp terminal_stops() do
     StopGroups.expand_groups(["_terminal"])
   end
@@ -213,6 +212,9 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
   defp load_data(params) do
     %{env: env, min_time: min_time, max_time: max_time} = params
 
+    sort_map =
+      PredictionAnalyzer.Utilities.routes_for_mode(:subway) |> Enum.with_index() |> Enum.into(%{})
+
     unpredicted_departures_query =
       from(ve in VehicleEvent,
         as: :vehicle_event,
@@ -225,7 +227,6 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
             ve.departure_time <= ^max_time and
             ve.stop_id in ^terminal_stops(),
         group_by: ve.route_id,
-        order_by: ve.route_id,
         select:
           {ve.route_id, count(ve.id),
            count(ve.id)
@@ -252,7 +253,10 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
             )) * 100.0 / count(ve.id)}
       )
 
-    unpredicted_departures = PredictionAnalyzer.Repo.all(unpredicted_departures_query)
+    unpredicted_departures =
+      unpredicted_departures_query
+      |> PredictionAnalyzer.Repo.all()
+      |> Enum.sort_by(&Map.get(sort_map, elem(&1, 0), 0))
 
     missed_departures_query =
       from(p in Prediction,
@@ -263,7 +267,6 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
             not is_nil(p.departure_time) and
             p.stop_id in ^terminal_stops(),
         group_by: p.route_id,
-        order_by: [desc: count(p.trip_id, :distinct)],
         select:
           {p.route_id, count(p.trip_id, :distinct),
            count(p.trip_id, :distinct) |> filter(is_nil(p.vehicle_event_id)),
@@ -271,7 +274,10 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
              count(p.trip_id, :distinct)}
       )
 
-    missed_departures = PredictionAnalyzer.Repo.all(missed_departures_query)
+    missed_departures =
+      missed_departures_query
+      |> PredictionAnalyzer.Repo.all()
+      |> Enum.sort_by(&Map.get(sort_map, elem(&1, 0), 0))
 
     Map.merge(params, %{
       unpredicted_departures: unpredicted_departures,
