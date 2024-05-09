@@ -70,7 +70,12 @@ defmodule PredictionAnalyzer.Mixfile do
       "ecto.setup": ["ecto.create", "ecto.load", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.rollback": ["ecto.rollback", "ecto.dump"],
-      test: ["ecto.create --quiet", "ecto.load --quiet", "ecto.migrate --quiet", "test"]
+      test: [
+        "ecto.create --quiet",
+        "ecto.load --quiet --skip-if-loaded",
+        "ecto.migrate --quiet",
+        "test"
+      ]
     ]
   end
 end
