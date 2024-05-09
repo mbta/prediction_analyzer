@@ -294,4 +294,227 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
       assert Utilities.routes_for_mode(:subway) == routes
     end
   end
+
+  describe "missed_departures_summary/2" do
+    test "date filters by service date rather than calendar date" do
+      insert_predictions([
+        # Just after start of service 7/1
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[04:01:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[04:01:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip1"
+        },
+        # Just before end of 7/1 service
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-02], ~T[01:59:00]),
+          file_timestamp: unix(~D[2019-07-02], ~T[01:59:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip2"
+        },
+        # Just before start of service 7/5
+        %{
+          id: 3,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-05], ~T[03:59:00]),
+          file_timestamp: unix(~D[2019-07-05], ~T[03:59:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip3"
+        },
+        # Just after end of 7/5 service
+        %{
+          id: 4,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-06], ~T[02:01:00]),
+          file_timestamp: unix(~D[2019-07-06], ~T[02:01:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip4"
+        }
+      ])
+
+      assert [{"route1", 2, 2, 100.0}] =
+               MissedPredictions.missed_departures_summary(~D[2019-07-01], "prod")
+
+      assert [] = MissedPredictions.missed_departures_summary(~D[2019-07-05], "prod")
+    end
+
+    test "aggregates multiple predictions for the same trip into a single record" do
+      insert_predictions([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip1"
+        },
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:01:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:01:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip1"
+        }
+      ])
+
+      assert [{"route1", 1, 1, 100.0}] =
+               MissedPredictions.missed_departures_summary(~D[2019-07-01], "prod")
+    end
+
+    test "predictions without a departure time are not considered" do
+      insert_predictions([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: nil,
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip1"
+        }
+      ])
+
+      assert [] = MissedPredictions.missed_departures_summary(~D[2019-07-01], "prod")
+    end
+
+    test "predictions for non-terminals are not considered" do
+      insert_predictions([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "non-terminal",
+          route_id: "route1",
+          trip_id: "trip1"
+        }
+      ])
+
+      assert [] = MissedPredictions.missed_departures_summary(~D[2019-07-01], "prod")
+    end
+
+    test "predictions with a vehicle event are not unrealized" do
+      insert_vehicle_events([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip1",
+          is_deleted: false
+        }
+      ])
+
+      insert_predictions([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip1",
+          vehicle_event_id: 1
+        }
+      ])
+
+      assert [{"route1", 1, 0, 0.0}] =
+               MissedPredictions.missed_departures_summary(~D[2019-07-01], "prod")
+    end
+
+    test "results are sorted in dropdown order" do
+      insert_predictions([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "Red",
+          trip_id: "trip1"
+        },
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "Green-E",
+          trip_id: "trip2"
+        },
+        %{
+          id: 3,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "Blue",
+          trip_id: "trip3"
+        },
+        %{
+          id: 4,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "Green-D",
+          trip_id: "trip4"
+        },
+        %{
+          id: 5,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "Green-C",
+          trip_id: "trip5"
+        },
+        %{
+          id: 6,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "Green-B",
+          trip_id: "trip6"
+        },
+        %{
+          id: 7,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "Orange",
+          trip_id: "trip7"
+        },
+        %{
+          id: 8,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "Mattapan",
+          trip_id: "trip8"
+        }
+      ])
+
+      routes =
+        MissedPredictions.missed_departures_summary(~D[2019-07-01], "prod")
+        |> Enum.map(&elem(&1, 0))
+
+      assert Utilities.routes_for_mode(:subway) == routes
+    end
+  end
 end
