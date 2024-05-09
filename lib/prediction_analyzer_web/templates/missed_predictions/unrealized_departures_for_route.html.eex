@@ -1,34 +1,34 @@
 <div class="col-sm-12">
-<h3>Unpredicted Departures</h3>
+<h3>Unrealized Departure Predictions</h3>
 <h4><%= @route %> - All Stops</h4>
 <table class="table">
     <thead>
     <tr>
         <th>Stop ID</th>
         <th>Stop Name</th>
-        <th>Total Departures</th>
-        <th>Unpredicted Departures</th>
+        <th>Total Trips</th>
+        <th>Trips With Unrealized Departures</th>
         <th>Percentage</th>
     </tr>
     </thead>
     <tbody>
-    <%= for {stop_id, stop_name, total, unpredicted, pct} <- @missing_departures_by_route do %>
+    <%= for {stop_id, stop_name, total, unrealized, pct} <- @unrealized_departures_for_route do %>
     <tr>
         <td><%= link(stop_id, to: Routes.missed_predictions_path(@conn, :index, Map.put(@query_params, "stop_id", stop_id))) %></td>
         <td><%= link(stop_name, to: Routes.missed_predictions_path(@conn, :index, Map.put(@query_params, "stop_id", stop_id))) %></td>
         <td><%= total %></td>
-        <td><%= unpredicted %></td>
+        <td><%= unrealized %></td>
         <td><%= :erlang.float_to_binary(pct, [decimals: 2]) %></td>
     </tr>
     <% end %>
     <tr>
-        <% total_departures = @missing_departures_by_route |> Enum.map(&(elem(&1, 2))) |> Enum.sum() %>
-        <% total_unpredicted = @missing_departures_by_route |>  Enum.map(&(elem(&1, 3))) |> Enum.sum() %>
-        <% total_pct = if total_departures > 0, do: (total_unpredicted / total_departures) * 100, else: 0.0 %>
+        <% total_trips = @unrealized_departures_for_route |> Enum.map(&(elem(&1, 2))) |> Enum.sum() %>
+        <% total_unrealized = @unrealized_departures_for_route |>  Enum.map(&(elem(&1, 3))) |> Enum.sum() %>
+        <% total_pct = if total_trips > 0, do: (total_unrealized / total_trips) * 100, else: 0.0 %>
         <td></td>
         <td>Total</td>
-        <td><strong><%= total_departures %></strong></td>
-        <td><strong><%= total_unpredicted %></strong></td>
+        <td><strong><%= total_trips %></strong></td>
+        <td><strong><%= total_unrealized %></strong></td>
         <td><strong><%= :erlang.float_to_binary(total_pct, [decimals: 2]) %></strong></td>
     </tr>
     </tbody>

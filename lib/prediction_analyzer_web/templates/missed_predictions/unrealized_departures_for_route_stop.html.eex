@@ -14,7 +14,7 @@
         </tr>
     </thead>
     <tbody>
-        <%= for {vehicle_id, trip_id, min_departure_time, max_departure_time, min_file_time, max_file_time, predictions} <- @unrealized_departures_by_route_stop do %>
+        <%= for {vehicle_id, trip_id, min_departure_time, max_departure_time, min_file_time, max_file_time, predictions} <- @unrealized_departures_for_route_stop do %>
         <tr>
         <td><%= vehicle_id %></td>
         <td><%= trip_id %></td>
