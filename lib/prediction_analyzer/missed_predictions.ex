@@ -153,7 +153,7 @@ defmodule PredictionAnalyzer.MissedPredictions do
     |> Enum.sort_by(&Map.get(sort_map(), elem(&1, 0), 0))
   end
 
-  def missed_departues_for_route(date, env, route_id) do
+  def missed_departures_for_route(date, env, route_id) do
     {min_time, max_time} = service_times(date)
 
     missed_departures_query =

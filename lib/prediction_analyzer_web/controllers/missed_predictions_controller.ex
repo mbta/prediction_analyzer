@@ -68,7 +68,7 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
        when not is_nil(missed_route) do
     Map.merge(params, %{
       unrealized_departures_for_route:
-        MissedPredictions.missed_departues_for_route(date, env, missed_route),
+        MissedPredictions.missed_departures_for_route(date, env, missed_route),
       route: missed_route
     })
   end

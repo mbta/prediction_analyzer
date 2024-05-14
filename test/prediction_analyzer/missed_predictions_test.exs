@@ -21,6 +21,15 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
     {^cnt, _} = Repo.insert_all(Prediction, predictions)
   end
 
+  setup_all do
+    {:ok, _pid} =
+      start_supervised(
+        {PredictionAnalyzer.StopNameFetcher, name: PredictionAnalyzer.StopNameFetcher}
+      )
+
+    :ok
+  end
+
   describe "unpredicted_departures_summary/2" do
     test "date filter's by service dates rather than calendar dates" do
       insert_vehicle_events([
@@ -516,5 +525,121 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
 
       assert Utilities.routes_for_mode(:subway) == routes
     end
+  end
+
+  describe "missed_departures_for_route/3" do
+    test "includes stop names as well as IDs" do
+      insert_predictions([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1"
+        }
+      ])
+
+      assert [{"70197", "Park Street - Green Line - (C) Cleveland Circle", 1, 1, 100.0}] =
+               MissedPredictions.missed_departures_for_route(~D[2019-07-01], "prod", "route1")
+    end
+
+    test "it does not include stop_ids not in terminal stops" do
+      insert_predictions([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "non-terminal",
+          route_id: "route1",
+          trip_id: "trip1"
+        },
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip2"
+        }
+      ])
+
+      included_stops =
+        MissedPredictions.missed_departures_for_route(~D[2019-07-01], "prod", "route1")
+        |> Enum.map(&elem(&1, 0))
+
+      assert ["70036"] = included_stops
+    end
+
+    test "predicted and unpredicted departures are summarized correctly" do
+      insert_vehicle_events([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip1",
+          is_deleted: false
+        }
+      ])
+
+      insert_predictions([
+        %{
+          id: 1,
+          vehicle_event_id: 1,
+          route_id: "route1",
+          trip_id: "trip1",
+          stop_id: "70036",
+          file_timestamp: unix(~D[2019-07-01], ~T[10:01:00]),
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00])
+        },
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:02:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:02:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip2"
+        }
+      ])
+
+      assert [{"70036", "70036", 2, 1, 50.0}] =
+               MissedPredictions.missed_departures_for_route(~D[2019-07-01], "prod", "route1")
+    end
+  end
+
+  describe "missed_departures_for_route_stop/4" do
+    test "returns missed departures" do
+      insert_predictions([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          vehicle_id: "vehicle1"
+        }
+      ])
+
+      assert [
+               {"vehicle1", "trip1", 1_561_989_600, 1_561_989_600, 1_561_989_600, 1_561_989_600,
+                1}
+             ] =
+               MissedPredictions.missed_departures_for_route_stop(
+                 ~D[2019-07-01],
+                 "prod",
+                 "route1",
+                 "70197"
+               )
+    end
+
+    # TODO moar tests!
   end
 end
