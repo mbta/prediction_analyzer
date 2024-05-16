@@ -3,8 +3,6 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
   alias PredictionAnalyzer.StopNameFetcher
   alias PredictionAnalyzer.MissedPredictions
 
-  # TODO: populate date filter when date is not provided
-
   defp parse_date(nil), do: Date.utc_today()
 
   defp parse_date(date_str) do
@@ -87,11 +85,12 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
       |> load_data()
 
     conn =
-      put_in(
-        conn,
+      conn
+      |> put_in(
         [Access.key(:params, %{}), Access.key("filters", %{}), Access.key("chart_range", %{})],
         "Missed/Missing Predictions"
       )
+      |> put_in([Access.key(:params, %{}), "date"], Date.to_iso8601(assigns[:date]))
 
     render(conn, "index.html", assigns)
   end
