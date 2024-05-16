@@ -304,6 +304,256 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
     end
   end
 
+  describe "unpredicted_departures_for_route/3" do
+    test "includes stop names as well as IDs" do
+      insert_vehicle_events([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          is_deleted: false
+        }
+      ])
+
+      assert [{"70197", "Park Street - Green Line - (C) Cleveland Circle", 1, 1, 100.0}] =
+               MissedPredictions.unpredicted_departures_for_route(
+                 ~D[2019-07-01],
+                 "prod",
+                 "route1"
+               )
+    end
+
+    test "it does not include stop_ids not in terminal stops" do
+      insert_vehicle_events([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "non-terminal",
+          route_id: "route1",
+          trip_id: "trip1",
+          is_deleted: false
+        },
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70036",
+          route_id: "route1",
+          trip_id: "trip2",
+          is_deleted: false
+        }
+      ])
+
+      included_stops =
+        MissedPredictions.unpredicted_departures_for_route(~D[2019-07-01], "prod", "route1")
+        |> Enum.map(&elem(&1, 0))
+
+      assert ["70036"] = included_stops
+    end
+
+    test "vehicle events with predictions after departure are unpredicted" do
+      insert_vehicle_events([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          is_deleted: false
+        }
+      ])
+
+      insert_predictions([
+        %{
+          id: 1,
+          vehicle_event_id: 1,
+          route_id: "route1",
+          trip_id: "trip1",
+          stop_id: "70197",
+          file_timestamp: unix(~D[2019-07-01], ~T[10:01:00]),
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00])
+        }
+      ])
+
+      assert [{"70197", "Park Street - Green Line - (C) Cleveland Circle", 1, 1, 100.0}] =
+               MissedPredictions.unpredicted_departures_for_route(
+                 ~D[2019-07-01],
+                 "prod",
+                 "route1"
+               )
+    end
+
+    test "vehicle events with and without predictions are summarized correctly" do
+      insert_vehicle_events([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          is_deleted: false
+        },
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:05:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          is_deleted: false
+        },
+        %{
+          id: 3,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:01:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          is_deleted: false
+        },
+        %{
+          id: 4,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[11:02:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip2",
+          is_deleted: false
+        }
+      ])
+
+      insert_predictions([
+        %{
+          id: 1,
+          vehicle_event_id: 1,
+          route_id: "route1",
+          trip_id: "trip1",
+          stop_id: "70197",
+          file_timestamp: unix(~D[2019-07-01], ~T[09:55:00]),
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00])
+        }
+      ])
+
+      assert [
+               {"70197", "Park Street - Green Line - (C) Cleveland Circle", 4, 3, 75.0}
+             ] =
+               MissedPredictions.unpredicted_departures_for_route(
+                 ~D[2019-07-01],
+                 "prod",
+                 "route1"
+               )
+    end
+  end
+
+  describe "upredicted_departues_for_route_stop" do
+    test "returns unpredicted departures" do
+      insert_vehicle_events([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          vehicle_id: "vehicle1",
+          is_deleted: false
+        },
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:02:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          vehicle_id: "vehicle1",
+          is_deleted: false
+        },
+        %{
+          id: 3,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:04:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip2",
+          vehicle_id: "vehicle2",
+          is_deleted: false
+        }
+      ])
+
+      assert [
+               {"vehicle1", "trip1", 1_561_989_600},
+               {"vehicle1", "trip1", 1_561_989_720},
+               {"vehicle2", "trip2", 1_561_989_840}
+             ] =
+               MissedPredictions.unpredicted_departures_for_route_stop(
+                 ~D[2019-07-01],
+                 "prod",
+                 "route1",
+                 "70197"
+               )
+    end
+
+    test "does not include predicted departures" do
+      insert_vehicle_events([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          vehicle_id: "vehicle1",
+          is_deleted: false
+        },
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:02:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          vehicle_id: "vehicle1",
+          is_deleted: false
+        }
+      ])
+
+      insert_predictions([
+        %{
+          id: 1,
+          vehicle_event_id: 1,
+          route_id: "route1",
+          trip_id: "trip1",
+          stop_id: "70197",
+          file_timestamp: unix(~D[2019-07-01], ~T[09:55:00]),
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00])
+        },
+        %{
+          id: 2,
+          vehicle_event_id: 2,
+          route_id: "route1",
+          trip_id: "trip1",
+          stop_id: "70197",
+          file_timestamp: unix(~D[2019-07-01], ~T[09:57:00]),
+          departure_time: unix(~D[2019-07-01], ~T[10:02:00])
+        }
+      ])
+
+      assert [] =
+               MissedPredictions.unpredicted_departures_for_route_stop(
+                 ~D[2019-07-01],
+                 "prod",
+                 "route1",
+                 "70197"
+               )
+    end
+  end
+
   describe "missed_departures_summary/2" do
     test "date filters by service date rather than calendar date" do
       insert_predictions([
@@ -640,6 +890,67 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
                )
     end
 
-    # TODO moar tests!
+    test "missed departures are summarized by vehicle, trip" do
+      insert_predictions([
+        %{
+          id: 1,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:00:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:00:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          vehicle_id: "vehicle1"
+        },
+        %{
+          id: 2,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:05:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:02:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          vehicle_id: "vehicle1"
+        },
+        %{
+          id: 3,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[10:01:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[10:01:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip1",
+          vehicle_id: "vehicle2"
+        },
+        %{
+          id: 4,
+          environment: "prod",
+          departure_time: unix(~D[2019-07-01], ~T[11:02:00]),
+          file_timestamp: unix(~D[2019-07-01], ~T[11:02:00]),
+          stop_id: "70197",
+          route_id: "route1",
+          trip_id: "trip2",
+          vehicle_id: "vehicle1"
+        }
+      ])
+
+      assert [
+               # vehicle1 was predicted for trip1 whith file times of 10:00 and 10:02 and departure times of 10:00 and 10:05
+               {"vehicle1", "trip1", 1_561_989_600, 1_561_989_900, 1_561_989_600, 1_561_989_720,
+                2},
+               # trip2 is it's own entry
+               {"vehicle1", "trip2", 1_561_993_320, 1_561_993_320, 1_561_993_320, 1_561_993_320,
+                1},
+               # vehicle2 is it's own entry even though it's the same trip as vehicle1
+               {"vehicle2", "trip1", 1_561_989_660, 1_561_989_660, 1_561_989_660, 1_561_989_660,
+                1}
+             ] =
+               MissedPredictions.missed_departures_for_route_stop(
+                 ~D[2019-07-01],
+                 "prod",
+                 "route1",
+                 "70197"
+               )
+    end
   end
 end
