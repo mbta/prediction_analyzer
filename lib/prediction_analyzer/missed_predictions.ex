@@ -96,7 +96,7 @@ defmodule PredictionAnalyzer.MissedPredictions do
 
     unpredicted_departures_query
     |> PredictionAnalyzer.Repo.all()
-    |> add_stop_names(0)
+    |> add_stop_names()
   end
 
   def unpredicted_departures_for_route_stop(date, env, route_id, stop_id) do
@@ -174,7 +174,7 @@ defmodule PredictionAnalyzer.MissedPredictions do
              count(p.trip_id, :distinct)}
       )
 
-    PredictionAnalyzer.Repo.all(missed_departures_query) |> add_stop_names(0)
+    PredictionAnalyzer.Repo.all(missed_departures_query) |> add_stop_names()
   end
 
   def missed_departures_for_route_stop(date, env, route_id, stop_id) do
@@ -219,13 +219,13 @@ defmodule PredictionAnalyzer.MissedPredictions do
     StopGroups.expand_groups(["_terminal"])
   end
 
-  defp add_stop_names(data, idx) do
+  defp add_stop_names(data) do
     stop_dict = StopNameFetcher.get_stop_descriptions(:subway)
 
     Enum.map(data, fn row ->
-      stop_id = elem(row, idx)
+      stop_id = elem(row, 0)
       stop_name = Map.get(stop_dict, stop_id, stop_id)
-      Tuple.insert_at(row, idx + 1, stop_name)
+      Tuple.insert_at(row, 1, stop_name)
     end)
   end
 end
