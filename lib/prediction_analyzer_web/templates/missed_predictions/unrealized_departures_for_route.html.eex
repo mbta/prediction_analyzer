@@ -22,9 +22,7 @@
     </tr>
     <% end %>
     <tr>
-        <% total_trips = @unrealized_departures_for_route |> Enum.map(&(elem(&1, 2))) |> Enum.sum() %>
-        <% total_unrealized = @unrealized_departures_for_route |>  Enum.map(&(elem(&1, 3))) |> Enum.sum() %>
-        <% total_pct = if total_trips > 0, do: (total_unrealized / total_trips) * 100, else: 0.0 %>
+        <% {total_trips, total_unrealized, total_pct} = @totals %>
         <td></td>
         <td>Total</td>
         <td><strong><%= total_trips %></strong></td>

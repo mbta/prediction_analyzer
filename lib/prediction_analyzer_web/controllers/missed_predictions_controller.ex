@@ -23,6 +23,13 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
     })
   end
 
+  defp totals(data, base_idx, missed_idx) do
+    total_missed = data |> Enum.map(&elem(&1, missed_idx)) |> Enum.sum()
+    total_base = data |> Enum.map(&elem(&1, base_idx)) |> Enum.sum()
+    total_pct = if total_base > 0, do: total_missed * 100.0 / total_base, else: 0.0
+    {total_base, total_missed, total_pct}
+  end
+
   defp load_data(
          %{"missing_route" => missing_route, "stop_id" => stop_id, env: env, date: date} = params
        )
@@ -40,9 +47,15 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
 
   defp load_data(%{"missing_route" => missing_route, env: env, date: date} = params)
        when not is_nil(missing_route) do
+    missing_departures_for_route =
+      MissedPredictions.unpredicted_departures_for_route(date, env, missing_route)
+
+    totals = totals(missing_departures_for_route, 2, 3)
+
     Map.merge(params, %{
       missing_departures_for_route:
         MissedPredictions.unpredicted_departures_for_route(date, env, missing_route),
+      totals: totals,
       route: missing_route
     })
   end
@@ -64,17 +77,30 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsController do
 
   defp load_data(%{"missed_route" => missed_route, env: env, date: date} = params)
        when not is_nil(missed_route) do
+    unrealized_departures_for_route =
+      MissedPredictions.missed_departures_for_route(date, env, missed_route)
+
+    totals = totals(unrealized_departures_for_route, 2, 3)
+
     Map.merge(params, %{
       unrealized_departures_for_route:
         MissedPredictions.missed_departures_for_route(date, env, missed_route),
+      totals: totals,
       route: missed_route
     })
   end
 
   defp load_data(%{env: env, date: date} = params) do
+    unpredicted_departures = MissedPredictions.unpredicted_departures_summary(date, env)
+    missed_departures = MissedPredictions.missed_departures_summary(date, env)
+    unpredicted_totals = totals(unpredicted_departures, 1, 2)
+    missed_totals = totals(missed_departures, 1, 2)
+
     Map.merge(params, %{
-      unpredicted_departures: MissedPredictions.unpredicted_departures_summary(date, env),
-      missed_departures: MissedPredictions.missed_departures_summary(date, env)
+      unpredicted_departures: unpredicted_departures,
+      missed_departures: missed_departures,
+      unpredicted_totals: unpredicted_totals,
+      missed_totals: missed_totals
     })
   end
 
