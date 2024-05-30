@@ -14,7 +14,7 @@
         <tr>
             <td><%= vehicle_id %></td>
             <td><%= trip_id %></td>
-            <td><%= format_unix(departure_time) %></td>
+            <td><%= departure_time %></td>
         </tr>
         <% end %>
     </tbody>

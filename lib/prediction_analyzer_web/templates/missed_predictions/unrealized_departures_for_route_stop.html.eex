@@ -18,10 +18,10 @@
         <tr>
         <td><%= vehicle_id %></td>
         <td><%= trip_id %></td>
-        <td><%= format_unix(min_departure_time) %></td>
-        <td><%= format_unix(max_departure_time) %></td>
-        <td><%= format_unix(min_file_time) %></td>
-        <td><%= format_unix(max_file_time) %></td>
+        <td><%= min_departure_time %></td>
+        <td><%= max_departure_time %></td>
+        <td><%= min_file_time %></td>
+        <td><%= max_file_time %></td>
         <td><%= predictions %></td>
         </tr>
         <% end %>

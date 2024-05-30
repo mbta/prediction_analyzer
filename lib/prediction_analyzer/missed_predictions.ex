@@ -4,6 +4,7 @@ defmodule PredictionAnalyzer.MissedPredictions do
   alias PredictionAnalyzer.Predictions.Prediction
   alias PredictionAnalyzer.Filters.StopGroups
   alias PredictionAnalyzer.StopNameFetcher
+  import Utilities.Time, only: [format_unix: 1]
 
   def unpredicted_departures_summary(date, env) do
     {min_time, max_time} = service_times(date)
@@ -126,7 +127,15 @@ defmodule PredictionAnalyzer.MissedPredictions do
         select: {ve.vehicle_id, ve.trip_id, ve.departure_time}
       )
 
-    PredictionAnalyzer.Repo.all(unpredicted_departures_query)
+    unpredicted_departures_query
+    |> PredictionAnalyzer.Repo.all()
+    |> Enum.map(fn row ->
+      {
+        elem(row, 0),
+        elem(row, 1),
+        elem(row, 2) |> format_unix()
+      }
+    end)
   end
 
   def missed_departures_summary(date, env) do
@@ -197,7 +206,19 @@ defmodule PredictionAnalyzer.MissedPredictions do
            min(p.file_timestamp), max(p.file_timestamp), count(p.id)}
       )
 
-    PredictionAnalyzer.Repo.all(missed_departures_query)
+    missed_departures_query
+    |> PredictionAnalyzer.Repo.all()
+    |> Enum.map(fn row ->
+      {
+        elem(row, 0),
+        elem(row, 1),
+        elem(row, 2) |> format_unix(),
+        elem(row, 3) |> format_unix(),
+        elem(row, 4) |> format_unix(),
+        elem(row, 5) |> format_unix(),
+        elem(row, 6)
+      }
+    end)
   end
 
   defp service_times(date) do
