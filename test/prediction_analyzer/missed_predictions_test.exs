@@ -487,9 +487,9 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
       ])
 
       assert [
-               {"vehicle1", "trip1", 1_561_989_600},
-               {"vehicle1", "trip1", 1_561_989_720},
-               {"vehicle2", "trip2", 1_561_989_840}
+               {"vehicle1", "trip1", "2019-07-01 10:00:00 EDT"},
+               {"vehicle1", "trip1", "2019-07-01 10:02:00 EDT"},
+               {"vehicle2", "trip2", "2019-07-01 10:04:00 EDT"}
              ] =
                MissedPredictions.unpredicted_departures_for_route_stop(
                  ~D[2019-07-01],
@@ -879,8 +879,8 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
       ])
 
       assert [
-               {"vehicle1", "trip1", 1_561_989_600, 1_561_989_600, 1_561_989_600, 1_561_989_600,
-                1}
+               {"vehicle1", "trip1", "2019-07-01 10:00:00 EDT", "2019-07-01 10:00:00 EDT",
+                "2019-07-01 10:00:00 EDT", "2019-07-01 10:00:00 EDT", 1}
              ] =
                MissedPredictions.missed_departures_for_route_stop(
                  ~D[2019-07-01],
@@ -936,14 +936,14 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
 
       assert [
                # vehicle1 was predicted for trip1 whith file times of 10:00 and 10:02 and departure times of 10:00 and 10:05
-               {"vehicle1", "trip1", 1_561_989_600, 1_561_989_900, 1_561_989_600, 1_561_989_720,
-                2},
+               {"vehicle1", "trip1", "2019-07-01 10:00:00 EDT", "2019-07-01 10:05:00 EDT",
+                "2019-07-01 10:00:00 EDT", "2019-07-01 10:02:00 EDT", 2},
                # trip2 is it's own entry
-               {"vehicle1", "trip2", 1_561_993_320, 1_561_993_320, 1_561_993_320, 1_561_993_320,
-                1},
+               {"vehicle1", "trip2", "2019-07-01 11:02:00 EDT", "2019-07-01 11:02:00 EDT",
+                "2019-07-01 11:02:00 EDT", "2019-07-01 11:02:00 EDT", 1},
                # vehicle2 is it's own entry even though it's the same trip as vehicle1
-               {"vehicle2", "trip1", 1_561_989_660, 1_561_989_660, 1_561_989_660, 1_561_989_660,
-                1}
+               {"vehicle2", "trip1", "2019-07-01 10:01:00 EDT", "2019-07-01 10:01:00 EDT",
+                "2019-07-01 10:01:00 EDT", "2019-07-01 10:01:00 EDT", 1}
              ] =
                MissedPredictions.missed_departures_for_route_stop(
                  ~D[2019-07-01],
