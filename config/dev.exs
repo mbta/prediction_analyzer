@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -51,7 +51,7 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
   ]
 
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+config :logger, :console, format: "[$level] $message\n", level: :error
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.

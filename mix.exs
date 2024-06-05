@@ -37,16 +37,17 @@ defmodule PredictionAnalyzer.Mixfile do
     [
       {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:ex_aws_rds, "~> 2.0"},
-      {:ecto, "~> 2.0"},
+      {:ecto, "~> 3.11"},
+      {:ecto_sql, "~> 3.11"},
       {:lcov_ex, "~> 0.2", only: :test, runtime: false},
       {:gettext, "~> 0.11"},
       {:hackney, "~> 1.17.0"},
       {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.5.0"},
-      {:phoenix_ecto, "~> 3.2"},
+      {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:phoenix_live_reload, "~> 1.4", only: :dev},
       {:phoenix_pubsub, "~> 2.0"},
       {:plug_cowboy, "~> 2.1"},
       {:plug, "~> 1.10"},
@@ -69,7 +70,12 @@ defmodule PredictionAnalyzer.Mixfile do
       "ecto.setup": ["ecto.create", "ecto.load", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.rollback": ["ecto.rollback", "ecto.dump"],
-      test: ["ecto.create --quiet", "ecto.load --quiet", "ecto.migrate --quiet", "test"]
+      test: [
+        "ecto.create --quiet",
+        "ecto.load --quiet --skip-if-loaded",
+        "ecto.migrate --quiet",
+        "test"
+      ]
     ]
   end
 end

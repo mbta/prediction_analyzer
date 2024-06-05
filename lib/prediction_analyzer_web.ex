@@ -41,6 +41,8 @@ defmodule PredictionAnalyzerWeb do
       alias PredictionAnalyzerWeb.Router.Helpers, as: Routes
       import PredictionAnalyzerWeb.ErrorHelpers
       import PredictionAnalyzerWeb.Gettext
+      import PredictionAnalyzerWeb.ViewHelpers
+      import Utilities.Time
     end
   end
 

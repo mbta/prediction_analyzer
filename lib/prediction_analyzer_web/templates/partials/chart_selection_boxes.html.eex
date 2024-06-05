@@ -1,0 +1,17 @@
+<%= hidden_input(@f, :chart_range) %>
+<div class="chart-range-links">
+    <%= for chart_range <- ["Single Day", "Multi-Day", "By Station"] do %>
+    <%= content_tag :a, chart_range, class: chart_range_class(@conn, chart_range), id: chart_range_id(chart_range), href: "#" %>
+    <% end %>
+    <%= content_tag :a, "Unpredicted/Unrealized Departures", class: chart_range_class(@conn, "Missed/Missing Predictions"), id: chart_range_id("Missed/Missing Predictions"), href: "/missed_predictions" %>
+    <%= if @f.params["chart_range"] == "By Station" do %>
+    <%= content_tag :a, "Sort By Accuracy", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
+    <% end %>
+
+    <div class="activity-indicator-container">
+    <div class="activity-indicator" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <span>Fetching new data</span>
+    </div>
+</div>

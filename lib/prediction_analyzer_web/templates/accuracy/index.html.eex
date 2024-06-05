@@ -1,10 +1,4 @@
-<%= for mode_id <- [:subway, :commuter_rail] do %>
-  <%= content_tag :a, mode_string(mode_id), class: button_class(@conn, mode_id), href: Routes.accuracy_path(@conn, mode_id) %>
-<% end %>
-<div class="">
-  Show Dev Green results
-  <input type="checkbox" id="show-dev-green-check" checked>
-</div>
+<%= render(PredictionAnalyzerWeb.PartialsView, "header.html", assigns) %>
 <div class="row accuracy-summary-header">
   <div class="col-xs-6" id="prod-accuracy-total">
     <span class="prod-text prod-text-header">Prod</span>
@@ -83,7 +77,6 @@
 
 <%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn f -> %>
   <%= hidden_input(f, :mode) %>
-  <%= hidden_input(f, :chart_range) %>
 
   <div class="row">
     <div class="col-xs-3">
@@ -173,23 +166,7 @@
       </div>
     </div>
     <div class="col-xs-9">
-      <div class="chart-range-links">
-        <%= for chart_range <- ["Single Day", "Multi-Day", "By Station"] do %>
-          <%= content_tag :a, chart_range, class: chart_range_class(@conn, chart_range), id: chart_range_id(chart_range), href: "#" %>
-        <% end %>
-
-        <%= if f.params["chart_range"] == "By Station" do %>
-          <%= content_tag :a, "Sort By Accuracy", id: "sort-order-link", class: "sort-order-link", "data-sort-order": "by_id", href: "#" %>
-        <% end %>
-
-        <div class="activity-indicator-container">
-          <div class="activity-indicator" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <span>Fetching new data</span>
-        </div>
-      </div>
-
+      <%= render(PredictionAnalyzerWeb.PartialsView, "chart_selection_boxes.html", %{f: f, conn: @conn}) %>
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <br />
       <div class="col-xs-6">

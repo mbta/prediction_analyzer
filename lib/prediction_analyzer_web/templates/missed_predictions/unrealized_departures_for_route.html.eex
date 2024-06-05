@@ -1,0 +1,34 @@
+<div class="col-sm-12">
+<h3>Unrealized Departure Predictions</h3>
+<h4><%= @route %> - All Stops</h4>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Stop ID</th>
+        <th>Stop Name</th>
+        <th>Total Trips</th>
+        <th>Trips With Unrealized Departures</th>
+        <th>Percentage</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= for {stop_id, stop_name, total, unrealized, pct} <- @unrealized_departures_for_route do %>
+    <tr>
+        <td><%= link(stop_id, to: Routes.missed_predictions_path(@conn, :index, Map.put(@query_params, "stop_id", stop_id))) %></td>
+        <td><%= link(stop_name, to: Routes.missed_predictions_path(@conn, :index, Map.put(@query_params, "stop_id", stop_id))) %></td>
+        <td><%= total %></td>
+        <td><%= unrealized %></td>
+        <td><%= :erlang.float_to_binary(pct, [decimals: 2]) %></td>
+    </tr>
+    <% end %>
+    <tr>
+        <% {total_trips, total_unrealized, total_pct} = @totals %>
+        <td></td>
+        <td>Total</td>
+        <td><strong><%= total_trips %></strong></td>
+        <td><strong><%= total_unrealized %></strong></td>
+        <td><strong><%= :erlang.float_to_binary(total_pct, [decimals: 2]) %></strong></td>
+    </tr>
+    </tbody>
+</table>
+</div>

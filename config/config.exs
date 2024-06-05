@@ -1,9 +1,9 @@
 # This file is responsible for configuring your application
-# and its dependencies with the aid of the Mix.Config module.
+# and its dependencies with the aid of the Config module.
 #
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
-use Mix.Config
+import Config
 
 # Configures the endpoint
 config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
@@ -34,8 +34,6 @@ config :prediction_analyzer, :timezone, "America/New_York"
 config :prediction_analyzer, :max_dwell_time_sec, 30 * 60
 config :prediction_analyzer, :prune_lookback_sec, 7 * 24 * 60 * 60
 config :prediction_analyzer, :analysis_lookback_min, 40
-
-config :prediction_analyzer, PredictionAnalyzer.Repo, adapter: Ecto.Adapters.Postgres
 
 config :prediction_analyzer, start_workers: true
 
