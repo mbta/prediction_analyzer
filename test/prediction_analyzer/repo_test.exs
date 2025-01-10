@@ -13,11 +13,22 @@ defmodule PredictionAnalyzer.RepoTest do
       reassign_env(:aws_rds_mod, FakeAwsRds)
 
       config =
-        []
-        |> Keyword.merge(username: "u", hostname: "h", port: 4000)
+        [username: "u", hostname: "h", port: 4000]
         |> PredictionAnalyzer.Repo.before_connect()
 
       assert {:ok, "iam_token"} = Keyword.fetch(config, :password)
+    end
+
+    test "enables TLS/SSL encryption" do
+      reassign_env(:aws_rds_mod, FakeAwsRds)
+
+      config =
+        [username: "u", hostname: "h", port: 4000]
+        |> PredictionAnalyzer.Repo.before_connect()
+
+      certfile_path = config[:ssl_opts][:cacertfile]
+      assert certfile_path
+      assert Path.basename(certfile_path) == "aws-cert-bundle.pem"
     end
   end
 end
