@@ -20,7 +20,7 @@ defmodule PredictionAnalyzer.Repo do
     Keyword.merge(config,
       password: token,
       ssl_opts: [
-        cacertfile: Path.join(:code.priv_dir(:arrow), "aws-cert-bundle.pem"),
+        cacertfile: Path.join(:code.priv_dir(:prediction_analyzer), "aws-cert-bundle.pem"),
         verify: :verify_peer,
         server_name_indication: String.to_charlist(hostname),
         verify_fun:
