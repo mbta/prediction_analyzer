@@ -21,7 +21,7 @@ config :prediction_analyzer, PredictionAnalyzerWeb.Endpoint,
 
 config :logger,
   backends: [:console, Sentry.LoggerBackend],
-  level: :info
+  level: :debug
 
 config :prediction_analyzer, PredictionAnalyzer.Repo,
   pool_size: 15,
