@@ -8,8 +8,6 @@ WORKDIR /root
 RUN mix local.hex --force && \
   mix local.rebar --force
 
-ADD https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem aws-cert-bundle.pem
-
 ADD mix.lock mix.lock
 ADD mix.exs mix.exs
 ADD config config
@@ -33,6 +31,9 @@ FROM elixir-builder as app-builder
 # Add Elixir code
 ADD lib lib
 ADD priv priv
+
+# Download CA bundle for SSL-encrypted DB connection
+ADD https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem priv/aws-cert-bundle.pem
 
 RUN mix compile
 
@@ -60,8 +61,6 @@ COPY --from=app-builder --chown=prediction_analyzer:prediction_analyzer /root/pr
 
 # Add application artifact compiled in app-builder container
 COPY --from=app-builder --chown=prediction_analyzer:prediction_analyzer /root/_build/prod/rel/prediction_analyzer .
-
-COPY --from=app-builder --chown=prediction_analyzer:prediction_analyzer /root/aws-cert-bundle.pem ./priv/aws-cert-bundle.pem
 
 EXPOSE 4000
 
