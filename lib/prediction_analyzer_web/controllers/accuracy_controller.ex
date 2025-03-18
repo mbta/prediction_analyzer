@@ -97,7 +97,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         end
 
       accuracies =
-        (Map.keys(prod_accuracies) ++ Map.keys(dev_green_accuracies) ++ Map.keys(dev_blue_accuracies))
+        (Map.keys(prod_accuracies) ++
+           Map.keys(dev_green_accuracies) ++ Map.keys(dev_blue_accuracies))
         |> Enum.uniq()
         |> Enum.sort(sort_function)
         |> Enum.map(fn scope ->
@@ -262,28 +263,27 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   @spec set_up_accuracy_chart(list(), map()) :: map()
   defp set_up_accuracy_chart(accuracies, filter_params) do
     Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: [], db_accs: []}, fn {[
-                                                                              bucket,
-                                                                              prod_total,
-                                                                              prod_accurate,
-                                                                              _prod_mean_error,
-                                                                              _prod_rmse
-                                                                            ],
-                                                                            [
-                                                                              _bucket,
-                                                                              dg_total,
-                                                                              dg_accurate,
-                                                                              _dg_mean_error,
-                                                                              _dg_rmse
-                                                                            ],
-                                                                            [
-                                                                              _bucket_db,
-                                                                              db_total,
-                                                                              db_accurate,
-                                                                              _db_mean_error,
-                                                                              _db_rmse
-                                                                            ]
-                                                                            },
-                                                                           acc ->
+                                                                                           bucket,
+                                                                                           prod_total,
+                                                                                           prod_accurate,
+                                                                                           _prod_mean_error,
+                                                                                           _prod_rmse
+                                                                                         ],
+                                                                                         [
+                                                                                           _bucket,
+                                                                                           dg_total,
+                                                                                           dg_accurate,
+                                                                                           _dg_mean_error,
+                                                                                           _dg_rmse
+                                                                                         ],
+                                                                                         [
+                                                                                           _bucket_db,
+                                                                                           db_total,
+                                                                                           db_accurate,
+                                                                                           _db_mean_error,
+                                                                                           _db_rmse
+                                                                                         ]},
+                                                                                        acc ->
       prod_accuracy = if prod_total == 0, do: [0], else: [prod_accurate / prod_total]
       dg_accuracy = if dg_total == 0, do: [0], else: [dg_accurate / dg_total]
       db_accuracy = if db_total == 0, do: [0], else: [db_accurate / db_total]
