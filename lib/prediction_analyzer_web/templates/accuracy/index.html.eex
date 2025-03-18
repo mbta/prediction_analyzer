@@ -51,7 +51,7 @@
   </div>
 
 
-  <div class="col-xs-3" id="dev-green-accuracy-total">
+  <div class="col-xs-6" id="dev-green-accuracy-total">
     <span class="dev-green-text dev-green-text-header">Dev Green</span>
     <div>
       <span class="accuracy-summary-percentage dev-green-text">
@@ -185,7 +185,7 @@
       <%= render(PredictionAnalyzerWeb.PartialsView, "chart_selection_boxes.html", %{f: f, conn: @conn}) %>
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <br />
-      <div class="col-xs-4">
+      <div class="col-xs-6">
         <span class="prod-text prod-text-header">Prod</span>
         <table class="table" id="prod-data-table">
           <tr>
@@ -196,7 +196,7 @@
             <th class="prod-text">Count</th>
           </tr>
 
-          <%= for {[row_scope, prod_total, prod_accurate, prod_err, prod_rmse], _dg} <- @accuracies do %>
+          <%= for {[row_scope, prod_total, prod_accurate, prod_err, prod_rmse], _dg, _db} <- @accuracies do %>
             <tr>
               <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
               <td class="prod-text">
@@ -210,7 +210,7 @@
         </table>
       </div>
 
-      <div class="col-xs-4">
+      <div class="col-xs-6">
         <span class="dev-green-text dev-green-text-header">Dev Green</span>
         <table class="table" id="dev-green-data-table">
           <tr>
@@ -221,7 +221,7 @@
             <th class="dev-green-text">Count</th>
           </tr>
 
-          <%= for {_prod, [row_scope, dg_total, dg_accurate, dg_err, dg_rmse]} <- @accuracies do %>
+          <%= for {_prod, [row_scope, dg_total, dg_accurate, dg_err, dg_rmse], _db} <- @accuracies do %>
             <tr>
               <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
               <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
@@ -233,8 +233,8 @@
         </table>
       </div>
 
-      <div class="col-xs-4">
-        <span class="dev-blue-text dev-blue-text-header">Dev blue</span>
+      <div class="col-xs-6">
+        <span class="dev-blue-text dev-blue-text-header">Dev Blue</span>
         <table class="table" id="dev-blue-data-table">
           <tr>
             <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>

@@ -42,10 +42,16 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     insert_hourly_accuracy("prod", 10, 108, 102)
     insert_hourly_accuracy("prod", 11, 225, 211)
     insert_hourly_accuracy("prod", 11, 270, 261)
+
     insert_hourly_accuracy("dev-green", 10, 401, 399)
     insert_hourly_accuracy("dev-green", 10, 408, 302)
     insert_hourly_accuracy("dev-green", 11, 525, 411)
     insert_hourly_accuracy("dev-green", 11, 570, 461)
+
+    insert_hourly_accuracy("dev-blue", 10, 200, 100)
+    insert_hourly_accuracy("dev-blue", 10, 100, 100)
+    insert_hourly_accuracy("dev-blue", 11, 420, 200)
+    insert_hourly_accuracy("dev-blue", 11, 420, 123)
 
     conn = get(conn, "/accuracy")
     conn = get(conn, redirected_to(conn))
@@ -60,6 +66,12 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     assert response =~ "1095"
     # (411 + 461) / (525 + 570)
     assert response =~ "79.63%"
+
+    # 420 + 420
+    assert response =~ "840"
+
+    # (123 + 200) + (420 + 420)
+    assert response =~ "38.45%"
   end
 
   test "GET /accuracy aggregates the results by hour, even when one environment is missing hours",

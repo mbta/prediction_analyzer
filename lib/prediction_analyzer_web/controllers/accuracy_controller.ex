@@ -276,7 +276,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
                                                                               _dg_rmse
                                                                             ],
                                                                             [
-                                                                              _bucket,
+                                                                              _bucket_db,
                                                                               db_total,
                                                                               db_accurate,
                                                                               _db_mean_error,

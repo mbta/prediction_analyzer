@@ -16,7 +16,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
 
     schedule_prod_fetch(self(), initial_prod_fetch_ms)
     schedule_dev_green_fetch(self(), initial_dev_green_fetch_ms)
-    schedule_dev_blue_fetch(self(), initial_dev_green_fetch_ms)
+    schedule_dev_blue_fetch(self(), initial_dev_blue_fetch_ms)
     schedule_commuter_rail_fetch(self(), initial_commuter_rail_fetch_ms)
 
     {:ok, %{}}
@@ -71,11 +71,11 @@ defmodule PredictionAnalyzer.Predictions.Download do
   end
 
   defp get_vars(:dev_blue) do
-    dev_green_aws_predictions_url =
+    dev_blue_aws_predictions_url =
       Application.get_env(:prediction_analyzer, :dev_blue_aws_predictions_url)
 
     http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
-    {dev_green_aws_predictions_url, http_fetcher}
+    {dev_blue_aws_predictions_url, http_fetcher}
   end
 
   defp schedule_prod_fetch(pid, ms) do
