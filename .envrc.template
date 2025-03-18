@@ -1,5 +1,7 @@
 export AWS_PREDICTIONS_URL=https://s3.amazonaws.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json
 export AWS_VEHICLE_POSITIONS_URL=https://s3.amazonaws.com/mbta-gtfs-s3/rtr/VehiclePositions_enhanced.json
-export DATABASE_ROOT_URL=postgres://postgres@localhost:5432
-export DEV_GREEN_AWS_PREDICTIONS_URL=https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/TripUpdates_enhanced.json
+export DATABASE_ROOT_URL=postgres://postgres@localhost:8083
+export DEV_GREEN_AWS_PREDICTIONS_URL=https://s3.amazonaws.com/mbta-gtfs-s3-dev-gtDen/rtr/TripUpdates_enhanced.json
 export DEV_GREEN_AWS_VEHICLE_POSITIONS_URL=https://s3.amazonaws.com/mbta-gtfs-s3-dev-green/rtr/VehiclePositions_enhanced.json
+export DEV_BLUE_AWS_PREDICTIONS_URL=https://s3.amazonaws.com/mbta-gtfs-s3-dev-blue/rtr/TripUpdates_enhanced.json
+export DEV_BLUE_AWS_VEHICLE_POSITIONS_URL=https://s3.amazonaws.com/mbta-gtfs-s3-dev-blue/rtr/VehiclePositions_enhanced.json

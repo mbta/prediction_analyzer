@@ -11,10 +11,12 @@ defmodule PredictionAnalyzer.Predictions.Download do
   def init(args \\ []) do
     initial_prod_fetch_ms = args[:initial_prod_fetch_ms] || 1_000
     initial_dev_green_fetch_ms = args[:initial_dev_green_fetch_ms] || 11_000
+    initial_dev_blue_fetch_ms = args[:initial_dev_blue_fetch_ms] || 11_000
     initial_commuter_rail_fetch_ms = args[:initial_commuter_rail_fetch_ms] || 21_000
 
     schedule_prod_fetch(self(), initial_prod_fetch_ms)
     schedule_dev_green_fetch(self(), initial_dev_green_fetch_ms)
+    schedule_dev_blue_fetch(self(), initial_dev_green_fetch_ms)
     schedule_commuter_rail_fetch(self(), initial_commuter_rail_fetch_ms)
 
     {:ok, %{}}
@@ -68,12 +70,24 @@ defmodule PredictionAnalyzer.Predictions.Download do
     {dev_green_aws_predictions_url, http_fetcher}
   end
 
+  defp get_vars(:dev_blue) do
+    dev_green_aws_predictions_url =
+      Application.get_env(:prediction_analyzer, :dev_blue_aws_predictions_url)
+
+    http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
+    {dev_green_aws_predictions_url, http_fetcher}
+  end
+
   defp schedule_prod_fetch(pid, ms) do
     Process.send_after(pid, :get_prod_predictions, ms)
   end
 
   defp schedule_dev_green_fetch(pid, ms) do
     Process.send_after(pid, :get_dev_green_predictions, ms)
+  end
+
+  defp schedule_dev_blue_fetch(pid, ms) do
+    Process.send_after(pid, :get_dev_blue_predictions, ms)
   end
 
   defp schedule_commuter_rail_fetch(pid, ms) do
@@ -89,6 +103,12 @@ defmodule PredictionAnalyzer.Predictions.Download do
   def handle_info(:get_dev_green_predictions, _state) do
     schedule_dev_green_fetch(self(), 60_000)
     predictions = get_subway_predictions(:dev_green)
+    {:noreply, predictions}
+  end
+
+  def handle_info(:get_dev_blue_predictions, _state) do
+    schedule_dev_green_fetch(self(), 60_000)
+    predictions = get_subway_predictions(:dev_blue)
     {:noreply, predictions}
   end
 
@@ -137,6 +157,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
           case env do
             :prod -> "prod"
             :dev_green -> "dev-green"
+            :dev_blue -> "dev-blue"
           end,
         trip_id: prediction["trip_update"]["trip"]["trip_id"],
         vehicle_id: prediction["trip_update"]["vehicle"]["id"],

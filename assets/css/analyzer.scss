@@ -34,7 +34,7 @@
 }
 
 .prod-text {
-  color: #1fecff;
+  color: #c743f0;
 }
 
 .prod-text-header {
@@ -43,10 +43,19 @@
 }
 
 .dev-green-text {
-  color: #c743f0;
+  color: #72ff13;
 }
 
 .dev-green-text-header {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.dev-blue-text {
+  color: #1fecff;
+}
+
+.dev-blue-text-header {
   text-transform: uppercase;
   font-weight: bold;
 }

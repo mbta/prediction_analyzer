@@ -216,13 +216,18 @@
 }
 
 .c3-legend-item-Prod text {
-  fill: #1fecff;
-  stroke: #1fecff;
+  fill: #c743f0;
+  stroke: #c743f0;
 }
 
 .c3-legend-item-Dev-Green text {
-  fill: #c743f0;
-  stroke: #c743f0;
+  fill: #72ff13;
+  stroke: #72ff13;
+}
+
+.c3-legend-item-Dev-Blue text {
+  fill: #1fecff;
+  stroke: #1fecff;
 }
 
 .c3-axis path,

@@ -8,6 +8,7 @@ interface DataPoint {
   bucket: string
   prodAcc: number
   dgAcc?: number
+  dbAcc?: number
 }
 
 declare global {
@@ -35,6 +36,19 @@ export default () => {
       } else {
         jQuery("#dev-green-data-table").hide()
         jQuery("#dev-green-accuracy-total").hide()
+      }
+      setupDashboard()
+    })
+
+    jQuery("#show-dev-blue-check").change((event) => {
+      event.preventDefault()
+      const showDevGreen = jQuery("#show-dev-blue-check")
+      if (showDevGreen.is(":checked")) {
+        jQuery("#dev-blue-data-table").show()
+        jQuery("#dev-blue-accuracy-total").show()
+      } else {
+        jQuery("#dev-blue-data-table").hide()
+        jQuery("#dev-blue-accuracy-total").hide()
       }
       setupDashboard()
     })
@@ -88,9 +102,11 @@ const renderDashboard = () => {
   let xFormat
 
   const showDevGreen = jQuery("#show-dev-green-check").is(":checked")
+  const showDevBlue = jQuery("#show-dev-blue-check").is(":checked")
 
   const sortedProdAccs: any[] = []
   const sortedDgAccs: any[] = []
+  const sortedDbAccs: any[] = []
   const sortedBucketNames: string[] = []
 
   if (window.sortOrderLink) {
@@ -178,25 +194,25 @@ const renderDashboard = () => {
   }
 
   const col1 = ["Prod"].concat(sortedProdAccs)
-  let col2
-  if (showDevGreen) {
-    col2 = ["Dev Green"].concat(sortedDgAccs)
-  } else {
-    col2 = []
-  }
   const xData = ["x"].concat(sortedBucketNames)
-  let data
+
+  let columns = [xData, col1];
+
   if (showDevGreen) {
-    data = { x: "x", columns: [xData, col1, col2], type: dataType, xFormat }
-  } else {
-    data = { x: "x", columns: [xData, col1], type: dataType, xFormat }
+    let col2: any = ["Dev Green"].concat(sortedDgAccs)
+    columns.push(col2);
   }
+  if (showDevBlue) {
+    let col3: any = ["Dev Blue"].concat(sortedDbAccs)
+    columns.push(col3);
+  }
+  let data: any = { x: "x", columns: columns, type: dataType, xFormat }
 
   c3.generate({
     bindto: "#chart-prediction-accuracy",
     data,
     color: {
-      pattern: ["#1fecff", "#c743f0"],
+      pattern: ["#c743f0", "#72ff13", "#1fecff"],
     },
     axis: {
       rotated: rotateAxes,
@@ -317,12 +333,14 @@ const setupDashboard = () => {
   const rawData = window.dataPredictionAccuracyJSON
   const prodAccs = rawData.prod_accs
   const showDevGreen = jQuery("#show-dev-green-check").is(":checked")
+  const showDevBlue = jQuery("#show-dev-blue-check").is(":checked")
   let dgAccs
   if (showDevGreen) {
     dgAccs = rawData.dg_accs
   } else {
     dgAccs = []
   }
+  let dbAccs = showDevBlue ? rawData.db_accs : [];
   const bucketNames = rawData.buckets
   let i
 
@@ -337,23 +355,15 @@ const setupDashboard = () => {
     window.sortOrderLink.addEventListener("click", toggleSortOrder)
   }
 
-  if (showDevGreen) {
-    for (i = 0; i < bucketNames.length; i++) {
-      window.dataPoints.push({
-        id: i,
-        bucket: bucketNames[i],
-        prodAcc: prodAccs[i],
-        dgAcc: dgAccs[i],
-      })
+  for (i = 0; i < bucketNames.length; i++) {
+    let chartDataPoint = {
+      id: i,
+      bucket: bucketNames[i],
+      prodAcc: prodAccs[i],
     }
-  } else {
-    for (i = 0; i < bucketNames.length; i++) {
-      window.dataPoints.push({
-        id: i,
-        bucket: bucketNames[i],
-        prodAcc: prodAccs[i],
-      })
-    }
+
+    Object.assign(chartDataPoint, showDevGreen && dgAccs[i], showDevBlue && dbAccs[i])
+    window.dataPoints.push()
   }
 
   renderDashboard()

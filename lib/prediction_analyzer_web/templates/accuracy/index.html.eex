@@ -48,15 +48,10 @@
         </table>
       </div>
     </div>
-    <div id='reminder-text-toggle' class="reminder-text-button">
-      <div class="nav-tab-wrapper">
-        <a href="#reminder-text-shown" class="nav-tab">How is accuracy calculated?</a>
-      </div>
-    </div>
   </div>
 
 
-  <div class="col-xs-6" id="dev-green-accuracy-total">
+  <div class="col-xs-3" id="dev-green-accuracy-total">
     <span class="dev-green-text dev-green-text-header">Dev Green</span>
     <div>
       <span class="accuracy-summary-percentage dev-green-text">
@@ -71,8 +66,29 @@
       From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
     </div>
   </div>
+
+  <div class="col-xs-3" id="dev-blue-accuracy-total">
+    <span class="dev-blue-text dev-blue-text-header">Dev blue</span>
+    <div>
+      <span class="accuracy-summary-percentage dev-blue-text">
+        <%= accuracy_percentage(@dev_blue_num_accurate, @dev_blue_num_predictions) %>
+      </span>
+      <span class="accuracy-summary-percent-sign dev-blue-text">
+        %
+      </span>
+    </div>
+    <div class="dev-blue-text">
+      <em>Err: <%= Float.round(@dev_blue_mean_error || 0.0, 2) %>, RMSE: <%= Float.round(@dev_blue_rmse || 0.0, 2) %></em> <br>
+      From <%= @dev_blue_num_accurate %> accurate out of <%= @dev_blue_num_predictions %> total predictions
+    </div>
+  </div>
 </div>
 
+  <div id='reminder-text-toggle' class="reminder-text-button">
+    <div class="nav-tab-wrapper">
+      <a href="#reminder-text-shown" class="nav-tab">How is accuracy calculated?</a>
+    </div>
+  </div>
 <hr class="accuracy-separator">
 
 <%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn f -> %>
@@ -169,7 +185,7 @@
       <%= render(PredictionAnalyzerWeb.PartialsView, "chart_selection_boxes.html", %{f: f, conn: @conn}) %>
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <br />
-      <div class="col-xs-6">
+      <div class="col-xs-4">
         <span class="prod-text prod-text-header">Prod</span>
         <table class="table" id="prod-data-table">
           <tr>
@@ -194,7 +210,7 @@
         </table>
       </div>
 
-      <div class="col-xs-6">
+      <div class="col-xs-4">
         <span class="dev-green-text dev-green-text-header">Dev Green</span>
         <table class="table" id="dev-green-data-table">
           <tr>
@@ -212,6 +228,29 @@
               <td class="dev-green-text"><%= Float.round(dg_err || 0.0, 0) %></td>
               <td class="dev-green-text"><%= Float.round(dg_rmse || 0.0, 0) %></td>
               <td class="dev-green-text"><%= dg_total %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+
+      <div class="col-xs-4">
+        <span class="dev-blue-text dev-blue-text-header">Dev blue</span>
+        <table class="table" id="dev-blue-data-table">
+          <tr>
+            <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
+            <th class="dev-blue-text">Accuracy</th>
+            <th class="dev-blue-text">Err</th>
+            <th class="dev-blue-text">RMSE</th>
+            <th class="dev-blue-text">Count</th>
+          </tr>
+
+          <%= for {_prod, _dev_green, [row_scope, db_total, db_accurate, db_err, db_rmse]} <- @accuracies do %>
+            <tr>
+              <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
+              <td class="dev-blue-text"><%= accuracy_percentage(db_accurate, db_total) %>%</td>
+              <td class="dev-blue-text"><%= Float.round(db_err || 0.0, 0) %></td>
+              <td class="dev-blue-text"><%= Float.round(db_rmse || 0.0, 0) %></td>
+              <td class="dev-blue-text"><%= db_total %></td>
             </tr>
           <% end %>
         </table>
