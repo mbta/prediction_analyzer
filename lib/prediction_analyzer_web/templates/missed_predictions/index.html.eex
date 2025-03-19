@@ -11,7 +11,7 @@
       </div>
       <div class="form-group">
         <%= explainer_label(f, :env, "Environment") %>
-        <%= select(f, :env, ["Prod": "prod", "Dev Green": "dev-green"], class: "form-control") %>
+        <%= select(f, :env, ["Prod": "prod", "Dev Green": "dev-green", "Dev Blue": "dev-blue"], class: "form-control") %>
       </div>
       <%= submit "Filter", id: "filter-submit-btn", class: "btn btn-default" %>
     </div>

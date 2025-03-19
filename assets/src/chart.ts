@@ -132,6 +132,9 @@ const renderDashboard = () => {
     if (showDevGreen) {
       sortedDgAccs.push(dataPoint.dgAcc)
     }
+    if (showDevBlue) {
+      sortedDbAccs.push(dataPoint.dbAcc)
+    }
     sortedBucketNames.push(dataPoint.bucket)
   })
 
@@ -334,15 +337,9 @@ const setupDashboard = () => {
   const prodAccs = rawData.prod_accs
   const showDevGreen = jQuery("#show-dev-green-check").is(":checked")
   const showDevBlue = jQuery("#show-dev-blue-check").is(":checked")
-  let dgAccs
-  if (showDevGreen) {
-    dgAccs = rawData.dg_accs
-  } else {
-    dgAccs = []
-  }
+  let dgAccs = showDevGreen ? rawData.dg_accs : [];
   let dbAccs = showDevBlue ? rawData.db_accs : [];
   const bucketNames = rawData.buckets
-  let i
 
   window.chartType = rawData.chart_type
   window.timeframeResolution = rawData.timeframe_resolution
@@ -355,7 +352,7 @@ const setupDashboard = () => {
     window.sortOrderLink.addEventListener("click", toggleSortOrder)
   }
 
-  for (i = 0; i < bucketNames.length; i++) {
+  for (let i = 0; i < bucketNames.length; i++) {
     let chartDataPoint = {
       id: i,
       bucket: bucketNames[i],

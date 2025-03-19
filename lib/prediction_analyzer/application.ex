@@ -95,7 +95,7 @@ defmodule PredictionAnalyzer.Application do
 
     Config.update_env(
       :dev_blue_aws_vehicle_positions_url,
-      System.get_env("DEV_BLUE_AWS_VEHICLE_POSITIONS_URL") || "https://s3.amazonaws.com/mbta-gtfs-s3-dev-blue/rtr/TripUpdates_enhanced.json"
+      System.get_env("DEV_BLUE_AWS_VEHICLE_POSITIONS_URL") || "https://s3.amazonaws.com/mbta-gtfs-s3-dev-blue/rtr/VehiclePositions_enhanced.json"
     )
   end
 end
