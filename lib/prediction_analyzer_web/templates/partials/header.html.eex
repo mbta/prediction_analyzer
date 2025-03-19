@@ -7,5 +7,5 @@
 </div>
 <div class="">
   Show Dev Blue results
-  <input type="checkbox" id="show-dev-blue-check" checked>
+  <input type="checkbox" id="show-dev-blue-check">
 </div>

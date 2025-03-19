@@ -359,7 +359,7 @@ const setupDashboard = () => {
       prodAcc: prodAccs[i],
     }
 
-    Object.assign(chartDataPoint, showDevGreen && dgAccs[i], showDevBlue && dbAccs[i])
+    Object.assign(chartDataPoint, showDevGreen && {dgAcc: dgAccs[i]}, showDevBlue && {dbAcc: dbAccs[i]})
     window.dataPoints.push()
   }
 
