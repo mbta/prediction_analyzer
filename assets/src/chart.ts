@@ -37,6 +37,7 @@ export default () => {
         jQuery("#dev-green-data-table").hide()
         jQuery("#dev-green-accuracy-total").hide()
       }
+      console.log("hello")
       setupDashboard()
     })
 
@@ -199,23 +200,30 @@ const renderDashboard = () => {
   const col1 = ["Prod"].concat(sortedProdAccs)
   const xData = ["x"].concat(sortedBucketNames)
 
-  let columns = [xData, col1];
+  let columns = [xData, col1]
 
   if (showDevGreen) {
     let col2: any = ["Dev Green"].concat(sortedDgAccs)
-    columns.push(col2);
+    columns.push(col2)
   }
   if (showDevBlue) {
     let col3: any = ["Dev Blue"].concat(sortedDbAccs)
-    columns.push(col3);
+    columns.push(col3)
   }
   let data: any = { x: "x", columns: columns, type: dataType, xFormat }
 
+  let pattern = ["#c743f0"]
+  if (showDevGreen) {
+    pattern.push("#72ff13")
+  }
+  if (showDevBlue) {
+    pattern.push("#1fecff")
+  }
   c3.generate({
     bindto: "#chart-prediction-accuracy",
     data,
     color: {
-      pattern: ["#c743f0", "#72ff13", "#1fecff"],
+      pattern: pattern,
     },
     axis: {
       rotated: rotateAxes,
@@ -320,7 +328,9 @@ const setupDatePickers = () => {
 }
 
 const setupDashboard = () => {
-  setupDatePickers()
+  if (!document.getElementById("chart-prediction-accuracy")) {
+    setupDatePickers()
+  }
 
   jQuery("#filters_stop_ids").selectize({
     dropdownParent: "body",
@@ -337,8 +347,8 @@ const setupDashboard = () => {
   const prodAccs = rawData.prod_accs
   const showDevGreen = jQuery("#show-dev-green-check").is(":checked")
   const showDevBlue = jQuery("#show-dev-blue-check").is(":checked")
-  let dgAccs = showDevGreen ? rawData.dg_accs : [];
-  let dbAccs = showDevBlue ? rawData.db_accs : [];
+  let dgAccs = showDevGreen ? rawData.dg_accs : []
+  let dbAccs = showDevBlue ? rawData.db_accs : []
   const bucketNames = rawData.buckets
 
   window.chartType = rawData.chart_type
@@ -359,8 +369,12 @@ const setupDashboard = () => {
       prodAcc: prodAccs[i],
     }
 
-    Object.assign(chartDataPoint, showDevGreen && {dgAcc: dgAccs[i]}, showDevBlue && {dbAcc: dbAccs[i]})
-    window.dataPoints.push()
+    Object.assign(
+      chartDataPoint,
+      showDevGreen && { dgAcc: dgAccs[i] },
+      showDevBlue && { dbAcc: dbAccs[i] }
+    )
+    window.dataPoints.push(chartDataPoint)
   }
 
   renderDashboard()
