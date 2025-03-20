@@ -107,7 +107,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
   end
 
   def handle_info(:get_dev_blue_predictions, _state) do
-    schedule_dev_green_fetch(self(), 60_000)
+    schedule_dev_blue_fetch(self(), 60_000)
     predictions = get_subway_predictions(:dev_blue)
     {:noreply, predictions}
   end
@@ -130,7 +130,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     {:noreply, state}
   end
 
-  @spec store_subway_predictions(map(), :dev_green | :prod) ::
+  @spec store_subway_predictions(map(), :dev_green | :prod | :dev_blue) ::
           {integer(), nil | [term()]} | no_return()
   defp store_subway_predictions(
          %{"entity" => entities, "header" => %{"timestamp" => timestamp}},
