@@ -185,77 +185,80 @@
       <%= render(PredictionAnalyzerWeb.PartialsView, "chart_selection_boxes.html", %{f: f, conn: @conn}) %>
       <div data-prediction-accuracy class="chart" id="chart-prediction-accuracy"></div>
       <br />
-      <div class="col-xs-6">
-        <span class="prod-text prod-text-header">Prod</span>
-        <table class="table" id="prod-data-table">
-          <tr>
-            <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
-            <th class="prod-text">Accuracy</th>
-            <th class="prod-text">Err</th>
-            <th class="prod-text">RMSE</th>
-            <th class="prod-text">Count</th>
-          </tr>
-
-          <%= for {[row_scope, prod_total, prod_accurate, prod_err, prod_rmse], _dg, _db} <- @accuracies do %>
-            <tr>
-              <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
-              <td class="prod-text">
-                <%= accuracy_percentage(prod_accurate, prod_total) %>%
-              </td>
-              <td class="prod-text"><%= Float.round(prod_err || 0.0, 0) %></td>
-              <td class="prod-text"><%= Float.round(prod_rmse || 0.0, 0) %></td>
-              <td class="prod-text"><%= prod_total %></td>
-            </tr>
-          <% end %>
-        </table>
-      </div>
-
-      <div class="col-xs-6">
-        <span class="dev-green-text dev-green-text-header">Dev Green</span>
-        <table class="table" id="dev-green-data-table">
-          <tr>
-            <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
-            <th class="dev-green-text">Accuracy</th>
-            <th class="dev-green-text">Err</th>
-            <th class="dev-green-text">RMSE</th>
-            <th class="dev-green-text">Count</th>
-          </tr>
-
-          <%= for {_prod, [row_scope, dg_total, dg_accurate, dg_err, dg_rmse], _db} <- @accuracies do %>
-            <tr>
-              <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
-              <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
-              <td class="dev-green-text"><%= Float.round(dg_err || 0.0, 0) %></td>
-              <td class="dev-green-text"><%= Float.round(dg_rmse || 0.0, 0) %></td>
-              <td class="dev-green-text"><%= dg_total %></td>
-            </tr>
-          <% end %>
-        </table>
-      </div>
-
-      <div class="col-xs-6">
-        <span class="dev-blue-text dev-blue-text-header">Dev Blue</span>
-        <table class="table" id="dev-blue-data-table">
-          <tr>
-            <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
-            <th class="dev-blue-text">Accuracy</th>
-            <th class="dev-blue-text">Err</th>
-            <th class="dev-blue-text">RMSE</th>
-            <th class="dev-blue-text">Count</th>
-          </tr>
-
-          <%= for {_prod, _dev_green, [row_scope, db_total, db_accurate, db_err, db_rmse]} <- @accuracies do %>
-            <tr>
-              <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
-              <td class="dev-blue-text"><%= accuracy_percentage(db_accurate, db_total) %>%</td>
-              <td class="dev-blue-text"><%= Float.round(db_err || 0.0, 0) %></td>
-              <td class="dev-blue-text"><%= Float.round(db_rmse || 0.0, 0) %></td>
-              <td class="dev-blue-text"><%= db_total %></td>
-            </tr>
-          <% end %>
-        </table>
-      </div>
     </div>
+  </div>
+
+  </br>
+
+  <div class="col-xs-4">
+    <span class="prod-text prod-text-header">Prod</span>
+    <table class="table" id="prod-data-table">
+      <tr>
+        <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
+        <th class="prod-text">Accuracy</th>
+        <th class="prod-text">Err</th>
+        <th class="prod-text">RMSE</th>
+        <th class="prod-text">Count</th>
+      </tr>
+
+      <%= for {[row_scope, prod_total, prod_accurate, prod_err, prod_rmse], _dg, _db} <- @accuracies do %>
+        <tr>
+          <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
+          <td class="prod-text">
+            <%= accuracy_percentage(prod_accurate, prod_total) %>%
+          </td>
+          <td class="prod-text"><%= Float.round(prod_err || 0.0, 0) %></td>
+          <td class="prod-text"><%= Float.round(prod_rmse || 0.0, 0) %></td>
+          <td class="prod-text"><%= prod_total %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <div class="col-xs-4">
+    <span class="dev-green-text dev-green-text-header">Dev Green</span>
+    <table class="table" id="dev-green-data-table">
+      <tr>
+        <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
+        <th class="dev-green-text">Accuracy</th>
+        <th class="dev-green-text">Err</th>
+        <th class="dev-green-text">RMSE</th>
+        <th class="dev-green-text">Count</th>
+      </tr>
+
+      <%= for {_prod, [row_scope, dg_total, dg_accurate, dg_err, dg_rmse], _db} <- @accuracies do %>
+        <tr>
+          <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
+          <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
+          <td class="dev-green-text"><%= Float.round(dg_err || 0.0, 0) %></td>
+          <td class="dev-green-text"><%= Float.round(dg_rmse || 0.0, 0) %></td>
+          <td class="dev-green-text"><%= dg_total %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <div class="col-xs-4">
+    <span class="dev-blue-text dev-blue-text-header">Dev Blue</span>
+    <table class="table" id="dev-blue-data-table">
+      <tr>
+        <th><%= chart_range_scope_header(f.params["chart_range"]) %></th>
+        <th class="dev-blue-text">Accuracy</th>
+        <th class="dev-blue-text">Err</th>
+        <th class="dev-blue-text">RMSE</th>
+        <th class="dev-blue-text">Count</th>
+      </tr>
+
+      <%= for {_prod, _dev_green, [row_scope, db_total, db_accurate, db_err, db_rmse]} <- @accuracies do %>
+        <tr>
+          <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
+          <td class="dev-blue-text"><%= accuracy_percentage(db_accurate, db_total) %>%</td>
+          <td class="dev-blue-text"><%= Float.round(db_err || 0.0, 0) %></td>
+          <td class="dev-blue-text"><%= Float.round(db_rmse || 0.0, 0) %></td>
+          <td class="dev-blue-text"><%= db_total %></td>
+        </tr>
+      <% end %>
+    </table>
   </div>
 <% end %>
 
