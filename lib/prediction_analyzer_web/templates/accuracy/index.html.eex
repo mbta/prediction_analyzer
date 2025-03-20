@@ -51,7 +51,7 @@
   </div>
 
 
-  <div class="col-xs-6" id="dev-green-accuracy-total">
+  <div class="col-xs-3" id="dev-green-accuracy-total">
     <span class="dev-green-text dev-green-text-header">Dev Green</span>
     <div>
       <span class="accuracy-summary-percentage dev-green-text">
