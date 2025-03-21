@@ -190,7 +190,7 @@
 
   </br>
 
-  <div class="col-xs-4">
+  <div class="col-xs-4" id="prod-data-table-col">
     <span class="prod-text prod-text-header">Prod</span>
     <table class="table" id="prod-data-table">
       <tr>
@@ -215,7 +215,7 @@
     </table>
   </div>
 
-  <div class="col-xs-4">
+  <div class="col-xs-4" id="dev-green-data-table-col">
     <span class="dev-green-text dev-green-text-header">Dev Green</span>
     <table class="table" id="dev-green-data-table">
       <tr>
@@ -238,7 +238,7 @@
     </table>
   </div>
 
-  <div class="col-xs-4">
+  <div class="col-xs-4" id="dev-blue-data-table-col">
     <span class="dev-blue-text dev-blue-text-header">Dev Blue</span>
     <table class="table" id="dev-blue-data-table">
       <tr>

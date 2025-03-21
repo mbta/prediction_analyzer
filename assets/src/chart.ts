@@ -31,13 +31,12 @@ export default () => {
       event.preventDefault()
       const showDevGreen = jQuery("#show-dev-green-check")
       if (showDevGreen.is(":checked")) {
-        jQuery("#dev-green-data-table").show()
+        jQuery("#dev-green-data-table-col").show()
         jQuery("#dev-green-accuracy-total").show()
       } else {
-        jQuery("#dev-green-data-table").hide()
+        jQuery("#dev-green-data-table-col").hide()
         jQuery("#dev-green-accuracy-total").hide()
       }
-      console.log("hello")
       setupDashboard()
     })
 
@@ -45,10 +44,10 @@ export default () => {
       event.preventDefault()
       const showDevGreen = jQuery("#show-dev-blue-check")
       if (showDevGreen.is(":checked")) {
-        jQuery("#dev-blue-data-table").show()
+        jQuery("#dev-blue-data-table-col").show()
         jQuery("#dev-blue-accuracy-total").show()
       } else {
-        jQuery("#dev-blue-data-table").hide()
+        jQuery("#dev-blue-data-table-col").hide()
         jQuery("#dev-blue-accuracy-total").hide()
       }
       setupDashboard()
