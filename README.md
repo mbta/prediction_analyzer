@@ -23,6 +23,8 @@ PostgreSQL and Direnv are available on macOS Homebrew.
 5. `mix ecto.setup`
 6. `npm install --prefix assets`
 
+If you have previously set up the DB and run into issues, you may have to drop the DB and run `mix ecto.setup` to recreate it.
+
 ## Common Tasks
 
 * Run the app: `mix phx.server` (then go to <http://localhost:4000>)
