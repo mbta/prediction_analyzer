@@ -23,33 +23,30 @@ declare global {
 
 export default () => {
   window.addEventListener("DOMContentLoaded", () => {
+    let setSectionVisibility = (env: string) => {
+      const showSectionCheckbox = jQuery(`#show-${env}-check`)
+      let showSection = showSectionCheckbox.is(":checked")
+
+      jQuery(`#${env}-data-table-col`).css("display", showSection ? "block" : "none");
+      jQuery(`#${env}-accuracy-total`).css("display", showSection ? "block" : "none");
+    }
+
+    setSectionVisibility("dev-green")
+    setSectionVisibility("dev-blue")
+
     if (document.getElementById("chart-prediction-accuracy")) {
       setupDashboard()
     }
 
     jQuery("#show-dev-green-check").change((event) => {
       event.preventDefault()
-      const showDevGreen = jQuery("#show-dev-green-check")
-      if (showDevGreen.is(":checked")) {
-        jQuery("#dev-green-data-table-col").show()
-        jQuery("#dev-green-accuracy-total").show()
-      } else {
-        jQuery("#dev-green-data-table-col").hide()
-        jQuery("#dev-green-accuracy-total").hide()
-      }
+      setSectionVisibility("dev-green")
       setupDashboard()
     })
 
     jQuery("#show-dev-blue-check").change((event) => {
       event.preventDefault()
-      const showDevGreen = jQuery("#show-dev-blue-check")
-      if (showDevGreen.is(":checked")) {
-        jQuery("#dev-blue-data-table-col").show()
-        jQuery("#dev-blue-accuracy-total").show()
-      } else {
-        jQuery("#dev-blue-data-table-col").hide()
-        jQuery("#dev-blue-accuracy-total").hide()
-      }
+      setSectionVisibility("dev-blue")
       setupDashboard()
     })
 

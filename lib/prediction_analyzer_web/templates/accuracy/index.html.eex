@@ -67,7 +67,7 @@
     </div>
   </div>
 
-  <div class="col-xs-3" id="dev-blue-accuracy-total">
+  <div class="col-xs-3" id="dev-blue-accuracy-total" style="display: none;">
     <span class="dev-blue-text dev-blue-text-header">Dev blue</span>
     <div>
       <span class="accuracy-summary-percentage dev-blue-text">
@@ -238,7 +238,7 @@
     </table>
   </div>
 
-  <div class="col-xs-4" id="dev-blue-data-table-col">
+  <div class="col-xs-4" id="dev-blue-data-table-col" style="display: none;">
     <span class="dev-blue-text dev-blue-text-header">Dev Blue</span>
     <table class="table" id="dev-blue-data-table">
       <tr>
