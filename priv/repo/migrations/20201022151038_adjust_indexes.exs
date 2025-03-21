@@ -1,6 +1,7 @@
 defmodule PredictionAnalyzer.Repo.Migrations.AdjustIndexes do
   use Ecto.Migration
   @disable_ddl_transaction true
+  @disable_migration_lock true
 
   def change do
     drop(index(:predictions, :trip_id, where: "vehicle_event_id IS NULL", concurrently: true))

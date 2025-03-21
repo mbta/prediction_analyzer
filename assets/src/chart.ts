@@ -8,6 +8,7 @@ interface DataPoint {
   bucket: string
   prodAcc: number
   dgAcc?: number
+  dbAcc?: number
 }
 
 declare global {
@@ -22,20 +23,30 @@ declare global {
 
 export default () => {
   window.addEventListener("DOMContentLoaded", () => {
+    let setSectionVisibility = (env: string) => {
+      const showSectionCheckbox = jQuery(`#show-${env}-check`)
+      let showSection = showSectionCheckbox.is(":checked")
+
+      jQuery(`#${env}-data-table-col`).css("display", showSection ? "block" : "none");
+      jQuery(`#${env}-accuracy-total`).css("display", showSection ? "block" : "none");
+    }
+
+    setSectionVisibility("dev-green")
+    setSectionVisibility("dev-blue")
+
     if (document.getElementById("chart-prediction-accuracy")) {
       setupDashboard()
     }
 
     jQuery("#show-dev-green-check").change((event) => {
       event.preventDefault()
-      const showDevGreen = jQuery("#show-dev-green-check")
-      if (showDevGreen.is(":checked")) {
-        jQuery("#dev-green-data-table").show()
-        jQuery("#dev-green-accuracy-total").show()
-      } else {
-        jQuery("#dev-green-data-table").hide()
-        jQuery("#dev-green-accuracy-total").hide()
-      }
+      setSectionVisibility("dev-green")
+      setupDashboard()
+    })
+
+    jQuery("#show-dev-blue-check").change((event) => {
+      event.preventDefault()
+      setSectionVisibility("dev-blue")
       setupDashboard()
     })
 
@@ -88,9 +99,11 @@ const renderDashboard = () => {
   let xFormat
 
   const showDevGreen = jQuery("#show-dev-green-check").is(":checked")
+  const showDevBlue = jQuery("#show-dev-blue-check").is(":checked")
 
   const sortedProdAccs: any[] = []
   const sortedDgAccs: any[] = []
+  const sortedDbAccs: any[] = []
   const sortedBucketNames: string[] = []
 
   if (window.sortOrderLink) {
@@ -115,6 +128,9 @@ const renderDashboard = () => {
     sortedProdAccs.push(dataPoint.prodAcc)
     if (showDevGreen) {
       sortedDgAccs.push(dataPoint.dgAcc)
+    }
+    if (showDevBlue) {
+      sortedDbAccs.push(dataPoint.dbAcc)
     }
     sortedBucketNames.push(dataPoint.bucket)
   })
@@ -178,25 +194,32 @@ const renderDashboard = () => {
   }
 
   const col1 = ["Prod"].concat(sortedProdAccs)
-  let col2
-  if (showDevGreen) {
-    col2 = ["Dev Green"].concat(sortedDgAccs)
-  } else {
-    col2 = []
-  }
   const xData = ["x"].concat(sortedBucketNames)
-  let data
-  if (showDevGreen) {
-    data = { x: "x", columns: [xData, col1, col2], type: dataType, xFormat }
-  } else {
-    data = { x: "x", columns: [xData, col1], type: dataType, xFormat }
-  }
 
+  let columns = [xData, col1]
+
+  if (showDevGreen) {
+    let col2: any = ["Dev Green"].concat(sortedDgAccs)
+    columns.push(col2)
+  }
+  if (showDevBlue) {
+    let col3: any = ["Dev Blue"].concat(sortedDbAccs)
+    columns.push(col3)
+  }
+  let data: any = { x: "x", columns: columns, type: dataType, xFormat }
+
+  let pattern = ["#c743f0"]
+  if (showDevGreen) {
+    pattern.push("#72ff13")
+  }
+  if (showDevBlue) {
+    pattern.push("#1fecff")
+  }
   c3.generate({
     bindto: "#chart-prediction-accuracy",
     data,
     color: {
-      pattern: ["#1fecff", "#c743f0"],
+      pattern: pattern,
     },
     axis: {
       rotated: rotateAxes,
@@ -215,7 +238,6 @@ const renderDashboard = () => {
         },
       },
       x: {
-        height: 200,
         label: {
           text: xAxisText,
           position: "outer-center",
@@ -301,7 +323,9 @@ const setupDatePickers = () => {
 }
 
 const setupDashboard = () => {
-  setupDatePickers()
+  if (!document.getElementById("chart-prediction-accuracy")) {
+    setupDatePickers()
+  }
 
   jQuery("#filters_stop_ids").selectize({
     dropdownParent: "body",
@@ -317,14 +341,10 @@ const setupDashboard = () => {
   const rawData = window.dataPredictionAccuracyJSON
   const prodAccs = rawData.prod_accs
   const showDevGreen = jQuery("#show-dev-green-check").is(":checked")
-  let dgAccs
-  if (showDevGreen) {
-    dgAccs = rawData.dg_accs
-  } else {
-    dgAccs = []
-  }
+  const showDevBlue = jQuery("#show-dev-blue-check").is(":checked")
+  let dgAccs = showDevGreen ? rawData.dg_accs : []
+  let dbAccs = showDevBlue ? rawData.db_accs : []
   const bucketNames = rawData.buckets
-  let i
 
   window.chartType = rawData.chart_type
   window.timeframeResolution = rawData.timeframe_resolution
@@ -337,23 +357,19 @@ const setupDashboard = () => {
     window.sortOrderLink.addEventListener("click", toggleSortOrder)
   }
 
-  if (showDevGreen) {
-    for (i = 0; i < bucketNames.length; i++) {
-      window.dataPoints.push({
-        id: i,
-        bucket: bucketNames[i],
-        prodAcc: prodAccs[i],
-        dgAcc: dgAccs[i],
-      })
+  for (let i = 0; i < bucketNames.length; i++) {
+    let chartDataPoint = {
+      id: i,
+      bucket: bucketNames[i],
+      prodAcc: prodAccs[i],
     }
-  } else {
-    for (i = 0; i < bucketNames.length; i++) {
-      window.dataPoints.push({
-        id: i,
-        bucket: bucketNames[i],
-        prodAcc: prodAccs[i],
-      })
-    }
+
+    Object.assign(
+      chartDataPoint,
+      showDevGreen && { dgAcc: dgAccs[i] },
+      showDevBlue && { dbAcc: dbAccs[i] }
+    )
+    window.dataPoints.push(chartDataPoint)
   }
 
   renderDashboard()

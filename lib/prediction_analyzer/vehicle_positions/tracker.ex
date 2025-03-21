@@ -100,6 +100,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     {:noreply, state}
   end
 
+  def handle_info(:track_commuter_rail_vehicles, %{environment: "dev-blue"} = state) do
+    {:noreply, state}
+  end
+
   def handle_info(:track_commuter_rail_vehicles, state) do
     url_path = "vehicles"
 
@@ -193,6 +197,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
   def get_env_vehicle_positions_url("dev-green") do
     Application.get_env(:prediction_analyzer, :dev_green_aws_vehicle_positions_url)
+  end
+
+  def get_env_vehicle_positions_url("dev-blue") do
+    Application.get_env(:prediction_analyzer, :dev_blue_aws_vehicle_positions_url)
   end
 
   def get_env_vehicle_positions_url("prod") do

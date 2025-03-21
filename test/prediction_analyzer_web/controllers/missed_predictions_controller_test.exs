@@ -159,8 +159,6 @@ defmodule PredictionAnalyzerWeb.MissedPredictionsControllerTest do
 
       response = html_response(conn, 200)
 
-      IO.puts(response)
-
       assert response =~ "Unpredicted Departures"
       assert response =~ "Green-B"
       assert response =~ "All Stops"

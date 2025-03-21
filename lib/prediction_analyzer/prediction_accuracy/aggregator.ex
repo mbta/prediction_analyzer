@@ -76,7 +76,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
     try do
       repo.transaction(
         fn ->
-          for environment <- ~w(prod dev-green),
+          for environment <- ~w(prod dev-green dev-blue),
               kind <- [nil | Map.values(Filters.kinds())],
               {bin_name, {bin_min, bin_max, bin_error_min, bin_error_max}} <- Filters.bins(),
               in_next_two? <- [true, false] do

@@ -52,6 +52,19 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         )
         |> PredictionAnalyzer.Repo.one!()
 
+      [dev_blue_num_accurate, dev_blue_num_predictions, dev_blue_mean_error, dev_blue_rmse] =
+        from(
+          acc in relevant_accuracies,
+          select: [
+            sum(acc.num_accurate_predictions),
+            sum(acc.num_predictions),
+            aggregate_mean_error(acc.mean_error, acc.num_predictions),
+            aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
+          ],
+          where: acc.environment == "dev-blue" and acc.route_id in ^routes
+        )
+        |> PredictionAnalyzer.Repo.one!()
+
       prod_accuracies =
         relevant_accuracies
         |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
@@ -68,6 +81,14 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           {scope, accuracy}
         end)
 
+      dev_blue_accuracies =
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range("dev-blue", filter_params)
+        |> PredictionAnalyzer.Repo.all()
+        |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
+          {scope, accuracy}
+        end)
+
       sort_function =
         if filter_params["chart_range"] == "Daily" do
           fn d1, d2 -> Date.compare(d1, d2) == :lt end
@@ -76,14 +97,16 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         end
 
       accuracies =
-        (Map.keys(prod_accuracies) ++ Map.keys(dev_green_accuracies))
+        (Map.keys(prod_accuracies) ++
+           Map.keys(dev_green_accuracies) ++ Map.keys(dev_blue_accuracies))
         |> Enum.uniq()
         |> Enum.sort(sort_function)
         |> Enum.map(fn scope ->
           prod_accuracy = prod_accuracies[scope] || [scope, 0, 0, nil, nil]
           dev_green_accuracy = dev_green_accuracies[scope] || [scope, 0, 0, nil, nil]
+          dev_blue_accuracy = dev_blue_accuracies[scope] || [scope, 0, 0, nil, nil]
 
-          {prod_accuracy, dev_green_accuracy}
+          {prod_accuracy, dev_green_accuracy, dev_blue_accuracy}
         end)
 
       render(
@@ -99,6 +122,10 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         dev_green_num_predictions: dev_green_num_predictions,
         dev_green_mean_error: dev_green_mean_error,
         dev_green_rmse: dev_green_rmse,
+        dev_blue_num_accurate: dev_blue_num_accurate,
+        dev_blue_num_predictions: dev_blue_num_predictions,
+        dev_blue_mean_error: dev_blue_mean_error,
+        dev_blue_rmse: dev_blue_rmse,
         error_msg: error_msg,
         mode: mode_atom,
         bins:
@@ -235,23 +262,31 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   @spec set_up_accuracy_chart(list(), map()) :: map()
   defp set_up_accuracy_chart(accuracies, filter_params) do
-    Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: []}, fn {[
-                                                                              bucket,
-                                                                              prod_total,
-                                                                              prod_accurate,
-                                                                              _prod_mean_error,
-                                                                              _prod_rmse
-                                                                            ],
-                                                                            [
-                                                                              _bucket,
-                                                                              dg_total,
-                                                                              dg_accurate,
-                                                                              _dg_mean_error,
-                                                                              _dg_rmse
-                                                                            ]},
-                                                                           acc ->
+    Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: [], db_accs: []}, fn {[
+                                                                                           bucket,
+                                                                                           prod_total,
+                                                                                           prod_accurate,
+                                                                                           _prod_mean_error,
+                                                                                           _prod_rmse
+                                                                                         ],
+                                                                                         [
+                                                                                           _bucket,
+                                                                                           dg_total,
+                                                                                           dg_accurate,
+                                                                                           _dg_mean_error,
+                                                                                           _dg_rmse
+                                                                                         ],
+                                                                                         [
+                                                                                           _bucket_db,
+                                                                                           db_total,
+                                                                                           db_accurate,
+                                                                                           _db_mean_error,
+                                                                                           _db_rmse
+                                                                                         ]},
+                                                                                        acc ->
       prod_accuracy = if prod_total == 0, do: [0], else: [prod_accurate / prod_total]
       dg_accuracy = if dg_total == 0, do: [0], else: [dg_accurate / dg_total]
+      db_accuracy = if db_total == 0, do: [0], else: [db_accurate / db_total]
 
       acc
       |> Map.put(
@@ -261,6 +296,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       )
       |> Map.put(:prod_accs, acc[:prod_accs] ++ prod_accuracy)
       |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
+      |> Map.put(:db_accs, acc[:db_accs] ++ db_accuracy)
     end)
     |> Map.put(:chart_type, filter_params["chart_range"] || "Hourly")
     |> Map.put(:timeframe_resolution, filter_params["timeframe_resolution"] || "60")

@@ -175,6 +175,10 @@ defmodule FakeHTTPoison do
     prediction_response_body(url)
   end
 
+  def get!("https://dev_blue.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" = url) do
+    prediction_response_body(url)
+  end
+
   def get!(url) do
     Logger.info("fetched #{url}")
     %{body: "{}"}

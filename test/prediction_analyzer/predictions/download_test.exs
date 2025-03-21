@@ -51,6 +51,7 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
     test "downloads and stores predictions" do
       Download.get_subway_predictions(:prod)
       Download.get_subway_predictions(:dev_green)
+      Download.get_subway_predictions(:dev_blue)
 
       query =
         from(p in Prediction,
@@ -70,7 +71,12 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
                ["dev-green", "TEST_TRIP_2", "70061", 1, "mid_trip", 1],
                ["dev-green", "TEST_TRIP_1", "70061", 1, "mid_trip", 2],
                ["dev-green", "TEST_TRIP_1", "70063", 1, "mid_trip", 1],
-               ["dev-green", "TEST_TRIP_2", "70063", 1, "mid_trip", 2]
+               ["dev-green", "TEST_TRIP_2", "70063", 1, "mid_trip", 2],
+               ["dev-blue", "TEST_TRIP_4", nil, 1, "mid_trip", nil],
+               ["dev-blue", "TEST_TRIP_2", "70061", 1, "mid_trip", 1],
+               ["dev-blue", "TEST_TRIP_1", "70061", 1, "mid_trip", 2],
+               ["dev-blue", "TEST_TRIP_1", "70063", 1, "mid_trip", 1],
+               ["dev-blue", "TEST_TRIP_2", "70063", 1, "mid_trip", 2]
              ]
     end
   end

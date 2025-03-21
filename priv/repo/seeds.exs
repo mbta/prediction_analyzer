@@ -41,7 +41,7 @@ service_dates =
     |> DateTime.to_date()
   end)
 
-for env <- ["prod", "dev-green"],
+for env <- ["prod", "dev-green", "dev-blue"],
     service_date <- service_dates,
     hour_of_day <- 4..25,
     {route_id, stop_id, direction_id, kind} <- stops,
@@ -68,7 +68,7 @@ end
   Repo.insert_all(PredictionAccuracy, chunk)
 end)
 
-for env <- ["prod", "dev-green"],
+for env <- ["prod", "dev-green", "dev-blue"],
     service_date <- service_dates,
     hour_of_day <- 4..25,
     {route_id, stop_id, direction_id, kind} <- stops do
