@@ -16,6 +16,7 @@ declare global {
     sortOrderLink: HTMLElement
     dataPoints: DataPoint[]
     dataPredictionAccuracyJSON: any
+    datePickerCreated: boolean
     chartType: string
     timeframeResolution: string
   }
@@ -319,11 +320,12 @@ const setupDatePickers = () => {
       formatter: dateFormatter,
       showAllDates: true,
     })
+    document.getElementById("chart-prediction-accuracy")?.setAttribute("datePickerAdded", "true");
   }
 }
 
 const setupDashboard = () => {
-  if (!document.getElementById("chart-prediction-accuracy")) {
+  if (!document.getElementById("chart-prediction-accuracy")?.hasAttribute("datePickerAdded")) {
     setupDatePickers()
   }
 
