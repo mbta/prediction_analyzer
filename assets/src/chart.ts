@@ -16,7 +16,6 @@ declare global {
     sortOrderLink: HTMLElement
     dataPoints: DataPoint[]
     dataPredictionAccuracyJSON: any
-    datePickerCreated: boolean
     chartType: string
     timeframeResolution: string
   }
