@@ -105,16 +105,15 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
         associate_vehicle_event_with_predictions(ve)
 
       {_, _} ->
+        log_string =
+          "One departure, multiple updates for vehicle=#{vehicle.label} route=#{vehicle.route_id} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+
         cond do
           vehicle.route_id in Utilities.routes_for_mode(:subway) ->
-            Logger.error(
-              "One departure, multiple updates for #{vehicle.label} on #{vehicle.route_id}"
-            )
+            Logger.error(log_string)
 
           vehicle.route_id in Utilities.routes_for_mode(:commuter_rail) ->
-            Logger.info(
-              "One departure, multiple updates for #{vehicle.label} on #{vehicle.route_id}"
-            )
+            Logger.info(log_string)
         end
     end
 

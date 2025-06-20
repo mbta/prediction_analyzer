@@ -151,7 +151,8 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
           Comparator.compare(new_vehicles, old_vehicles)
         end)
 
-      assert log =~ "One departure, multiple updates"
+      assert log =~
+               "One departure, multiple updates for vehicle=1000 route=Red stop_id=stop1 environment=dev-green"
     end
 
     test "does not log an error when there are multiple updates for a commuter rail vehicle" do
