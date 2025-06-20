@@ -106,7 +106,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
 
       {_, _} ->
         log_string =
-          "One departure, multiple updates for vehicle=#{vehicle.label} route=#{vehicle.route_id} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+          "One departure, multiple updates for vehicle=#{vehicle.label} route=#{vehicle.route_id} trip_id=#{vehicle.trip_id} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
 
         cond do
           vehicle.route_id in Utilities.routes_for_mode(:subway) ->
