@@ -9,6 +9,12 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
   alias PredictionAnalyzer.VehiclePositions.Vehicle
 
   setup do
+    log_level = Logger.level()
+
+    on_exit(fn ->
+      Logger.configure(level: log_level)
+    end)
+
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
   end
 
@@ -44,6 +50,8 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
   describe "compare_vehicles" do
     test "records arrival and departure of vehicle" do
+      Logger.configure(level: :info)
+
       assert Repo.one(from(ve in VehicleEvent, select: count(ve.id))) == 0
 
       old_vehicles = %{
@@ -54,7 +62,13 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         "1" => %{@vehicle | current_status: :STOPPED_AT}
       }
 
-      Comparator.compare(new_vehicles, old_vehicles)
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~
+               "Inserted vehicle arrival event: vehicle=1000 stop_id=stop1 environment=dev-green"
 
       arrival_time = @vehicle.timestamp
 
