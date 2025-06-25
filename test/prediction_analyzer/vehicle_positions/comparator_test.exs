@@ -115,6 +115,24 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
              ] = Repo.all(from(ve in VehicleEvent, select: ve))
     end
 
+    test "logs when a vehicle drops out of the feed" do
+      Logger.configure(level: :info)
+
+      old_vehicles = %{
+        "1" => %{@vehicle | current_status: :INCOMING_AT}
+      }
+
+      new_vehicles = %{}
+
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~
+               "vehicles_dropped_from_feed vehicles=[{\"dev-green\", \"1000\"}]"
+    end
+
     test "logs an error when there are multiple updates for a subway vehicle" do
       vehicle = %{@vehicle | route_id: "Red"}
 
