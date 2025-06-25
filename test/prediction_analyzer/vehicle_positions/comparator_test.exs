@@ -364,6 +364,8 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
     end
 
     test "records arrival of vehicle created in STOPPED_AT state" do
+      Logger.configure(level: :info)
+
       old_vehicles = %{}
 
       new_vehicles = %{
@@ -374,7 +376,13 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         "1" => %{@vehicle | stop_id: "stop2", current_status: :IN_TRANSIT}
       }
 
-      Comparator.compare(new_vehicles, old_vehicles)
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~ "Tracking new vehicle vehicle=1000 stop_id=stop1 environment=dev-green"
+
       timestamp = @vehicle.timestamp
 
       assert [

@@ -53,7 +53,9 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       record_arrival(vehicle)
     end
 
-    Logger.info("Tracking new vehicle #{label}")
+    Logger.info(
+      "Tracking new vehicle vehicle=#{label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+    )
   end
 
   defp compare_vehicle(_new, _old) do
