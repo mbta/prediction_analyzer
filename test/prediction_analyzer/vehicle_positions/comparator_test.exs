@@ -9,6 +9,12 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
   alias PredictionAnalyzer.VehiclePositions.Vehicle
 
   setup do
+    log_level = Logger.level()
+
+    on_exit(fn ->
+      Logger.configure(level: log_level)
+    end)
+
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(PredictionAnalyzer.Repo)
   end
 
@@ -44,6 +50,8 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
 
   describe "compare_vehicles" do
     test "records arrival and departure of vehicle" do
+      Logger.configure(level: :info)
+
       assert Repo.one(from(ve in VehicleEvent, select: count(ve.id))) == 0
 
       old_vehicles = %{
@@ -54,7 +62,13 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         "1" => %{@vehicle | current_status: :STOPPED_AT}
       }
 
-      Comparator.compare(new_vehicles, old_vehicles)
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~
+               "Inserted vehicle arrival event: vehicle=1000 stop_id=stop1 environment=dev-green"
 
       arrival_time = @vehicle.timestamp
 
@@ -83,7 +97,13 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         }
       }
 
-      Comparator.compare(new_vehicles, old_vehicles)
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~
+               "Added departure to vehicle event for vehicle=1000 stop_id=stop1 environment=dev-green"
 
       assert [
                %VehicleEvent{
@@ -93,6 +113,24 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
                  departure_time: ^departure_time
                }
              ] = Repo.all(from(ve in VehicleEvent, select: ve))
+    end
+
+    test "logs when a vehicle drops out of the feed" do
+      Logger.configure(level: :info)
+
+      old_vehicles = %{
+        "1" => %{@vehicle | current_status: :INCOMING_AT}
+      }
+
+      new_vehicles = %{}
+
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~
+               "vehicles_dropped_from_feed vehicles=[{\"dev-green\", \"1000\"}]"
     end
 
     test "logs an error when there are multiple updates for a subway vehicle" do
@@ -350,6 +388,8 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
     end
 
     test "records arrival of vehicle created in STOPPED_AT state" do
+      Logger.configure(level: :info)
+
       old_vehicles = %{}
 
       new_vehicles = %{
@@ -360,7 +400,13 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         "1" => %{@vehicle | stop_id: "stop2", current_status: :IN_TRANSIT}
       }
 
-      Comparator.compare(new_vehicles, old_vehicles)
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~ "Tracking new vehicle vehicle=1000 stop_id=stop1 environment=dev-green"
+
       timestamp = @vehicle.timestamp
 
       assert [

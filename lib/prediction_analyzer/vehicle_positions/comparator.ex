@@ -19,6 +19,20 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       compare_vehicle(new_vehicle, old_vehicles[new_vehicle.id])
     end)
 
+    new_vehicle_ids = new_vehicles |> Map.keys() |> MapSet.new()
+    old_vehicle_ids = old_vehicles |> Map.keys() |> MapSet.new()
+
+    lost_vehicle_ids = MapSet.difference(old_vehicle_ids, new_vehicle_ids)
+
+    if MapSet.size(lost_vehicle_ids) > 0 do
+      lost_vehicle_labels =
+        Enum.map(lost_vehicle_ids, fn vehicle_id ->
+          {old_vehicles[vehicle_id].environment, old_vehicles[vehicle_id].label}
+        end)
+
+      Logger.info("vehicles_dropped_from_feed vehicles=#{inspect(lost_vehicle_labels)}")
+    end
+
     new_vehicles
   end
 
@@ -53,7 +67,9 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       record_arrival(vehicle)
     end
 
-    Logger.info("Tracking new vehicle #{label}")
+    Logger.info(
+      "Tracking new vehicle vehicle=#{label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+    )
   end
 
   defp compare_vehicle(_new, _old) do
@@ -72,7 +88,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> Repo.insert()
     |> case do
       {:ok, vehicle_event} ->
-        Logger.info("Inserted vehicle event: #{vehicle.label} arrived at #{vehicle.stop_id}")
+        Logger.info(
+          "Inserted vehicle arrival event: vehicle=#{vehicle.label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+        )
+
         associate_vehicle_event_with_predictions(vehicle_event)
 
       {:error, changeset} ->
@@ -101,7 +120,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
         Logger.warn("Tried to update departure time, but no arrival for #{vehicle.label}")
 
       {1, [ve]} ->
-        Logger.info("Added departure to vehicle event for #{vehicle.label}")
+        Logger.info(
+          "Added departure to vehicle event for vehicle=#{vehicle.label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+        )
+
         associate_vehicle_event_with_predictions(ve)
 
       {_, _} ->
