@@ -106,7 +106,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
         Logger.warn("Tried to update departure time, but no arrival for #{vehicle.label}")
 
       {1, [ve]} ->
-        Logger.info("Added departure to vehicle event for #{vehicle.label}")
+        Logger.info(
+          "Added departure to vehicle event for vehicle=#{vehicle.label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+        )
+
         associate_vehicle_event_with_predictions(ve)
 
       {_, _} ->

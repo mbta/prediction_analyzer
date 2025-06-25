@@ -97,7 +97,13 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         }
       }
 
-      Comparator.compare(new_vehicles, old_vehicles)
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~
+               "Added departure to vehicle event for vehicle=1000 stop_id=stop1 environment=dev-green"
 
       assert [
                %VehicleEvent{
