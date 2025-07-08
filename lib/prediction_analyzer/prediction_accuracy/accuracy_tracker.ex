@@ -43,6 +43,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
     previous_hour_end = current_hour_start
     same_hour_yesterday_start = DateTime.add(current_hour_start, -86400, :second)
     same_hour_yesterday_end = DateTime.add(current_hour_end, -86400, :second)
+  end
 
     accuracy_now = fetch_accuracy(@target_stop_id, current_hour_start, current_hour_end)
     previous_hour_accuracy = fetch_accuracy(@target_stop_id, previous_hour_start, previous_hour_end)
