@@ -3,6 +3,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   alias PredictionAnalyzer.PredictionAccuracy
+
   alias PredictionAnalyzer.Filters
   require Logger
 
