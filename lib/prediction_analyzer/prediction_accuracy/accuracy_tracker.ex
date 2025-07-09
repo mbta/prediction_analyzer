@@ -2,6 +2,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
   use GenServer
 
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.PredictionAccuracy
   alias PredictionAnalyzer.Filters
   require Logger
 
@@ -29,11 +30,15 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
     :ok
   end
 
-  def handle_info(:schedule_next_check, _state) do
-    state = check_accuracy()
+  def handle_info(:check_accuracy, state) do
+    Logger.info("Accuracy check is now running")
+
+    check_accuracy()
+
     schedule_next_check(self())
     {:noreply, state}
   end
+
 
   defp check_accuracy() do
     now = DateTime.utc_now() |> DateTime.truncate(:minute)
@@ -43,34 +48,60 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
     previous_hour_end = current_hour_start
     same_hour_yesterday_start = DateTime.add(current_hour_start, -86400, :second)
     same_hour_yesterday_end = DateTime.add(current_hour_end, -86400, :second)
-  end
+
 
     accuracy_now = fetch_accuracy(@target_stop_id, current_hour_start, current_hour_end)
     previous_hour_accuracy = fetch_accuracy(@target_stop_id, previous_hour_start, previous_hour_end)
     same_hour_yesterday_accuracy = fetch_accuracy(@target_stop_id, same_hour_yesterday_start, same_hour_yesterday_end)
+    check_alert(accuracy_now, previous_hour_accuracy, same_hour_yesterday_accuracy)
+end
 
   defp fetch_accuracy(stop_id, start_time, end_time) do
     PredictionAccuracy.get_accuracy(stop_id, start_time, end_time, ["at_terminal", "reverse_trip"])
   end
 
-  defp check_alert(accuracy_now, previous_hour_accuracy, same_hour_yesterday_accuracy) do
-    if (previous_hour_accuracy - accuracy_now) > @hourly_drop_threshold do
-      send_alert("Hourly accuracy drop more than 25%: #{previous_hour_accuracy} - #{accuracy_now}")
-    end
 
-    if (same_hour_yesterday_accuracy - accuracy_now) > @daily_drop_threshold do
-      send_alert("Daily accuracy drop more than 25%: #{same_hour_yesterday_accuracy} - #{accuracy_now}")
-    end
+  #defp check_alert(accuracy_now, previous_hour_accuracy, same_hour_yesterday_accuracy) do
+  #   if (previous_hour_accuracy - accuracy_now) > @hourly_drop_threshold do
+  #     # send_alert("Hourly accuracy drop more than 25%: #{previous_hour_accuracy} - #{accuracy_now}")
+  #     Logger.info("Rgiht now the accuracy is!!!! #{accuracy_now}")
+  #   end
 
-    if accuracy_now < @min_accuracy_threshold do
-      send_alert("General accuracy less than 50%: #{accuracy_now}")
-    end
+  #   if (same_hour_yesterday_accuracy - accuracy_now) > @daily_drop_threshold do
+  #     send_alert("Daily accuracy drop more than 25%: #{same_hour_yesterday_accuracy} - #{accuracy_now}")
+  #   end
+
+  #   if accuracy_now < @min_accuracy_threshold do
+  #     send_alert("General accuracy less than 50%: #{accuracy_now}")
+  #   end
   end
 
-  defp send_alert(message) do
-    Logger.warn(message)
-    Slack.send_alert("ALERT!!! #{message}", "#tid-transit-data-alerts-testing")
+
+
+defp check_alert(accuracy_now, previous_hour_accuracy, same_hour_yesterday_accuracy) do
+  Logger.info("Right now accuracy!!!! #{accuracy_now}")
+  Logger.info("Previous Accuracy!!!! #{previous_hour_accuracy}")
+  Logger.info("Same hour but yesterday!!!!! #{same_hour_yesterday_accuracy}")
+
+  if (previous_hour_accuracy - accuracy_now) > @hourly_drop_threshold do
+    Logger.warn("Hourly drop more than 25% oh no")
   end
+
+  if (same_hour_yesterday_accuracy - accuracy_now) > @daily_drop_threshold do
+    Logger.warn("Daily drop more than 25% oh no")
+  end
+
+  if accuracy_now < @min_accuracy_threshold do
+    Logger.warn("General accuracy less than 50% oh nooo!!")
+  end
+
+
+end
+
+
+
+
+
 
   # def check_accuracy() do
   #  ["Red", "Blue", "Orange", "Green-B", "Green-C", "Green-D", "Green-E", "Mattapan"]
@@ -157,5 +188,3 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 #       end
 
 #     accuracy
-  end
-end
