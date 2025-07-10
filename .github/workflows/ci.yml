@@ -107,7 +107,7 @@ jobs:
         with:
           name: elixir-lcov
           path: cover/
-      - uses: mbta/actions/dialyzer@v1
+      - uses: mbta/actions/dialyzer@v2.13
 
   nodejs:
     name: Test Node
