@@ -34,7 +34,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     {yesterday_query, _} =
       PredictionAccuracy.filter(%{
-        "route_id" => route_id,
+        "route_ids" => route_id,
         "chart_range" => "Hourly",
         "service_date" => yesterday
       })
@@ -48,7 +48,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     {previous_day_query, _} =
       PredictionAccuracy.filter(%{
-        "route_id" => route_id,
+        "route_ids" => route_id,
         "chart_range" => "Hourly",
         "service_date" => previous_day
       })
