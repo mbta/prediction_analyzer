@@ -27,8 +27,14 @@ export default () => {
       const showSectionCheckbox = jQuery(`#show-${env}-check`)
       const showSection = showSectionCheckbox.is(":checked")
 
-      jQuery(`#${env}-data-table-col`).css("display", showSection ? "block" : "none");
-      jQuery(`#${env}-accuracy-total`).css("display", showSection ? "block" : "none");
+      jQuery(`#${env}-data-table-col`).css(
+        "display",
+        showSection ? "block" : "none"
+      )
+      jQuery(`#${env}-accuracy-total`).css(
+        "display",
+        showSection ? "block" : "none"
+      )
     }
 
     setSectionVisibility("dev-green")
@@ -319,15 +325,19 @@ const setupDatePickers = () => {
       formatter: dateFormatter,
       showAllDates: true,
     })
-    const chartElement = document.getElementById("chart-prediction-accuracy");
+    const chartElement = document.getElementById("chart-prediction-accuracy")
     if (chartElement) {
-      chartElement.setAttribute("datePickerAdded", "true");
+      chartElement.setAttribute("datePickerAdded", "true")
     }
   }
 }
 
 const setupDashboard = () => {
-  if (!document.getElementById("chart-prediction-accuracy")?.hasAttribute("datePickerAdded")) {
+  if (
+    !document
+      .getElementById("chart-prediction-accuracy")
+      ?.hasAttribute("datePickerAdded")
+  ) {
     setupDatePickers()
   }
 
