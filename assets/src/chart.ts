@@ -23,12 +23,18 @@ declare global {
 
 export default () => {
   window.addEventListener("DOMContentLoaded", () => {
-    let setSectionVisibility = (env: string) => {
+    const setSectionVisibility = (env: string) => {
       const showSectionCheckbox = jQuery(`#show-${env}-check`)
-      let showSection = showSectionCheckbox.is(":checked")
+      const showSection = showSectionCheckbox.is(":checked")
 
-      jQuery(`#${env}-data-table-col`).css("display", showSection ? "block" : "none");
-      jQuery(`#${env}-accuracy-total`).css("display", showSection ? "block" : "none");
+      jQuery(`#${env}-data-table-col`).css(
+        "display",
+        showSection ? "block" : "none"
+      )
+      jQuery(`#${env}-accuracy-total`).css(
+        "display",
+        showSection ? "block" : "none"
+      )
     }
 
     setSectionVisibility("dev-green")
@@ -196,19 +202,19 @@ const renderDashboard = () => {
   const col1 = ["Prod"].concat(sortedProdAccs)
   const xData = ["x"].concat(sortedBucketNames)
 
-  let columns = [xData, col1]
+  const columns = [xData, col1]
 
   if (showDevGreen) {
-    let col2: any = ["Dev Green"].concat(sortedDgAccs)
+    const col2: any = ["Dev Green"].concat(sortedDgAccs)
     columns.push(col2)
   }
   if (showDevBlue) {
-    let col3: any = ["Dev Blue"].concat(sortedDbAccs)
+    const col3: any = ["Dev Blue"].concat(sortedDbAccs)
     columns.push(col3)
   }
-  let data: any = { x: "x", columns: columns, type: dataType, xFormat }
+  const data: any = { x: "x", columns, type: dataType, xFormat }
 
-  let pattern = ["#c743f0"]
+  const pattern = ["#c743f0"]
   if (showDevGreen) {
     pattern.push("#72ff13")
   }
@@ -219,7 +225,7 @@ const renderDashboard = () => {
     bindto: "#chart-prediction-accuracy",
     data,
     color: {
-      pattern: pattern,
+      pattern,
     },
     axis: {
       rotated: rotateAxes,
@@ -319,12 +325,19 @@ const setupDatePickers = () => {
       formatter: dateFormatter,
       showAllDates: true,
     })
-    document.getElementById("chart-prediction-accuracy")?.setAttribute("datePickerAdded", "true");
+    const chartElement = document.getElementById("chart-prediction-accuracy")
+    if (chartElement) {
+      chartElement.setAttribute("datePickerAdded", "true")
+    }
   }
 }
 
 const setupDashboard = () => {
-  if (!document.getElementById("chart-prediction-accuracy")?.hasAttribute("datePickerAdded")) {
+  if (
+    !document
+      .getElementById("chart-prediction-accuracy")
+      ?.hasAttribute("datePickerAdded")
+  ) {
     setupDatePickers()
   }
 
@@ -343,8 +356,8 @@ const setupDashboard = () => {
   const prodAccs = rawData.prod_accs
   const showDevGreen = jQuery("#show-dev-green-check").is(":checked")
   const showDevBlue = jQuery("#show-dev-blue-check").is(":checked")
-  let dgAccs = showDevGreen ? rawData.dg_accs : []
-  let dbAccs = showDevBlue ? rawData.db_accs : []
+  const dgAccs = showDevGreen ? rawData.dg_accs : []
+  const dbAccs = showDevBlue ? rawData.db_accs : []
   const bucketNames = rawData.buckets
 
   window.chartType = rawData.chart_type
@@ -359,7 +372,7 @@ const setupDashboard = () => {
   }
 
   for (let i = 0; i < bucketNames.length; i++) {
-    let chartDataPoint = {
+    const chartDataPoint = {
       id: i,
       bucket: bucketNames[i],
       prodAcc: prodAccs[i],

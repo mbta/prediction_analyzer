@@ -139,6 +139,7 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
       log =
         capture_log(fn ->
           send(pid, :something_unexpected)
+          :sys.get_state(pid)
         end)
 
       assert log =~ "unexpected_message"
