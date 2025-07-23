@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.10 (Debian 15.10-1.pgdg120+1)
--- Dumped by pg_dump version 15.12 (Homebrew)
+-- Dumped from database version 17.5 (Postgres.app)
+-- Dumped by pg_dump version 17.5 (Postgres.app)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -32,8 +33,7 @@ CREATE TYPE public.arrival_departure AS ENUM (
 
 CREATE TYPE public.environment AS ENUM (
     'prod',
-    'dev-green',
-    'dev-blue'
+    'dev-green'
 );
 
 
@@ -373,4 +373,3 @@ INSERT INTO public."schema_migrations" (version) VALUES (20201130194309);
 INSERT INTO public."schema_migrations" (version) VALUES (20230717150451);
 INSERT INTO public."schema_migrations" (version) VALUES (20230914092018);
 INSERT INTO public."schema_migrations" (version) VALUES (20231005191442);
-INSERT INTO public."schema_migrations" (version) VALUES (20250318190252);
