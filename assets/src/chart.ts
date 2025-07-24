@@ -341,12 +341,12 @@ const setupDashboard = () => {
     setupDatePickers()
   }
 
-  jQuery("#filters_stop_ids").selectize({
+  jQuery("#accuracy-form_stop_ids").selectize({
     dropdownParent: "body",
     placeholder: "Type to search...",
     scrollDuration: 0,
   })
-  jQuery("#filters_kinds").selectize({
+  jQuery("#accuracy-form_kinds").selectize({
     dropdownParent: "body",
     placeholder: "(all kinds)",
     scrollDuration: 0,
