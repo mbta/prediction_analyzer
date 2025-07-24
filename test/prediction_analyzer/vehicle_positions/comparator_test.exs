@@ -130,7 +130,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         end)
 
       assert log =~
-               "vehicles_dropped_from_feed vehicles=[{\"dev-green\", \"1000\"}]"
+               "vehicles_dropped_from_feed environment=dev-green vehicle=1000"
     end
 
     test "logs an error when there are multiple updates for a subway vehicle" do
