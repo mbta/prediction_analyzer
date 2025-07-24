@@ -64,7 +64,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
     previous_day_accuracy = get_accuracy(previous_day_accs)
 
     if yesterday_accuracy < previous_day_accuracy - @drop_threshold do
-      Logger.warn(
+      Logger.warning(
         "accuracy_drop on #{route_id} from #{previous_day_accuracy} to #{yesterday_accuracy} between #{previous_day} and #{yesterday}"
       )
     end

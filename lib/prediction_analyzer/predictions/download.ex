@@ -51,7 +51,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
         |> store_commuter_rail_predictions(last_modified)
 
       {:error, e} ->
-        Logger.warn("Could not download commuter rail predictions; received: #{inspect(e)}")
+        Logger.warning("Could not download commuter rail predictions; received: #{inspect(e)}")
         %{}
     end
   end
@@ -123,7 +123,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
   end
 
   def handle_info(msg, state) do
-    Logger.warn(
+    Logger.warning(
       "PredictionAnalyzer.Predictions.Download event=unexpected_message message=#{inspect(msg)}"
     )
 
