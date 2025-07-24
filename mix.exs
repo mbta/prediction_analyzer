@@ -53,7 +53,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:plug, "~> 1.10"},
       {:postgrex, ">= 0.0.0"},
       {:timex, "~> 3.1"},
-      {:sentry, "~> 10.4"},
+      {:sentry, "~> 11.0"},
       {:csv, "~> 3.0"}
     ]
   end
