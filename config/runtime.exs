@@ -8,8 +8,7 @@ if config_env() == :prod do
     environment_name: sentry_env,
     tags: %{
       env: sentry_env
-    },
-    included_environments: [sentry_env]
+    }
 
   pool_size =
     case System.get_env("DATABASE_POOL_SIZE") do
