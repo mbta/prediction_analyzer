@@ -19,7 +19,7 @@
 <% end %>
 
 <div class="col-xs-9">
-  <%= form_for @conn, Routes.missed_predictions_path(@conn, :index), [as: "filters", method: :get, class: "accuracy-form", id: "accuracy-form", action: "/accuracy"], fn f -> %>
+  <%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: "filters", method: :get, class: "accuracy-form", id: "accuracy-form", action: "/accuracy"], fn f -> %>
   <%= render(PredictionAnalyzerWeb.PartialsView, "chart_selection_boxes.html", %{f: f, conn: @conn}) %>
   <% end %>
   <div class=row>
