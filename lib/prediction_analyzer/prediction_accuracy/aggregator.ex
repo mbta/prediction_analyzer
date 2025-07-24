@@ -35,7 +35,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
     if result == :ok do
       Logger.info("Finished prediction aggregations in #{time / 1000} ms")
     else
-      Logger.warn("Prediction aggregation failed, not retrying")
+      Logger.warning("Prediction aggregation failed, not retrying")
     end
 
     schedule_next_run(self())
@@ -105,7 +105,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Aggregator do
       :ok
     rescue
       e in DBConnection.ConnectionError ->
-        Logger.warn("#{__MODULE__} do_aggregation #{inspect(e)}")
+        Logger.warning("#{__MODULE__} do_aggregation #{inspect(e)}")
         :error
     end
   end
