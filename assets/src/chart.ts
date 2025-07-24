@@ -68,7 +68,7 @@ export default () => {
 
 const bindFormLinks = (accuracyForm) => {
   const chartRangeInput = document.getElementById(
-    "filters_chart_range"
+    "accuracy-form_chart_range"
   ) as HTMLInputElement
 
   const bindChartRangeLink = (linkId, inputValue) => {
@@ -298,7 +298,7 @@ const setupDatePickers = () => {
   }
 
   const serviceDateInput = document.querySelector(
-    "#filters_service_date"
+    "#accuracy-form_service_date"
   ) as HTMLInputElement
   if (serviceDateInput) {
     datepicker(serviceDateInput, {
@@ -309,10 +309,10 @@ const setupDatePickers = () => {
   }
 
   const dateStartInput = document.querySelector(
-    "#filters_date_start"
+    "#accuracy-form_date_start"
   ) as HTMLInputElement
   const dateEndInput = document.querySelector(
-    "#filters_date_end"
+    "#accuracy-form_date_end"
   ) as HTMLInputElement
   if (dateStartInput && dateEndInput) {
     datepicker(dateStartInput, {
@@ -341,12 +341,12 @@ const setupDashboard = () => {
     setupDatePickers()
   }
 
-  jQuery("#filters_stop_ids").selectize({
+  jQuery("#accuracy-form_stop_ids").selectize({
     dropdownParent: "body",
     placeholder: "Type to search...",
     scrollDuration: 0,
   })
-  jQuery("#filters_kinds").selectize({
+  jQuery("#accuracy-form_kinds").selectize({
     dropdownParent: "body",
     placeholder: "(all kinds)",
     scrollDuration: 0,
