@@ -117,7 +117,9 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> Repo.update_all([])
     |> case do
       {0, _} ->
-        Logger.warn("Tried to update departure time, but no arrival for #{vehicle.label}")
+        Logger.warn(
+          "Tried to update departure time, but no arrival vehicle=#{vehicle.label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+        )
 
       {1, [ve]} ->
         Logger.info(
