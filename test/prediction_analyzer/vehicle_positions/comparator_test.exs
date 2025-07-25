@@ -142,7 +142,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         end)
 
       assert log =~
-               "vehicles_dropped_from_feed environment=dev-green vehicle=1000 vehicle=1001"
+               "vehicles_dropped_from_feed environment=dev-green count=2 vehicle=1000 vehicle=1001"
     end
 
     test "logs a message for each environment when a vehicle drops out of the feed" do
@@ -172,10 +172,10 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         end)
 
       assert log =~
-               "vehicles_dropped_from_feed environment=dev-green vehicle=1000"
+               "vehicles_dropped_from_feed environment=dev-green count=1 vehicle=1000"
 
       assert log =~
-               "vehicles_dropped_from_feed environment=prod vehicle=1001"
+               "vehicles_dropped_from_feed environment=prod count=1 vehicle=1001"
     end
 
     test "logs an error when there are multiple updates for a subway vehicle" do

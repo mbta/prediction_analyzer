@@ -30,7 +30,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
       Logger.info(
         [
           "vehicles_dropped_from_feed",
-          "environment=#{environment}"
+          "environment=#{environment}",
+          "count=#{length(vehicle_ids)}"
           | vehicle_ids
             |> Enum.map(&"vehicle=#{old_vehicles[&1].label}")
         ]
