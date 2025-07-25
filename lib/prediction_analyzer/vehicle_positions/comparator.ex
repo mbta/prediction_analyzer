@@ -24,21 +24,19 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
 
     lost_vehicle_ids = MapSet.difference(old_vehicle_ids, new_vehicle_ids)
 
-    if MapSet.size(lost_vehicle_ids) > 0 do
-      lost_vehicle_ids
-      |> Enum.group_by(&old_vehicles[&1].environment)
-      |> Enum.each(fn {environment, vehicle_ids} ->
-        Logger.info(
-          [
-            "vehicles_dropped_from_feed",
-            "environment=#{environment}"
-            | vehicle_ids
-              |> Enum.map(&"vehicle=#{old_vehicles[&1].label}")
-          ]
-          |> Enum.intersperse(" ")
-        )
-      end)
-    end
+    lost_vehicle_ids
+    |> Enum.group_by(&old_vehicles[&1].environment)
+    |> Enum.each(fn {environment, vehicle_ids} ->
+      Logger.info(
+        [
+          "vehicles_dropped_from_feed",
+          "environment=#{environment}"
+          | vehicle_ids
+            |> Enum.map(&"vehicle=#{old_vehicles[&1].label}")
+        ]
+        |> Enum.intersperse(" ")
+      )
+    end)
 
     new_vehicles
   end
