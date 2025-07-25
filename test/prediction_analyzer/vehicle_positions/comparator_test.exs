@@ -119,7 +119,19 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       Logger.configure(level: :info)
 
       old_vehicles = %{
-        "1" => %{@vehicle | current_status: :INCOMING_AT}
+        "1" => %{@vehicle | current_status: :INCOMING_AT},
+        "2" => %Vehicle{
+          id: "2",
+          environment: "dev-green",
+          label: "1001",
+          is_deleted: false,
+          trip_id: "trip2",
+          route_id: "route1",
+          direction_id: 0,
+          current_status: :INCOMING_AT,
+          stop_id: "stop1",
+          timestamp: :os.system_time(:second)
+        }
       }
 
       new_vehicles = %{}
@@ -130,7 +142,40 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
         end)
 
       assert log =~
-               "vehicles_dropped_from_feed vehicles=[{\"dev-green\", \"1000\"}]"
+               "vehicles_dropped_from_feed environment=dev-green count=2 vehicle=1000 vehicle=1001"
+    end
+
+    test "logs a message for each environment when a vehicle drops out of the feed" do
+      Logger.configure(level: :info)
+
+      old_vehicles = %{
+        "1" => %{@vehicle | current_status: :INCOMING_AT},
+        "2" => %Vehicle{
+          id: "2",
+          environment: "prod",
+          label: "1001",
+          is_deleted: false,
+          trip_id: "trip2",
+          route_id: "route1",
+          direction_id: 0,
+          current_status: :INCOMING_AT,
+          stop_id: "stop1",
+          timestamp: :os.system_time(:second)
+        }
+      }
+
+      new_vehicles = %{}
+
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~
+               "vehicles_dropped_from_feed environment=dev-green count=1 vehicle=1000"
+
+      assert log =~
+               "vehicles_dropped_from_feed environment=prod count=1 vehicle=1001"
     end
 
     test "logs an error when there are multiple updates for a subway vehicle" do
