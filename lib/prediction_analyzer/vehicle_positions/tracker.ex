@@ -86,12 +86,12 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
         {:noreply, state}
 
       {:ok, %{status_code: code}} ->
-        :ok = Logger.warn(["Could not download subway vehicles. status_code=", inspect(code)])
+        :ok = Logger.warning(["Could not download subway vehicles. status_code=", inspect(code)])
 
         {:noreply, state}
 
       {:error, e} ->
-        Logger.warn("Could not download subway vehicles; received: #{inspect(e)}")
+        Logger.warning("Could not download subway vehicles; received: #{inspect(e)}")
         {:noreply, state}
     end
   end
@@ -146,7 +146,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
           state
 
         {:error, e} ->
-          Logger.warn("Could not download commuter rail vehicles; received: #{inspect(e)}")
+          Logger.warning("Could not download commuter rail vehicles; received: #{inspect(e)}")
           state
       end
 
@@ -158,7 +158,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
   end
 
   def handle_info(msg, state) do
-    Logger.warn(
+    Logger.warning(
       "PredictionAnalyzer.VehiclePositions.Tracker event=unknown_message: #{inspect(msg)}"
     )
 
@@ -176,7 +176,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
           []
 
         _ ->
-          Logger.warn("failed_to_parse_vehicle_entity #{inspect(e)}")
+          Logger.warning("failed_to_parse_vehicle_entity #{inspect(e)}")
           []
       end
     end)

@@ -22,7 +22,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
       setup_db_for_route("Red", 69, 80)
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           AccuracyTracker.check_accuracy()
         end)
 
@@ -33,7 +33,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
       setup_db_for_route("Red", 80, 90)
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           AccuracyTracker.check_accuracy()
         end)
 
@@ -44,7 +44,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
       setup_db_for_route("Red", 90, 80)
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           AccuracyTracker.check_accuracy()
         end)
 
@@ -57,7 +57,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
       setup_db_for_route("Orange", 70, 75)
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           result = AccuracyTracker.check_accuracy()
 
           red_accuracy = result["Red"]
@@ -94,7 +94,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTrackerTest do
           :timer.sleep(50)
         end)
 
-      Logger.configure(level: :warn)
+      Logger.configure(level: :warning)
 
       assert log =~ "check_accuracy"
     end

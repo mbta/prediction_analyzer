@@ -86,7 +86,7 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
       reassign_env(:http_fetcher, FailedHTTPFetcher)
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           Download.get_commuter_rail_predictions()
         end)
 

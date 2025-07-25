@@ -40,7 +40,7 @@ RUN mix compile
 # Add frontend assets compiled in node container, required by phx.digest
 COPY --from=assets-builder /root/priv/static ./priv/static
 
-RUN mix do phx.digest, release
+RUN mix do phx.digest, sentry.package_source_code, release
 
 # Finally, use an Alpine container for the runtime environment
 FROM alpine:3.17.0

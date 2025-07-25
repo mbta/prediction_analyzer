@@ -216,7 +216,7 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
         }
       ])
 
-      assert [{"route1", 1, 0, 0.0}] =
+      assert [{"route1", 1, 0, +0.0}] =
                MissedPredictions.unpredicted_departures_summary(~D[2019-07-01], "prod")
     end
 
@@ -689,7 +689,7 @@ defmodule PredictionAnalyzer.MissedPredictionsTest do
         }
       ])
 
-      assert [{"route1", 1, 0, 0.0}] =
+      assert [{"route1", 1, 0, +0.0}] =
                MissedPredictions.missed_departures_summary(~D[2019-07-01], "prod")
     end
 

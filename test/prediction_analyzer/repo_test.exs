@@ -26,7 +26,7 @@ defmodule PredictionAnalyzer.RepoTest do
         [username: "u", hostname: "h", port: 4000]
         |> PredictionAnalyzer.Repo.before_connect()
 
-      certfile_path = config[:ssl_opts][:cacertfile]
+      certfile_path = config[:ssl][:cacertfile]
       assert certfile_path
       assert Path.basename(certfile_path) == "aws-cert-bundle.pem"
     end
