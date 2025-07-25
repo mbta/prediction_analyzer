@@ -230,7 +230,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           Comparator.compare(new_vehicles, old_vehicles)
         end)
 
@@ -290,7 +290,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           Comparator.compare(new_vehicles, old_vehicles)
         end)
 
@@ -485,7 +485,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           Comparator.compare(new_vehicles, old_vehicles)
         end)
 
@@ -513,7 +513,7 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           Comparator.compare(new_vehicles, old_vehicles)
         end)
 
