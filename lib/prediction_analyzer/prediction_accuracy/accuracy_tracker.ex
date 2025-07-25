@@ -17,7 +17,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
   end
 
   def handle_info(:check_accuracy, state) do
-    Logger.info("Running accuracy check...")
+    Logger.info("Checking accuracy")
     check_accuracy()
     schedule_next_check(self())
     {:noreply, state}
@@ -30,33 +30,32 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
   defp check_accuracy do
     now = DateTime.utc_now() |> DateTime.truncate(:second)
-    curr_start = DateTime.add(now, -3600, :second)
-    curr_end = now
-    prev_start = DateTime.add(curr_start, -3600, :second)
-    prev_end = curr_start
-    acc_now = fetch_accuracy(@target_stop_id, curr_start, curr_end)
-    acc_prev = fetch_accuracy(@target_stop_id, prev_start, prev_end)
-    trigger_maybe(acc_prev, acc_now, prev_end, curr_end)
+    current_hour_start = DateTime.add(now, -3600, :second)
+    current_hour_finish = now
+    previous_hour_start = DateTime.add(current_hour_start, -3600, :second)
+    previous_hour_end = current_hour_start
+    current_accuracy = fetch_accuracy(@target_stop_id, current_hour_start, current_hour_finish)
+    previous_accuracy = fetch_accuracy(@target_stop_id, previous_hour_start, previous_hour_end)
+    trigger_maybe(previous_accuracy, current_accuracy, previous_hour_end, current_hour_finish)
   end
 
   defp fetch_accuracy(stop_id, start_time, end_time) do
-    PredictionAccuracy.get_accuracy(stop_id, start_time, end_time, ["at_terminal", "reverse_trip"])
+    get_accuracy(stop_id, start_time, end_time, ["at_terminal", "reverse_trip"])
   end
 
-  defp trigger_maybe(nil, _curr, _prev_end, _curr_end), do: :skip
-  defp trigger_maybe(_prev, nil, _prev_end, _curr_end), do: :skip
-  defp trigger_maybe(prev, curr, prev_end, curr_end) do
+  defp trigger_maybe(nil, _curr, _previous_hour_end, _current_hour_finish), do: :skip
+  defp trigger_maybe(_prev, nil, _previous_hour_end, _current_hour_finish), do: :skip
+  defp trigger_maybe(prev, curr, previous_hour_end, current_hour_finish) do
     drop = prev - curr
     if drop > @drop_threshold do
       IO.puts("""
 
       Alert!!! Prediction Accuracy drop!!!
 
-      Time: #{inspect(prev_end)} to #{inspect(curr_end)}
-      Previous Hour Accuracy: #{prev}
-      Current Hour Accuracy: #{curr}
+      Time: #{inspect(previous_hour_end)} to #{inspect(current_hour_finish)}
+      Previous Hour: #{prev}
+      Current Hour: #{curr}
       Drop: #{drop * 100}%
-
       """)
     end
   end
