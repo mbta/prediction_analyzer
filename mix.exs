@@ -37,8 +37,8 @@ defmodule PredictionAnalyzer.Mixfile do
     [
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_aws_rds, "~> 2.0"},
-      {:ecto, "~> 3.11"},
-      {:ecto_sql, "~> 3.11"},
+      {:ecto, "~> 3.13"},
+      {:ecto_sql, "~> 3.13"},
       {:lcov_ex, "~> 0.2", only: :test, runtime: false},
       {:gettext, "~> 0.11"},
       {:hackney, "~> 1.17.0"},
