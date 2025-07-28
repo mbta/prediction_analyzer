@@ -95,7 +95,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> case do
       {:ok, vehicle_event} ->
         Logger.info(
-          "Inserted vehicle arrival event: vehicle=#{vehicle.label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+          "Inserted vehicle arrival event: vehicle=#{vehicle.label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment} vehicle_event_id=#{vehicle_event.id}"
         )
 
         associate_vehicle_event_with_predictions(vehicle_event)
@@ -129,21 +129,29 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
 
       {1, [ve]} ->
         Logger.info(
-          "Added departure to vehicle event for vehicle=#{vehicle.label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+          "Added departure to vehicle event for vehicle=#{vehicle.label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment} vehicle_event_id=#{ve.id}"
         )
 
         associate_vehicle_event_with_predictions(ve)
 
-      {_, _} ->
-        log_string =
-          "One departure, multiple updates for vehicle=#{vehicle.label} route=#{vehicle.route_id} trip_id=#{vehicle.trip_id} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
+      {vehicle_event_count, vehicle_events} ->
+        log_contents =
+          [
+            "One departure, multiple updates for vehicle=#{vehicle.label} ",
+            "route=#{vehicle.route_id} ",
+            "trip_id=#{vehicle.trip_id} ",
+            "stop_id=#{vehicle.stop_id} ",
+            "environment=#{vehicle.environment} ",
+            "matched_vehicle_event_count=#{vehicle_event_count}",
+            Enum.map(vehicle_events, &" vehicle_event_id=#{&1.id}")
+          ]
 
         cond do
           vehicle.route_id in Utilities.routes_for_mode(:subway) ->
-            Logger.error(log_string)
+            Logger.error(log_contents)
 
           vehicle.route_id in Utilities.routes_for_mode(:commuter_rail) ->
-            Logger.info(log_string)
+            Logger.info(log_contents)
         end
     end
 
