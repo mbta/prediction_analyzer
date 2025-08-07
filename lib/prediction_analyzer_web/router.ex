@@ -21,6 +21,7 @@ defmodule PredictionAnalyzerWeb.Router do
     get("/vehicle_events", VehicleEventsController, :index)
     get("/accuracy", AccuracyController, :index)
     get("/missed_predictions", MissedPredictionsController, :index)
+    get("/predictions", PredictionsController, :csv)
     get("/_health", HealthController, :index)
   end
 
