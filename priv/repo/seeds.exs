@@ -72,7 +72,7 @@ for env <- ["prod", "dev-green", "dev-blue"],
     service_date <- service_dates,
     hour_of_day <- 4..25,
     {route_id, stop_id, direction_id, kind} <- stops do
-  for i <- 1..:rand.uniform(25) do
+  for _ <- 1..:rand.uniform(25) do
     timestamp =
       service_date
       |> Timex.to_datetime()
