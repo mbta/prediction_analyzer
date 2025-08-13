@@ -19,10 +19,7 @@ defmodule PredictionAnalyzer.Repo do
 
     Keyword.merge(config,
       password: token,
-      # Heads up: ecto_sql 3.12+ changes the structure of these options.
-      # https://hexdocs.pm/ecto_sql/Ecto.Adapters.Postgres.html#module-connection-options
-      ssl: true,
-      ssl_opts: [
+      ssl: [
         cacertfile: Path.join(:code.priv_dir(:prediction_analyzer), "aws-cert-bundle.pem"),
         verify: :verify_peer,
         server_name_indication: String.to_charlist(hostname),
