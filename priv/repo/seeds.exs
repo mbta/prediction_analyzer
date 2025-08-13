@@ -35,7 +35,7 @@ stops = [
 Logger.info("Generating sample prediction_accuracy data")
 
 service_dates =
-  Enum.map(0..-14, fn day_offset ->
+  Enum.map(0..-14//-1, fn day_offset ->
     Timex.local()
     |> Timex.shift(days: day_offset)
     |> DateTime.to_date()
