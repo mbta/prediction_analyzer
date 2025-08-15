@@ -7,6 +7,13 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
   @drop_threshold 0.1
 
+  @spec start_link([
+          {:debug, [:log | :statistics | :trace | {any(), any()}]}
+          | {:hibernate_after, :infinity | non_neg_integer()}
+          | {:name, atom() | {:global, any()} | {:via, atom(), any()}}
+          | {:spawn_opt, [:link | :monitor | {any(), any()}]}
+          | {:timeout, :infinity | non_neg_integer()}
+        ]) :: :ignore | {:error, any()} | {:ok, pid()}
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, [], opts)
   end
