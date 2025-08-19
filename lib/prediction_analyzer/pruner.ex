@@ -24,7 +24,7 @@ defmodule PredictionAnalyzer.Pruner do
     Logger.info("Beginning prune of DB")
 
     prune_lookback_sec = Application.get_env(:prediction_analyzer, :prune_lookback_sec)
-    max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)
+    max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)[:default]
 
     predictions_cutoff = System.system_time(:second) - prune_lookback_sec
     vehicle_events_cutoff = predictions_cutoff - max_dwell_time_sec
