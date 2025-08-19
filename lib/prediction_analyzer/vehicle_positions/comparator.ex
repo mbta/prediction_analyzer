@@ -109,7 +109,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
 
   @spec record_departure(Vehicle.t()) :: nil
   defp record_departure(vehicle) do
-    max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)
+    max_dwell_time_sec = max_dwell_time(vehicle)
 
     from(
       ve in VehicleEvent,
@@ -148,6 +148,14 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     end
 
     nil
+  end
+
+  defp max_dwell_time(%Vehicle{route_id: "Mattapan"}) do
+    Application.get_env(:prediction_analyzer, :max_dwell_time_sec)[:mattapan]
+  end
+
+  defp max_dwell_time(_vehicle) do
+    Application.get_env(:prediction_analyzer, :max_dwell_time_sec)[:default]
   end
 
   @spec vehicle_params(Vehicle.t()) :: map()

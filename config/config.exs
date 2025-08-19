@@ -31,7 +31,11 @@ config :prediction_analyzer, :api_base_url, "https://api-v3.mbta.com/"
 config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks.NoOp
 config :prediction_analyzer, :stop_name_fetcher, PredictionAnalyzer.StopNameFetcher
 config :prediction_analyzer, :timezone, "America/New_York"
-config :prediction_analyzer, :max_dwell_time_sec, 30 * 60
+
+config :prediction_analyzer, :max_dwell_time_sec,
+  default: 30 * 60,
+  mattapan: 20 * 60
+
 config :prediction_analyzer, :prune_lookback_sec, 7 * 24 * 60 * 60
 config :prediction_analyzer, :analysis_lookback_min, 40
 

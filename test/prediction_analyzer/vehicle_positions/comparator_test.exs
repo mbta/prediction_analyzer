@@ -238,6 +238,60 @@ defmodule PredictionAnalyzer.VehiclePositions.ComparatorTest do
                "One departure, multiple updates for vehicle=1000 route=Red trip_id=trip1 stop_id=stop1 environment=dev-green"
     end
 
+    test "uses bespoke max_dwell_time for mattapan" do
+      Logger.configure(level: :info)
+
+      vehicle = %{@vehicle | route_id: "Mattapan"}
+
+      event1 = %PredictionAnalyzer.VehicleEvents.VehicleEvent{
+        vehicle_id: "1",
+        environment: "dev-green",
+        vehicle_label: "1000",
+        is_deleted: false,
+        route_id: "Mattapan",
+        direction_id: 0,
+        trip_id: "trip1",
+        stop_id: "stop1",
+        # Set the first "arrival" to just before the mattapan max dwell time
+        arrival_time:
+          vehicle.timestamp -
+            Application.get_env(:prediction_analyzer, :max_dwell_time_sec)[:mattapan],
+        departure_time: nil
+      }
+
+      event2 = %PredictionAnalyzer.VehicleEvents.VehicleEvent{
+        vehicle_id: "1",
+        environment: "dev-green",
+        vehicle_label: "1000",
+        is_deleted: false,
+        route_id: "Mattapan",
+        direction_id: 0,
+        trip_id: "trip1",
+        stop_id: "stop1",
+        arrival_time: vehicle.timestamp,
+        departure_time: nil
+      }
+
+      PredictionAnalyzer.Repo.insert(event1)
+      PredictionAnalyzer.Repo.insert(event2)
+
+      old_vehicles = %{
+        "1" => %{vehicle | stop_id: "stop1", current_status: :STOPPED_AT}
+      }
+
+      new_vehicles = %{
+        "1" => %{vehicle | stop_id: "stop2", current_status: :IN_TRANSIT_TO}
+      }
+
+      log =
+        capture_log([level: :info], fn ->
+          Comparator.compare(new_vehicles, old_vehicles)
+        end)
+
+      assert log =~
+               "Added departure to vehicle event for"
+    end
+
     test "does not log an error when there are multiple updates for a commuter rail vehicle" do
       vehicle = %{@vehicle | route_id: "CR-Fitchburg"}
 
