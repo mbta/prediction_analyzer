@@ -35,7 +35,7 @@ stops = [
 Logger.info("Generating sample prediction_accuracy data")
 
 service_dates =
-  Enum.map(0..-14, fn day_offset ->
+  Enum.map(0..-14//-1, fn day_offset ->
     Timex.local()
     |> Timex.shift(days: day_offset)
     |> DateTime.to_date()
@@ -72,7 +72,7 @@ for env <- ["prod", "dev-green", "dev-blue"],
     service_date <- service_dates,
     hour_of_day <- 4..25,
     {route_id, stop_id, direction_id, kind} <- stops do
-  for i <- 1..:rand.uniform(25) do
+  for _ <- 1..:rand.uniform(25) do
     timestamp =
       service_date
       |> Timex.to_datetime()

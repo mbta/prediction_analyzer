@@ -101,7 +101,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
         associate_vehicle_event_with_predictions(vehicle_event)
 
       {:error, changeset} ->
-        Logger.warn("Could not insert vehicle event: #{inspect(changeset)}")
+        Logger.warning("Could not insert vehicle event: #{inspect(changeset)}")
     end
 
     nil
@@ -123,7 +123,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> Repo.update_all([])
     |> case do
       {0, _} ->
-        Logger.warn(
+        Logger.warning(
           "Tried to update departure time, but no arrival vehicle=#{vehicle.label} stop_id=#{vehicle.stop_id} environment=#{vehicle.environment}"
         )
 
@@ -207,7 +207,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Comparator do
     |> case do
       {0, _} ->
         unless vehicle_event.departure_time do
-          Logger.warn(
+          Logger.warning(
             "vehicle_event_type=standard Created vehicle_event with no associated prediction: #{vehicle_event.id}"
           )
         end

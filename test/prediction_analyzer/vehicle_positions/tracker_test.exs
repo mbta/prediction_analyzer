@@ -106,7 +106,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           assert Tracker.handle_info(:track_subway_vehicles, state) ==
                    {:noreply,
                     %{
@@ -135,7 +135,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           assert Tracker.handle_info(:track_subway_vehicles, state) ==
                    {:noreply, state}
         end)
@@ -156,7 +156,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           assert Tracker.handle_info(:track_subway_vehicles, state) ==
                    {:noreply,
                     %{
@@ -185,7 +185,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           assert Tracker.handle_info(:track_subway_vehicles, state) ==
                    {:noreply,
                     %{
@@ -278,7 +278,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       }
 
       log =
-        capture_log([level: :warn], fn ->
+        capture_log([level: :warning], fn ->
           assert Tracker.handle_info(:track_commuter_rail_vehicles, state) ==
                    {:noreply,
                     %{

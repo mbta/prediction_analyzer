@@ -84,7 +84,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
         parse_response(response)
 
       {:error, e} ->
-        Logger.warn("Could not download stop names; received: #{inspect(e)}")
+        Logger.warning("Could not download stop names; received: #{inspect(e)}")
         %{}
     end
   end

@@ -35,25 +35,25 @@ defmodule PredictionAnalyzer.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_aws_rds, "~> 2.0"},
-      {:ecto, "~> 3.11"},
-      {:ecto_sql, "~> 3.11"},
+      {:ecto, "~> 3.13"},
+      {:ecto_sql, "~> 3.13"},
       {:lcov_ex, "~> 0.2", only: :test, runtime: false},
       {:gettext, "~> 0.11"},
       {:hackney, "~> 1.17.0"},
       {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.0"},
-      {:phoenix, "~> 1.5.0"},
+      {:phoenix, "~> 1.6.0"},
       {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_html, "~> 2.10"},
+      {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.4", only: :dev},
       {:phoenix_pubsub, "~> 2.0"},
       {:plug_cowboy, "~> 2.1"},
       {:plug, "~> 1.10"},
       {:postgrex, ">= 0.0.0"},
       {:timex, "~> 3.1"},
-      {:sentry, "~> 8.0"},
+      {:sentry, "~> 11.0"},
       {:csv, "~> 3.0"}
     ]
   end
