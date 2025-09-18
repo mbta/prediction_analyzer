@@ -49,7 +49,7 @@ defmodule PredictionAnalyzer.PrunerTest do
   end
 
   test "prune deletes predictions that are older than lookback period with dwell time grace period for vehicle events" do
-    max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)
+    max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)[:default]
     prune_lookback_sec = Application.get_env(:prediction_analyzer, :prune_lookback_sec)
 
     prune_cutoff = System.system_time(:second) - prune_lookback_sec

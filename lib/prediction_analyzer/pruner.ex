@@ -24,10 +24,9 @@ defmodule PredictionAnalyzer.Pruner do
     Logger.info("Beginning prune of DB")
 
     prune_lookback_sec = Application.get_env(:prediction_analyzer, :prune_lookback_sec)
-    max_dwell_time_sec = Application.get_env(:prediction_analyzer, :max_dwell_time_sec)
 
     predictions_cutoff = System.system_time(:second) - prune_lookback_sec
-    vehicle_events_cutoff = predictions_cutoff - max_dwell_time_sec
+    vehicle_events_cutoff = predictions_cutoff - max_dwell_time_sec()
 
     {time, _} =
       :timer.tc(fn ->
@@ -57,6 +56,18 @@ defmodule PredictionAnalyzer.Pruner do
     schedule_next_run(self())
     {:noreply, state}
   end
+
+  # The `max_dwell_time_sec` configuration used to be a single value for
+  # all usages but now contains bespoke values for certain circumstances,
+  # such as the Mattapan line. Despite this, that information is not in the
+  # `VehicleEvent`'s table. To keep the Pruner running as is, it uses the largest
+  # value of the configuration list, to avoid pruning any `VehicleEvent`'s
+  # too soon.
+  defp max_dwell_time_sec,
+    do:
+      Application.get_env(:prediction_analyzer, :max_dwell_time_sec)
+      |> Keyword.values()
+      |> Enum.max()
 
   @spec schedule_next_run(pid()) :: reference()
   defp schedule_next_run(pid) do
