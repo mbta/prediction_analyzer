@@ -1,15 +1,7 @@
 import pandas as pd
 import numpy as np
 import pytz
-
-# CSV paths here; 
-# pa_csv for prediction analyzer (from PA endpoint - merged for the day)
-# tb_csv for tableau data, exported from the accuracy report
-pa_csv = 'merged-70238-2025-08-22.csv'
-tb_csv = 'ClevelandCircle0822-2.csv'
-
-# Sanity Check as required, include PA trip_IDs and uncomment sanity check block below
-SANITY_TRIP_IDS = ['69330461'] 
+import sys
 
 
 # CSV Load
@@ -57,9 +49,11 @@ def preprocess_tableau(tb):
     return tb
 
 # Match PA/Tableau; record mismatches
-def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=60, sanity_trip_ids=None):
+def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=60):
     pa['departure_time_unix'] = pd.to_numeric(pa['departure_time_unix'], errors='coerce')
     tb['departure_time_unix'] = pd.to_numeric(tb['departure_time_unix'], errors='coerce')
+    tb['predicted_departure_unix'] = pd.to_numeric(tb['predicted_departure_unix'], errors='coerce')
+    pa['predicted_departure_unix'] = pd.to_numeric(pa['predicted_departure_unix'], errors='coerce')
 
     eastern = pytz.timezone('America/New_York')
     unmatched_rows = []
@@ -75,20 +69,16 @@ def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=60, sanity_trip_
             (tb['departure_time_unix'] <= pa_dep + tolerance_dep)
         ]
 
-        # SANITY CHECK
-        #if sanity_trip_ids and pa_row['trip_id'] in sanity_trip_ids:
-        #    print("\n=== SANITY CHECK for trip", pa_row['trip_id'], "===")
-        #    print("PA departure_time_unix:", pa_dep)
-        #    print("Candidate Tableau departure times:", candidates['departure_time_unix'].tolist())
-
         row_out = pa_row.copy()
         tableau_time_str = ''
+        tableau_generated_time_str = ''
 
         if candidates.empty:
             mismatch_reason = "No Tableau row with departure_time within tolerance"
         else:
             gen_diff = (candidates['generated_time_unix'] - pa_row['generated_time_unix']).abs()
             pred_diff = (candidates['predicted_departure_unix'] - pa_row['predicted_departure_unix']).abs()
+
             valid = (gen_diff <= tolerance) & (pred_diff <= tolerance)
 
             if valid.any():
@@ -103,12 +93,18 @@ def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=60, sanity_trip_
                 mismatch_reason = "; ".join(reasons)
 
             # Pick first candidate departure time for reference
-            if len(candidates['departure_time_unix'].dropna()) > 0:
-                dt_utc = pd.to_datetime(candidates['departure_time_unix'].dropna().iloc[0], unit='s', utc=True)
+            if len(candidates['departure_time_unix']) > 0:
+                dt_utc = pd.to_datetime(candidates['departure_time_unix'].iloc[0], unit='s', utc=True)
                 tableau_time_str = dt_utc.tz_convert(eastern).strftime('%Y-%m-%d %H:%M:%S %Z')
+                gen_dt_utc = pd.to_datetime(candidates['generated_time_unix'].iloc[0], unit='s', utc=True)
+                tableau_generated_time_str = gen_dt_utc.tz_convert(eastern).strftime('%Y-%m-%d %H:%M:%S %Z')
 
         row_out['mismatch_reason'] = mismatch_reason
         row_out['tableau_departure_time'] = tableau_time_str
+        row_out['tableau_generated_departure_time'] = tableau_generated_time_str
+        row_out['pa_departure_dt'] = pd.to_datetime(pa_row['departure_time_unix'], unit='s', utc='True').tz_convert(eastern).strftime('%Y-%m-%d %H:%M:%S %Z')
+        row_out['pa_generated_dt'] = pd.to_datetime(pa_row['generated_time_unix'], unit='s', utc='True').tz_convert(eastern).strftime('%Y-%m-%d %H:%M:%S %Z')
+
         unmatched_rows.append(row_out)
 
     unmatched_df = pd.DataFrame(unmatched_rows)
@@ -209,13 +205,15 @@ def create_clean_unmatched_summary(unmatched_df, tb_df, minor_tol=60):
 
 # Main
 if __name__ == '__main__':
-
-
+    if len(sys.argv) != 3:
+        print("Usage: ./delta-analyzer-departure (prediction analyzer file) (tableau file)", file=sys.stderr)
+        exit(1)
+    [_, pa_csv, tb_csv] = sys.argv
     pa_df, tb_df = load_data(pa_csv, tb_csv)
     pa_df, tb_df = normalize_keys(pa_df, tb_df)
     tb_df = preprocess_tableau(tb_df)
 
-    matched_df, unmatched_df, all_rows = match_rows_with_reasons(pa_df, tb_df, tolerance=5, sanity_trip_ids=SANITY_TRIP_IDS)
+    matched_df, unmatched_df, all_rows = match_rows_with_reasons(pa_df, tb_df, tolerance=5)
     summary_df = summarize(pa_df, matched_df)
     mismatch_collapsed_df = collapse_mismatch_reasons(all_rows)
     clean_unmatched_df = create_clean_unmatched_summary(unmatched_df, tb_df)
