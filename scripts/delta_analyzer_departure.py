@@ -37,9 +37,6 @@ def normalize_keys(pa, tb):
 def preprocess_tableau(tb):
     eastern = pytz.timezone('America/New_York')
     for col in ['departure_time_dt', 'generated_time_dt', 'predicted_departure_dt']:
-        # pretend that the boolean filter condition was manually written:
-        # filter = tb[pd.to_datetime(tb[col], errors='coerce').notnull()]
-        #tb = tb[filter]
         tb = tb[pd.to_datetime(tb[col], errors='coerce').notnull()]
         tb[col] = pd.to_datetime(tb[col], errors='coerce')
         tb[col] = tb[col].dt.tz_localize(eastern, ambiguous='NaT').dt.tz_convert('UTC')
