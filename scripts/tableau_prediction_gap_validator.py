@@ -3,7 +3,7 @@ import delta_analyzer_departure
 import pytz
 import sys
 
-def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=60):
+def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=15):
     pa['departure_time_unix'] = pd.to_numeric(pa['departure_time_unix'], errors='coerce')
     tb['departure_time_unix'] = pd.to_numeric(tb['departure_time_unix'], errors='coerce')
     tb['predicted_departure_unix'] = pd.to_numeric(tb['predicted_departure_unix'], errors='coerce')
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
     matched_df, unmatched_df, all_rows = match_rows_with_reasons(pa_df, tb_df, tolerance_dep=15, tolerance=60)
     
-    # compare tableau dataframe against matched dataframe, instead of prediction analyzer df
+    # compare tableau dataframe against matched dataframe, instead of entire set of prediction analyzer data
     summary_df = delta_analyzer_departure.summarize(tb_df, matched_df)
     
     # file generation
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     no_matches = (summary_df['matched_rows'] == 0).sum()
     partial_matches = ((summary_df['matched_rows'] > 0) & (summary_df['unmatched_rows'] > 0)).sum()
     
-    print(f'{total_trip_ids} total unique trip_IDs in the Prediction Analyzer data for that service day')
+    print(f'{total_trip_ids} total unique trip_IDs in the Tableau data for that service day')
     print(f'{perfect_matches} trips had perfect matches')
     print(f'This includes {no_matches} trips with NO matches')
     print(f"Plus {partial_matches} trips with PARTIAL matches (some rows matched, some didn't)")
