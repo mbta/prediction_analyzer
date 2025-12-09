@@ -23,9 +23,11 @@ def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=15):
             (tb_dep >= pa['departure_time_unix'] - tolerance_dep)
             & (tb_dep <= pa['departure_time_unix'] + tolerance_dep)
         ]
+        
+        if candidates['departure_time_unix'].empty:
+            continue
+        
         row_out = tb_row.copy()
-        tableau_time_str = ''
-        tableau_generated_time_str = ''
 
         if candidates.empty:
             mismatch_reason = ('No prediction_analyzer row with departure_time within tolerance')
@@ -47,6 +49,7 @@ def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=15):
                 mismatch_reason = '; '.join(reasons)
 
             # Pick first candidate departure time for reference
+            # coming from pa, these are already datetimes
             if len(candidates['departure_time_unix']) > 0:
                 pa_dep_utc = candidates['departure_time_unix'].iloc[0]
                 pa_gen_time_utc = candidates['generated_time_unix'].iloc[0]
