@@ -24,9 +24,6 @@ def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=15):
             & (tb_dep <= pa['departure_time_unix'] + tolerance_dep)
         ]
         
-        if candidates['departure_time_unix'].empty:
-            continue
-        
         row_out = tb_row.copy()
 
         if candidates.empty:
