@@ -58,6 +58,7 @@ def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=15):
         tableau_time_str = tb_dt_utc.tz_convert(eastern).strftime('%Y-%m-%d %H:%M:%S %Z')
         tb_gen_dt_utc = pd.to_datetime(tb_row['generated_time_unix'], unit='s', utc=True)
         tableau_generated_time_str = tb_gen_dt_utc.tz_convert(eastern).strftime('%Y-%m-%d %H:%M:%S %Z')
+
         row_out['mismatch_reason'] = mismatch_reason
         row_out['tableau_departure_time'] = tableau_time_str
         row_out['tableau_prediction_generated_time'] = tableau_generated_time_str
