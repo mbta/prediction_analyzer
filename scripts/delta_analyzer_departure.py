@@ -3,7 +3,6 @@ import numpy as np
 import pytz
 import sys
 
-
 # CSV Load
 def load_data(pa_path, tb_path):
     pa = pd.read_csv(pa_path)
@@ -34,7 +33,7 @@ def normalize_keys(pa, tb):
         df['consist'] = df['consist'].astype(str).str.strip()
     return pa, tb
 
-# Tableua preprocess
+# Tableau preprocess
 def preprocess_tableau(tb):
     eastern = pytz.timezone('America/New_York')
     for col in ['departure_time_dt', 'generated_time_dt', 'predicted_departure_dt']:
