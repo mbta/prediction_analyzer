@@ -21,7 +21,8 @@ def load_data(pa_path, tb_path):
         "Prediction Generated Time": "generated_time_dt",
         "Predicted Departure Time": "predicted_departure_dt",
         "Trip ID": "trip_id",
-        "Predicted Vehicle Consist": "consist"
+        "Predicted Vehicle Consist": "consist",
+        "Vehicle Consist": "consist"
     })
 
     return pa, tb
@@ -36,14 +37,15 @@ def normalize_keys(pa, tb):
 # Tableau preprocess
 def preprocess_tableau(tb):
     eastern = pytz.timezone('America/New_York')
-    for col in ['departure_time_dt', 'generated_time_dt', 'predicted_departure_dt']:
+    # for col in ['departure_time_dt', 'generated_time_dt', 'predicted_departure_dt']:
+    for col in ['departure_time_dt']:
         tb = tb[pd.to_datetime(tb[col], errors='coerce').notnull()]
         tb[col] = pd.to_datetime(tb[col], errors='coerce')
         tb[col] = tb[col].dt.tz_localize(eastern, ambiguous='NaT').dt.tz_convert('UTC')
 
     tb['departure_time_unix'] = (tb['departure_time_dt'].view(np.int64) // 10**9).astype(int)
-    tb['generated_time_unix'] = tb['generated_time_dt'].astype(np.int64) // 10**9
-    tb['predicted_departure_unix'] = tb['predicted_departure_dt'].astype(np.int64) // 10**9
+    # tb['generated_time_unix'] = tb['generated_time_dt'].astype(np.int64) // 10**9
+    # tb['predicted_departure_unix'] = tb['predicted_departure_dt'].astype(np.int64) // 10**9
 
     return tb
 
