@@ -3,7 +3,7 @@ import delta_analyzer_departure
 import pytz
 import sys
 
-def match_rows_with_reasons(pa, tb, tolerance_dep=15, tolerance=15):
+def match_rows_with_reasons(pa, tb, tolerance_dep=15):
     pa['departure_time_unix'] = pd.to_numeric(pa['departure_time_unix'], errors='coerce')
     tb['departure_time_unix'] = pd.to_numeric(tb['departure_time_unix'], errors='coerce')
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     # converts tableau datetime values to unix time
     tb_df = delta_analyzer_departure.preprocess_tableau(tb_df)
 
-    matched_df, unmatched_df, all_rows = match_rows_with_reasons(pa_df, tb_df, tolerance_dep=15, tolerance=60)
+    matched_df, unmatched_df, all_rows = match_rows_with_reasons(pa_df, tb_df, tolerance_dep=15)
     
     # compare tableau dataframe against matched dataframe, instead of entire set of prediction analyzer data
     summary_df = delta_analyzer_departure.summarize(tb_df, matched_df)
