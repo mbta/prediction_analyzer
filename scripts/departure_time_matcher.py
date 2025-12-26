@@ -98,7 +98,7 @@ if __name__ == '__main__':
     tolerance = 15
 
     if len(sys.argv) == 4:
-        tolerance = int(sys.arg[3])
+        tolerance = int(sys.argv[3])
         pa_file = sys.argv[1]
         tb_file = sys.argv[2]
     elif len(sys.argv) == 3:
