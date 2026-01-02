@@ -55,27 +55,19 @@ def match_departures(pa_file, tb_file, tolerance=15):
         suffixes=('_tb', '_pa')
     )
 
-    # Mark which Tableau rows successfully matched to a PA row
-    merged['tb_matched'] = pd.notna(merged.get('trip_id'))
-    merged['source'] = merged['tb_matched'].apply(lambda x: 'Tableau matched to PA' if x else 'Tableau only')
+    # Determine source
+    merged['source'] = merged.apply(
+        lambda row: 'Both' if pd.notna(row.get('trip_id')) else 'Tableau Only',
+        axis=1
+    )
 
-    # Find which unique PA rows were matched
-    matched_pa_indices = set()
-    for _, tb_row in merged[merged['tb_matched']].iterrows():
-        tb_time = tb_row['departure_time_unix']
-        matching_pa = pa_sorted[
-            (pa_sorted['departure_time_unix'] >= tb_time - tolerance) &
-            (pa_sorted['departure_time_unix'] <= tb_time + tolerance)
-        ]
-        if len(matching_pa) > 0:
-            closest_idx = (matching_pa['departure_time_unix'] - tb_time).abs().idxmin()
-            matched_pa_indices.add(closest_idx)
+    # Find PA-only rows (not matched)
+    matched_pa_times = merged[merged['source'] == 'Both']['departure_time_unix'].values
+    pa_only = pa_sorted[~pa_sorted['departure_time_unix'].isin(matched_pa_times)].copy()
+    pa_only['source'] = 'PA Only'
 
-    # Mark PA rows
-    pa_sorted['source'] = ['PA matched to Tableau' if idx in matched_pa_indices else 'PA only' for idx in pa_sorted.index]
-
-    # Combine all Tableau rows and PA rows
-    all_matches = pd.concat([merged, pa_sorted], ignore_index=True)
+    # Combine all results
+    all_matches = pd.concat([merged, pa_only], ignore_index=True)
 
     # Add EST formatted time
     all_matches['departure_time_est'] = all_matches['departure_time_unix'].apply(unix_to_est)
@@ -122,18 +114,14 @@ if __name__ == '__main__':
     matches_df.to_csv('matches.csv', index=False)
 
     # Print summary
-    tb_matched = len(matches_df[matches_df['source'] == 'Tableau matched to PA'])
     tb_only = len(matches_df[matches_df['source'] == 'Tableau only'])
-    pa_matched = len(matches_df[matches_df['source'] == 'PA matched to Tableau'])
     pa_only = len(matches_df[matches_df['source'] == 'PA Only'])
+    both = len(matches_df[matches_df['source'] == 'Both'])
 
     print(f"\n=== Departure Time Match Summary ===")
     print(f"Tolerance: {tolerance} seconds")
-    print(f"\nTotal rows in Tableau: {total_tb}")
-    print(f"Total rows in Prediction Analyzer: {total_pa}")
-    print(f"\nTableau rows that matched to PA: {tb_matched}")
-    print(f"Tableau rows with no PA match: {tb_only}")
-    print(f"PA rows that matched to Tableau: {pa_matched}")
-    print(f"PA rows with no Tableau match: {pa_only}")
+    print(f"\nMatches in both: {both}")
+    print(f"Tableau only (no PA match): {tb_only}")
+    print(f"PA only (no Tableau match): {pa_only}")
     print(f"\nTotal output rows: {len(matches_df)} (should equal {total_tb + total_pa})")
     print(f"\nResults saved to matches.csv")
