@@ -65,8 +65,18 @@ def match_departures(pa_file, tb_file, tolerance=15):
         axis=1
     )
 
-    # Find PA-only rows (not matched) - use pa_index to identify which rows were matched
-    matched_pa_indices = merged[merged['source'] == 'Both']['pa_index'].dropna().astype(int).values
+    # Find all PA rows within tolerance of any Tableau row
+    # matched_pa_indices = merged[merged['source'] == 'Both']['pa_index'].dropna().astype(int).values
+    matched_pa_indices = set()
+    for tb_time in tb_sorted['departure_time_unix']:
+        # Find all PA rows within tolerance of this Tableau time
+        within_tolerance = pa_sorted[
+            (pa_sorted['departure_time_unix'] >= tb_time - tolerance) &
+            (pa_sorted['departure_time_unix'] <= tb_time + tolerance)
+        ]['pa_index'].values
+        matched_pa_indices.update(within_tolerance)
+
+    # PA-only rows not within tolerance of Tableau row
     pa_only = pa_sorted[~pa_sorted['pa_index'].isin(matched_pa_indices)].copy()
     pa_only['source'] = 'PA Only'
     pa_only['is_false_positive'] = False
