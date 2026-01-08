@@ -150,5 +150,4 @@ if __name__ == '__main__':
     print(f"    Both: {fp_both}")
     print(f"    Total false positives: {fp_tableau_only + fp_both}")
     print(f"\nTotal output rows: {len(matches_df)}")
-    print(f"Expected: {total_tb} + {total_pa} - {both} - {fp_tableau_only} - {fp_both} (matched) = {total_tb + total_pa - both - fp_tableau_only - fp_both}")
     print(f"\nResults saved to matches.csv")
