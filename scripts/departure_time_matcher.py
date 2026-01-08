@@ -78,9 +78,6 @@ def match_departures(pa_file, tb_file, tolerance=15):
     fp_tableau_only = len(all_matches[(all_matches['source'] == 'Tableau Only') &(all_matches['is_false_positive'] == True)])
     fp_both = len(all_matches[(all_matches['source'] == 'Both') &(all_matches['is_false_positive'] == True)])
 
-    # Count matches before filtering
-    both_before_filter = len(all_matches[all_matches['source'] == 'Both'])
-
     # Filter out false positives
     all_matches = all_matches[~((all_matches['source'].isin(['Tableau Only', 'Both'])) & (all_matches['is_false_positive'] == True))]
 
@@ -107,7 +104,7 @@ def match_departures(pa_file, tb_file, tolerance=15):
 
     result_df = all_matches[output_cols].copy()
 
-    return result_df, len(tb_df), len(pa_df), fp_tableau_only, fp_both, both_before_filter
+    return result_df, len(tb_df), len(pa_df), fp_tableau_only, fp_both
 
 if __name__ == '__main__':
     tolerance = 15
@@ -123,7 +120,7 @@ if __name__ == '__main__':
         print("Usage: python departure_time_matcher.py <pa_csv> <tb<csv> [tolerance_seconds]")
         sys.exit(1)
 
-    matches_df, total_tb, total_pa, fp_tableau_only, fp_both, both_before_filter = match_departures(pa_file, tb_file, tolerance)
+    matches_df, total_tb, total_pa, fp_tableau_only, fp_both = match_departures(pa_file, tb_file, tolerance)
 
     # Save to CSV
     matches_df.to_csv('matches.csv', index=False)
@@ -143,5 +140,5 @@ if __name__ == '__main__':
     print(f"    Both: {fp_both}")
     print(f"    Total false positives: {fp_tableau_only + fp_both}")
     print(f"\nTotal output rows: {len(matches_df)}")
-    print(f"Expected: {total_tb} + {total_pa} - {both_before_filter} (matched) - {fp_tableau_only + fp_both} (false postive) = {total_tb + total_pa - both_before_filter - fp_tableau_only - fp_both}")
+    print(f"Expected: {total_tb} + {total_pa} - {both} - {fp_tableau_only} - {fp_both} (matched) = {total_tb + total_pa - both - fp_tableau_only - fp_both}")
     print(f"\nResults saved to matches.csv")
