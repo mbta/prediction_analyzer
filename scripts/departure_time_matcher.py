@@ -39,7 +39,7 @@ def match_departures(pa_file, tb_file, tolerance=15):
     tb_df = pd.read_csv(tb_file, sep='\t', encoding='utf-16')
     tb_df['departure_time_unix'] = tb_df['Departure Time'].apply(parse_tableau_time)
     tb_df = tb_df.dropna(subset=['departure_time_unix'])
-    tb_df['departure_time_unix'] = tb_df['departure_time_unix'].astype('int64')
+    tb_df['departure_time_unix'] = tb_df['departure_time_unix']
 
     # Read false positive flag
     tb_df['is_false_positive'] = tb_df['False Positive Departure Flag'].notna()
