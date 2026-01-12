@@ -66,7 +66,6 @@ def match_departures(pa_file, tb_file, tolerance=15):
     )
 
     # Find all PA rows within tolerance of any Tableau row
-    # matched_pa_indices = merged[merged['source'] == 'Both']['pa_index'].dropna().astype(int).values
     matched_pa_indices = set()
     for tb_time in tb_sorted['departure_time_unix']:
         # Find all PA rows within tolerance of this Tableau time
