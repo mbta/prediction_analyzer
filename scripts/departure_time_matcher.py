@@ -30,7 +30,7 @@ def match_departures(pa_file, tb_file, tolerance=15):
 
     # Load Prediction Analyzer data
     pa_df = pd.read_csv(pa_file)
-    pa_df['departure_time_unix'] = pd.to_numeric(pa_df['departure_time'], errors='coerce')
+    pa_df['departure_time_unix'] = pd.to_numeric(pa_df['departure_time'])
     pa_df = pa_df.dropna(subset=['departure_time_unix'])
     pa_df = pa_df.drop_duplicates(subset=['departure_time', 'trip_id'], keep='first')
     pa_df['departure_time_unix'] = pa_df['departure_time_unix'].astype('int64')
