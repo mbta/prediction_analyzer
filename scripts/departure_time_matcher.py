@@ -81,37 +81,37 @@ def match_departures(pa_file, tb_file, tolerance=15):
     pa_only['is_false_positive'] = False
 
     # Combine all results
-    all_matches = pd.concat([merged, pa_only], ignore_index=True)
+    all_rows = pd.concat([merged, pa_only], ignore_index=True)
 
     # Count false positives by source before filtering
-    fp_tableau_only = len(all_matches[(all_matches['source'] == 'Tableau Only') &(all_matches['is_false_positive'] == True)])
-    fp_both = len(all_matches[(all_matches['source'] == 'Both') &(all_matches['is_false_positive'] == True)])
+    fp_tableau_only = len(all_rows[(all_rows['source'] == 'Tableau Only') &(all_rows['is_false_positive'] == True)])
+    fp_both = len(all_rows[(all_rows['source'] == 'Both') &(all_rows['is_false_positive'] == True)])
 
     # Filter out false positives
-    all_matches = all_matches[~((all_matches['source'].isin(['Tableau Only', 'Both'])) & (all_matches['is_false_positive'] == True))]
+    all_rows = all_rows[~((all_rows['source'].isin(['Tableau Only', 'Both'])) & (all_rows['is_false_positive'] == True))]
 
     # Add EST formatted time
-    all_matches['departure_time_est'] = all_matches['departure_time_unix'].apply(unix_to_est)
+    all_rows['departure_time_est'] = all_rows['departure_time_unix'].apply(unix_to_est)
 
     # Select and order output columns
     output_cols = ['departure_time_unix', 'departure_time_est', 'source']
 
     # Add relevant data columns based on source
-    if 'trip_id' in all_matches.columns:
+    if 'trip_id' in all_rows.columns:
         output_cols.append('trip_id')
-    if 'Trip ID' in all_matches.columns:
-        all_matches['tableau_trip_id'] = all_matches['Trip ID']
+    if 'Trip ID' in all_rows.columns:
+        all_rows['tableau_trip_id'] = all_rows['Trip ID']
         output_cols.append('tableau_trip_id')
-    if 'vehicle_label' in all_matches.columns:
+    if 'vehicle_label' in all_rows.columns:
         output_cols.append('vehicle_label')
-    if 'Vehicle Consist' in all_matches.columns:
-        all_matches['tableau_consist'] = all_matches['Vehicle Consist']
+    if 'Vehicle Consist' in all_rows.columns:
+        all_rows['tableau_consist'] = all_rows['Vehicle Consist']
         output_cols.append('tableau_consist')
 
     # Filter to available columns
-    output_cols = [col for col in output_cols if col in all_matches.columns]
+    output_cols = [col for col in output_cols if col in all_rows.columns]
 
-    result_df = all_matches[output_cols].copy()
+    result_df = all_rows[output_cols].copy()
 
     return result_df, len(tb_df), len(pa_df), fp_tableau_only, fp_both
 
@@ -141,12 +141,12 @@ if __name__ == '__main__':
 
     print(f"\n=== Departure Time Match Summary ===")
     print(f"Tolerance: {tolerance} seconds")
-    print(f"\nMatches in both: {both}")
+    print(f"\nMatched rows: {both}")
     print(f"Tableau only (no PA match): {tb_only}")
     print(f"PA only (no Tableau match): {pa_only}")
     print(f"\nFalse positives detected and ignored:")
     print(f"    Tableau Only: {fp_tableau_only}")
-    print(f"    Both: {fp_both}")
+    print(f"    Matched rows: {fp_both}")
     print(f"    Total false positives: {fp_tableau_only + fp_both}")
     print(f"\nTotal output rows: {len(matches_df)}")
     print(f"\nResults saved to matches.csv")
