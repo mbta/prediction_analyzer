@@ -2,8 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.10 (Debian 15.10-1.pgdg120+1)
--- Dumped by pg_dump version 15.12 (Homebrew)
+\restrict igrEkxFu8iw84a0QS6bySAftyHnrNcPgZEui7pjDL936H7KpaLjOkMfhZTf8GKF
+
+-- Dumped from database version 15.14 (Homebrew)
+-- Dumped by pg_dump version 15.14 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -162,7 +164,7 @@ ALTER SEQUENCE public.predictions_id_seq OWNED BY public.predictions.id;
 
 CREATE TABLE public.schema_migrations (
     version bigint NOT NULL,
-    inserted_at timestamp(0) without time zone
+    inserted_at timestamp without time zone
 );
 
 
@@ -346,6 +348,8 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
+\unrestrict igrEkxFu8iw84a0QS6bySAftyHnrNcPgZEui7pjDL936H7KpaLjOkMfhZTf8GKF
+
 INSERT INTO public."schema_migrations" (version) VALUES (20181017190602);
 INSERT INTO public."schema_migrations" (version) VALUES (20181022210113);
 INSERT INTO public."schema_migrations" (version) VALUES (20181025152446);
@@ -373,4 +377,4 @@ INSERT INTO public."schema_migrations" (version) VALUES (20201130194309);
 INSERT INTO public."schema_migrations" (version) VALUES (20230717150451);
 INSERT INTO public."schema_migrations" (version) VALUES (20230914092018);
 INSERT INTO public."schema_migrations" (version) VALUES (20231005191442);
-INSERT INTO public."schema_migrations" (version) VALUES (20250318190252);
+INSERT INTO public."schema_migrations" (version) VALUES (20260126145616);
