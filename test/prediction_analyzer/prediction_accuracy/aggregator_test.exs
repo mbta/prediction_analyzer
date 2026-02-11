@@ -12,6 +12,10 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AggregatorTest do
     def transaction(fun, _opts \\ []) do
       fun.()
     end
+
+    def config do
+      [telemetry_prefix: [:prediction_accuracy, :repo]]
+    end
   end
 
   setup do

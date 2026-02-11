@@ -16,11 +16,6 @@ defmodule PredictionAnalyzer.Telemetry do
     :ok
   end
 
-  @spec repo_telemetry_prefix() :: [atom]
-  def repo_telemetry_prefix do
-    PredictionAnalyzer.Repo.config()[:telemetry_prefix]
-  end
-
   defp events do
     [
       # Other events to listen for go here
@@ -28,7 +23,7 @@ defmodule PredictionAnalyzer.Telemetry do
   end
 
   defp repo_events do
-    prefix = repo_telemetry_prefix()
+    prefix = PredictionAnalyzer.Repo.config()[:telemetry_prefix]
 
     [
       :insert_accuracy_query,
