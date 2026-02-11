@@ -21,14 +21,16 @@ defmodule PredictionAnalyzer.StopNameFetcher do
     {:ok, state}
   end
 
-  @spec get_stop_descriptions(PredictionAnalyzer.Utilities.mode()) :: %{String.t() => String.t()}
-  def get_stop_descriptions(mode) do
-    GenServer.call(__MODULE__, {:get_stop_descriptions, mode})
+  @spec get_stop_descriptions(GenServer.server(), PredictionAnalyzer.Utilities.mode()) ::
+          %{String.t() => String.t()}
+  def get_stop_descriptions(pid \\ __MODULE__, mode) do
+    GenServer.call(pid, {:get_stop_descriptions, mode})
   end
 
-  @spec get_stop_name(PredictionAnalyzer.Utilities.mode(), String.t()) :: String.t()
-  def get_stop_name(mode, stop_id) do
-    GenServer.call(__MODULE__, {:get_stop_name, mode, stop_id})
+  @spec get_stop_name(GenServer.server(), PredictionAnalyzer.Utilities.mode(), String.t()) ::
+          String.t()
+  def get_stop_name(pid \\ __MODULE__, mode, stop_id) do
+    GenServer.call(pid, {:get_stop_name, mode, stop_id})
   end
 
   def handle_call({:get_stop_descriptions, mode}, _from, state) do
