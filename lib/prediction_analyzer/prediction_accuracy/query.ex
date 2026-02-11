@@ -1,5 +1,4 @@
 defmodule PredictionAnalyzer.PredictionAccuracy.Query do
-  alias PredictionAnalyzer.Telemetry
   require Logger
 
   @doc """

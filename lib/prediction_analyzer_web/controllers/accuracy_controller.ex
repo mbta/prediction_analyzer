@@ -2,7 +2,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   use PredictionAnalyzerWeb, :controller
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   alias PredictionAnalyzer.Filters
-  alias PredictionAnalyzer.Telemetry
 
   import Ecto.Query, only: [from: 2]
   import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
