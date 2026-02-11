@@ -1,22 +1,10 @@
 defmodule Test.Support.Env do
-  defmacro reassign_env(var) do
-    quote do
-      old_value = Application.get_env(:prediction_analyzer, unquote(var))
+  def reassign_env(key, value) do
+    old_value = Application.get_env(:prediction_analyzer, key)
+    Application.put_env(:prediction_analyzer, key, value)
 
-      on_exit(fn ->
-        Application.put_env(:prediction_analyzer, unquote(var), old_value)
-      end)
-    end
-  end
-
-  defmacro reassign_env(var, value) do
-    quote do
-      old_value = Application.get_env(:prediction_analyzer, unquote(var))
-      Application.put_env(:prediction_analyzer, unquote(var), unquote(value))
-
-      on_exit(fn ->
-        Application.put_env(:prediction_analyzer, unquote(var), old_value)
-      end)
-    end
+    ExUnit.Callbacks.on_exit(fn ->
+      Application.put_env(:prediction_analyzer, key, old_value)
+    end)
   end
 end
