@@ -6,13 +6,12 @@ defmodule PredictionAnalyzer.Telemetry do
 
   @spec setup_telemetry() :: :ok
   def setup_telemetry do
-    _ =
-      :telemetry.attach_many(
-        "prediction-analyzer-handler",
-        events(),
-        &__MODULE__.handle_event/4,
-        []
-      )
+    :telemetry.attach_many(
+      "prediction-analyzer-handler",
+      events(),
+      &__MODULE__.handle_event/4,
+      []
+    )
 
     :ok
   end
