@@ -4,16 +4,22 @@ defmodule PredictionAnalyzer.Telemetry do
   """
   require Logger
 
+  @spec setup_telemetry() :: :ok
+  def setup_telemetry do
+    _ =
+      :telemetry.attach_many(
+        "prediction-analyzer-handler",
+        events(),
+        &__MODULE__.handle_event/4,
+        []
+      )
+
+    :ok
+  end
+
   @spec repo_telemetry_prefix() :: [atom]
   def repo_telemetry_prefix do
     PredictionAnalyzer.Repo.config()[:telemetry_prefix]
-  end
-
-  @spec setup_telemetry() :: :ok
-  def setup_telemetry do
-    _ = :telemetry.attach_many("prediction-analyzer-handler", events(), &handle_event/4, [])
-
-    :ok
   end
 
   defp events do
