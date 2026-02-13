@@ -52,7 +52,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
         in_next_two?,
         minute_of_hour
       ],
-      telemetry_event: repo_module.config()[:telemetry_prefix] ++ [:insert_accuracy_query]
+      telemetry_event: repo_module.config()[:telemetry_prefix] ++ [:named_query],
+      telemetry_options: [name: :insert_accuracy]
     )
   end
 

@@ -41,9 +41,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           where: acc.environment == "prod" and acc.route_id in ^routes
         )
         |> PredictionAnalyzer.Repo.one!(
-          telemetry_event:
-            PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:accuracy_context_query],
-          telemetry_options: [env: :prod, request_params: params_string]
+          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
+          telemetry_options: [name: :accuracy_context, env: :prod, request_params: params_string]
         )
 
       [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse] =
@@ -58,9 +57,12 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           where: acc.environment == "dev-green" and acc.route_id in ^routes
         )
         |> PredictionAnalyzer.Repo.one!(
-          telemetry_event:
-            PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:accuracy_context_query],
-          telemetry_options: [env: :dev_green, request_params: params_string]
+          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
+          telemetry_options: [
+            name: :accuracy_context,
+            env: :dev_green,
+            request_params: params_string
+          ]
         )
 
       [dev_blue_num_accurate, dev_blue_num_predictions, dev_blue_mean_error, dev_blue_rmse] =
@@ -75,18 +77,20 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           where: acc.environment == "dev-blue" and acc.route_id in ^routes
         )
         |> PredictionAnalyzer.Repo.one!(
-          telemetry_event:
-            PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:accuracy_context_query],
-          telemetry_options: [env: :dev_blue, request_params: params_string]
+          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
+          telemetry_options: [
+            name: :accuracy_context,
+            env: :dev_blue,
+            request_params: params_string
+          ]
         )
 
       prod_accuracies =
         relevant_accuracies
         |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all(
-          telemetry_event:
-            PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:accuracies_query],
-          telemetry_options: [env: :prod, request_params: params_string]
+          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
+          telemetry_options: [name: :accuracies, env: :prod, request_params: params_string]
         )
         |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
           {scope, accuracy}
@@ -96,9 +100,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         relevant_accuracies
         |> Filters.stats_by_environment_and_chart_range("dev-green", filter_params)
         |> PredictionAnalyzer.Repo.all(
-          telemetry_event:
-            PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:accuracies_query],
-          telemetry_options: [env: :dev_green, request_params: params_string]
+          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
+          telemetry_options: [name: :accuracies, env: :dev_green, request_params: params_string]
         )
         |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
           {scope, accuracy}
@@ -108,9 +111,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         relevant_accuracies
         |> Filters.stats_by_environment_and_chart_range("dev-blue", filter_params)
         |> PredictionAnalyzer.Repo.all(
-          telemetry_event:
-            PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:accuracies_query],
-          telemetry_options: [env: :dev_blue, request_params: params_string]
+          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
+          telemetry_options: [name: :accuracies, env: :dev_blue, request_params: params_string]
         )
         |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
           {scope, accuracy}

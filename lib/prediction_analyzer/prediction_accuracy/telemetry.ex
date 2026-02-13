@@ -6,70 +6,59 @@ defmodule PredictionAnalyzer.Telemetry do
 
   @spec setup_telemetry() :: :ok
   def setup_telemetry do
-    :telemetry.attach_many(
+    :telemetry.attach(
       "prediction-analyzer-handler",
-      events(),
-      &__MODULE__.handle_event/4,
+      PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
+      &__MODULE__.handle_named_query_event/4,
       []
     )
-
-    :ok
   end
 
-  defp events do
-    [
-      # Other events to listen for go here
-    ] ++ repo_events()
+  @doc """
+  Logs timing info for named DB queries.
+
+  Requirements for this telemetry event to be handled correctly:
+  - The query options must include the `:telemetry_options` opt.
+  - `:telemetry_options` must be a KW list that has a `:name` key with a string or atom value.
+  - `:telemetry_options` may include other keys with string or atom values.
+
+  Logs will have the general form:
+
+      "{name}_query_time {options_key1}={options_val1} ... {options_keyN}={options_valN} {time_fields}".
+
+  E.g. if a query is executed with these opts:
+
+      [
+        telemetry_event: [:prediction_analyzer, :repo, :named_query],
+        telemetry_options: [name: :accuracies_by_date, env: :prod, start_date: "2026-01-01", end_date: "2026-01-07"]
+      ]
+
+  The resulting log could look like:
+
+      accuracies_by_date_query_time env=prod start_date=2026-01-01 end_date=2026-01-07 total_time_ms=40 query_time_ms==20
+  """
+  def handle_named_query_event(_event_name, measures, meta, _config) do
+    {name, options} = Keyword.pop!(meta.options, :name)
+    name = query_name_log_field(name)
+    time_fields = query_time_log_fields(measures)
+    extra_fields = extra_fields(options)
+
+    [name, extra_fields, time_fields]
+    |> Enum.reject(&(&1 in [nil, ""]))
+    |> Enum.join(" ")
+    |> Logger.info()
   end
 
-  defp repo_events do
-    prefix = PredictionAnalyzer.Repo.config()[:telemetry_prefix]
-
-    [
-      :insert_accuracy_query,
-      :accuracy_context_query,
-      :accuracies_query
-    ]
-    |> Enum.map(&(prefix ++ [&1]))
+  defp query_name_log_field(name) when is_binary(name) or is_atom(name) do
+    "#{name}_query_time"
   end
 
-  def handle_event(event, measurements, metadata, config)
-
-  def handle_event(
-        [:prediction_analyzer, :repo, :insert_accuracy_query],
-        measures,
-        _meta,
-        _config
-      ) do
-    Logger.info("insert_accuracy_query_time #{query_time_log_fields(measures)}")
-  end
-
-  def handle_event(
-        [:prediction_analyzer, :repo, :accuracy_context_query],
-        measures,
-        meta,
-        _config
-      ) do
-    env = meta[:options][:env]
-    request_params = inspect(meta[:options][:request_params])
-
-    Logger.info(
-      "accuracy_context_query_time env=#{env} #{query_time_log_fields(measures)} request_params=#{request_params}"
-    )
-  end
-
-  def handle_event(
-        [:prediction_analyzer, :repo, :accuracies_query],
-        measures,
-        meta,
-        _config
-      ) do
-    env = meta[:options][:env]
-    request_params = inspect(meta[:options][:request_params])
-
-    Logger.info(
-      "accuracies_query_time env=#{env} #{query_time_log_fields(measures)} request_params=#{request_params}"
-    )
+  defp extra_fields(options) do
+    options
+    |> Enum.reject(&match?({_, nil}, &1))
+    |> Enum.map_join(" ", fn
+      {name, value} when is_binary(value) or is_atom(value) -> "#{name}=#{value}"
+    end)
   end
 
   defp query_time_log_fields(measures) do
