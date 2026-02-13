@@ -29,9 +29,24 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
     PredictionAnalyzer.Repo.insert!(a1)
     PredictionAnalyzer.Repo.insert!(a2)
 
-    conn = get(conn, "/accuracy")
-    conn = get(conn, redirected_to(conn))
-    response = html_response(conn, 200)
+    old_level = Logger.level()
+    Logger.configure(level: :info)
+
+    {response, log} =
+      ExUnit.CaptureLog.with_log(fn ->
+        conn = get(conn, "/accuracy")
+        conn = get(conn, redirected_to(conn))
+        response = html_response(conn, 200)
+        response
+      end)
+
+    Logger.configure(level: old_level)
+    assert log =~ "accuracy_context_query_time env=prod"
+    assert log =~ "accuracy_context_query_time env=dev_green"
+    assert log =~ "accuracy_context_query_time env=dev_blue"
+    assert log =~ "accuracies_query_time env=prod"
+    assert log =~ "accuracies_query_time env=dev_green"
+    assert log =~ "accuracies_query_time env=dev_blue"
 
     assert response =~ "From 150 accurate out of 200 total predictions"
     assert response =~ "75.0"

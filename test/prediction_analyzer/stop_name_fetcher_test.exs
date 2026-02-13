@@ -14,63 +14,62 @@ defmodule PredictionAnalyzer.StopNameFetcherTest do
     "dummystop2" => "Dummy Stop Description"
   }
 
-  test "starts up with no issue" do
-    {:ok, pid} = StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-    :timer.sleep(500)
+  setup do
+    {:ok, pid} = StopNameFetcher.start_link()
+    # We don't need to explicitly stop the GenServer after test ends because it's
+    # killed when the linked test process exits.
+    # https://hexdocs.pm/ex_unit/ExUnit.Case.html#module-process-architecture
+
+    %{pid: pid}
+  end
+
+  test "starts up with no issue", %{pid: pid} do
     assert Process.alive?(pid)
   end
 
   describe "get_stop_descriptions/1" do
-    test "returns parsed results in alphabetical order" do
-      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-      assert StopNameFetcher.get_stop_descriptions(:subway) == @expected_descriptions
+    test "returns parsed results in alphabetical order", %{pid: pid} do
+      assert StopNameFetcher.get_stop_descriptions(pid, :subway) == @expected_descriptions
     end
 
     test "if API fetch fails, proceeds with an empty list of stops" do
       reassign_env(:api_base_url, "https://bad-api-v3.mbta.com/")
-      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-      assert StopNameFetcher.get_stop_descriptions(:subway) == %{}
-      assert StopNameFetcher.get_stop_descriptions(:commuter_rail) == %{}
+      {:ok, pid} = StopNameFetcher.start_link()
+      IO.inspect(Application.get_env(:prediction_analyzer, :api_base_url), label: "api_base_url")
+      assert StopNameFetcher.get_stop_descriptions(pid, :subway) == %{}
+      assert StopNameFetcher.get_stop_descriptions(pid, :commuter_rail) == %{}
     end
   end
 
   describe "get_stop_name/1" do
-    test "returns the name (and platform code) of the stop in question" do
-      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-
-      assert StopNameFetcher.get_stop_name(:subway, "70238") ==
+    test "returns the name (and platform code) of the stop in question", %{pid: pid} do
+      assert StopNameFetcher.get_stop_name(pid, :subway, "70238") ==
                "Cleveland Circle (Park Street & North)"
     end
 
-    test "returns the name with no platform code if the stop doesn't have a platform code" do
-      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-
-      assert StopNameFetcher.get_stop_name(:commuter_rail, "Andover") == "Andover"
+    test "returns the name with no platform code if the stop doesn't have a platform code", %{
+      pid: pid
+    } do
+      assert StopNameFetcher.get_stop_name(pid, :commuter_rail, "Andover") == "Andover"
     end
 
-    test "returns the id if the stop isn't found" do
-      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-
-      assert StopNameFetcher.get_stop_name(:commuter_rail, "99999999") == "99999999"
+    test "returns the id if the stop isn't found", %{pid: pid} do
+      assert StopNameFetcher.get_stop_name(pid, :commuter_rail, "99999999") == "99999999"
     end
 
-    test "returns the id if the mode isn't found" do
-      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-
-      assert StopNameFetcher.get_stop_name(:not_a_mode, "99999999") == "99999999"
+    test "returns the id if the mode isn't found", %{pid: pid} do
+      assert StopNameFetcher.get_stop_name(pid, :not_a_mode, "99999999") == "99999999"
     end
 
-    test "include the stop ID if the description and platform name are ambiguous" do
-      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-
-      assert StopNameFetcher.get_stop_name(:subway, "70150") ==
+    test "include the stop ID if the description and platform name are ambiguous", %{pid: pid} do
+      assert StopNameFetcher.get_stop_name(pid, :subway, "70150") ==
                "Kenmore (Park Street & North) - 70150"
     end
 
-    test "include the stop ID if the description is ambiguous (no platform name case)" do
-      StopNameFetcher.start_link(name: PredictionAnalyzer.StopNameFetcher)
-
-      assert StopNameFetcher.get_stop_name(:subway, "dummystop1") ==
+    test "include the stop ID if the description is ambiguous (no platform name case)", %{
+      pid: pid
+    } do
+      assert StopNameFetcher.get_stop_name(pid, :subway, "dummystop1") ==
                "Dummy Stop Name - dummystop1"
     end
   end

@@ -5,12 +5,16 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AggregatorTest do
   alias PredictionAnalyzer.PredictionAccuracy.Aggregator
 
   defmodule FakeRepo do
-    def query(_query, _params) do
+    def query(_query, _params, _opts \\ []) do
       raise DBConnection.ConnectionError
     end
 
     def transaction(fun, _opts \\ []) do
       fun.()
+    end
+
+    def config do
+      [telemetry_prefix: [:prediction_accuracy, :repo]]
     end
   end
 

@@ -33,21 +33,28 @@ defmodule PredictionAnalyzer.PredictionAccuracy.Query do
       |> Timex.shift(minutes: -Application.get_env(:prediction_analyzer, :analysis_lookback_min))
       |> PredictionAnalyzer.Utilities.service_date_info()
 
-    repo_module.query(insert_accuracy_query(kind), [
-      service_date,
-      hour_of_day,
-      bin_name,
-      bin_min,
-      bin_max,
-      bin_error_min,
-      bin_error_max,
-      min_unix,
-      max_unix,
-      environment,
-      kind,
-      in_next_two?,
-      minute_of_hour
-    ])
+    Logger.info("insert_accuracy_query_start")
+
+    repo_module.query(
+      insert_accuracy_query(kind),
+      [
+        service_date,
+        hour_of_day,
+        bin_name,
+        bin_min,
+        bin_max,
+        bin_error_min,
+        bin_error_max,
+        min_unix,
+        max_unix,
+        environment,
+        kind,
+        in_next_two?,
+        minute_of_hour
+      ],
+      telemetry_event: repo_module.config()[:telemetry_prefix] ++ [:named_query],
+      telemetry_options: [name: :insert_accuracy]
+    )
   end
 
   @spec insert_accuracy_query(String.t()) :: String.t()

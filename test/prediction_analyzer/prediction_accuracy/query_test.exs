@@ -158,19 +158,28 @@ defmodule PredictionAnalyzer.PredictionAccuracy.QueryTest do
           vehicle_event_id: ve_id
       })
 
-      {:ok, _} =
-        Query.calculate_aggregate_accuracy(
-          PredictionAnalyzer.Repo,
-          Timex.local(),
-          "mid_trip",
-          false,
-          bin_name,
-          bin_min,
-          bin_max,
-          bin_error_min,
-          bin_error_max,
-          "dev-green"
-        )
+      old_level = Logger.level()
+      Logger.configure(level: :info)
+
+      {{:ok, _}, log} =
+        ExUnit.CaptureLog.with_log(fn ->
+          Query.calculate_aggregate_accuracy(
+            PredictionAnalyzer.Repo,
+            Timex.local(),
+            "mid_trip",
+            false,
+            bin_name,
+            bin_min,
+            bin_max,
+            bin_error_min,
+            bin_error_max,
+            "dev-green"
+          )
+        end)
+
+      Logger.configure(level: old_level)
+      assert log =~ "insert_accuracy_query_start"
+      assert log =~ "insert_accuracy_query_time"
 
       [pa] = Repo.all(from(pa in PredictionAccuracy, select: pa))
 
