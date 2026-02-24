@@ -10,9 +10,9 @@ defmodule PredictionAnalyzer.Repo.Migrations.PartitionPredictionAccuracyByServic
   def down, do: do_migration(pk_cols: "id", partitioned?: false)
 
   defp do_migration(opts) do
-    ###############
-    # Preparation #
-    ###############
+    ###########
+    # Prepare #
+    ###########
 
     # Rename existing table and its dependent objects to make room for new ones.
     rename_old_table_and_objects()
