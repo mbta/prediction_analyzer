@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 3a0qiRwg9hfZ73fRrwdERv2gsYFH3ur0iwnMDrMhbeZoLMAcnQE677WWPMtjyOh
+\restrict MnZe9u7pYtkOuEMPrhB5Ddz8ZGs0dfN5hDdS13wYdTH7UmRDWeYgQTZLsa0Nhmi
 
 -- Dumped from database version 15.14 (Homebrew)
 -- Dumped by pg_dump version 15.14 (Homebrew)
@@ -112,6 +112,30 @@ ALTER SEQUENCE public.prediction_accuracy_id_seq OWNED BY public.prediction_accu
 
 
 SET default_table_access_method = heap;
+
+--
+-- Name: prediction_accuracy_default; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.prediction_accuracy_default (
+    id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
+    service_date date NOT NULL,
+    hour_of_day integer NOT NULL,
+    stop_id character varying(255) NOT NULL,
+    route_id character varying(255) NOT NULL,
+    arrival_departure public.arrival_departure,
+    bin public.prediction_bin NOT NULL,
+    num_predictions integer NOT NULL,
+    num_accurate_predictions integer NOT NULL,
+    environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
+    direction_id integer,
+    mean_error real,
+    root_mean_squared_error real,
+    kind public.prediction_kind,
+    in_next_two boolean,
+    minute_of_hour integer DEFAULT 0 NOT NULL
+);
+
 
 --
 -- Name: prediction_accuracy_y2024_m11; Type: TABLE; Schema: public; Owner: -
@@ -424,6 +448,13 @@ ALTER SEQUENCE public.vehicle_events_id_seq OWNED BY public.vehicle_events.id;
 
 
 --
+-- Name: prediction_accuracy_default; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_default DEFAULT;
+
+
+--
 -- Name: prediction_accuracy_y2024_m11; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
@@ -513,6 +544,14 @@ ALTER TABLE ONLY public.vehicle_events ALTER COLUMN id SET DEFAULT nextval('publ
 
 ALTER TABLE ONLY public.prediction_accuracy
     ADD CONSTRAINT prediction_accuracy_pkey PRIMARY KEY (id, service_date);
+
+
+--
+-- Name: prediction_accuracy_default prediction_accuracy_default_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_default
+    ADD CONSTRAINT prediction_accuracy_default_pkey PRIMARY KEY (id, service_date);
 
 
 --
@@ -619,10 +658,24 @@ CREATE INDEX prediction_accuracy_service_date_index ON ONLY public.prediction_ac
 
 
 --
+-- Name: prediction_accuracy_default_service_date_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_default_service_date_idx ON public.prediction_accuracy_default USING btree (service_date);
+
+
+--
 -- Name: prediction_accuracy_stop_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_stop_id_index ON ONLY public.prediction_accuracy USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_default_stop_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_default_stop_id_idx ON public.prediction_accuracy_default USING btree (stop_id);
 
 
 --
@@ -812,6 +865,27 @@ CREATE INDEX vehicle_events_stop_id_index ON public.vehicle_events USING btree (
 --
 
 CREATE INDEX vehicle_events_vehicle_id_index ON public.vehicle_events USING btree (vehicle_id) WHERE (departure_time IS NULL);
+
+
+--
+-- Name: prediction_accuracy_default_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_default_pkey;
+
+
+--
+-- Name: prediction_accuracy_default_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_default_service_date_idx;
+
+
+--
+-- Name: prediction_accuracy_default_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_default_stop_id_idx;
 
 
 --
@@ -1015,7 +1089,7 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 3a0qiRwg9hfZ73fRrwdERv2gsYFH3ur0iwnMDrMhbeZoLMAcnQE677WWPMtjyOh
+\unrestrict MnZe9u7pYtkOuEMPrhB5Ddz8ZGs0dfN5hDdS13wYdTH7UmRDWeYgQTZLsa0Nhmi
 
 INSERT INTO public."schema_migrations" (version) VALUES (20181017190602);
 INSERT INTO public."schema_migrations" (version) VALUES (20181022210113);

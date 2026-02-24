@@ -115,6 +115,8 @@ defmodule PredictionAnalyzer.Repo.Migrations.PartitionPredictionAccuracyByServic
         else: {:cont, [range | acc]}
     end)
     |> Enum.each(&create_attach_child_table/1)
+
+    create_attach_default_child_table()
   end
 
   defp create_attach_child_table({lbound_inclusive, ubound_exclusive}) do
@@ -122,6 +124,17 @@ defmodule PredictionAnalyzer.Repo.Migrations.PartitionPredictionAccuracyByServic
     CREATE TABLE prediction_accuracy_#{Calendar.strftime(lbound_inclusive, "y%Y_m%m")}
         PARTITION OF prediction_accuracy
         FOR VALUES FROM ('#{lbound_inclusive}') TO ('#{ubound_exclusive}')
+    """)
+  end
+
+  defp create_attach_default_child_table do
+    # Default partition will not be used, except:
+    # - by test cases, or
+    # - if we for some reason insert rows with service dates earlier than the
+    #   current oldest service date in the table.
+    execute("""
+    CREATE TABLE prediction_accuracy_default
+        PARTITION OF prediction_accuracy DEFAULT
     """)
   end
 end
