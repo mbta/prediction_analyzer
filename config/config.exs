@@ -43,12 +43,14 @@ config :prediction_analyzer, start_workers: true
 
 # Caveats:
 # - Value must be a divisor of 12.
+# - Changing this to a *higher* value after the migration PartitionPredictionAccuracyByServiceDate
+#   has run may result in a gap in the partitioned date ranges.
+#   Records with service_dates in that gap will be routed to the default partition.
 # - Changing this to a *lower* value after the migration PartitionPredictionAccuracyByServiceDate
 #   has run may cause the next run of PredictionAccuracyPartitionWorker
 #   to fail due to overlapping date ranges.
-# - Changing this to a *higher* value after the migration PartitionPredictionAccuracyByServiceDate
-#   has run may result in a gap in the partitioned date ranges. Records with service_dates in that gap
-#   will be routed to the default partition.
+#   You could work around this by skipping one or more runs of the job
+#   and possibly leaving a gap.
 config :prediction_analyzer, :partition_size_months, 1
 
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
