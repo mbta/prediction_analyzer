@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict MnZe9u7pYtkOuEMPrhB5Ddz8ZGs0dfN5hDdS13wYdTH7UmRDWeYgQTZLsa0Nhmi
+\restrict cEJT4NTbLvdctwtcQZwLW4fwjMcu7oiMQHH18n9Ba8SF6yUvZjo8gj2Pbo6SM76
 
 -- Dumped from database version 15.14 (Homebrew)
 -- Dumped by pg_dump version 15.14 (Homebrew)
@@ -138,10 +138,10 @@ CREATE TABLE public.prediction_accuracy_default (
 
 
 --
--- Name: prediction_accuracy_y2024_m11; Type: TABLE; Schema: public; Owner: -
+-- Name: prediction_accuracy_y2024_m12; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.prediction_accuracy_y2024_m11 (
+CREATE TABLE public.prediction_accuracy_y2024_m12 (
     id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
     service_date date NOT NULL,
     hour_of_day integer NOT NULL,
@@ -186,10 +186,58 @@ CREATE TABLE public.prediction_accuracy_y2025_m01 (
 
 
 --
+-- Name: prediction_accuracy_y2025_m02; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.prediction_accuracy_y2025_m02 (
+    id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
+    service_date date NOT NULL,
+    hour_of_day integer NOT NULL,
+    stop_id character varying(255) NOT NULL,
+    route_id character varying(255) NOT NULL,
+    arrival_departure public.arrival_departure,
+    bin public.prediction_bin NOT NULL,
+    num_predictions integer NOT NULL,
+    num_accurate_predictions integer NOT NULL,
+    environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
+    direction_id integer,
+    mean_error real,
+    root_mean_squared_error real,
+    kind public.prediction_kind,
+    in_next_two boolean,
+    minute_of_hour integer DEFAULT 0 NOT NULL
+);
+
+
+--
 -- Name: prediction_accuracy_y2025_m03; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.prediction_accuracy_y2025_m03 (
+    id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
+    service_date date NOT NULL,
+    hour_of_day integer NOT NULL,
+    stop_id character varying(255) NOT NULL,
+    route_id character varying(255) NOT NULL,
+    arrival_departure public.arrival_departure,
+    bin public.prediction_bin NOT NULL,
+    num_predictions integer NOT NULL,
+    num_accurate_predictions integer NOT NULL,
+    environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
+    direction_id integer,
+    mean_error real,
+    root_mean_squared_error real,
+    kind public.prediction_kind,
+    in_next_two boolean,
+    minute_of_hour integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: prediction_accuracy_y2025_m04; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.prediction_accuracy_y2025_m04 (
     id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
     service_date date NOT NULL,
     hour_of_day integer NOT NULL,
@@ -234,10 +282,58 @@ CREATE TABLE public.prediction_accuracy_y2025_m05 (
 
 
 --
+-- Name: prediction_accuracy_y2025_m06; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.prediction_accuracy_y2025_m06 (
+    id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
+    service_date date NOT NULL,
+    hour_of_day integer NOT NULL,
+    stop_id character varying(255) NOT NULL,
+    route_id character varying(255) NOT NULL,
+    arrival_departure public.arrival_departure,
+    bin public.prediction_bin NOT NULL,
+    num_predictions integer NOT NULL,
+    num_accurate_predictions integer NOT NULL,
+    environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
+    direction_id integer,
+    mean_error real,
+    root_mean_squared_error real,
+    kind public.prediction_kind,
+    in_next_two boolean,
+    minute_of_hour integer DEFAULT 0 NOT NULL
+);
+
+
+--
 -- Name: prediction_accuracy_y2025_m07; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.prediction_accuracy_y2025_m07 (
+    id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
+    service_date date NOT NULL,
+    hour_of_day integer NOT NULL,
+    stop_id character varying(255) NOT NULL,
+    route_id character varying(255) NOT NULL,
+    arrival_departure public.arrival_departure,
+    bin public.prediction_bin NOT NULL,
+    num_predictions integer NOT NULL,
+    num_accurate_predictions integer NOT NULL,
+    environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
+    direction_id integer,
+    mean_error real,
+    root_mean_squared_error real,
+    kind public.prediction_kind,
+    in_next_two boolean,
+    minute_of_hour integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: prediction_accuracy_y2025_m08; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.prediction_accuracy_y2025_m08 (
     id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
     service_date date NOT NULL,
     hour_of_day integer NOT NULL,
@@ -282,6 +378,30 @@ CREATE TABLE public.prediction_accuracy_y2025_m09 (
 
 
 --
+-- Name: prediction_accuracy_y2025_m10; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.prediction_accuracy_y2025_m10 (
+    id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
+    service_date date NOT NULL,
+    hour_of_day integer NOT NULL,
+    stop_id character varying(255) NOT NULL,
+    route_id character varying(255) NOT NULL,
+    arrival_departure public.arrival_departure,
+    bin public.prediction_bin NOT NULL,
+    num_predictions integer NOT NULL,
+    num_accurate_predictions integer NOT NULL,
+    environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
+    direction_id integer,
+    mean_error real,
+    root_mean_squared_error real,
+    kind public.prediction_kind,
+    in_next_two boolean,
+    minute_of_hour integer DEFAULT 0 NOT NULL
+);
+
+
+--
 -- Name: prediction_accuracy_y2025_m11; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -306,10 +426,58 @@ CREATE TABLE public.prediction_accuracy_y2025_m11 (
 
 
 --
+-- Name: prediction_accuracy_y2025_m12; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.prediction_accuracy_y2025_m12 (
+    id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
+    service_date date NOT NULL,
+    hour_of_day integer NOT NULL,
+    stop_id character varying(255) NOT NULL,
+    route_id character varying(255) NOT NULL,
+    arrival_departure public.arrival_departure,
+    bin public.prediction_bin NOT NULL,
+    num_predictions integer NOT NULL,
+    num_accurate_predictions integer NOT NULL,
+    environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
+    direction_id integer,
+    mean_error real,
+    root_mean_squared_error real,
+    kind public.prediction_kind,
+    in_next_two boolean,
+    minute_of_hour integer DEFAULT 0 NOT NULL
+);
+
+
+--
 -- Name: prediction_accuracy_y2026_m01; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.prediction_accuracy_y2026_m01 (
+    id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
+    service_date date NOT NULL,
+    hour_of_day integer NOT NULL,
+    stop_id character varying(255) NOT NULL,
+    route_id character varying(255) NOT NULL,
+    arrival_departure public.arrival_departure,
+    bin public.prediction_bin NOT NULL,
+    num_predictions integer NOT NULL,
+    num_accurate_predictions integer NOT NULL,
+    environment public.environment DEFAULT 'prod'::public.environment NOT NULL,
+    direction_id integer,
+    mean_error real,
+    root_mean_squared_error real,
+    kind public.prediction_kind,
+    in_next_two boolean,
+    minute_of_hour integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: prediction_accuracy_y2026_m02; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.prediction_accuracy_y2026_m02 (
     id bigint DEFAULT nextval('public.prediction_accuracy_id_seq'::regclass) NOT NULL,
     service_date date NOT NULL,
     hour_of_day integer NOT NULL,
@@ -455,66 +623,115 @@ ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_a
 
 
 --
--- Name: prediction_accuracy_y2024_m11; Type: TABLE ATTACH; Schema: public; Owner: -
+-- Name: prediction_accuracy_y2024_m12; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2024_m11 FOR VALUES FROM ('2024-11-01') TO ('2025-01-01');
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2024_m12 FOR VALUES FROM ('2024-12-01') TO ('2025-01-01');
 
 
 --
 -- Name: prediction_accuracy_y2025_m01; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m01 FOR VALUES FROM ('2025-01-01') TO ('2025-03-01');
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m01 FOR VALUES FROM ('2025-01-01') TO ('2025-02-01');
+
+
+--
+-- Name: prediction_accuracy_y2025_m02; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m02 FOR VALUES FROM ('2025-02-01') TO ('2025-03-01');
 
 
 --
 -- Name: prediction_accuracy_y2025_m03; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m03 FOR VALUES FROM ('2025-03-01') TO ('2025-05-01');
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m03 FOR VALUES FROM ('2025-03-01') TO ('2025-04-01');
+
+
+--
+-- Name: prediction_accuracy_y2025_m04; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m04 FOR VALUES FROM ('2025-04-01') TO ('2025-05-01');
 
 
 --
 -- Name: prediction_accuracy_y2025_m05; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m05 FOR VALUES FROM ('2025-05-01') TO ('2025-07-01');
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m05 FOR VALUES FROM ('2025-05-01') TO ('2025-06-01');
+
+
+--
+-- Name: prediction_accuracy_y2025_m06; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m06 FOR VALUES FROM ('2025-06-01') TO ('2025-07-01');
 
 
 --
 -- Name: prediction_accuracy_y2025_m07; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m07 FOR VALUES FROM ('2025-07-01') TO ('2025-09-01');
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m07 FOR VALUES FROM ('2025-07-01') TO ('2025-08-01');
+
+
+--
+-- Name: prediction_accuracy_y2025_m08; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m08 FOR VALUES FROM ('2025-08-01') TO ('2025-09-01');
 
 
 --
 -- Name: prediction_accuracy_y2025_m09; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m09 FOR VALUES FROM ('2025-09-01') TO ('2025-11-01');
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m09 FOR VALUES FROM ('2025-09-01') TO ('2025-10-01');
+
+
+--
+-- Name: prediction_accuracy_y2025_m10; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m10 FOR VALUES FROM ('2025-10-01') TO ('2025-11-01');
 
 
 --
 -- Name: prediction_accuracy_y2025_m11; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m11 FOR VALUES FROM ('2025-11-01') TO ('2026-01-01');
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m11 FOR VALUES FROM ('2025-11-01') TO ('2025-12-01');
+
+
+--
+-- Name: prediction_accuracy_y2025_m12; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2025_m12 FOR VALUES FROM ('2025-12-01') TO ('2026-01-01');
 
 
 --
 -- Name: prediction_accuracy_y2026_m01; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2026_m01 FOR VALUES FROM ('2026-01-01') TO ('2026-03-01');
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2026_m01 FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
+
+
+--
+-- Name: prediction_accuracy_y2026_m02; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2026_m02 FOR VALUES FROM ('2026-02-01') TO ('2026-03-01');
 
 
 --
 -- Name: prediction_accuracy_y2026_m03; Type: TABLE ATTACH; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2026_m03 FOR VALUES FROM ('2026-03-01') TO ('2026-05-01');
+ALTER TABLE ONLY public.prediction_accuracy ATTACH PARTITION public.prediction_accuracy_y2026_m03 FOR VALUES FROM ('2026-03-01') TO ('2026-04-01');
 
 
 --
@@ -555,11 +772,11 @@ ALTER TABLE ONLY public.prediction_accuracy_default
 
 
 --
--- Name: prediction_accuracy_y2024_m11 prediction_accuracy_y2024_m11_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: prediction_accuracy_y2024_m12 prediction_accuracy_y2024_m12_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.prediction_accuracy_y2024_m11
-    ADD CONSTRAINT prediction_accuracy_y2024_m11_pkey PRIMARY KEY (id, service_date);
+ALTER TABLE ONLY public.prediction_accuracy_y2024_m12
+    ADD CONSTRAINT prediction_accuracy_y2024_m12_pkey PRIMARY KEY (id, service_date);
 
 
 --
@@ -571,11 +788,27 @@ ALTER TABLE ONLY public.prediction_accuracy_y2025_m01
 
 
 --
+-- Name: prediction_accuracy_y2025_m02 prediction_accuracy_y2025_m02_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_y2025_m02
+    ADD CONSTRAINT prediction_accuracy_y2025_m02_pkey PRIMARY KEY (id, service_date);
+
+
+--
 -- Name: prediction_accuracy_y2025_m03 prediction_accuracy_y2025_m03_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.prediction_accuracy_y2025_m03
     ADD CONSTRAINT prediction_accuracy_y2025_m03_pkey PRIMARY KEY (id, service_date);
+
+
+--
+-- Name: prediction_accuracy_y2025_m04 prediction_accuracy_y2025_m04_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_y2025_m04
+    ADD CONSTRAINT prediction_accuracy_y2025_m04_pkey PRIMARY KEY (id, service_date);
 
 
 --
@@ -587,11 +820,27 @@ ALTER TABLE ONLY public.prediction_accuracy_y2025_m05
 
 
 --
+-- Name: prediction_accuracy_y2025_m06 prediction_accuracy_y2025_m06_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_y2025_m06
+    ADD CONSTRAINT prediction_accuracy_y2025_m06_pkey PRIMARY KEY (id, service_date);
+
+
+--
 -- Name: prediction_accuracy_y2025_m07 prediction_accuracy_y2025_m07_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.prediction_accuracy_y2025_m07
     ADD CONSTRAINT prediction_accuracy_y2025_m07_pkey PRIMARY KEY (id, service_date);
+
+
+--
+-- Name: prediction_accuracy_y2025_m08 prediction_accuracy_y2025_m08_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_y2025_m08
+    ADD CONSTRAINT prediction_accuracy_y2025_m08_pkey PRIMARY KEY (id, service_date);
 
 
 --
@@ -603,6 +852,14 @@ ALTER TABLE ONLY public.prediction_accuracy_y2025_m09
 
 
 --
+-- Name: prediction_accuracy_y2025_m10 prediction_accuracy_y2025_m10_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_y2025_m10
+    ADD CONSTRAINT prediction_accuracy_y2025_m10_pkey PRIMARY KEY (id, service_date);
+
+
+--
 -- Name: prediction_accuracy_y2025_m11 prediction_accuracy_y2025_m11_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -611,11 +868,27 @@ ALTER TABLE ONLY public.prediction_accuracy_y2025_m11
 
 
 --
+-- Name: prediction_accuracy_y2025_m12 prediction_accuracy_y2025_m12_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_y2025_m12
+    ADD CONSTRAINT prediction_accuracy_y2025_m12_pkey PRIMARY KEY (id, service_date);
+
+
+--
 -- Name: prediction_accuracy_y2026_m01 prediction_accuracy_y2026_m01_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.prediction_accuracy_y2026_m01
     ADD CONSTRAINT prediction_accuracy_y2026_m01_pkey PRIMARY KEY (id, service_date);
+
+
+--
+-- Name: prediction_accuracy_y2026_m02 prediction_accuracy_y2026_m02_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_y2026_m02
+    ADD CONSTRAINT prediction_accuracy_y2026_m02_pkey PRIMARY KEY (id, service_date);
 
 
 --
@@ -679,17 +952,17 @@ CREATE INDEX prediction_accuracy_default_stop_id_idx ON public.prediction_accura
 
 
 --
--- Name: prediction_accuracy_y2024_m11_service_date_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: prediction_accuracy_y2024_m12_service_date_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX prediction_accuracy_y2024_m11_service_date_idx ON public.prediction_accuracy_y2024_m11 USING btree (service_date);
+CREATE INDEX prediction_accuracy_y2024_m12_service_date_idx ON public.prediction_accuracy_y2024_m12 USING btree (service_date);
 
 
 --
--- Name: prediction_accuracy_y2024_m11_stop_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: prediction_accuracy_y2024_m12_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX prediction_accuracy_y2024_m11_stop_id_idx ON public.prediction_accuracy_y2024_m11 USING btree (stop_id);
+CREATE INDEX prediction_accuracy_y2024_m12_stop_id_idx ON public.prediction_accuracy_y2024_m12 USING btree (stop_id);
 
 
 --
@@ -707,6 +980,20 @@ CREATE INDEX prediction_accuracy_y2025_m01_stop_id_idx ON public.prediction_accu
 
 
 --
+-- Name: prediction_accuracy_y2025_m02_service_date_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m02_service_date_idx ON public.prediction_accuracy_y2025_m02 USING btree (service_date);
+
+
+--
+-- Name: prediction_accuracy_y2025_m02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m02_stop_id_idx ON public.prediction_accuracy_y2025_m02 USING btree (stop_id);
+
+
+--
 -- Name: prediction_accuracy_y2025_m03_service_date_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -718,6 +1005,20 @@ CREATE INDEX prediction_accuracy_y2025_m03_service_date_idx ON public.prediction
 --
 
 CREATE INDEX prediction_accuracy_y2025_m03_stop_id_idx ON public.prediction_accuracy_y2025_m03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_y2025_m04_service_date_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m04_service_date_idx ON public.prediction_accuracy_y2025_m04 USING btree (service_date);
+
+
+--
+-- Name: prediction_accuracy_y2025_m04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m04_stop_id_idx ON public.prediction_accuracy_y2025_m04 USING btree (stop_id);
 
 
 --
@@ -735,6 +1036,20 @@ CREATE INDEX prediction_accuracy_y2025_m05_stop_id_idx ON public.prediction_accu
 
 
 --
+-- Name: prediction_accuracy_y2025_m06_service_date_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m06_service_date_idx ON public.prediction_accuracy_y2025_m06 USING btree (service_date);
+
+
+--
+-- Name: prediction_accuracy_y2025_m06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m06_stop_id_idx ON public.prediction_accuracy_y2025_m06 USING btree (stop_id);
+
+
+--
 -- Name: prediction_accuracy_y2025_m07_service_date_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -746,6 +1061,20 @@ CREATE INDEX prediction_accuracy_y2025_m07_service_date_idx ON public.prediction
 --
 
 CREATE INDEX prediction_accuracy_y2025_m07_stop_id_idx ON public.prediction_accuracy_y2025_m07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_y2025_m08_service_date_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m08_service_date_idx ON public.prediction_accuracy_y2025_m08 USING btree (service_date);
+
+
+--
+-- Name: prediction_accuracy_y2025_m08_stop_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m08_stop_id_idx ON public.prediction_accuracy_y2025_m08 USING btree (stop_id);
 
 
 --
@@ -763,6 +1092,20 @@ CREATE INDEX prediction_accuracy_y2025_m09_stop_id_idx ON public.prediction_accu
 
 
 --
+-- Name: prediction_accuracy_y2025_m10_service_date_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m10_service_date_idx ON public.prediction_accuracy_y2025_m10 USING btree (service_date);
+
+
+--
+-- Name: prediction_accuracy_y2025_m10_stop_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m10_stop_id_idx ON public.prediction_accuracy_y2025_m10 USING btree (stop_id);
+
+
+--
 -- Name: prediction_accuracy_y2025_m11_service_date_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -777,6 +1120,20 @@ CREATE INDEX prediction_accuracy_y2025_m11_stop_id_idx ON public.prediction_accu
 
 
 --
+-- Name: prediction_accuracy_y2025_m12_service_date_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m12_service_date_idx ON public.prediction_accuracy_y2025_m12 USING btree (service_date);
+
+
+--
+-- Name: prediction_accuracy_y2025_m12_stop_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2025_m12_stop_id_idx ON public.prediction_accuracy_y2025_m12 USING btree (stop_id);
+
+
+--
 -- Name: prediction_accuracy_y2026_m01_service_date_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -788,6 +1145,20 @@ CREATE INDEX prediction_accuracy_y2026_m01_service_date_idx ON public.prediction
 --
 
 CREATE INDEX prediction_accuracy_y2026_m01_stop_id_idx ON public.prediction_accuracy_y2026_m01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_y2026_m02_service_date_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2026_m02_service_date_idx ON public.prediction_accuracy_y2026_m02 USING btree (service_date);
+
+
+--
+-- Name: prediction_accuracy_y2026_m02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_y2026_m02_stop_id_idx ON public.prediction_accuracy_y2026_m02 USING btree (stop_id);
 
 
 --
@@ -889,24 +1260,24 @@ ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.pre
 
 
 --
--- Name: prediction_accuracy_y2024_m11_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: prediction_accuracy_y2024_m12_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_y2024_m11_pkey;
-
-
---
--- Name: prediction_accuracy_y2024_m11_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_y2024_m11_service_date_idx;
+ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_y2024_m12_pkey;
 
 
 --
--- Name: prediction_accuracy_y2024_m11_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: prediction_accuracy_y2024_m12_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2024_m11_stop_id_idx;
+ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_y2024_m12_service_date_idx;
+
+
+--
+-- Name: prediction_accuracy_y2024_m12_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2024_m12_stop_id_idx;
 
 
 --
@@ -931,6 +1302,27 @@ ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.pre
 
 
 --
+-- Name: prediction_accuracy_y2025_m02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_y2025_m02_pkey;
+
+
+--
+-- Name: prediction_accuracy_y2025_m02_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_y2025_m02_service_date_idx;
+
+
+--
+-- Name: prediction_accuracy_y2025_m02_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2025_m02_stop_id_idx;
+
+
+--
 -- Name: prediction_accuracy_y2025_m03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -949,6 +1341,27 @@ ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION publi
 --
 
 ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2025_m03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_y2025_m04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_y2025_m04_pkey;
+
+
+--
+-- Name: prediction_accuracy_y2025_m04_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_y2025_m04_service_date_idx;
+
+
+--
+-- Name: prediction_accuracy_y2025_m04_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2025_m04_stop_id_idx;
 
 
 --
@@ -973,6 +1386,27 @@ ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.pre
 
 
 --
+-- Name: prediction_accuracy_y2025_m06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_y2025_m06_pkey;
+
+
+--
+-- Name: prediction_accuracy_y2025_m06_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_y2025_m06_service_date_idx;
+
+
+--
+-- Name: prediction_accuracy_y2025_m06_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2025_m06_stop_id_idx;
+
+
+--
 -- Name: prediction_accuracy_y2025_m07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -991,6 +1425,27 @@ ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION publi
 --
 
 ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2025_m07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_y2025_m08_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_y2025_m08_pkey;
+
+
+--
+-- Name: prediction_accuracy_y2025_m08_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_y2025_m08_service_date_idx;
+
+
+--
+-- Name: prediction_accuracy_y2025_m08_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2025_m08_stop_id_idx;
 
 
 --
@@ -1015,6 +1470,27 @@ ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.pre
 
 
 --
+-- Name: prediction_accuracy_y2025_m10_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_y2025_m10_pkey;
+
+
+--
+-- Name: prediction_accuracy_y2025_m10_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_y2025_m10_service_date_idx;
+
+
+--
+-- Name: prediction_accuracy_y2025_m10_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2025_m10_stop_id_idx;
+
+
+--
 -- Name: prediction_accuracy_y2025_m11_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -1036,6 +1512,27 @@ ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.pre
 
 
 --
+-- Name: prediction_accuracy_y2025_m12_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_y2025_m12_pkey;
+
+
+--
+-- Name: prediction_accuracy_y2025_m12_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_y2025_m12_service_date_idx;
+
+
+--
+-- Name: prediction_accuracy_y2025_m12_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2025_m12_stop_id_idx;
+
+
+--
 -- Name: prediction_accuracy_y2026_m01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -1054,6 +1551,27 @@ ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION publi
 --
 
 ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2026_m01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_y2026_m02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_pkey ATTACH PARTITION public.prediction_accuracy_y2026_m02_pkey;
+
+
+--
+-- Name: prediction_accuracy_y2026_m02_service_date_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_service_date_index ATTACH PARTITION public.prediction_accuracy_y2026_m02_service_date_idx;
+
+
+--
+-- Name: prediction_accuracy_y2026_m02_stop_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_stop_id_index ATTACH PARTITION public.prediction_accuracy_y2026_m02_stop_id_idx;
 
 
 --
@@ -1089,7 +1607,7 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict MnZe9u7pYtkOuEMPrhB5Ddz8ZGs0dfN5hDdS13wYdTH7UmRDWeYgQTZLsa0Nhmi
+\unrestrict cEJT4NTbLvdctwtcQZwLW4fwjMcu7oiMQHH18n9Ba8SF6yUvZjo8gj2Pbo6SM76
 
 INSERT INTO public."schema_migrations" (version) VALUES (20181017190602);
 INSERT INTO public."schema_migrations" (version) VALUES (20181022210113);

@@ -4,7 +4,9 @@ defmodule PredictionAnalyzer.Repo.Migrations.PartitionPredictionAccuracyByServic
 
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
 
-  @partition_size_months 2
+  @partition_size_months Application.compile_env!(:prediction_analyzer, :partition_size_months)
+
+  @copy_data_timeout :timer.minutes(5)
 
   def up, do: do_migration(pk_cols: "id, service_date", partitioned?: true)
   def down, do: do_migration(pk_cols: "id", partitioned?: false)
@@ -55,13 +57,19 @@ defmodule PredictionAnalyzer.Repo.Migrations.PartitionPredictionAccuracyByServic
     # Copy data over #
     ##################
 
-    [
-      # If copying to the partitioned table, it will automatically route each record to the appropriate child table.
-      "INSERT INTO prediction_accuracy SELECT * FROM prediction_accuracy_old",
-      # Update the id sequence after copying so that it doesn't cause PK conflicts on future inserts.
+    # If copying to the partitioned table, it will automatically route each record to the appropriate child table.
+    execute(fn ->
+      repo().query!(
+        "INSERT INTO prediction_accuracy SELECT * FROM prediction_accuracy_old",
+        [],
+        timeout: @copy_data_timeout
+      )
+    end)
+
+    # Update the id sequence after copying so that it doesn't cause PK conflicts on future inserts.
+    execute(
       "SELECT setval('prediction_accuracy_id_seq', (SELECT max(id) FROM prediction_accuracy))"
-    ]
-    |> Enum.each(&execute/1)
+    )
 
     ############
     # Clean up #
@@ -83,36 +91,32 @@ defmodule PredictionAnalyzer.Repo.Migrations.PartitionPredictionAccuracyByServic
     |> Enum.each(&execute/1)
   end
 
+  # Creates children of the partitioned table for date ranges:
+  # range0(includes earliest service_date), range1, ..., rangeN-1(includes utc_today), rangeN
   defp create_child_tables do
-    # For unclear reasons, the time zone database is not available during migrations.
-    # So, we can't determine the current service date--it requires a localized "now" datetime.
+    # We get today in UTC, which will always be >= the current service date.
     #
-    # As a workaround, we use UTC today, which will always be >= the current service date.
-    #
-    # We create partitions up to and including the first one that starts _after_ UTC today,
-    # ensuring records will have a child table to be routed to for at least
-    # the next @partition_size_months.
+    # This is fine because the goal is to create partitions up to 1 past the
+    # partition that includes the current service date.
+    # In the worst case (service date is at the very end of a partition range, and UTC today is on the following date),
+    # we would just create 1 more partition than needed right now.
     utc_today = Date.utc_today()
 
     earliest_service_date_q = from(p in PredictionAccuracy, select: min(p.service_date))
     service_date0 = repo().one(earliest_service_date_q)
 
-    month = div(service_date0.month - 1, @partition_size_months) * @partition_size_months + 1
+    lbound_month =
+      div(service_date0.month - 1, @partition_size_months) * @partition_size_months + 1
 
-    lbound_inclusive0 = Date.new!(service_date0.year, month, 1)
+    lbound_inclusive0 = Date.new!(service_date0.year, lbound_month, 1)
     ubound_exclusive0 = Date.shift(lbound_inclusive0, month: @partition_size_months)
 
     {lbound_inclusive0, ubound_exclusive0}
     |> Stream.iterate(fn {_, ubound_exclusive} ->
       {ubound_exclusive, Date.shift(ubound_exclusive, month: @partition_size_months)}
     end)
-    # Behaves like:
-    #     |> Enum.take_while(fn {lbound_inclusive, _} -> not Date.after?(lbound_inclusive, utc_today) end)
-    # except it also takes the first value for which the predicate returns false.
-    |> Enum.reduce_while([], fn {lbound_inclusive, _} = range, acc ->
-      if Date.after?(lbound_inclusive, utc_today),
-        do: {:halt, Enum.reverse([range | acc])},
-        else: {:cont, [range | acc]}
+    |> take_until_and_including(fn {lbound_inclusive, _} ->
+      Date.after?(lbound_inclusive, utc_today)
     end)
     |> Enum.each(&create_attach_child_table/1)
 
@@ -136,5 +140,16 @@ defmodule PredictionAnalyzer.Repo.Migrations.PartitionPredictionAccuracyByServic
     CREATE TABLE prediction_accuracy_default
         PARTITION OF prediction_accuracy DEFAULT
     """)
+  end
+
+  # Behaves like:
+  #     Enum.take_while(enumerable, &not(end_condition?.(&1)))
+  # but also takes the first value for which `end_condition?` returns true.
+  defp take_until_and_including(enumerable, end_condition?) do
+    Enum.reduce_while(enumerable, [], fn el, acc ->
+      if end_condition?.(el),
+        do: {:halt, Enum.reverse([el | acc])},
+        else: {:cont, [el | acc]}
+    end)
   end
 end

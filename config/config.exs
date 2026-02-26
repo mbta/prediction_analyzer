@@ -41,6 +41,8 @@ config :prediction_analyzer, :analysis_lookback_min, 40
 
 config :prediction_analyzer, start_workers: true
 
+config :prediction_analyzer, :partition_size_months, 1
+
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
 config :phoenix, :json_library, Jason
