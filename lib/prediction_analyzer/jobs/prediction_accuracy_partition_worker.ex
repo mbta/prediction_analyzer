@@ -1,4 +1,4 @@
-defmodule PredictionAnalyzer.PredictionAccuracyPartitionWorker do
+defmodule PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorker do
   @moduledoc """
   Periodically creates and attaches new child tables to the partitioned
   `prediction_accuracy` table.
