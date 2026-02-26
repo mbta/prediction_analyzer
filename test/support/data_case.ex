@@ -16,6 +16,8 @@ defmodule PredictionAnalyzer.DataCase do
 
   using do
     quote do
+      use Oban.Testing, repo: PredictionAnalyzer.Repo
+
       alias PredictionAnalyzer.Repo
 
       import Ecto
