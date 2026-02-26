@@ -100,4 +100,30 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorkerTest do
 
     assert_received {:fake_repo_command, ^expected_command}
   end
+
+  test "Logs an error if the job exhausts all its retries" do
+    args = %{
+      repo: FakeRepoBad,
+      partition_size_months: 1,
+      today: ~D[2026-08-01]
+    }
+
+    opts = [attempt: 10]
+
+    expected_command = """
+    CREATE TABLE IF NOT EXISTS prediction_accuracy_y2026_m09
+        PARTITION OF prediction_accuracy
+        FOR VALUES FROM ('2026-09-01') TO ('2026-10-01')
+    """
+
+    assert {{:error, %Postgrex.QueryError{message: "query failed!"}}, logs} =
+             with_log(fn -> perform_job(PredictionAccuracyPartitionWorker, args, opts) end)
+
+    assert logs =~
+             "partition_worker_error reason=\"** (Postgrex.QueryError) query failed!\""
+
+    assert logs =~ "oban_job_retries_exhausted"
+
+    assert_received {:fake_repo_command, ^expected_command}
+  end
 end
