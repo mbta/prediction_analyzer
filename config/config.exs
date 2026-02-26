@@ -47,6 +47,19 @@ config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
 config :phoenix, :json_library, Jason
 
+config :prediction_analyzer, Oban,
+  engine: Oban.Engines.Basic,
+  queues: [default: 10],
+  repo: PredictionAnalyzer.Repo,
+  plugins: [
+    {Oban.Plugins.Cron,
+     timezone: "America/New_York",
+     crontab: [
+       # At 04:00 Eastern on the first day of each month.
+       {"0 4 1 * *", PredictionAnalyzer.PredictionAccuracyPartitionWorker}
+     ]}
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

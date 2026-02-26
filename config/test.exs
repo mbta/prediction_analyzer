@@ -28,3 +28,5 @@ config :prediction_analyzer,
 config :prediction_analyzer, start_workers: false
 config :prediction_analyzer, :stop_name_fetcher, PredictionAnalyzer.FakeStopNameFetcher
 config :prediction_analyzer, retry_sleep_time: 1
+
+config :prediction_analyzer, Oban, testing: :manual

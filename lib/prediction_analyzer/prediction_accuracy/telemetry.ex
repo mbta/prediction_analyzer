@@ -7,9 +7,16 @@ defmodule PredictionAnalyzer.Telemetry do
   @spec setup_telemetry() :: :ok
   def setup_telemetry do
     :telemetry.attach(
-      "prediction-analyzer-handler",
+      "prediction-analyzer-named-query-handler",
       PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
       &__MODULE__.handle_named_query_event/4,
+      []
+    )
+
+    :telemetry.attach_many(
+      "prediction-analyzer-oban-job-handler",
+      [[:oban, :job, :exception]],
+      &__MODULE__.handle_oban_job_event/4,
       []
     )
   end
@@ -49,6 +56,31 @@ defmodule PredictionAnalyzer.Telemetry do
     |> Logger.info()
   end
 
+  @doc """
+  Emits logs for selected Oban job events.
+  """
+  def handle_oban_job_event([:oban, :job, :exception], measures, %{state: :discard} = meta, _) do
+    # Log an error if the job has exhausted its retry attempts and is being discarded.
+    details =
+      case meta.kind do
+        :error ->
+          message = Exception.message(meta.reason)
+          full_details = Exception.format(meta.kind, meta.reason, meta.stacktrace)
+          "message=#{inspect(message)}\n#{full_details}"
+
+        _other ->
+          "\n#{Exception.format(meta.kind, meta.reason, meta.stacktrace)}"
+      end
+
+    Logger.error(
+      "oban_job_retries_exhausted #{get_job_info(meta.job)} attempts=#{meta.job.attempt} result=#{inspect(meta.result)} duration=#{measures.duration} memory=#{measures.memory} queue_time=#{measures.queue_time} #{details}"
+    )
+  end
+
+  def handle_oban_job_event(_event, _measures, _meta, _config) do
+    nil
+  end
+
   defp query_name_log_field(name) when is_binary(name) or is_atom(name) do
     "#{name}_query_time"
   end
@@ -81,5 +113,9 @@ defmodule PredictionAnalyzer.Telemetry do
       # the time spent decoding the data received from the database
       :decode_time
     ]
+  end
+
+  defp get_job_info(job) do
+    "job_id=#{job.id} job_worker=#{inspect(job.worker)} job_args=#{inspect(job.args)}"
   end
 end
