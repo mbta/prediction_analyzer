@@ -103,7 +103,7 @@ defmodule PredictionAnalyzer.Repo.Migrations.PartitionPredictionAccuracyByServic
     utc_today = Date.utc_today()
 
     earliest_service_date_q = from(p in PredictionAccuracy, select: min(p.service_date))
-    service_date0 = repo().one(earliest_service_date_q)
+    service_date0 = repo().one(earliest_service_date_q) || utc_today
 
     lbound_month =
       div(service_date0.month - 1, @partition_size_months) * @partition_size_months + 1
