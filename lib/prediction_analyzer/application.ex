@@ -11,6 +11,7 @@ defmodule PredictionAnalyzer.Application do
     # Define workers and child supervisors to be supervised
     supervisors = [
       PredictionAnalyzer.Repo,
+      {Oban, Application.fetch_env!(:prediction_analyzer, Oban)},
       {Phoenix.PubSub, name: PredictionAnalyzerWeb.PubSub},
       PredictionAnalyzerWeb.Endpoint
     ]

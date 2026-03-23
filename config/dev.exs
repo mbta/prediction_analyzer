@@ -62,6 +62,8 @@ config :prediction_analyzer, PredictionAnalyzer.Repo,
   url: "#{System.get_env("DATABASE_ROOT_URL")}/prediction_analyzer_dev",
   username: "postgres",
   password: "postgres",
+  database: "prediction_analyzer_dev",
+  hostname: "localhost",
   pool_size: 10
 
 config :prediction_analyzer, start_workers: true

@@ -44,6 +44,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:hackney, "~> 1.17.0"},
       {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.0"},
+      {:oban, "~> 2.19"},
       {:phoenix, "~> 1.6.0"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.0"},
