@@ -38,58 +38,46 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorkerTest do
   end
 
   test "Generates correct CREATE TABLE command for the given date" do
-    args = %{
-      repo: FakeRepoGood,
-      partition_size_months: 2,
-      today: ~D[2026-02-01]
-    }
+    args = %{repo: FakeRepoGood, today: ~D[2026-02-01]}
 
     expected_command = """
-    CREATE TABLE IF NOT EXISTS prediction_accuracy_y2026_m03
-        PARTITION OF prediction_accuracy
-        FOR VALUES FROM ('2026-03-01') TO ('2026-05-01')
+    CREATE TABLE IF NOT EXISTS prediction_accuracy_partition_week_of_2026_02_02
+        PARTITION OF prediction_accuracy_partitioned
+        FOR VALUES FROM ('2026-02-02') TO ('2026-02-09')
     """
 
     assert {:ok, logs} = with_log(fn -> perform_job(PredictionAccuracyPartitionWorker, args) end)
 
     assert logs =~
-             "partition_worker_success child_table_name=prediction_accuracy_y2026_m03 result=created"
+             "partition_worker_success child_table_name=prediction_accuracy_partition_week_of_2026_02_02 result=created"
 
     assert_received {:fake_repo_command, ^expected_command}
   end
 
   test "Handles case where partition already exists" do
-    args = %{
-      repo: FakeRepoTableExists,
-      partition_size_months: 2,
-      today: ~D[2026-01-01]
-    }
+    args = %{repo: FakeRepoTableExists, today: ~D[2026-01-01]}
 
     expected_command = """
-    CREATE TABLE IF NOT EXISTS prediction_accuracy_y2026_m03
-        PARTITION OF prediction_accuracy
-        FOR VALUES FROM ('2026-03-01') TO ('2026-05-01')
+    CREATE TABLE IF NOT EXISTS prediction_accuracy_partition_week_of_2026_01_05
+        PARTITION OF prediction_accuracy_partitioned
+        FOR VALUES FROM ('2026-01-05') TO ('2026-01-12')
     """
 
     assert {:ok, logs} = with_log(fn -> perform_job(PredictionAccuracyPartitionWorker, args) end)
 
     assert logs =~
-             "partition_worker_success child_table_name=prediction_accuracy_y2026_m03 result=already_exists"
+             "partition_worker_success child_table_name=prediction_accuracy_partition_week_of_2026_01_05 result=already_exists"
 
     assert_received {:fake_repo_command, ^expected_command}
   end
 
   test "Logs failures" do
-    args = %{
-      repo: FakeRepoBad,
-      partition_size_months: 3,
-      today: ~D[2026-08-01]
-    }
+    args = %{repo: FakeRepoBad, today: ~D[2026-08-01]}
 
     expected_command = """
-    CREATE TABLE IF NOT EXISTS prediction_accuracy_y2026_m10
-        PARTITION OF prediction_accuracy
-        FOR VALUES FROM ('2026-10-01') TO ('2027-01-01')
+    CREATE TABLE IF NOT EXISTS prediction_accuracy_partition_week_of_2026_08_03
+        PARTITION OF prediction_accuracy_partitioned
+        FOR VALUES FROM ('2026-08-03') TO ('2026-08-10')
     """
 
     assert {{:error, %Postgrex.QueryError{message: "query failed!"}}, logs} =
@@ -102,18 +90,14 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorkerTest do
   end
 
   test "Logs an error if the job exhausts all its retries" do
-    args = %{
-      repo: FakeRepoBad,
-      partition_size_months: 1,
-      today: ~D[2026-08-01]
-    }
+    args = %{repo: FakeRepoBad, today: ~D[2026-08-01]}
 
     opts = [attempt: 10]
 
     expected_command = """
-    CREATE TABLE IF NOT EXISTS prediction_accuracy_y2026_m09
-        PARTITION OF prediction_accuracy
-        FOR VALUES FROM ('2026-09-01') TO ('2026-10-01')
+    CREATE TABLE IF NOT EXISTS prediction_accuracy_partition_week_of_2026_08_03
+        PARTITION OF prediction_accuracy_partitioned
+        FOR VALUES FROM ('2026-08-03') TO ('2026-08-10')
     """
 
     assert {{:error, %Postgrex.QueryError{message: "query failed!"}}, logs} =
