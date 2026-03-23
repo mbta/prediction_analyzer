@@ -15,6 +15,8 @@ config :prediction_analyzer, PredictionAnalyzer.Repo,
   url: "#{System.get_env("DATABASE_ROOT_URL")}/prediction_analyzer_test",
   username: "postgres",
   password: "postgres",
+  database: "prediction_analyzer_test",
+  hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :prediction_analyzer,
