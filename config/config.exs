@@ -41,18 +41,6 @@ config :prediction_analyzer, :analysis_lookback_min, 40
 
 config :prediction_analyzer, start_workers: true
 
-# Caveats:
-# - Value must be a divisor of 12.
-# - Changing this to a *higher* value after the migration PartitionPredictionAccuracyByServiceDate
-#   has run may result in a gap in the partitioned date ranges.
-#   Records with service_dates in that gap will be routed to the default partition.
-# - Changing this to a *lower* value after the migration PartitionPredictionAccuracyByServiceDate
-#   has run may cause the next run of PredictionAccuracyPartitionWorker
-#   to fail due to overlapping date ranges.
-#   You could work around this by skipping one or more runs of the job
-#   and possibly leaving a gap.
-config :prediction_analyzer, :partition_size_months, 1
-
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
 config :phoenix, :json_library, Jason
@@ -65,10 +53,25 @@ config :prediction_analyzer, Oban,
     {Oban.Plugins.Cron,
      timezone: "America/New_York",
      crontab: [
-       # At 04:00 Eastern on the first day of each month.
-       {"0 4 1 * *", PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorker}
+       # At 04:00 Eastern every Monday.
+       {"0 4 * * MON", PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorker},
+       # Every 2 minutes.
+       {"*/2 * * * *", PredictionAnalyzer.Jobs.PredictionAccuracyDataMigrationWorker}
      ]}
   ]
+
+# Config for incremental migration of the `prediction_accuracy` table.
+config :prediction_analyzer, :prediction_accuracy_migration,
+  monolithic: "prediction_accuracy_monolithic",
+  partitioned: "prediction_accuracy_partitioned",
+  migration_state: "prediction_accuracy_migration_state",
+  copy_data_timeout: :timer.minutes(1) + :timer.seconds(55),
+  # Number of service dates to copy per run of the incremental data migration job, as a `Duration.duration()`.
+  # (1 day subtracted because the copy range is inclusive on both ends.)
+  copy_duration: [week: 1, day: -1],
+  # The migration can be finalized once data has been copied up to, but not including,
+  # the window that ends after (today - min_days_in_past_for_finalize).
+  min_days_in_past_for_finalize: 3
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
