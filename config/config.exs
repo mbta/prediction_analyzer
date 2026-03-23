@@ -54,9 +54,7 @@ config :prediction_analyzer, Oban,
      timezone: "America/New_York",
      crontab: [
        # At 04:00 Eastern every Monday.
-       {"0 4 * * MON", PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorker},
-       # Every 2 minutes.
-       {"*/2 * * * *", PredictionAnalyzer.Jobs.PredictionAccuracyDataMigrationWorker}
+       {"0 4 * * MON", PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorker}
      ]}
   ]
 
