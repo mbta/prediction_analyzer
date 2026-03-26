@@ -57,6 +57,20 @@ defmodule PredictionAnalyzer.Application do
           Logger.info("Started application, running migrations")
           Application.get_env(:prediction_analyzer, :migration_task).migrate()
           Logger.info("Finished migrations")
+
+          %{rows: [[size_bytes]]} =
+            PredictionAnalyzer.Repo.query!(
+              "SELECT pg_total_relation_size('prediction_accuracy_monolithic')"
+            )
+
+          Logger.info("dev_debug prediction_accuracy_table_info size_bytes=#{size_bytes}")
+
+          %{rows: [[size_bytes]]} =
+            PredictionAnalyzer.Repo.query!(
+              "SELECT pg_database_size('#{Application.get_env(:prediction_analyzer, PredictionAnalyzer.Repo)[:database]}')"
+            )
+
+          Logger.info("dev_debug db_info size_bytes=#{size_bytes}")
         end)
 
         success
