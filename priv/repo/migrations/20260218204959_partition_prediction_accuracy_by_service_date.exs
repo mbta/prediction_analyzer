@@ -185,6 +185,8 @@ defmodule PredictionAnalyzer.Repo.Migrations.PartitionPredictionAccuracyByServic
     # Update the id sequence after copying so that it doesn't cause PK conflicts on future inserts.
     execute("SELECT setval('#{@monolithic}_id_seq', (SELECT max(id) FROM #{@monolithic}))")
 
+    execute(fn -> repo().query!("ANALYZE #{@monolithic}", [], timeout: :timer.minutes(30)) end)
+
     # Re-point the view from the partitioned to the monolithic table.
     execute("CREATE OR REPLACE VIEW prediction_accuracy AS SELECT * FROM #{@monolithic}")
 
