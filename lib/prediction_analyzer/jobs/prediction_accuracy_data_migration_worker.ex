@@ -29,17 +29,15 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyDataMigrationWorker do
   # Some napkin math:
   #     iex> total_row_count = 803_000_000
   #     iex> service_dates_covered = Date.diff(Date.utc_today(), ~D[2018-10-01])
-  #     2730
-  # Estimating number of rows copied per job run (i.e., number of rows per service date)
-  #     iex> div(total_row_count, service_dates_covered)
-  #     294_139
+  #     2_730
+  # Estimating number of rows copied per job run (i.e., number of rows per week of service dates)
+  #     iex> round(total_row_count / service_dates_covered * 7)
+  #     2_058_974
   # Estimating time to reach present day:
-  #     iex> total_minutes = service_dates_covered * 2
-  #     5_460
+  #     iex> total_minutes = ceil(service_dates_covered / 7) * 2
+  #     780
   #     iex> total_hours = ceil(total_minutes / 60)
-  #     91
-  #     iex> total_days = ceil(total_hours / 24)
-  #     4
+  #     13
 
   @impl Oban.Worker
   def timeout(_job), do: @copy_data_timeout
