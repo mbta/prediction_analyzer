@@ -6,6 +6,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   import Ecto.Query, only: [from: 2]
   import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
 
+  @timeout :timer.minutes(5)
+
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(
         conn,
@@ -42,7 +44,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         )
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracy_context, env: :prod, request_params: params_string]
+          telemetry_options: [name: :accuracy_context, env: :prod, request_params: params_string],
+          timeout: @timeout
         )
 
       [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse] =
@@ -82,7 +85,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             name: :accuracy_context,
             env: :dev_blue,
             request_params: params_string
-          ]
+          ],
+          timeout: @timeout
         )
 
       prod_accuracies =
@@ -90,7 +94,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracies, env: :prod, request_params: params_string]
+          telemetry_options: [name: :accuracies, env: :prod, request_params: params_string],
+          timeout: @timeout
         )
         |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
           {scope, accuracy}
@@ -101,7 +106,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         |> Filters.stats_by_environment_and_chart_range("dev-green", filter_params)
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracies, env: :dev_green, request_params: params_string]
+          telemetry_options: [name: :accuracies, env: :dev_green, request_params: params_string],
+          timeout: @timeout
         )
         |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
           {scope, accuracy}
@@ -112,7 +118,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         |> Filters.stats_by_environment_and_chart_range("dev-blue", filter_params)
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracies, env: :dev_blue, request_params: params_string]
+          telemetry_options: [name: :accuracies, env: :dev_blue, request_params: params_string],
+          timeout: @timeout
         )
         |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
           {scope, accuracy}
