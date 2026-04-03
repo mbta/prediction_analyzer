@@ -22,6 +22,7 @@ defmodule PredictionAnalyzer.Repo.Migrations.FinalizePredictionAccuracyPartition
        ]
      ```
   4. Call `iex -S mix` and wait until you see "prediction_accuracy_migration_job_skipped_copy" printed.
+     (You may need to change the log level configuration in config/dev.exs for said log to show up)
   5. Remove `.disabled` from this filename and run `mix ecto.migrate`. The migration should complete.
   6. Undo config changes made in steps 2 and 3. You're all set.
 
@@ -62,6 +63,8 @@ defmodule PredictionAnalyzer.Repo.Migrations.FinalizePredictionAccuracyPartition
 
     # Update the id sequence after copying so that it doesn't cause PK conflicts on future inserts.
     execute("SELECT setval('#{@partitioned}_id_seq', (SELECT max(id) FROM #{@partitioned}))")
+
+    execute(fn -> repo().query!("ANALYZE #{@partitioned}", [], timeout: :timer.minutes(30)) end)
 
     # Re-point the view from the monolithic to the partitioned table.
     execute("CREATE OR REPLACE VIEW prediction_accuracy AS SELECT * FROM #{@partitioned}")
