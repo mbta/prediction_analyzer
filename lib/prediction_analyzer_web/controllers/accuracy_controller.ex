@@ -6,6 +6,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   import Ecto.Query, only: [from: 2]
   import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
 
+  require Logger
+
   @timeout :timer.minutes(5)
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -31,7 +33,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     if time_filters_present?(filter_params) do
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
 
-      [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
+      q =
         from(
           acc in relevant_accuracies,
           select: [
@@ -42,6 +44,13 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           ],
           where: acc.environment == "prod" and acc.route_id in ^routes
         )
+
+      plan = PredictionAnalyzer.Repo.explain(:all, q, analyze: true, timeout: @timeout)
+      Logger.info("accuracy_context_query_plan_follows")
+      IO.puts(plan)
+
+      [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
+        q
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
           telemetry_options: [name: :accuracy_context, env: :prod, request_params: params_string],
@@ -89,9 +98,16 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           timeout: @timeout
         )
 
-      prod_accuracies =
+      q =
         relevant_accuracies
         |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
+
+      plan = PredictionAnalyzer.Repo.explain(:all, q, analyze: true, timeout: @timeout)
+      Logger.info("accuracies_query_plan_follows")
+      IO.puts(plan)
+
+      prod_accuracies =
+        q
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
           telemetry_options: [name: :accuracies, env: :prod, request_params: params_string],
