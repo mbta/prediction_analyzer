@@ -33,17 +33,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     if time_filters_present?(filter_params) do
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
 
-      q_accuracies_prod =
-        relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
-
-      plan =
-        PredictionAnalyzer.Repo.explain(:all, q_accuracies_prod, analyze: true, timeout: @timeout)
-
-      Logger.info("accuracies_query_plan_follows")
-      IO.puts(plan)
-
-      q =
+      q_accuracy_context_prod =
         from(
           acc in relevant_accuracies,
           select: [
@@ -55,12 +45,51 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           where: acc.environment == "prod" and acc.route_id in ^routes
         )
 
-      plan = PredictionAnalyzer.Repo.explain(:all, q, analyze: true, timeout: @timeout)
-      Logger.info("accuracy_context_query_plan_follows")
-      IO.puts(plan)
+      q_accuracies_prod =
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
+
+      accuracy_context_explain_plan =
+        PredictionAnalyzer.Repo.explain(:all, q_accuracy_context_prod,
+          format: :map,
+          timeout: @timeout
+        )
+        |> Jason.encode(pretty: true)
+
+      Logger.info("accuracy_context_query_explain")
+      Logger.info(accuracy_context_explain_plan)
+
+      accuracies_explain_plan =
+        PredictionAnalyzer.Repo.explain(:all, q_accuracies_prod, format: :map, timeout: @timeout)
+        |> Jason.encode(pretty: true)
+
+      Logger.info("accuracies_query_explain")
+      Logger.info(accuracies_explain_plan)
+
+      accuracy_context_explain_analyze_plan =
+        PredictionAnalyzer.Repo.explain(:all, q_accuracy_context_prod,
+          analyze: true,
+          format: :map,
+          timeout: @timeout
+        )
+        |> Jason.encode(pretty: true)
+
+      Logger.info("accuracy_context_query_explain_analyze")
+      Logger.info(accuracy_context_explain_analyze_plan)
+
+      accuracies_explain_analyze_plan =
+        PredictionAnalyzer.Repo.explain(:all, q_accuracies_prod,
+          analyze: true,
+          format: :map,
+          timeout: @timeout
+        )
+        |> Jason.encode(pretty: true)
+
+      Logger.info("accuracies_query_explain_analyze")
+      Logger.info(accuracies_explain_analyze_plan)
 
       [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
-        q
+        q_accuracy_context_prod
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
           telemetry_options: [name: :accuracy_context, env: :prod, request_params: params_string],
