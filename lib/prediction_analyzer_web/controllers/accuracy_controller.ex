@@ -33,6 +33,16 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     if time_filters_present?(filter_params) do
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
 
+      q_accuracies_prod =
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
+
+      plan =
+        PredictionAnalyzer.Repo.explain(:all, q_accuracies_prod, analyze: true, timeout: @timeout)
+
+      Logger.info("accuracies_query_plan_follows")
+      IO.puts(plan)
+
       q =
         from(
           acc in relevant_accuracies,
@@ -98,16 +108,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           timeout: @timeout
         )
 
-      q =
-        relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
-
-      plan = PredictionAnalyzer.Repo.explain(:all, q, analyze: true, timeout: @timeout)
-      Logger.info("accuracies_query_plan_follows")
-      IO.puts(plan)
-
       prod_accuracies =
-        q
+        q_accuracies_prod
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
           telemetry_options: [name: :accuracies, env: :prod, request_params: params_string],
