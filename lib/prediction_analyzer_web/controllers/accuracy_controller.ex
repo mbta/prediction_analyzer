@@ -33,7 +33,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     if time_filters_present?(filter_params) do
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
 
-      q_accuracy_context_prod =
+      [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
         from(
           acc in relevant_accuracies,
           select: [
@@ -44,56 +44,9 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           ],
           where: acc.environment == "prod" and acc.route_id in ^routes
         )
-
-      q_accuracies_prod =
-        relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
-
-      accuracy_context_explain_plan =
-        PredictionAnalyzer.Repo.explain(:all, q_accuracy_context_prod,
-          format: :map,
-          timeout: @timeout
-        )
-        |> Jason.encode(pretty: true)
-
-      Logger.info("accuracy_context_query_explain")
-      Logger.info(accuracy_context_explain_plan)
-
-      accuracies_explain_plan =
-        PredictionAnalyzer.Repo.explain(:all, q_accuracies_prod, format: :map, timeout: @timeout)
-        |> Jason.encode(pretty: true)
-
-      Logger.info("accuracies_query_explain")
-      Logger.info(accuracies_explain_plan)
-
-      accuracy_context_explain_analyze_plan =
-        PredictionAnalyzer.Repo.explain(:all, q_accuracy_context_prod,
-          analyze: true,
-          format: :map,
-          timeout: @timeout
-        )
-        |> Jason.encode(pretty: true)
-
-      Logger.info("accuracy_context_query_explain_analyze")
-      Logger.info(accuracy_context_explain_analyze_plan)
-
-      accuracies_explain_analyze_plan =
-        PredictionAnalyzer.Repo.explain(:all, q_accuracies_prod,
-          analyze: true,
-          format: :map,
-          timeout: @timeout
-        )
-        |> Jason.encode(pretty: true)
-
-      Logger.info("accuracies_query_explain_analyze")
-      Logger.info(accuracies_explain_analyze_plan)
-
-      [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
-        q_accuracy_context_prod
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracy_context, env: :prod, request_params: params_string],
-          timeout: @timeout
+          telemetry_options: [name: :accuracy_context, env: :prod, request_params: params_string]
         )
 
       [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse] =
@@ -133,16 +86,15 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             name: :accuracy_context,
             env: :dev_blue,
             request_params: params_string
-          ],
-          timeout: @timeout
+          ]
         )
 
       prod_accuracies =
-        q_accuracies_prod
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracies, env: :prod, request_params: params_string],
-          timeout: @timeout
+          telemetry_options: [name: :accuracies, env: :prod, request_params: params_string]
         )
         |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
           {scope, accuracy}
@@ -153,8 +105,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         |> Filters.stats_by_environment_and_chart_range("dev-green", filter_params)
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracies, env: :dev_green, request_params: params_string],
-          timeout: @timeout
+          telemetry_options: [name: :accuracies, env: :dev_green, request_params: params_string]
         )
         |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
           {scope, accuracy}
@@ -165,8 +116,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         |> Filters.stats_by_environment_and_chart_range("dev-blue", filter_params)
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracies, env: :dev_blue, request_params: params_string],
-          timeout: @timeout
+          telemetry_options: [name: :accuracies, env: :dev_blue, request_params: params_string]
         )
         |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
           {scope, accuracy}
@@ -225,6 +175,87 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   def index(conn, params) do
     redirect_with_default_filters(conn, params)
+  end
+
+  def debug(
+        conn,
+        %{
+          "filters" =>
+            %{
+              "route_ids" => route_ids,
+              "direction_id" => direction_id,
+              "bin" => bin,
+              "mode" => mode
+            } = filter_params
+        } = params
+      )
+      when not is_nil(route_ids) and not is_nil(direction_id) and byte_size(bin) > 0 do
+    mode_atom = PredictionAnalyzer.Utilities.string_to_mode(mode)
+    routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
+
+    if time_filters_present?(filter_params) do
+      {relevant_accuracies, _error_msg} = PredictionAccuracy.filter(filter_params)
+
+      q_accuracy_context_prod =
+        from(
+          acc in relevant_accuracies,
+          select: [
+            sum(acc.num_accurate_predictions),
+            sum(acc.num_predictions),
+            aggregate_mean_error(acc.mean_error, acc.num_predictions),
+            aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
+          ],
+          where: acc.environment == "prod" and acc.route_id in ^routes
+        )
+
+      q_accuracies_prod =
+        relevant_accuracies
+        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
+
+      accuracy_context_explain_plan =
+        PredictionAnalyzer.Repo.explain(:all, q_accuracy_context_prod,
+          format: :map,
+          timeout: @timeout
+        )
+
+      Logger.info("accuracy_context_query_explain_done")
+
+      accuracies_explain_plan =
+        PredictionAnalyzer.Repo.explain(:all, q_accuracies_prod, format: :map, timeout: @timeout)
+
+      Logger.info("accuracies_query_explain_done")
+
+      accuracy_context_explain_analyze_plan =
+        PredictionAnalyzer.Repo.explain(:all, q_accuracy_context_prod,
+          analyze: true,
+          format: :map,
+          timeout: @timeout
+        )
+
+      Logger.info("accuracy_context_query_explain_analyze_done")
+
+      accuracies_explain_analyze_plan =
+        PredictionAnalyzer.Repo.explain(:all, q_accuracies_prod,
+          analyze: true,
+          format: :map,
+          timeout: @timeout
+        )
+
+      Logger.info("accuracies_query_explain_analyze_done")
+
+      json(conn, %{
+        accuracy_context_explain: accuracy_context_explain_plan,
+        accuracies_explain: accuracies_explain_plan,
+        accuracy_context_explain_analyze: accuracy_context_explain_analyze_plan,
+        accuracies_explain_analyze: accuracies_explain_analyze_plan
+      })
+    else
+      redirect_with_default_filters(conn, params, :debug)
+    end
+  end
+
+  def debug(conn, params) do
+    redirect_with_default_filters(conn, params, :debug)
   end
 
   def subway(conn, params) do
