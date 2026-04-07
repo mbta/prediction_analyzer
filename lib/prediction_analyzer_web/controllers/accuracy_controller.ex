@@ -9,6 +9,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   require Logger
 
   @timeout :timer.minutes(5)
+  @envs ["prod", "dev-green", "dev-blue"]
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(
@@ -24,99 +25,33 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         } = params
       )
       when not is_nil(route_ids) and not is_nil(direction_id) and byte_size(bin) > 0 do
-    request_uri = conn |> current_url(params) |> URI.parse()
-    params_string = request_uri.query
-
     if time_filters_present?(filter_params) do
+      request_uri = conn |> current_url(params) |> URI.parse()
+      params_string = request_uri.query
+
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
-
-      [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
-        from(
-          acc in relevant_accuracies,
-          select: [
-            sum(acc.num_accurate_predictions),
-            sum(acc.num_predictions),
-            aggregate_mean_error(acc.mean_error, acc.num_predictions),
-            aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
-          ],
-          where: acc.environment == "prod"
-        )
-        |> PredictionAnalyzer.Repo.one!(
-          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracy_context, env: :prod, request_params: params_string]
-        )
-
-      [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse] =
-        from(
-          acc in relevant_accuracies,
-          select: [
-            sum(acc.num_accurate_predictions),
-            sum(acc.num_predictions),
-            aggregate_mean_error(acc.mean_error, acc.num_predictions),
-            aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
-          ],
-          where: acc.environment == "dev-green"
-        )
-        |> PredictionAnalyzer.Repo.one!(
-          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [
-            name: :accuracy_context,
-            env: :dev_green,
-            request_params: params_string
-          ]
-        )
-
-      [dev_blue_num_accurate, dev_blue_num_predictions, dev_blue_mean_error, dev_blue_rmse] =
-        from(
-          acc in relevant_accuracies,
-          select: [
-            sum(acc.num_accurate_predictions),
-            sum(acc.num_predictions),
-            aggregate_mean_error(acc.mean_error, acc.num_predictions),
-            aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
-          ],
-          where: acc.environment == "dev-blue"
-        )
-        |> PredictionAnalyzer.Repo.one!(
-          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [
-            name: :accuracy_context,
-            env: :dev_blue,
-            request_params: params_string
-          ]
-        )
-
       accuracies_by_chart_range = Filters.stats_by_chart_range(relevant_accuracies, filter_params)
 
-      prod_accuracies =
-        from(acc in accuracies_by_chart_range, where: acc.environment == "prod")
-        |> PredictionAnalyzer.Repo.all(
-          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracies, env: :prod, request_params: params_string]
-        )
-        |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
-          {scope, accuracy}
-        end)
+      sup = PredictionAnalyzer.TaskSupervisor
+      accuracy_context_partial = &accuracy_context(relevant_accuracies, params_string, &1)
+      accuracies_partial = &accuracies(accuracies_by_chart_range, params_string, &1)
 
-      dev_green_accuracies =
-        from(acc in accuracies_by_chart_range, where: acc.environment == "dev-green")
-        |> PredictionAnalyzer.Repo.all(
-          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracies, env: :dev_green, request_params: params_string]
-        )
-        |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
-          {scope, accuracy}
-        end)
+      accuracy_context_tasks =
+        Task.Supervisor.async_stream(sup, @envs, accuracy_context_partial, timeout: @timeout)
 
-      dev_blue_accuracies =
-        from(acc in accuracies_by_chart_range, where: acc.environment == "dev-blue")
-        |> PredictionAnalyzer.Repo.all(
-          telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
-          telemetry_options: [name: :accuracies, env: :dev_blue, request_params: params_string]
-        )
-        |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
-          {scope, accuracy}
-        end)
+      accuracy_tasks =
+        Task.Supervisor.async_stream(sup, @envs, accuracies_partial, timeout: @timeout)
+
+      tasks = Stream.concat(accuracy_context_tasks, accuracy_tasks)
+
+      [
+        [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse],
+        [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse],
+        [dev_blue_num_accurate, dev_blue_num_predictions, dev_blue_mean_error, dev_blue_rmse],
+        prod_accuracies,
+        dev_green_accuracies,
+        dev_blue_accuracies
+      ] = Enum.map(tasks, fn {:ok, result} -> result end)
 
       sort_function =
         if filter_params["chart_range"] == "Daily" do
@@ -171,6 +106,34 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   def index(conn, params) do
     redirect_with_default_filters(conn, params)
+  end
+
+  defp accuracy_context(relevant_accuracies, params_string, env) do
+    from(
+      acc in relevant_accuracies,
+      select: [
+        sum(acc.num_accurate_predictions),
+        sum(acc.num_predictions),
+        aggregate_mean_error(acc.mean_error, acc.num_predictions),
+        aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
+      ],
+      where: acc.environment == ^env
+    )
+    |> PredictionAnalyzer.Repo.one!(
+      telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
+      telemetry_options: [name: :accuracy_context, env: env, request_params: params_string]
+    )
+  end
+
+  defp accuracies(accuracies_by_chart_range, params_string, env) do
+    from(acc in accuracies_by_chart_range, where: acc.environment == ^env)
+    |> PredictionAnalyzer.Repo.all(
+      telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
+      telemetry_options: [name: :accuracies, env: env, request_params: params_string]
+    )
+    |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
+      {scope, accuracy}
+    end)
   end
 
   def debug(
@@ -264,12 +227,10 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     if time_filters_present?(filter_params) do
       {relevant_accuracies, _} = PredictionAccuracy.filter(filter_params)
 
-      accuracies_by_chart_range =
-        Filters.stats_by_environment_and_chart_range(relevant_accuracies, filter_params)
+      accuracies_by_chart_range = Filters.stats_by_chart_range(relevant_accuracies, filter_params)
 
       prod_accuracies =
         from(acc in accuracies_by_chart_range, where: acc.environment == "prod")
-        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all()
         |> Enum.map(fn [row_scope, prod_total, prod_accurate, prod_err, prod_rmse] ->
           %{
