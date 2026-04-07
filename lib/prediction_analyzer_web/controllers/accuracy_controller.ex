@@ -25,7 +25,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       )
       when not is_nil(route_ids) and not is_nil(direction_id) and byte_size(bin) > 0 do
     mode_atom = PredictionAnalyzer.Utilities.string_to_mode(mode)
-    routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
 
     request_uri = conn |> current_url(params) |> URI.parse()
     params_string = request_uri.query
@@ -42,7 +41,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             aggregate_mean_error(acc.mean_error, acc.num_predictions),
             aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
           ],
-          where: acc.environment == "prod" and acc.route_id in ^routes
+          where: acc.environment == "prod"
         )
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
@@ -58,7 +57,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             aggregate_mean_error(acc.mean_error, acc.num_predictions),
             aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
           ],
-          where: acc.environment == "dev-green" and acc.route_id in ^routes
+          where: acc.environment == "dev-green"
         )
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
@@ -78,7 +77,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             aggregate_mean_error(acc.mean_error, acc.num_predictions),
             aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
           ],
-          where: acc.environment == "dev-blue" and acc.route_id in ^routes
+          where: acc.environment == "dev-blue"
         )
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
@@ -89,8 +88,10 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           ]
         )
 
+      accuracies_by_chart_range = Filters.stats_by_chart_range(relevant_accuracies, filter_params)
+
       prod_accuracies =
-        relevant_accuracies
+        from(acc in accuracies_by_chart_range, where: acc.environment == "prod")
         |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
@@ -101,8 +102,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         end)
 
       dev_green_accuracies =
-        relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range("dev-green", filter_params)
+        from(acc in accuracies_by_chart_range, where: acc.environment == "dev-green")
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
           telemetry_options: [name: :accuracies, env: :dev_green, request_params: params_string]
@@ -112,8 +112,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         end)
 
       dev_blue_accuracies =
-        relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range("dev-blue", filter_params)
+        from(acc in accuracies_by_chart_range, where: acc.environment == "dev-blue")
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
           telemetry_options: [name: :accuracies, env: :dev_blue, request_params: params_string]
@@ -184,17 +183,14 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             %{
               "route_ids" => route_ids,
               "direction_id" => direction_id,
-              "bin" => bin,
-              "mode" => mode
+              "bin" => bin
             } = filter_params
         } = params
       )
       when not is_nil(route_ids) and not is_nil(direction_id) and byte_size(bin) > 0 do
-    mode_atom = PredictionAnalyzer.Utilities.string_to_mode(mode)
-    routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
-
     if time_filters_present?(filter_params) do
       {relevant_accuracies, _error_msg} = PredictionAccuracy.filter(filter_params)
+      accuracies_by_chart_range = Filters.stats_by_chart_range(relevant_accuracies, filter_params)
 
       q_accuracy_context_prod =
         from(
@@ -205,12 +201,10 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             aggregate_mean_error(acc.mean_error, acc.num_predictions),
             aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
           ],
-          where: acc.environment == "prod" and acc.route_id in ^routes
+          where: acc.environment == "prod"
         )
 
-      q_accuracies_prod =
-        relevant_accuracies
-        |> Filters.stats_by_environment_and_chart_range("prod", filter_params)
+      q_accuracies_prod = from(acc in accuracies_by_chart_range, where: acc.environment == "prod")
 
       accuracy_context_explain_plan =
         PredictionAnalyzer.Repo.explain(:all, q_accuracy_context_prod,
