@@ -33,6 +33,7 @@ defmodule PredictionAnalyzer.Repo.Migrations.FinalizePredictionAccuracyPartition
   """
   use Ecto.Migration
   import Ecto.Query
+  require Logger
 
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
 
@@ -172,6 +173,64 @@ defmodule PredictionAnalyzer.Repo.Migrations.FinalizePredictionAccuracyPartition
     partitioned_count = PredictionAnalyzer.Repo.one!(from(@partitioned, select: count()))
 
     if monolithic_count != partitioned_count do
+      # Log the basic count info now in case the below query for more details fails.
+      Logger.error(
+        "mismatched_row_counts_after_finishing_copy monolithic_count=#{monolithic_count} partitioned_count=#{partitioned_count}"
+      )
+
+      discrepancy =
+        from(
+          m in @monolithic,
+          full_join: p in @partitioned,
+          on: m.id == p.id,
+          where: is_nil(m.id) or is_nil(p.id),
+          select: %{
+            from_monolithic?: is_nil(p.id),
+            id: coalesce(m.id, p.id),
+            service_date: coalesce(m.service_date, p.service_date)
+          }
+        )
+        |> PredictionAnalyzer.Repo.all()
+        |> Enum.group_by(&if(&1.from_monolithic?, do: :monolithic, else: :partitioned))
+
+      case Map.fetch(discrepancy, :monolithic) do
+        {:ok, m_unmatched} ->
+          {%{service_date: min_sd}, %{service_date: max_sd}} =
+            Enum.min_max_by(m_unmatched, & &1.service_date, Date)
+
+          freqs_by_sd_json =
+            m_unmatched
+            |> Enum.frequencies_by(& &1.service_date)
+            |> Map.new(",", fn {sd, n} -> {Date.to_string(sd), n} end)
+            |> Jason.encode!()
+
+          Logger.error(
+            "unmatched_rows_in_monolithic count=#{length(m_unmatched)} min_service_date=#{min_sd} max_service_date=#{max_sd} freqs_by_service_date=#{freqs_by_sd_json}"
+          )
+
+        :error ->
+          Logger.error("unmatched_rows_in_monolithic count=0")
+      end
+
+      case Map.fetch(discrepancy, :partitioned) do
+        {:ok, p_unmatched} ->
+          {%{service_date: min_sd}, %{service_date: max_sd}} =
+            Enum.min_max_by(p_unmatched, & &1.service_date, Date)
+
+          freqs_by_sd_json =
+            p_unmatched
+            |> Enum.frequencies_by(& &1.service_date)
+            |> Map.new(",", fn {sd, n} -> {Date.to_string(sd), n} end)
+            |> Jason.encode!()
+
+          Logger.error(
+            "unmatched_rows_in_partitioned count=#{length(p_unmatched)} min_service_date=#{min_sd} max_service_date=#{max_sd} freqs_by_service_date=#{freqs_by_sd_json}"
+          )
+
+        :error ->
+          Logger.error("unmatched_rows_in_partitioned count=0")
+      end
+
       # (This stops further execution of the transaction.)
       PredictionAnalyzer.Repo.rollback(
         "mismatched_row_counts_after_finishing_copy monolithic_count=#{monolithic_count} partitioned_count=#{partitioned_count}"
