@@ -5,16 +5,27 @@ defmodule PredictionAnalyzer.Repo.Migrations.AddPredictionAccuracyCompositeIndex
   @disable_ddl_transaction true
   @disable_migration_lock true
 
+  @index_fields [:route_id, :environment, :service_date]
+
   def up do
-    # The `CONCURRENTLY` option is not supported for partitioned tables,
-    # so we need to take a more manual approach:
-    # 1. Create the index on the parent table only, non-concurrently.
-    #    This makes a metadata-only index that starts out in an "invalid" state. (A fast operation.)
-    # 2. Create an index concurrently on each partition table.
-    # 3. Attach each concurrently-building partition index to the index on the parent table.
+    # `prediction_accuracy_partitioned` is large in dev and prod--800+ million
+    # rows. It's impractical to add a new index to the table in a blocking
+    # manner--doing so would block basic functionality of the application for a
+    # significant amount of time. The index needs to be added without blocking
+    # other queries on the table, using the `CONCURRENTLY` option.
+    # https://www.postgresql.org/docs/current/sql-createindex.html#:~:text=TABLE.-,CONCURRENTLY
     #
-    # The parent table index automatically becomes valid once all partition tables
-    # have attached their own indexes to it.
+    # However, `CONCURRENTLY` is not directly supported for partitioned tables,
+    # so we need to take a more manual approach:
+    # 1. Create the index on the parent table only, non-concurrently. This makes
+    #    a metadata-only index that starts out in an "invalid" state. (A fast
+    #    operation.)
+    # 2. Create an index concurrently on each partition table.
+    # 3. Attach each concurrently-building partition index to the index on the
+    #    parent table.
+    #
+    # The parent table index automatically becomes valid once all partition
+    # tables have attached their own indexes to it.
     parent_idx_name = "prediction_accuracy_partitioned_composite_idx"
 
     partitions =
@@ -24,7 +35,7 @@ defmodule PredictionAnalyzer.Repo.Migrations.AddPredictionAccuracyCompositeIndex
       )
       |> PredictionAnalyzer.Repo.all(prefix: "pg_catalog")
 
-    create index("prediction_accuracy_partitioned", [:route_id, :environment, :service_date],
+    create index("prediction_accuracy_partitioned", @index_fields,
              name: parent_idx_name,
              only: true
            )
@@ -32,10 +43,7 @@ defmodule PredictionAnalyzer.Repo.Migrations.AddPredictionAccuracyCompositeIndex
     for partition <- partitions do
       partition_idx_name = "#{partition}_composite_idx"
 
-      create index(partition, [:route_id, :environment, :service_date],
-               name: partition_idx_name,
-               concurrently: true
-             )
+      create index(partition, @index_fields, name: partition_idx_name, concurrently: true)
 
       execute(fn ->
         repo().query!("ALTER INDEX #{parent_idx_name} ATTACH PARTITION #{partition_idx_name}")
@@ -44,6 +52,6 @@ defmodule PredictionAnalyzer.Repo.Migrations.AddPredictionAccuracyCompositeIndex
   end
 
   def down do
-    drop index(:prediction_accuracy_partitioned, [:route_id, :environment, :service_date])
+    drop index(:prediction_accuracy_partitioned, @index_fields)
   end
 end
