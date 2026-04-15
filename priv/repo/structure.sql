@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict x3E8W6S6NftM4YRcxJBlz4CDMqBrS6SPPwvZsAHw38fHd0CLwalviCqgiRpd0fd
+\restrict mHmBTkObZkZfea8dyzSy3dpfvMP2BG2micnAhrQ2OritCbojw9HsE0EKMigpGbo
 
 -- Dumped from database version 15.14 (Homebrew)
 -- Dumped by pg_dump version 15.14 (Homebrew)
@@ -15747,6 +15747,20 @@ CREATE INDEX oban_jobs_state_queue_priority_scheduled_at_id_index ON public.oban
 
 
 --
+-- Name: prediction_accuracy_partitioned_composite_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partitioned_composite_index ON ONLY public.prediction_accuracy_partitioned USING btree (route_id, environment, service_date);
+
+
+--
+-- Name: prediction_accuracy_partition_default_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_default_composite_idx ON public.prediction_accuracy_partition_default USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partitioned_service_date_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -15775,10 +15789,24 @@ CREATE INDEX prediction_accuracy_partition_default_stop_id_idx ON public.predict
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_10_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_10_01_composite_idx ON public.prediction_accuracy_partition_week_of_2018_10_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_10_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2018_10_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2018_10_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_10_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_10_08_composite_idx ON public.prediction_accuracy_partition_week_of_2018_10_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -15789,6 +15817,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2018_10_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_10_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_10_15_composite_idx ON public.prediction_accuracy_partition_week_of_2018_10_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_10_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -15796,10 +15831,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2018_10_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_10_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_10_22_composite_idx ON public.prediction_accuracy_partition_week_of_2018_10_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_10_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2018_10_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2018_10_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_10_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_10_29_composite_idx ON public.prediction_accuracy_partition_week_of_2018_10_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -15845,10 +15894,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2018_10_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_11_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_11_05_composite_idx ON public.prediction_accuracy_partition_week_of_2018_11_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_11_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2018_11_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2018_11_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_11_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_11_12_composite_idx ON public.prediction_accuracy_partition_week_of_2018_11_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -15859,10 +15922,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2018_11_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_11_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_11_19_composite_idx ON public.prediction_accuracy_partition_week_of_2018_11_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_11_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2018_11_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2018_11_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_11_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_11_26_composite_idx ON public.prediction_accuracy_partition_week_of_2018_11_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -15901,10 +15978,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2018_11_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_12_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_12_03_composite_idx ON public.prediction_accuracy_partition_week_of_2018_12_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_12_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2018_12_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2018_12_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_12_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_12_10_composite_idx ON public.prediction_accuracy_partition_week_of_2018_12_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -15915,6 +16006,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2018_12_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_12_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_12_17_composite_idx ON public.prediction_accuracy_partition_week_of_2018_12_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_12_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -15922,10 +16020,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2018_12_17_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_12_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_12_24_composite_idx ON public.prediction_accuracy_partition_week_of_2018_12_24 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_12_24_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2018_12_24_stop_id_idx ON public.prediction_accuracy_partition_week_of_2018_12_24 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_12_31_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2018_12_31_composite_idx ON public.prediction_accuracy_partition_week_of_2018_12_31 USING btree (route_id, environment, service_date);
 
 
 --
@@ -15971,10 +16083,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2018_12_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_01_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_01_07_composite_idx ON public.prediction_accuracy_partition_week_of_2019_01_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_01_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_01_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_01_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_01_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_01_14_composite_idx ON public.prediction_accuracy_partition_week_of_2019_01_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -15985,10 +16111,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_01_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_01_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_01_21_composite_idx ON public.prediction_accuracy_partition_week_of_2019_01_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_01_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_01_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_01_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_01_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_01_28_composite_idx ON public.prediction_accuracy_partition_week_of_2019_01_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16027,10 +16167,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_01_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_02_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_02_04_composite_idx ON public.prediction_accuracy_partition_week_of_2019_02_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_02_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_02_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_02_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_02_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_02_11_composite_idx ON public.prediction_accuracy_partition_week_of_2019_02_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16041,10 +16195,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_02_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_02_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_02_18_composite_idx ON public.prediction_accuracy_partition_week_of_2019_02_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_02_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_02_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_02_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_02_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_02_25_composite_idx ON public.prediction_accuracy_partition_week_of_2019_02_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16083,10 +16251,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_02_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_03_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_03_04_composite_idx ON public.prediction_accuracy_partition_week_of_2019_03_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_03_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_03_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_03_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_03_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_03_11_composite_idx ON public.prediction_accuracy_partition_week_of_2019_03_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16097,10 +16279,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_03_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_03_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_03_18_composite_idx ON public.prediction_accuracy_partition_week_of_2019_03_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_03_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_03_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_03_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_03_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_03_25_composite_idx ON public.prediction_accuracy_partition_week_of_2019_03_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16139,10 +16335,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_03_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_04_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_04_01_composite_idx ON public.prediction_accuracy_partition_week_of_2019_04_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_04_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_04_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_04_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_04_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_04_08_composite_idx ON public.prediction_accuracy_partition_week_of_2019_04_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16153,6 +16363,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_04_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_04_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_04_15_composite_idx ON public.prediction_accuracy_partition_week_of_2019_04_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_04_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -16160,10 +16377,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_04_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_04_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_04_22_composite_idx ON public.prediction_accuracy_partition_week_of_2019_04_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_04_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_04_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_04_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_04_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_04_29_composite_idx ON public.prediction_accuracy_partition_week_of_2019_04_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16209,10 +16440,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_04_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_05_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_05_06_composite_idx ON public.prediction_accuracy_partition_week_of_2019_05_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_05_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_05_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_05_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_05_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_05_13_composite_idx ON public.prediction_accuracy_partition_week_of_2019_05_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16223,10 +16468,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_05_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_05_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_05_20_composite_idx ON public.prediction_accuracy_partition_week_of_2019_05_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_05_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_05_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_05_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_05_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_05_27_composite_idx ON public.prediction_accuracy_partition_week_of_2019_05_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16265,10 +16524,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_05_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_06_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_06_03_composite_idx ON public.prediction_accuracy_partition_week_of_2019_06_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_06_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_06_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_06_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_06_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_06_10_composite_idx ON public.prediction_accuracy_partition_week_of_2019_06_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16279,10 +16552,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_06_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_06_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_06_17_composite_idx ON public.prediction_accuracy_partition_week_of_2019_06_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_06_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_06_17_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_06_17 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_06_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_06_24_composite_idx ON public.prediction_accuracy_partition_week_of_2019_06_24 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16321,10 +16608,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_06_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_07_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_07_01_composite_idx ON public.prediction_accuracy_partition_week_of_2019_07_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_07_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_07_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_07_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_07_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_07_08_composite_idx ON public.prediction_accuracy_partition_week_of_2019_07_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16335,6 +16636,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_07_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_07_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_07_15_composite_idx ON public.prediction_accuracy_partition_week_of_2019_07_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_07_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -16342,10 +16650,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_07_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_07_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_07_22_composite_idx ON public.prediction_accuracy_partition_week_of_2019_07_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_07_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_07_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_07_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_07_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_07_29_composite_idx ON public.prediction_accuracy_partition_week_of_2019_07_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16391,10 +16713,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_07_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_08_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_08_05_composite_idx ON public.prediction_accuracy_partition_week_of_2019_08_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_08_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_08_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_08_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_08_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_08_12_composite_idx ON public.prediction_accuracy_partition_week_of_2019_08_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16405,10 +16741,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_08_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_08_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_08_19_composite_idx ON public.prediction_accuracy_partition_week_of_2019_08_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_08_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_08_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_08_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_08_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_08_26_composite_idx ON public.prediction_accuracy_partition_week_of_2019_08_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16447,10 +16797,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_08_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_09_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_09_02_composite_idx ON public.prediction_accuracy_partition_week_of_2019_09_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_09_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_09_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_09_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_09_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_09_09_composite_idx ON public.prediction_accuracy_partition_week_of_2019_09_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16461,6 +16825,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_09_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_09_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_09_16_composite_idx ON public.prediction_accuracy_partition_week_of_2019_09_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_09_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -16468,10 +16839,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_09_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_09_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_09_23_composite_idx ON public.prediction_accuracy_partition_week_of_2019_09_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_09_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_09_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_09_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_09_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_09_30_composite_idx ON public.prediction_accuracy_partition_week_of_2019_09_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16517,10 +16902,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_09_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_10_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_10_07_composite_idx ON public.prediction_accuracy_partition_week_of_2019_10_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_10_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_10_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_10_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_10_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_10_14_composite_idx ON public.prediction_accuracy_partition_week_of_2019_10_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16531,10 +16930,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_10_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_10_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_10_21_composite_idx ON public.prediction_accuracy_partition_week_of_2019_10_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_10_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_10_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_10_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_10_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_10_28_composite_idx ON public.prediction_accuracy_partition_week_of_2019_10_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16573,10 +16986,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_10_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_11_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_11_04_composite_idx ON public.prediction_accuracy_partition_week_of_2019_11_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_11_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_11_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_11_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_11_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_11_11_composite_idx ON public.prediction_accuracy_partition_week_of_2019_11_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16587,10 +17014,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_11_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_11_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_11_18_composite_idx ON public.prediction_accuracy_partition_week_of_2019_11_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_11_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_11_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_11_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_11_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_11_25_composite_idx ON public.prediction_accuracy_partition_week_of_2019_11_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16629,10 +17070,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_11_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_12_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_12_02_composite_idx ON public.prediction_accuracy_partition_week_of_2019_12_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_12_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_12_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_12_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_12_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_12_09_composite_idx ON public.prediction_accuracy_partition_week_of_2019_12_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16643,6 +17098,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_12_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_12_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_12_16_composite_idx ON public.prediction_accuracy_partition_week_of_2019_12_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_12_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -16650,10 +17112,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_12_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_12_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_12_23_composite_idx ON public.prediction_accuracy_partition_week_of_2019_12_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_12_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2019_12_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2019_12_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_12_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2019_12_30_composite_idx ON public.prediction_accuracy_partition_week_of_2019_12_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16699,10 +17175,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2019_12_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_01_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_01_06_composite_idx ON public.prediction_accuracy_partition_week_of_2020_01_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_01_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_01_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_01_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_01_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_01_13_composite_idx ON public.prediction_accuracy_partition_week_of_2020_01_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16713,10 +17203,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_01_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_01_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_01_20_composite_idx ON public.prediction_accuracy_partition_week_of_2020_01_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_01_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_01_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_01_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_01_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_01_27_composite_idx ON public.prediction_accuracy_partition_week_of_2020_01_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16755,10 +17259,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_01_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_02_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_02_03_composite_idx ON public.prediction_accuracy_partition_week_of_2020_02_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_02_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_02_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_02_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_02_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_02_10_composite_idx ON public.prediction_accuracy_partition_week_of_2020_02_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16769,10 +17287,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_02_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_02_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_02_17_composite_idx ON public.prediction_accuracy_partition_week_of_2020_02_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_02_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_02_17_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_02_17 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_02_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_02_24_composite_idx ON public.prediction_accuracy_partition_week_of_2020_02_24 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16811,10 +17343,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_02_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_03_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_03_02_composite_idx ON public.prediction_accuracy_partition_week_of_2020_03_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_03_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_03_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_03_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_03_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_03_09_composite_idx ON public.prediction_accuracy_partition_week_of_2020_03_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16825,6 +17371,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_03_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_03_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_03_16_composite_idx ON public.prediction_accuracy_partition_week_of_2020_03_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_03_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -16832,10 +17385,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_03_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_03_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_03_23_composite_idx ON public.prediction_accuracy_partition_week_of_2020_03_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_03_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_03_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_03_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_03_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_03_30_composite_idx ON public.prediction_accuracy_partition_week_of_2020_03_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16881,10 +17448,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_03_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_04_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_04_06_composite_idx ON public.prediction_accuracy_partition_week_of_2020_04_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_04_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_04_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_04_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_04_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_04_13_composite_idx ON public.prediction_accuracy_partition_week_of_2020_04_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16895,10 +17476,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_04_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_04_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_04_20_composite_idx ON public.prediction_accuracy_partition_week_of_2020_04_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_04_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_04_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_04_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_04_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_04_27_composite_idx ON public.prediction_accuracy_partition_week_of_2020_04_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16937,10 +17532,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_04_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_05_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_05_04_composite_idx ON public.prediction_accuracy_partition_week_of_2020_05_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_05_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_05_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_05_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_05_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_05_11_composite_idx ON public.prediction_accuracy_partition_week_of_2020_05_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16951,10 +17560,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_05_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_05_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_05_18_composite_idx ON public.prediction_accuracy_partition_week_of_2020_05_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_05_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_05_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_05_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_05_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_05_25_composite_idx ON public.prediction_accuracy_partition_week_of_2020_05_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -16993,10 +17616,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_05_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_06_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_06_01_composite_idx ON public.prediction_accuracy_partition_week_of_2020_06_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_06_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_06_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_06_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_06_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_06_08_composite_idx ON public.prediction_accuracy_partition_week_of_2020_06_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17007,6 +17644,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_06_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_06_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_06_15_composite_idx ON public.prediction_accuracy_partition_week_of_2020_06_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_06_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -17014,10 +17658,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_06_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_06_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_06_22_composite_idx ON public.prediction_accuracy_partition_week_of_2020_06_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_06_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_06_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_06_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_06_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_06_29_composite_idx ON public.prediction_accuracy_partition_week_of_2020_06_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17063,10 +17721,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_06_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_07_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_07_06_composite_idx ON public.prediction_accuracy_partition_week_of_2020_07_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_07_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_07_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_07_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_07_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_07_13_composite_idx ON public.prediction_accuracy_partition_week_of_2020_07_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17077,10 +17749,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_07_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_07_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_07_20_composite_idx ON public.prediction_accuracy_partition_week_of_2020_07_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_07_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_07_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_07_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_07_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_07_27_composite_idx ON public.prediction_accuracy_partition_week_of_2020_07_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17119,10 +17805,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_07_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_08_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_08_03_composite_idx ON public.prediction_accuracy_partition_week_of_2020_08_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_08_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_08_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_08_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_08_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_08_10_composite_idx ON public.prediction_accuracy_partition_week_of_2020_08_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17133,6 +17833,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_08_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_08_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_08_17_composite_idx ON public.prediction_accuracy_partition_week_of_2020_08_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_08_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -17140,10 +17847,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_08_17_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_08_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_08_24_composite_idx ON public.prediction_accuracy_partition_week_of_2020_08_24 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_08_24_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_08_24_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_08_24 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_08_31_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_08_31_composite_idx ON public.prediction_accuracy_partition_week_of_2020_08_31 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17189,10 +17910,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_08_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_09_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_09_07_composite_idx ON public.prediction_accuracy_partition_week_of_2020_09_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_09_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_09_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_09_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_09_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_09_14_composite_idx ON public.prediction_accuracy_partition_week_of_2020_09_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17203,10 +17938,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_09_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_09_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_09_21_composite_idx ON public.prediction_accuracy_partition_week_of_2020_09_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_09_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_09_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_09_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_09_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_09_28_composite_idx ON public.prediction_accuracy_partition_week_of_2020_09_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17245,10 +17994,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_09_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_10_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_10_05_composite_idx ON public.prediction_accuracy_partition_week_of_2020_10_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_10_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_10_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_10_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_10_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_10_12_composite_idx ON public.prediction_accuracy_partition_week_of_2020_10_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17259,10 +18022,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_10_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_10_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_10_19_composite_idx ON public.prediction_accuracy_partition_week_of_2020_10_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_10_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_10_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_10_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_10_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_10_26_composite_idx ON public.prediction_accuracy_partition_week_of_2020_10_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17301,10 +18078,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_10_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_11_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_11_02_composite_idx ON public.prediction_accuracy_partition_week_of_2020_11_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_11_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_11_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_11_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_11_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_11_09_composite_idx ON public.prediction_accuracy_partition_week_of_2020_11_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17315,6 +18106,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_11_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_11_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_11_16_composite_idx ON public.prediction_accuracy_partition_week_of_2020_11_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_11_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -17322,10 +18120,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_11_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_11_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_11_23_composite_idx ON public.prediction_accuracy_partition_week_of_2020_11_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_11_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_11_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_11_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_11_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_11_30_composite_idx ON public.prediction_accuracy_partition_week_of_2020_11_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17371,10 +18183,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_11_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_12_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_12_07_composite_idx ON public.prediction_accuracy_partition_week_of_2020_12_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_12_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_12_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_12_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_12_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_12_14_composite_idx ON public.prediction_accuracy_partition_week_of_2020_12_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17385,10 +18211,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_12_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_12_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_12_21_composite_idx ON public.prediction_accuracy_partition_week_of_2020_12_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_12_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2020_12_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2020_12_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_12_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2020_12_28_composite_idx ON public.prediction_accuracy_partition_week_of_2020_12_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17427,10 +18267,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2020_12_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_01_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_01_04_composite_idx ON public.prediction_accuracy_partition_week_of_2021_01_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_01_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_01_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_01_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_01_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_01_11_composite_idx ON public.prediction_accuracy_partition_week_of_2021_01_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17441,10 +18295,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_01_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_01_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_01_18_composite_idx ON public.prediction_accuracy_partition_week_of_2021_01_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_01_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_01_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_01_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_01_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_01_25_composite_idx ON public.prediction_accuracy_partition_week_of_2021_01_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17483,10 +18351,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_01_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_02_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_02_01_composite_idx ON public.prediction_accuracy_partition_week_of_2021_02_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_02_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_02_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_02_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_02_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_02_08_composite_idx ON public.prediction_accuracy_partition_week_of_2021_02_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17497,10 +18379,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_02_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_02_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_02_15_composite_idx ON public.prediction_accuracy_partition_week_of_2021_02_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_02_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_02_15_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_02_15 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_02_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_02_22_composite_idx ON public.prediction_accuracy_partition_week_of_2021_02_22 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17539,10 +18435,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_02_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_03_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_03_01_composite_idx ON public.prediction_accuracy_partition_week_of_2021_03_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_03_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_03_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_03_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_03_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_03_08_composite_idx ON public.prediction_accuracy_partition_week_of_2021_03_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17553,6 +18463,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_03_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_03_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_03_15_composite_idx ON public.prediction_accuracy_partition_week_of_2021_03_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_03_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -17560,10 +18477,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_03_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_03_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_03_22_composite_idx ON public.prediction_accuracy_partition_week_of_2021_03_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_03_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_03_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_03_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_03_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_03_29_composite_idx ON public.prediction_accuracy_partition_week_of_2021_03_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17609,10 +18540,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_03_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_04_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_04_05_composite_idx ON public.prediction_accuracy_partition_week_of_2021_04_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_04_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_04_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_04_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_04_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_04_12_composite_idx ON public.prediction_accuracy_partition_week_of_2021_04_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17623,10 +18568,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_04_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_04_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_04_19_composite_idx ON public.prediction_accuracy_partition_week_of_2021_04_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_04_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_04_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_04_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_04_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_04_26_composite_idx ON public.prediction_accuracy_partition_week_of_2021_04_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17665,10 +18624,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_04_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_05_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_05_03_composite_idx ON public.prediction_accuracy_partition_week_of_2021_05_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_05_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_05_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_05_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_05_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_05_10_composite_idx ON public.prediction_accuracy_partition_week_of_2021_05_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17679,6 +18652,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_05_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_05_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_05_17_composite_idx ON public.prediction_accuracy_partition_week_of_2021_05_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_05_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -17686,10 +18666,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_05_17_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_05_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_05_24_composite_idx ON public.prediction_accuracy_partition_week_of_2021_05_24 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_05_24_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_05_24_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_05_24 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_05_31_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_05_31_composite_idx ON public.prediction_accuracy_partition_week_of_2021_05_31 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17735,10 +18729,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_05_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_06_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_06_07_composite_idx ON public.prediction_accuracy_partition_week_of_2021_06_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_06_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_06_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_06_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_06_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_06_14_composite_idx ON public.prediction_accuracy_partition_week_of_2021_06_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17749,10 +18757,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_06_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_06_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_06_21_composite_idx ON public.prediction_accuracy_partition_week_of_2021_06_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_06_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_06_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_06_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_06_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_06_28_composite_idx ON public.prediction_accuracy_partition_week_of_2021_06_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17791,10 +18813,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_06_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_07_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_07_05_composite_idx ON public.prediction_accuracy_partition_week_of_2021_07_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_07_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_07_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_07_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_07_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_07_12_composite_idx ON public.prediction_accuracy_partition_week_of_2021_07_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17805,10 +18841,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_07_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_07_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_07_19_composite_idx ON public.prediction_accuracy_partition_week_of_2021_07_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_07_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_07_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_07_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_07_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_07_26_composite_idx ON public.prediction_accuracy_partition_week_of_2021_07_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17847,10 +18897,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_07_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_08_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_08_02_composite_idx ON public.prediction_accuracy_partition_week_of_2021_08_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_08_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_08_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_08_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_08_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_08_09_composite_idx ON public.prediction_accuracy_partition_week_of_2021_08_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17861,6 +18925,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_08_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_08_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_08_16_composite_idx ON public.prediction_accuracy_partition_week_of_2021_08_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_08_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -17868,10 +18939,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_08_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_08_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_08_23_composite_idx ON public.prediction_accuracy_partition_week_of_2021_08_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_08_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_08_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_08_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_08_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_08_30_composite_idx ON public.prediction_accuracy_partition_week_of_2021_08_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17917,10 +19002,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_08_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_09_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_09_06_composite_idx ON public.prediction_accuracy_partition_week_of_2021_09_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_09_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_09_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_09_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_09_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_09_13_composite_idx ON public.prediction_accuracy_partition_week_of_2021_09_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17931,10 +19030,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_09_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_09_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_09_20_composite_idx ON public.prediction_accuracy_partition_week_of_2021_09_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_09_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_09_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_09_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_09_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_09_27_composite_idx ON public.prediction_accuracy_partition_week_of_2021_09_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17973,10 +19086,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_09_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_10_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_10_04_composite_idx ON public.prediction_accuracy_partition_week_of_2021_10_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_10_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_10_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_10_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_10_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_10_11_composite_idx ON public.prediction_accuracy_partition_week_of_2021_10_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -17987,10 +19114,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_10_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_10_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_10_18_composite_idx ON public.prediction_accuracy_partition_week_of_2021_10_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_10_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_10_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_10_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_10_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_10_25_composite_idx ON public.prediction_accuracy_partition_week_of_2021_10_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18029,10 +19170,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_10_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_11_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_11_01_composite_idx ON public.prediction_accuracy_partition_week_of_2021_11_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_11_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_11_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_11_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_11_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_11_08_composite_idx ON public.prediction_accuracy_partition_week_of_2021_11_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18043,6 +19198,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_11_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_11_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_11_15_composite_idx ON public.prediction_accuracy_partition_week_of_2021_11_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_11_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -18050,10 +19212,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_11_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_11_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_11_22_composite_idx ON public.prediction_accuracy_partition_week_of_2021_11_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_11_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_11_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_11_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_11_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_11_29_composite_idx ON public.prediction_accuracy_partition_week_of_2021_11_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18099,10 +19275,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_11_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_12_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_12_06_composite_idx ON public.prediction_accuracy_partition_week_of_2021_12_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_12_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_12_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_12_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_12_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_12_13_composite_idx ON public.prediction_accuracy_partition_week_of_2021_12_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18113,10 +19303,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_12_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_12_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_12_20_composite_idx ON public.prediction_accuracy_partition_week_of_2021_12_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_12_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2021_12_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2021_12_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_12_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2021_12_27_composite_idx ON public.prediction_accuracy_partition_week_of_2021_12_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18155,10 +19359,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2021_12_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_01_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_01_03_composite_idx ON public.prediction_accuracy_partition_week_of_2022_01_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_01_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_01_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_01_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_01_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_01_10_composite_idx ON public.prediction_accuracy_partition_week_of_2022_01_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18169,6 +19387,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_01_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_01_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_01_17_composite_idx ON public.prediction_accuracy_partition_week_of_2022_01_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_01_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -18176,10 +19401,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_01_17_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_01_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_01_24_composite_idx ON public.prediction_accuracy_partition_week_of_2022_01_24 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_01_24_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_01_24_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_01_24 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_01_31_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_01_31_composite_idx ON public.prediction_accuracy_partition_week_of_2022_01_31 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18225,10 +19464,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_01_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_02_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_02_07_composite_idx ON public.prediction_accuracy_partition_week_of_2022_02_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_02_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_02_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_02_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_02_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_02_14_composite_idx ON public.prediction_accuracy_partition_week_of_2022_02_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18239,10 +19492,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_02_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_02_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_02_21_composite_idx ON public.prediction_accuracy_partition_week_of_2022_02_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_02_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_02_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_02_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_02_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_02_28_composite_idx ON public.prediction_accuracy_partition_week_of_2022_02_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18281,10 +19548,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_02_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_03_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_03_07_composite_idx ON public.prediction_accuracy_partition_week_of_2022_03_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_03_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_03_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_03_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_03_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_03_14_composite_idx ON public.prediction_accuracy_partition_week_of_2022_03_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18295,10 +19576,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_03_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_03_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_03_21_composite_idx ON public.prediction_accuracy_partition_week_of_2022_03_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_03_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_03_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_03_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_03_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_03_28_composite_idx ON public.prediction_accuracy_partition_week_of_2022_03_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18337,10 +19632,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_03_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_04_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_04_04_composite_idx ON public.prediction_accuracy_partition_week_of_2022_04_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_04_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_04_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_04_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_04_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_04_11_composite_idx ON public.prediction_accuracy_partition_week_of_2022_04_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18351,10 +19660,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_04_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_04_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_04_18_composite_idx ON public.prediction_accuracy_partition_week_of_2022_04_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_04_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_04_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_04_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_04_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_04_25_composite_idx ON public.prediction_accuracy_partition_week_of_2022_04_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18393,10 +19716,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_04_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_05_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_05_02_composite_idx ON public.prediction_accuracy_partition_week_of_2022_05_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_05_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_05_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_05_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_05_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_05_09_composite_idx ON public.prediction_accuracy_partition_week_of_2022_05_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18407,6 +19744,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_05_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_05_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_05_16_composite_idx ON public.prediction_accuracy_partition_week_of_2022_05_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_05_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -18414,10 +19758,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_05_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_05_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_05_23_composite_idx ON public.prediction_accuracy_partition_week_of_2022_05_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_05_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_05_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_05_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_05_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_05_30_composite_idx ON public.prediction_accuracy_partition_week_of_2022_05_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18463,10 +19821,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_05_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_06_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_06_06_composite_idx ON public.prediction_accuracy_partition_week_of_2022_06_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_06_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_06_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_06_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_06_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_06_13_composite_idx ON public.prediction_accuracy_partition_week_of_2022_06_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18477,10 +19849,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_06_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_06_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_06_20_composite_idx ON public.prediction_accuracy_partition_week_of_2022_06_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_06_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_06_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_06_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_06_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_06_27_composite_idx ON public.prediction_accuracy_partition_week_of_2022_06_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18519,10 +19905,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_06_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_07_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_07_04_composite_idx ON public.prediction_accuracy_partition_week_of_2022_07_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_07_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_07_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_07_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_07_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_07_11_composite_idx ON public.prediction_accuracy_partition_week_of_2022_07_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18533,10 +19933,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_07_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_07_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_07_18_composite_idx ON public.prediction_accuracy_partition_week_of_2022_07_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_07_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_07_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_07_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_07_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_07_25_composite_idx ON public.prediction_accuracy_partition_week_of_2022_07_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18575,10 +19989,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_07_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_08_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_08_01_composite_idx ON public.prediction_accuracy_partition_week_of_2022_08_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_08_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_08_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_08_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_08_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_08_08_composite_idx ON public.prediction_accuracy_partition_week_of_2022_08_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18589,6 +20017,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_08_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_08_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_08_15_composite_idx ON public.prediction_accuracy_partition_week_of_2022_08_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_08_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -18596,10 +20031,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_08_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_08_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_08_22_composite_idx ON public.prediction_accuracy_partition_week_of_2022_08_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_08_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_08_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_08_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_08_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_08_29_composite_idx ON public.prediction_accuracy_partition_week_of_2022_08_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18645,10 +20094,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_08_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_09_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_09_05_composite_idx ON public.prediction_accuracy_partition_week_of_2022_09_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_09_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_09_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_09_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_09_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_09_12_composite_idx ON public.prediction_accuracy_partition_week_of_2022_09_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18659,10 +20122,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_09_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_09_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_09_19_composite_idx ON public.prediction_accuracy_partition_week_of_2022_09_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_09_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_09_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_09_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_09_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_09_26_composite_idx ON public.prediction_accuracy_partition_week_of_2022_09_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18701,10 +20178,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_09_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_10_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_10_03_composite_idx ON public.prediction_accuracy_partition_week_of_2022_10_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_10_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_10_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_10_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_10_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_10_10_composite_idx ON public.prediction_accuracy_partition_week_of_2022_10_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18715,6 +20206,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_10_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_10_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_10_17_composite_idx ON public.prediction_accuracy_partition_week_of_2022_10_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_10_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -18722,10 +20220,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_10_17_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_10_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_10_24_composite_idx ON public.prediction_accuracy_partition_week_of_2022_10_24 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_10_24_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_10_24_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_10_24 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_10_31_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_10_31_composite_idx ON public.prediction_accuracy_partition_week_of_2022_10_31 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18771,10 +20283,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_10_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_11_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_11_07_composite_idx ON public.prediction_accuracy_partition_week_of_2022_11_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_11_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_11_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_11_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_11_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_11_14_composite_idx ON public.prediction_accuracy_partition_week_of_2022_11_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18785,10 +20311,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_11_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_11_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_11_21_composite_idx ON public.prediction_accuracy_partition_week_of_2022_11_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_11_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_11_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_11_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_11_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_11_28_composite_idx ON public.prediction_accuracy_partition_week_of_2022_11_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18827,10 +20367,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_11_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_12_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_12_05_composite_idx ON public.prediction_accuracy_partition_week_of_2022_12_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_12_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_12_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_12_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_12_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_12_12_composite_idx ON public.prediction_accuracy_partition_week_of_2022_12_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18841,10 +20395,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_12_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_12_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_12_19_composite_idx ON public.prediction_accuracy_partition_week_of_2022_12_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_12_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2022_12_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2022_12_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_12_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2022_12_26_composite_idx ON public.prediction_accuracy_partition_week_of_2022_12_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18883,10 +20451,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2022_12_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_01_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_01_02_composite_idx ON public.prediction_accuracy_partition_week_of_2023_01_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_01_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_01_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_01_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_01_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_01_09_composite_idx ON public.prediction_accuracy_partition_week_of_2023_01_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18897,6 +20479,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_01_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_01_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_01_16_composite_idx ON public.prediction_accuracy_partition_week_of_2023_01_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_01_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -18904,10 +20493,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_01_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_01_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_01_23_composite_idx ON public.prediction_accuracy_partition_week_of_2023_01_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_01_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_01_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_01_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_01_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_01_30_composite_idx ON public.prediction_accuracy_partition_week_of_2023_01_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18953,10 +20556,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_01_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_02_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_02_06_composite_idx ON public.prediction_accuracy_partition_week_of_2023_02_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_02_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_02_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_02_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_02_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_02_13_composite_idx ON public.prediction_accuracy_partition_week_of_2023_02_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -18967,10 +20584,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_02_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_02_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_02_20_composite_idx ON public.prediction_accuracy_partition_week_of_2023_02_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_02_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_02_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_02_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_02_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_02_27_composite_idx ON public.prediction_accuracy_partition_week_of_2023_02_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19009,10 +20640,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_02_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_03_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_03_06_composite_idx ON public.prediction_accuracy_partition_week_of_2023_03_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_03_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_03_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_03_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_03_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_03_13_composite_idx ON public.prediction_accuracy_partition_week_of_2023_03_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19023,10 +20668,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_03_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_03_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_03_20_composite_idx ON public.prediction_accuracy_partition_week_of_2023_03_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_03_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_03_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_03_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_03_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_03_27_composite_idx ON public.prediction_accuracy_partition_week_of_2023_03_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19065,10 +20724,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_03_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_04_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_04_03_composite_idx ON public.prediction_accuracy_partition_week_of_2023_04_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_04_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_04_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_04_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_04_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_04_10_composite_idx ON public.prediction_accuracy_partition_week_of_2023_04_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19079,10 +20752,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_04_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_04_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_04_17_composite_idx ON public.prediction_accuracy_partition_week_of_2023_04_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_04_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_04_17_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_04_17 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_04_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_04_24_composite_idx ON public.prediction_accuracy_partition_week_of_2023_04_24 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19121,10 +20808,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_04_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_05_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_05_01_composite_idx ON public.prediction_accuracy_partition_week_of_2023_05_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_05_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_05_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_05_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_05_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_05_08_composite_idx ON public.prediction_accuracy_partition_week_of_2023_05_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19135,6 +20836,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_05_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_05_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_05_15_composite_idx ON public.prediction_accuracy_partition_week_of_2023_05_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_05_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -19142,10 +20850,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_05_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_05_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_05_22_composite_idx ON public.prediction_accuracy_partition_week_of_2023_05_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_05_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_05_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_05_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_05_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_05_29_composite_idx ON public.prediction_accuracy_partition_week_of_2023_05_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19191,10 +20913,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_05_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_06_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_06_05_composite_idx ON public.prediction_accuracy_partition_week_of_2023_06_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_06_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_06_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_06_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_06_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_06_12_composite_idx ON public.prediction_accuracy_partition_week_of_2023_06_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19205,10 +20941,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_06_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_06_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_06_19_composite_idx ON public.prediction_accuracy_partition_week_of_2023_06_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_06_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_06_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_06_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_06_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_06_26_composite_idx ON public.prediction_accuracy_partition_week_of_2023_06_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19247,10 +20997,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_06_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_07_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_07_03_composite_idx ON public.prediction_accuracy_partition_week_of_2023_07_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_07_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_07_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_07_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_07_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_07_10_composite_idx ON public.prediction_accuracy_partition_week_of_2023_07_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19261,6 +21025,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_07_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_07_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_07_17_composite_idx ON public.prediction_accuracy_partition_week_of_2023_07_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_07_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -19268,10 +21039,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_07_17_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_07_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_07_24_composite_idx ON public.prediction_accuracy_partition_week_of_2023_07_24 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_07_24_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_07_24_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_07_24 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_07_31_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_07_31_composite_idx ON public.prediction_accuracy_partition_week_of_2023_07_31 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19317,10 +21102,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_07_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_08_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_08_07_composite_idx ON public.prediction_accuracy_partition_week_of_2023_08_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_08_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_08_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_08_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_08_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_08_14_composite_idx ON public.prediction_accuracy_partition_week_of_2023_08_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19331,10 +21130,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_08_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_08_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_08_21_composite_idx ON public.prediction_accuracy_partition_week_of_2023_08_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_08_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_08_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_08_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_08_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_08_28_composite_idx ON public.prediction_accuracy_partition_week_of_2023_08_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19373,10 +21186,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_08_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_09_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_09_04_composite_idx ON public.prediction_accuracy_partition_week_of_2023_09_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_09_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_09_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_09_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_09_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_09_11_composite_idx ON public.prediction_accuracy_partition_week_of_2023_09_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19387,10 +21214,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_09_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_09_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_09_18_composite_idx ON public.prediction_accuracy_partition_week_of_2023_09_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_09_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_09_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_09_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_09_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_09_25_composite_idx ON public.prediction_accuracy_partition_week_of_2023_09_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19429,10 +21270,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_09_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_10_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_10_02_composite_idx ON public.prediction_accuracy_partition_week_of_2023_10_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_10_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_10_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_10_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_10_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_10_09_composite_idx ON public.prediction_accuracy_partition_week_of_2023_10_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19443,6 +21298,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_10_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_10_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_10_16_composite_idx ON public.prediction_accuracy_partition_week_of_2023_10_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_10_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -19450,10 +21312,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_10_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_10_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_10_23_composite_idx ON public.prediction_accuracy_partition_week_of_2023_10_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_10_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_10_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_10_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_10_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_10_30_composite_idx ON public.prediction_accuracy_partition_week_of_2023_10_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19499,10 +21375,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_10_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_11_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_11_06_composite_idx ON public.prediction_accuracy_partition_week_of_2023_11_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_11_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_11_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_11_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_11_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_11_13_composite_idx ON public.prediction_accuracy_partition_week_of_2023_11_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19513,10 +21403,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_11_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_11_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_11_20_composite_idx ON public.prediction_accuracy_partition_week_of_2023_11_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_11_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_11_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_11_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_11_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_11_27_composite_idx ON public.prediction_accuracy_partition_week_of_2023_11_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19555,10 +21459,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_11_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_12_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_12_04_composite_idx ON public.prediction_accuracy_partition_week_of_2023_12_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_12_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_12_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_12_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_12_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_12_11_composite_idx ON public.prediction_accuracy_partition_week_of_2023_12_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19569,10 +21487,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_12_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_12_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_12_18_composite_idx ON public.prediction_accuracy_partition_week_of_2023_12_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_12_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2023_12_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2023_12_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_12_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2023_12_25_composite_idx ON public.prediction_accuracy_partition_week_of_2023_12_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19611,10 +21543,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2023_12_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_01_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_01_01_composite_idx ON public.prediction_accuracy_partition_week_of_2024_01_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_01_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_01_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_01_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_01_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_01_08_composite_idx ON public.prediction_accuracy_partition_week_of_2024_01_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19625,6 +21571,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_01_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_01_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_01_15_composite_idx ON public.prediction_accuracy_partition_week_of_2024_01_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_01_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -19632,10 +21585,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_01_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_01_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_01_22_composite_idx ON public.prediction_accuracy_partition_week_of_2024_01_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_01_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_01_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_01_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_01_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_01_29_composite_idx ON public.prediction_accuracy_partition_week_of_2024_01_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19681,10 +21648,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_01_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_02_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_02_05_composite_idx ON public.prediction_accuracy_partition_week_of_2024_02_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_02_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_02_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_02_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_02_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_02_12_composite_idx ON public.prediction_accuracy_partition_week_of_2024_02_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19695,10 +21676,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_02_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_02_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_02_19_composite_idx ON public.prediction_accuracy_partition_week_of_2024_02_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_02_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_02_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_02_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_02_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_02_26_composite_idx ON public.prediction_accuracy_partition_week_of_2024_02_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19737,10 +21732,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_02_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_03_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_03_04_composite_idx ON public.prediction_accuracy_partition_week_of_2024_03_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_03_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_03_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_03_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_03_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_03_11_composite_idx ON public.prediction_accuracy_partition_week_of_2024_03_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19751,10 +21760,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_03_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_03_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_03_18_composite_idx ON public.prediction_accuracy_partition_week_of_2024_03_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_03_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_03_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_03_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_03_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_03_25_composite_idx ON public.prediction_accuracy_partition_week_of_2024_03_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19793,10 +21816,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_03_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_04_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_04_01_composite_idx ON public.prediction_accuracy_partition_week_of_2024_04_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_04_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_04_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_04_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_04_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_04_08_composite_idx ON public.prediction_accuracy_partition_week_of_2024_04_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19807,6 +21844,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_04_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_04_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_04_15_composite_idx ON public.prediction_accuracy_partition_week_of_2024_04_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_04_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -19814,10 +21858,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_04_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_04_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_04_22_composite_idx ON public.prediction_accuracy_partition_week_of_2024_04_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_04_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_04_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_04_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_04_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_04_29_composite_idx ON public.prediction_accuracy_partition_week_of_2024_04_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19863,10 +21921,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_04_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_05_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_05_06_composite_idx ON public.prediction_accuracy_partition_week_of_2024_05_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_05_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_05_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_05_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_05_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_05_13_composite_idx ON public.prediction_accuracy_partition_week_of_2024_05_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19877,10 +21949,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_05_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_05_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_05_20_composite_idx ON public.prediction_accuracy_partition_week_of_2024_05_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_05_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_05_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_05_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_05_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_05_27_composite_idx ON public.prediction_accuracy_partition_week_of_2024_05_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19919,10 +22005,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_05_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_06_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_06_03_composite_idx ON public.prediction_accuracy_partition_week_of_2024_06_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_06_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_06_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_06_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_06_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_06_10_composite_idx ON public.prediction_accuracy_partition_week_of_2024_06_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19933,10 +22033,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_06_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_06_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_06_17_composite_idx ON public.prediction_accuracy_partition_week_of_2024_06_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_06_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_06_17_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_06_17 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_06_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_06_24_composite_idx ON public.prediction_accuracy_partition_week_of_2024_06_24 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19975,10 +22089,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_06_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_07_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_07_01_composite_idx ON public.prediction_accuracy_partition_week_of_2024_07_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_07_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_07_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_07_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_07_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_07_08_composite_idx ON public.prediction_accuracy_partition_week_of_2024_07_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -19989,6 +22117,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_07_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_07_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_07_15_composite_idx ON public.prediction_accuracy_partition_week_of_2024_07_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_07_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -19996,10 +22131,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_07_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_07_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_07_22_composite_idx ON public.prediction_accuracy_partition_week_of_2024_07_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_07_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_07_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_07_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_07_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_07_29_composite_idx ON public.prediction_accuracy_partition_week_of_2024_07_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20045,10 +22194,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_07_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_08_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_08_05_composite_idx ON public.prediction_accuracy_partition_week_of_2024_08_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_08_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_08_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_08_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_08_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_08_12_composite_idx ON public.prediction_accuracy_partition_week_of_2024_08_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20059,10 +22222,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_08_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_08_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_08_19_composite_idx ON public.prediction_accuracy_partition_week_of_2024_08_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_08_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_08_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_08_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_08_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_08_26_composite_idx ON public.prediction_accuracy_partition_week_of_2024_08_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20101,10 +22278,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_08_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_09_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_09_02_composite_idx ON public.prediction_accuracy_partition_week_of_2024_09_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_09_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_09_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_09_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_09_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_09_09_composite_idx ON public.prediction_accuracy_partition_week_of_2024_09_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20115,6 +22306,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_09_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_09_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_09_16_composite_idx ON public.prediction_accuracy_partition_week_of_2024_09_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_09_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -20122,10 +22320,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_09_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_09_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_09_23_composite_idx ON public.prediction_accuracy_partition_week_of_2024_09_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_09_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_09_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_09_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_09_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_09_30_composite_idx ON public.prediction_accuracy_partition_week_of_2024_09_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20171,10 +22383,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_09_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_10_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_10_07_composite_idx ON public.prediction_accuracy_partition_week_of_2024_10_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_10_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_10_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_10_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_10_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_10_14_composite_idx ON public.prediction_accuracy_partition_week_of_2024_10_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20185,10 +22411,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_10_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_10_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_10_21_composite_idx ON public.prediction_accuracy_partition_week_of_2024_10_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_10_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_10_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_10_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_10_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_10_28_composite_idx ON public.prediction_accuracy_partition_week_of_2024_10_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20227,10 +22467,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_10_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_11_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_11_04_composite_idx ON public.prediction_accuracy_partition_week_of_2024_11_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_11_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_11_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_11_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_11_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_11_11_composite_idx ON public.prediction_accuracy_partition_week_of_2024_11_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20241,10 +22495,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_11_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_11_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_11_18_composite_idx ON public.prediction_accuracy_partition_week_of_2024_11_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_11_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_11_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_11_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_11_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_11_25_composite_idx ON public.prediction_accuracy_partition_week_of_2024_11_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20283,10 +22551,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_11_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_12_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_12_02_composite_idx ON public.prediction_accuracy_partition_week_of_2024_12_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_12_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_12_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_12_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_12_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_12_09_composite_idx ON public.prediction_accuracy_partition_week_of_2024_12_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20297,6 +22579,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_12_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_12_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_12_16_composite_idx ON public.prediction_accuracy_partition_week_of_2024_12_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_12_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -20304,10 +22593,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_12_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_12_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_12_23_composite_idx ON public.prediction_accuracy_partition_week_of_2024_12_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_12_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2024_12_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2024_12_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_12_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2024_12_30_composite_idx ON public.prediction_accuracy_partition_week_of_2024_12_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20353,10 +22656,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2024_12_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_01_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_01_06_composite_idx ON public.prediction_accuracy_partition_week_of_2025_01_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_01_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_01_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_01_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_01_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_01_13_composite_idx ON public.prediction_accuracy_partition_week_of_2025_01_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20367,10 +22684,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_01_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_01_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_01_20_composite_idx ON public.prediction_accuracy_partition_week_of_2025_01_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_01_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_01_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_01_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_01_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_01_27_composite_idx ON public.prediction_accuracy_partition_week_of_2025_01_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20409,10 +22740,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_01_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_02_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_02_03_composite_idx ON public.prediction_accuracy_partition_week_of_2025_02_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_02_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_02_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_02_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_02_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_02_10_composite_idx ON public.prediction_accuracy_partition_week_of_2025_02_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20423,10 +22768,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_02_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_02_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_02_17_composite_idx ON public.prediction_accuracy_partition_week_of_2025_02_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_02_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_02_17_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_02_17 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_02_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_02_24_composite_idx ON public.prediction_accuracy_partition_week_of_2025_02_24 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20465,10 +22824,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_02_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_03_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_03_03_composite_idx ON public.prediction_accuracy_partition_week_of_2025_03_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_03_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_03_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_03_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_03_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_03_10_composite_idx ON public.prediction_accuracy_partition_week_of_2025_03_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20479,6 +22852,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_03_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_03_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_03_17_composite_idx ON public.prediction_accuracy_partition_week_of_2025_03_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_03_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -20486,10 +22866,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_03_17_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_03_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_03_24_composite_idx ON public.prediction_accuracy_partition_week_of_2025_03_24 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_03_24_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_03_24_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_03_24 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_03_31_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_03_31_composite_idx ON public.prediction_accuracy_partition_week_of_2025_03_31 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20535,10 +22929,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_03_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_04_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_04_07_composite_idx ON public.prediction_accuracy_partition_week_of_2025_04_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_04_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_04_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_04_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_04_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_04_14_composite_idx ON public.prediction_accuracy_partition_week_of_2025_04_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20549,10 +22957,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_04_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_04_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_04_21_composite_idx ON public.prediction_accuracy_partition_week_of_2025_04_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_04_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_04_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_04_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_04_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_04_28_composite_idx ON public.prediction_accuracy_partition_week_of_2025_04_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20591,10 +23013,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_04_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_05_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_05_05_composite_idx ON public.prediction_accuracy_partition_week_of_2025_05_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_05_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_05_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_05_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_05_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_05_12_composite_idx ON public.prediction_accuracy_partition_week_of_2025_05_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20605,10 +23041,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_05_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_05_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_05_19_composite_idx ON public.prediction_accuracy_partition_week_of_2025_05_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_05_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_05_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_05_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_05_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_05_26_composite_idx ON public.prediction_accuracy_partition_week_of_2025_05_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20647,10 +23097,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_05_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_06_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_06_02_composite_idx ON public.prediction_accuracy_partition_week_of_2025_06_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_06_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_06_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_06_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_06_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_06_09_composite_idx ON public.prediction_accuracy_partition_week_of_2025_06_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20661,6 +23125,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_06_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_06_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_06_16_composite_idx ON public.prediction_accuracy_partition_week_of_2025_06_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_06_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -20668,10 +23139,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_06_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_06_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_06_23_composite_idx ON public.prediction_accuracy_partition_week_of_2025_06_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_06_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_06_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_06_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_06_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_06_30_composite_idx ON public.prediction_accuracy_partition_week_of_2025_06_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20717,10 +23202,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_06_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_07_07_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_07_07_composite_idx ON public.prediction_accuracy_partition_week_of_2025_07_07 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_07_07_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_07_07_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_07_07 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_07_14_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_07_14_composite_idx ON public.prediction_accuracy_partition_week_of_2025_07_14 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20731,10 +23230,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_07_14_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_07_21_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_07_21_composite_idx ON public.prediction_accuracy_partition_week_of_2025_07_21 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_07_21_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_07_21_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_07_21 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_07_28_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_07_28_composite_idx ON public.prediction_accuracy_partition_week_of_2025_07_28 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20773,10 +23286,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_07_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_08_04_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_08_04_composite_idx ON public.prediction_accuracy_partition_week_of_2025_08_04 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_08_04_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_08_04_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_08_04 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_08_11_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_08_11_composite_idx ON public.prediction_accuracy_partition_week_of_2025_08_11 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20787,10 +23314,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_08_11_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_08_18_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_08_18_composite_idx ON public.prediction_accuracy_partition_week_of_2025_08_18 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_08_18_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_08_18_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_08_18 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_08_25_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_08_25_composite_idx ON public.prediction_accuracy_partition_week_of_2025_08_25 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20829,10 +23370,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_08_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_09_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_09_01_composite_idx ON public.prediction_accuracy_partition_week_of_2025_09_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_09_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_09_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_09_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_09_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_09_08_composite_idx ON public.prediction_accuracy_partition_week_of_2025_09_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20843,6 +23398,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_09_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_09_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_09_15_composite_idx ON public.prediction_accuracy_partition_week_of_2025_09_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_09_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -20850,10 +23412,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_09_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_09_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_09_22_composite_idx ON public.prediction_accuracy_partition_week_of_2025_09_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_09_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_09_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_09_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_09_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_09_29_composite_idx ON public.prediction_accuracy_partition_week_of_2025_09_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20899,10 +23475,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_09_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_10_06_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_10_06_composite_idx ON public.prediction_accuracy_partition_week_of_2025_10_06 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_10_06_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_10_06_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_10_06 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_10_13_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_10_13_composite_idx ON public.prediction_accuracy_partition_week_of_2025_10_13 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20913,10 +23503,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_10_13_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_10_20_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_10_20_composite_idx ON public.prediction_accuracy_partition_week_of_2025_10_20 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_10_20_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_10_20_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_10_20 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_10_27_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_10_27_composite_idx ON public.prediction_accuracy_partition_week_of_2025_10_27 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20955,10 +23559,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_10_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_11_03_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_11_03_composite_idx ON public.prediction_accuracy_partition_week_of_2025_11_03 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_11_03_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_11_03_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_11_03 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_11_10_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_11_10_composite_idx ON public.prediction_accuracy_partition_week_of_2025_11_10 USING btree (route_id, environment, service_date);
 
 
 --
@@ -20969,10 +23587,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_11_10_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_11_17_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_11_17_composite_idx ON public.prediction_accuracy_partition_week_of_2025_11_17 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_11_17_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_11_17_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_11_17 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_11_24_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_11_24_composite_idx ON public.prediction_accuracy_partition_week_of_2025_11_24 USING btree (route_id, environment, service_date);
 
 
 --
@@ -21011,10 +23643,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_11_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_12_01_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_12_01_composite_idx ON public.prediction_accuracy_partition_week_of_2025_12_01 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_12_01_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_12_01_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_12_01 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_12_08_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_12_08_composite_idx ON public.prediction_accuracy_partition_week_of_2025_12_08 USING btree (route_id, environment, service_date);
 
 
 --
@@ -21025,6 +23671,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_12_08_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_12_15_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_12_15_composite_idx ON public.prediction_accuracy_partition_week_of_2025_12_15 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_12_15_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -21032,10 +23685,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_12_15_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_12_22_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_12_22_composite_idx ON public.prediction_accuracy_partition_week_of_2025_12_22 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_12_22_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2025_12_22_stop_id_idx ON public.prediction_accuracy_partition_week_of_2025_12_22 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_12_29_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2025_12_29_composite_idx ON public.prediction_accuracy_partition_week_of_2025_12_29 USING btree (route_id, environment, service_date);
 
 
 --
@@ -21081,10 +23748,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2025_12_service_date_idx4 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_01_05_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_01_05_composite_idx ON public.prediction_accuracy_partition_week_of_2026_01_05 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_01_05_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2026_01_05_stop_id_idx ON public.prediction_accuracy_partition_week_of_2026_01_05 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_01_12_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_01_12_composite_idx ON public.prediction_accuracy_partition_week_of_2026_01_12 USING btree (route_id, environment, service_date);
 
 
 --
@@ -21095,10 +23776,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2026_01_12_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_01_19_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_01_19_composite_idx ON public.prediction_accuracy_partition_week_of_2026_01_19 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_01_19_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2026_01_19_stop_id_idx ON public.prediction_accuracy_partition_week_of_2026_01_19 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_01_26_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_01_26_composite_idx ON public.prediction_accuracy_partition_week_of_2026_01_26 USING btree (route_id, environment, service_date);
 
 
 --
@@ -21137,10 +23832,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2026_01_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_02_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_02_02_composite_idx ON public.prediction_accuracy_partition_week_of_2026_02_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_02_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2026_02_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2026_02_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_02_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_02_09_composite_idx ON public.prediction_accuracy_partition_week_of_2026_02_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -21151,10 +23860,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2026_02_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_02_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_02_16_composite_idx ON public.prediction_accuracy_partition_week_of_2026_02_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_02_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2026_02_16_stop_id_idx ON public.prediction_accuracy_partition_week_of_2026_02_16 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_02_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_02_23_composite_idx ON public.prediction_accuracy_partition_week_of_2026_02_23 USING btree (route_id, environment, service_date);
 
 
 --
@@ -21193,10 +23916,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2026_02_service_date_idx3 ON 
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_03_02_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_03_02_composite_idx ON public.prediction_accuracy_partition_week_of_2026_03_02 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_03_02_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2026_03_02_stop_id_idx ON public.prediction_accuracy_partition_week_of_2026_03_02 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_03_09_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_03_09_composite_idx ON public.prediction_accuracy_partition_week_of_2026_03_09 USING btree (route_id, environment, service_date);
 
 
 --
@@ -21207,6 +23944,13 @@ CREATE INDEX prediction_accuracy_partition_week_of_2026_03_09_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_03_16_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_03_16_composite_idx ON public.prediction_accuracy_partition_week_of_2026_03_16 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_03_16_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -21214,10 +23958,24 @@ CREATE INDEX prediction_accuracy_partition_week_of_2026_03_16_stop_id_idx ON pub
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_03_23_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_03_23_composite_idx ON public.prediction_accuracy_partition_week_of_2026_03_23 USING btree (route_id, environment, service_date);
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_03_23_stop_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX prediction_accuracy_partition_week_of_2026_03_23_stop_id_idx ON public.prediction_accuracy_partition_week_of_2026_03_23 USING btree (stop_id);
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_03_30_composite_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX prediction_accuracy_partition_week_of_2026_03_30_composite_idx ON public.prediction_accuracy_partition_week_of_2026_03_30 USING btree (route_id, environment, service_date);
 
 
 --
@@ -21326,6 +24084,13 @@ CREATE INDEX vehicle_events_vehicle_id_index ON public.vehicle_events USING btre
 
 
 --
+-- Name: prediction_accuracy_partition_default_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_default_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_default_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21347,6 +24112,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_10_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_10_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_10_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21358,6 +24130,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_10_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_10_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_10_08_composite_idx;
 
 
 --
@@ -21375,6 +24154,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_10_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_10_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_10_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21389,6 +24175,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_10_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_10_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_10_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21400,6 +24193,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_10_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_10_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_10_29_composite_idx;
 
 
 --
@@ -21452,6 +24252,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_11_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_11_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_11_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21463,6 +24270,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_11_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_11_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_11_12_composite_idx;
 
 
 --
@@ -21480,6 +24294,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_11_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_11_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_11_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21491,6 +24312,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_11_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_11_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_11_26_composite_idx;
 
 
 --
@@ -21536,6 +24364,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_12_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_12_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_12_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21547,6 +24382,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_12_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_12_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_12_10_composite_idx;
 
 
 --
@@ -21564,6 +24406,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_12_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_12_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_12_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21578,6 +24427,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2018_12_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_12_24_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2018_12_24_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21589,6 +24445,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_12_24_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2018_12_31_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2018_12_31_composite_idx;
 
 
 --
@@ -21641,6 +24504,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_01_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_01_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_01_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21652,6 +24522,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_01_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_01_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_01_14_composite_idx;
 
 
 --
@@ -21669,6 +24546,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_01_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_01_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_01_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21680,6 +24564,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_01_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_01_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_01_28_composite_idx;
 
 
 --
@@ -21725,6 +24616,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_02_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_02_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_02_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21736,6 +24634,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_02_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_02_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_02_11_composite_idx;
 
 
 --
@@ -21753,6 +24658,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_02_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_02_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_02_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21764,6 +24676,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_02_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_02_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_02_25_composite_idx;
 
 
 --
@@ -21809,6 +24728,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_03_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_03_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_03_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21820,6 +24746,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_03_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_03_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_03_11_composite_idx;
 
 
 --
@@ -21837,6 +24770,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_03_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_03_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_03_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21848,6 +24788,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_03_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_03_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_03_25_composite_idx;
 
 
 --
@@ -21893,6 +24840,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_04_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_04_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_04_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21904,6 +24858,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_04_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_04_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_04_08_composite_idx;
 
 
 --
@@ -21921,6 +24882,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_04_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_04_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_04_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21935,6 +24903,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_04_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_04_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_04_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -21946,6 +24921,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_04_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_04_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_04_29_composite_idx;
 
 
 --
@@ -21998,6 +24980,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_05_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_05_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_05_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22009,6 +24998,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_05_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_05_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_05_13_composite_idx;
 
 
 --
@@ -22026,6 +25022,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_05_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_05_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_05_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22037,6 +25040,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_05_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_05_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_05_27_composite_idx;
 
 
 --
@@ -22082,6 +25092,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_06_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_06_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_06_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22093,6 +25110,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_06_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_06_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_06_10_composite_idx;
 
 
 --
@@ -22110,6 +25134,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_06_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_06_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_06_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22121,6 +25152,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_06_17_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_06_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_06_24_composite_idx;
 
 
 --
@@ -22166,6 +25204,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_07_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_07_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_07_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22177,6 +25222,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_07_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_07_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_07_08_composite_idx;
 
 
 --
@@ -22194,6 +25246,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_07_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_07_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_07_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22208,6 +25267,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_07_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_07_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_07_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22219,6 +25285,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_07_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_07_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_07_29_composite_idx;
 
 
 --
@@ -22271,6 +25344,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_08_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_08_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_08_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22282,6 +25362,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_08_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_08_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_08_12_composite_idx;
 
 
 --
@@ -22299,6 +25386,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_08_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_08_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_08_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22310,6 +25404,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_08_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_08_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_08_26_composite_idx;
 
 
 --
@@ -22355,6 +25456,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_09_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_09_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_09_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22366,6 +25474,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_09_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_09_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_09_09_composite_idx;
 
 
 --
@@ -22383,6 +25498,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_09_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_09_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_09_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22397,6 +25519,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_09_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_09_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_09_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22408,6 +25537,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_09_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_09_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_09_30_composite_idx;
 
 
 --
@@ -22460,6 +25596,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_10_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_10_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_10_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22471,6 +25614,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_10_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_10_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_10_14_composite_idx;
 
 
 --
@@ -22488,6 +25638,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_10_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_10_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_10_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22499,6 +25656,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_10_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_10_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_10_28_composite_idx;
 
 
 --
@@ -22544,6 +25708,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_11_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_11_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_11_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22555,6 +25726,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_11_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_11_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_11_11_composite_idx;
 
 
 --
@@ -22572,6 +25750,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_11_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_11_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_11_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22583,6 +25768,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_11_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_11_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_11_25_composite_idx;
 
 
 --
@@ -22628,6 +25820,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_12_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_12_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_12_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22639,6 +25838,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_12_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_12_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_12_09_composite_idx;
 
 
 --
@@ -22656,6 +25862,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_12_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_12_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_12_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22670,6 +25883,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2019_12_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_12_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2019_12_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22681,6 +25901,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_12_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2019_12_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2019_12_30_composite_idx;
 
 
 --
@@ -22733,6 +25960,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_01_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_01_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_01_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22744,6 +25978,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_01_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_01_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_01_13_composite_idx;
 
 
 --
@@ -22761,6 +26002,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_01_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_01_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_01_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22772,6 +26020,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_01_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_01_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_01_27_composite_idx;
 
 
 --
@@ -22817,6 +26072,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_02_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_02_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_02_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22828,6 +26090,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_02_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_02_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_02_10_composite_idx;
 
 
 --
@@ -22845,6 +26114,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_02_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_02_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_02_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22856,6 +26132,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_02_17_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_02_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_02_24_composite_idx;
 
 
 --
@@ -22901,6 +26184,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_03_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_03_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_03_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22912,6 +26202,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_03_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_03_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_03_09_composite_idx;
 
 
 --
@@ -22929,6 +26226,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_03_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_03_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_03_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22943,6 +26247,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_03_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_03_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_03_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -22954,6 +26265,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_03_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_03_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_03_30_composite_idx;
 
 
 --
@@ -23006,6 +26324,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_04_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_04_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_04_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23017,6 +26342,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_04_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_04_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_04_13_composite_idx;
 
 
 --
@@ -23034,6 +26366,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_04_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_04_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_04_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23045,6 +26384,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_04_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_04_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_04_27_composite_idx;
 
 
 --
@@ -23090,6 +26436,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_05_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_05_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_05_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23101,6 +26454,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_05_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_05_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_05_11_composite_idx;
 
 
 --
@@ -23118,6 +26478,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_05_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_05_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_05_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23129,6 +26496,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_05_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_05_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_05_25_composite_idx;
 
 
 --
@@ -23174,6 +26548,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_06_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_06_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_06_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23185,6 +26566,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_06_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_06_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_06_08_composite_idx;
 
 
 --
@@ -23202,6 +26590,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_06_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_06_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_06_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23216,6 +26611,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_06_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_06_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_06_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23227,6 +26629,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_06_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_06_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_06_29_composite_idx;
 
 
 --
@@ -23279,6 +26688,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_07_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_07_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_07_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23290,6 +26706,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_07_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_07_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_07_13_composite_idx;
 
 
 --
@@ -23307,6 +26730,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_07_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_07_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_07_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23318,6 +26748,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_07_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_07_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_07_27_composite_idx;
 
 
 --
@@ -23363,6 +26800,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_08_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_08_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_08_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23374,6 +26818,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_08_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_08_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_08_10_composite_idx;
 
 
 --
@@ -23391,6 +26842,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_08_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_08_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_08_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23405,6 +26863,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_08_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_08_24_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_08_24_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23416,6 +26881,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_08_24_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_08_31_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_08_31_composite_idx;
 
 
 --
@@ -23468,6 +26940,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_09_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_09_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_09_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23479,6 +26958,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_09_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_09_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_09_14_composite_idx;
 
 
 --
@@ -23496,6 +26982,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_09_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_09_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_09_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23507,6 +27000,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_09_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_09_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_09_28_composite_idx;
 
 
 --
@@ -23552,6 +27052,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_10_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_10_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_10_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23563,6 +27070,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_10_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_10_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_10_12_composite_idx;
 
 
 --
@@ -23580,6 +27094,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_10_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_10_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_10_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23591,6 +27112,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_10_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_10_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_10_26_composite_idx;
 
 
 --
@@ -23636,6 +27164,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_11_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_11_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_11_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23647,6 +27182,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_11_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_11_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_11_09_composite_idx;
 
 
 --
@@ -23664,6 +27206,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_11_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_11_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_11_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23678,6 +27227,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_11_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_11_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_11_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23689,6 +27245,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_11_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_11_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_11_30_composite_idx;
 
 
 --
@@ -23741,6 +27304,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_12_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_12_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_12_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23752,6 +27322,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_12_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_12_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_12_14_composite_idx;
 
 
 --
@@ -23769,6 +27346,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2020_12_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_12_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2020_12_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23780,6 +27364,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_12_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2020_12_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2020_12_28_composite_idx;
 
 
 --
@@ -23825,6 +27416,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_01_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_01_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_01_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23836,6 +27434,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_01_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_01_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_01_11_composite_idx;
 
 
 --
@@ -23853,6 +27458,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_01_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_01_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_01_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23864,6 +27476,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_01_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_01_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_01_25_composite_idx;
 
 
 --
@@ -23909,6 +27528,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_02_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_02_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_02_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23920,6 +27546,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_02_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_02_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_02_08_composite_idx;
 
 
 --
@@ -23937,6 +27570,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_02_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_02_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_02_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -23948,6 +27588,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_02_15_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_02_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_02_22_composite_idx;
 
 
 --
@@ -23993,6 +27640,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_03_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_03_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_03_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24004,6 +27658,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_03_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_03_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_03_08_composite_idx;
 
 
 --
@@ -24021,6 +27682,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_03_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_03_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_03_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24035,6 +27703,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_03_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_03_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_03_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24046,6 +27721,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_03_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_03_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_03_29_composite_idx;
 
 
 --
@@ -24098,6 +27780,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_04_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_04_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_04_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24109,6 +27798,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_04_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_04_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_04_12_composite_idx;
 
 
 --
@@ -24126,6 +27822,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_04_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_04_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_04_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24137,6 +27840,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_04_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_04_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_04_26_composite_idx;
 
 
 --
@@ -24182,6 +27892,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_05_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_05_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_05_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24193,6 +27910,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_05_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_05_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_05_10_composite_idx;
 
 
 --
@@ -24210,6 +27934,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_05_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_05_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_05_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24224,6 +27955,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_05_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_05_24_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_05_24_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24235,6 +27973,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_05_24_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_05_31_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_05_31_composite_idx;
 
 
 --
@@ -24287,6 +28032,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_06_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_06_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_06_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24298,6 +28050,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_06_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_06_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_06_14_composite_idx;
 
 
 --
@@ -24315,6 +28074,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_06_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_06_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_06_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24326,6 +28092,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_06_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_06_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_06_28_composite_idx;
 
 
 --
@@ -24371,6 +28144,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_07_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_07_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_07_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24382,6 +28162,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_07_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_07_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_07_12_composite_idx;
 
 
 --
@@ -24399,6 +28186,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_07_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_07_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_07_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24410,6 +28204,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_07_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_07_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_07_26_composite_idx;
 
 
 --
@@ -24455,6 +28256,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_08_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_08_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_08_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24466,6 +28274,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_08_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_08_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_08_09_composite_idx;
 
 
 --
@@ -24483,6 +28298,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_08_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_08_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_08_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24497,6 +28319,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_08_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_08_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_08_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24508,6 +28337,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_08_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_08_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_08_30_composite_idx;
 
 
 --
@@ -24560,6 +28396,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_09_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_09_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_09_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24571,6 +28414,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_09_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_09_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_09_13_composite_idx;
 
 
 --
@@ -24588,6 +28438,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_09_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_09_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_09_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24599,6 +28456,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_09_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_09_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_09_27_composite_idx;
 
 
 --
@@ -24644,6 +28508,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_10_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_10_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_10_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24655,6 +28526,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_10_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_10_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_10_11_composite_idx;
 
 
 --
@@ -24672,6 +28550,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_10_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_10_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_10_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24683,6 +28568,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_10_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_10_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_10_25_composite_idx;
 
 
 --
@@ -24728,6 +28620,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_11_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_11_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_11_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24739,6 +28638,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_11_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_11_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_11_08_composite_idx;
 
 
 --
@@ -24756,6 +28662,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_11_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_11_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_11_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24770,6 +28683,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_11_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_11_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_11_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24781,6 +28701,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_11_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_11_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_11_29_composite_idx;
 
 
 --
@@ -24833,6 +28760,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_12_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_12_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_12_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24844,6 +28778,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_12_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_12_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_12_13_composite_idx;
 
 
 --
@@ -24861,6 +28802,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2021_12_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_12_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2021_12_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24872,6 +28820,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_12_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2021_12_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2021_12_27_composite_idx;
 
 
 --
@@ -24917,6 +28872,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_01_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_01_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_01_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24928,6 +28890,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_01_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_01_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_01_10_composite_idx;
 
 
 --
@@ -24945,6 +28914,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_01_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_01_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_01_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24959,6 +28935,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_01_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_01_24_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_01_24_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -24970,6 +28953,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_01_24_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_01_31_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_01_31_composite_idx;
 
 
 --
@@ -25022,6 +29012,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_02_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_02_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_02_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25033,6 +29030,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_02_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_02_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_02_14_composite_idx;
 
 
 --
@@ -25050,6 +29054,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_02_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_02_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_02_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25061,6 +29072,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_02_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_02_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_02_28_composite_idx;
 
 
 --
@@ -25106,6 +29124,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_03_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_03_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_03_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25117,6 +29142,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_03_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_03_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_03_14_composite_idx;
 
 
 --
@@ -25134,6 +29166,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_03_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_03_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_03_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25145,6 +29184,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_03_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_03_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_03_28_composite_idx;
 
 
 --
@@ -25190,6 +29236,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_04_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_04_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_04_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25201,6 +29254,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_04_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_04_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_04_11_composite_idx;
 
 
 --
@@ -25218,6 +29278,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_04_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_04_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_04_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25229,6 +29296,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_04_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_04_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_04_25_composite_idx;
 
 
 --
@@ -25274,6 +29348,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_05_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_05_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_05_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25285,6 +29366,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_05_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_05_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_05_09_composite_idx;
 
 
 --
@@ -25302,6 +29390,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_05_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_05_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_05_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25316,6 +29411,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_05_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_05_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_05_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25327,6 +29429,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_05_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_05_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_05_30_composite_idx;
 
 
 --
@@ -25379,6 +29488,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_06_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_06_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_06_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25390,6 +29506,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_06_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_06_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_06_13_composite_idx;
 
 
 --
@@ -25407,6 +29530,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_06_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_06_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_06_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25418,6 +29548,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_06_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_06_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_06_27_composite_idx;
 
 
 --
@@ -25463,6 +29600,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_07_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_07_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_07_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25474,6 +29618,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_07_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_07_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_07_11_composite_idx;
 
 
 --
@@ -25491,6 +29642,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_07_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_07_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_07_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25502,6 +29660,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_07_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_07_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_07_25_composite_idx;
 
 
 --
@@ -25547,6 +29712,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_08_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_08_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_08_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25558,6 +29730,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_08_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_08_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_08_08_composite_idx;
 
 
 --
@@ -25575,6 +29754,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_08_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_08_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_08_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25589,6 +29775,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_08_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_08_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_08_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25600,6 +29793,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_08_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_08_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_08_29_composite_idx;
 
 
 --
@@ -25652,6 +29852,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_09_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_09_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_09_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25663,6 +29870,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_09_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_09_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_09_12_composite_idx;
 
 
 --
@@ -25680,6 +29894,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_09_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_09_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_09_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25691,6 +29912,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_09_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_09_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_09_26_composite_idx;
 
 
 --
@@ -25736,6 +29964,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_10_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_10_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_10_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25747,6 +29982,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_10_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_10_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_10_10_composite_idx;
 
 
 --
@@ -25764,6 +30006,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_10_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_10_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_10_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25778,6 +30027,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_10_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_10_24_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_10_24_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25789,6 +30045,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_10_24_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_10_31_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_10_31_composite_idx;
 
 
 --
@@ -25841,6 +30104,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_11_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_11_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_11_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25852,6 +30122,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_11_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_11_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_11_14_composite_idx;
 
 
 --
@@ -25869,6 +30146,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_11_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_11_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_11_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25880,6 +30164,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_11_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_11_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_11_28_composite_idx;
 
 
 --
@@ -25925,6 +30216,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_12_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_12_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_12_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25936,6 +30234,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_12_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_12_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_12_12_composite_idx;
 
 
 --
@@ -25953,6 +30258,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2022_12_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_12_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2022_12_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -25964,6 +30276,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_12_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2022_12_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2022_12_26_composite_idx;
 
 
 --
@@ -26009,6 +30328,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_01_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_01_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_01_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26020,6 +30346,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_01_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_01_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_01_09_composite_idx;
 
 
 --
@@ -26037,6 +30370,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_01_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_01_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_01_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26051,6 +30391,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_01_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_01_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_01_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26062,6 +30409,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_01_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_01_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_01_30_composite_idx;
 
 
 --
@@ -26114,6 +30468,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_02_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_02_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_02_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26125,6 +30486,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_02_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_02_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_02_13_composite_idx;
 
 
 --
@@ -26142,6 +30510,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_02_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_02_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_02_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26153,6 +30528,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_02_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_02_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_02_27_composite_idx;
 
 
 --
@@ -26198,6 +30580,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_03_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_03_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_03_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26209,6 +30598,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_03_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_03_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_03_13_composite_idx;
 
 
 --
@@ -26226,6 +30622,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_03_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_03_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_03_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26237,6 +30640,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_03_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_03_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_03_27_composite_idx;
 
 
 --
@@ -26282,6 +30692,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_04_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_04_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_04_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26293,6 +30710,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_04_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_04_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_04_10_composite_idx;
 
 
 --
@@ -26310,6 +30734,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_04_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_04_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_04_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26321,6 +30752,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_04_17_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_04_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_04_24_composite_idx;
 
 
 --
@@ -26366,6 +30804,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_05_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_05_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_05_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26377,6 +30822,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_05_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_05_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_05_08_composite_idx;
 
 
 --
@@ -26394,6 +30846,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_05_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_05_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_05_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26408,6 +30867,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_05_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_05_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_05_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26419,6 +30885,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_05_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_05_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_05_29_composite_idx;
 
 
 --
@@ -26471,6 +30944,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_06_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_06_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_06_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26482,6 +30962,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_06_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_06_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_06_12_composite_idx;
 
 
 --
@@ -26499,6 +30986,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_06_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_06_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_06_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26510,6 +31004,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_06_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_06_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_06_26_composite_idx;
 
 
 --
@@ -26555,6 +31056,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_07_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_07_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_07_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26566,6 +31074,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_07_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_07_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_07_10_composite_idx;
 
 
 --
@@ -26583,6 +31098,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_07_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_07_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_07_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26597,6 +31119,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_07_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_07_24_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_07_24_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26608,6 +31137,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_07_24_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_07_31_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_07_31_composite_idx;
 
 
 --
@@ -26660,6 +31196,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_08_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_08_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_08_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26671,6 +31214,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_08_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_08_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_08_14_composite_idx;
 
 
 --
@@ -26688,6 +31238,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_08_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_08_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_08_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26699,6 +31256,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_08_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_08_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_08_28_composite_idx;
 
 
 --
@@ -26744,6 +31308,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_09_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_09_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_09_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26755,6 +31326,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_09_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_09_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_09_11_composite_idx;
 
 
 --
@@ -26772,6 +31350,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_09_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_09_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_09_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26783,6 +31368,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_09_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_09_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_09_25_composite_idx;
 
 
 --
@@ -26828,6 +31420,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_10_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_10_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_10_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26839,6 +31438,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_10_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_10_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_10_09_composite_idx;
 
 
 --
@@ -26856,6 +31462,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_10_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_10_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_10_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26870,6 +31483,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_10_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_10_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_10_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26881,6 +31501,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_10_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_10_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_10_30_composite_idx;
 
 
 --
@@ -26933,6 +31560,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_11_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_11_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_11_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26944,6 +31578,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_11_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_11_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_11_13_composite_idx;
 
 
 --
@@ -26961,6 +31602,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_11_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_11_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_11_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -26972,6 +31620,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_11_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_11_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_11_27_composite_idx;
 
 
 --
@@ -27017,6 +31672,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_12_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_12_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_12_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27028,6 +31690,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_12_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_12_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_12_11_composite_idx;
 
 
 --
@@ -27045,6 +31714,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2023_12_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_12_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2023_12_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27056,6 +31732,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_12_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2023_12_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2023_12_25_composite_idx;
 
 
 --
@@ -27101,6 +31784,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_01_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_01_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_01_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27112,6 +31802,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_01_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_01_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_01_08_composite_idx;
 
 
 --
@@ -27129,6 +31826,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_01_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_01_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_01_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27143,6 +31847,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_01_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_01_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_01_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27154,6 +31865,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_01_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_01_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_01_29_composite_idx;
 
 
 --
@@ -27206,6 +31924,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_02_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_02_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_02_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27217,6 +31942,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_02_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_02_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_02_12_composite_idx;
 
 
 --
@@ -27234,6 +31966,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_02_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_02_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_02_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27245,6 +31984,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_02_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_02_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_02_26_composite_idx;
 
 
 --
@@ -27290,6 +32036,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_03_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_03_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_03_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27301,6 +32054,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_03_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_03_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_03_11_composite_idx;
 
 
 --
@@ -27318,6 +32078,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_03_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_03_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_03_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27329,6 +32096,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_03_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_03_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_03_25_composite_idx;
 
 
 --
@@ -27374,6 +32148,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_04_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_04_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_04_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27385,6 +32166,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_04_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_04_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_04_08_composite_idx;
 
 
 --
@@ -27402,6 +32190,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_04_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_04_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_04_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27416,6 +32211,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_04_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_04_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_04_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27427,6 +32229,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_04_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_04_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_04_29_composite_idx;
 
 
 --
@@ -27479,6 +32288,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_05_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_05_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_05_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27490,6 +32306,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_05_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_05_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_05_13_composite_idx;
 
 
 --
@@ -27507,6 +32330,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_05_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_05_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_05_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27518,6 +32348,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_05_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_05_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_05_27_composite_idx;
 
 
 --
@@ -27563,6 +32400,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_06_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_06_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_06_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27574,6 +32418,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_06_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_06_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_06_10_composite_idx;
 
 
 --
@@ -27591,6 +32442,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_06_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_06_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_06_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27602,6 +32460,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_06_17_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_06_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_06_24_composite_idx;
 
 
 --
@@ -27647,6 +32512,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_07_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_07_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_07_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27658,6 +32530,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_07_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_07_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_07_08_composite_idx;
 
 
 --
@@ -27675,6 +32554,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_07_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_07_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_07_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27689,6 +32575,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_07_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_07_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_07_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27700,6 +32593,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_07_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_07_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_07_29_composite_idx;
 
 
 --
@@ -27752,6 +32652,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_08_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_08_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_08_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27763,6 +32670,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_08_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_08_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_08_12_composite_idx;
 
 
 --
@@ -27780,6 +32694,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_08_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_08_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_08_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27791,6 +32712,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_08_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_08_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_08_26_composite_idx;
 
 
 --
@@ -27836,6 +32764,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_09_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_09_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_09_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27847,6 +32782,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_09_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_09_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_09_09_composite_idx;
 
 
 --
@@ -27864,6 +32806,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_09_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_09_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_09_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27878,6 +32827,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_09_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_09_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_09_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27889,6 +32845,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_09_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_09_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_09_30_composite_idx;
 
 
 --
@@ -27941,6 +32904,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_10_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_10_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_10_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27952,6 +32922,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_10_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_10_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_10_14_composite_idx;
 
 
 --
@@ -27969,6 +32946,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_10_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_10_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_10_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -27980,6 +32964,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_10_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_10_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_10_28_composite_idx;
 
 
 --
@@ -28025,6 +33016,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_11_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_11_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_11_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28036,6 +33034,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_11_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_11_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_11_11_composite_idx;
 
 
 --
@@ -28053,6 +33058,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_11_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_11_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_11_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28064,6 +33076,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_11_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_11_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_11_25_composite_idx;
 
 
 --
@@ -28109,6 +33128,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_12_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_12_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_12_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28120,6 +33146,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_12_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_12_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_12_09_composite_idx;
 
 
 --
@@ -28137,6 +33170,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_12_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_12_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_12_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28151,6 +33191,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2024_12_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_12_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2024_12_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28162,6 +33209,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_12_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2024_12_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2024_12_30_composite_idx;
 
 
 --
@@ -28214,6 +33268,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_01_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_01_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_01_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28225,6 +33286,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_01_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_01_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_01_13_composite_idx;
 
 
 --
@@ -28242,6 +33310,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_01_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_01_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_01_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28253,6 +33328,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_01_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_01_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_01_27_composite_idx;
 
 
 --
@@ -28298,6 +33380,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_02_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_02_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_02_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28309,6 +33398,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_02_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_02_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_02_10_composite_idx;
 
 
 --
@@ -28326,6 +33422,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_02_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_02_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_02_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28337,6 +33440,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_02_17_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_02_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_02_24_composite_idx;
 
 
 --
@@ -28382,6 +33492,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_03_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_03_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_03_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28393,6 +33510,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_03_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_03_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_03_10_composite_idx;
 
 
 --
@@ -28410,6 +33534,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_03_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_03_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_03_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28424,6 +33555,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_03_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_03_24_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_03_24_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28435,6 +33573,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_03_24_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_03_31_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_03_31_composite_idx;
 
 
 --
@@ -28487,6 +33632,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_04_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_04_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_04_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28498,6 +33650,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_04_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_04_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_04_14_composite_idx;
 
 
 --
@@ -28515,6 +33674,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_04_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_04_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_04_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28526,6 +33692,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_04_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_04_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_04_28_composite_idx;
 
 
 --
@@ -28571,6 +33744,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_05_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_05_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_05_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28582,6 +33762,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_05_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_05_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_05_12_composite_idx;
 
 
 --
@@ -28599,6 +33786,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_05_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_05_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_05_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28610,6 +33804,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_05_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_05_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_05_26_composite_idx;
 
 
 --
@@ -28655,6 +33856,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_06_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_06_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_06_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28666,6 +33874,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_06_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_06_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_06_09_composite_idx;
 
 
 --
@@ -28683,6 +33898,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_06_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_06_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_06_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28697,6 +33919,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_06_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_06_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_06_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28708,6 +33937,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_06_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_06_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_06_30_composite_idx;
 
 
 --
@@ -28760,6 +33996,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_07_07_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_07_07_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_07_07_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28771,6 +34014,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_07_07_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_07_14_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_07_14_composite_idx;
 
 
 --
@@ -28788,6 +34038,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_07_21_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_07_21_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_07_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28799,6 +34056,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_07_21_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_07_28_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_07_28_composite_idx;
 
 
 --
@@ -28844,6 +34108,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_08_04_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_08_04_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_08_04_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28855,6 +34126,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_08_04_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_08_11_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_08_11_composite_idx;
 
 
 --
@@ -28872,6 +34150,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_08_18_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_08_18_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_08_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28883,6 +34168,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_08_18_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_08_25_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_08_25_composite_idx;
 
 
 --
@@ -28928,6 +34220,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_09_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_09_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_09_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28939,6 +34238,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_09_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_09_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_09_08_composite_idx;
 
 
 --
@@ -28956,6 +34262,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_09_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_09_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_09_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28970,6 +34283,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_09_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_09_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_09_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -28981,6 +34301,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_09_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_09_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_09_29_composite_idx;
 
 
 --
@@ -29033,6 +34360,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_10_06_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_10_06_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_10_06_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29044,6 +34378,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_10_06_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_10_13_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_10_13_composite_idx;
 
 
 --
@@ -29061,6 +34402,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_10_20_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_10_20_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_10_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29072,6 +34420,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_10_20_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_10_27_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_10_27_composite_idx;
 
 
 --
@@ -29117,6 +34472,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_11_03_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_11_03_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_11_03_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29128,6 +34490,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_11_03_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_11_10_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_11_10_composite_idx;
 
 
 --
@@ -29145,6 +34514,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_11_17_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_11_17_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_11_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29156,6 +34532,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_11_17_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_11_24_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_11_24_composite_idx;
 
 
 --
@@ -29201,6 +34584,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_12_01_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_12_01_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_12_01_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29212,6 +34602,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_12_01_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_12_08_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_12_08_composite_idx;
 
 
 --
@@ -29229,6 +34626,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_12_15_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_12_15_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_12_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29243,6 +34647,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2025_12_22_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_12_22_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2025_12_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29254,6 +34665,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_12_22_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2025_12_29_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2025_12_29_composite_idx;
 
 
 --
@@ -29306,6 +34724,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_01_05_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_01_05_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_01_05_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29317,6 +34742,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_01_05_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_01_12_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_01_12_composite_idx;
 
 
 --
@@ -29334,6 +34766,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_01_19_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_01_19_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_01_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29345,6 +34784,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_01_19_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_01_26_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_01_26_composite_idx;
 
 
 --
@@ -29390,6 +34836,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_02_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_02_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_02_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29401,6 +34854,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_02_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_02_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_02_09_composite_idx;
 
 
 --
@@ -29418,6 +34878,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_02_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_02_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_02_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29429,6 +34896,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_02_16_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_02_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_02_23_composite_idx;
 
 
 --
@@ -29474,6 +34948,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_service_date_index ATTACH PAR
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_03_02_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_03_02_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_03_02_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29485,6 +34966,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_03_02_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_03_09_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_03_09_composite_idx;
 
 
 --
@@ -29502,6 +34990,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_03_16_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_03_16_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_03_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29516,6 +35011,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITIO
 
 
 --
+-- Name: prediction_accuracy_partition_week_of_2026_03_23_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_03_23_composite_idx;
+
+
+--
 -- Name: prediction_accuracy_partition_week_of_2026_03_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -29527,6 +35029,13 @@ ALTER INDEX public.prediction_accuracy_partitioned_pkey ATTACH PARTITION public.
 --
 
 ALTER INDEX public.prediction_accuracy_partitioned_stop_id_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_03_23_stop_id_idx;
+
+
+--
+-- Name: prediction_accuracy_partition_week_of_2026_03_30_composite_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.prediction_accuracy_partitioned_composite_index ATTACH PARTITION public.prediction_accuracy_partition_week_of_2026_03_30_composite_idx;
 
 
 --
@@ -29590,7 +35099,7 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict x3E8W6S6NftM4YRcxJBlz4CDMqBrS6SPPwvZsAHw38fHd0CLwalviCqgiRpd0fd
+\unrestrict mHmBTkObZkZfea8dyzSy3dpfvMP2BG2micnAhrQ2OritCbojw9HsE0EKMigpGbo
 
 INSERT INTO public."schema_migrations" (version) VALUES (20181017190602);
 INSERT INTO public."schema_migrations" (version) VALUES (20181022210113);
@@ -29624,3 +35133,4 @@ INSERT INTO public."schema_migrations" (version) VALUES (20260217041349);
 INSERT INTO public."schema_migrations" (version) VALUES (20260218204958);
 INSERT INTO public."schema_migrations" (version) VALUES (20260218204959);
 INSERT INTO public."schema_migrations" (version) VALUES (20260318195242);
+INSERT INTO public."schema_migrations" (version) VALUES (20260410160505);
