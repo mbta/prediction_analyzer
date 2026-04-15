@@ -150,17 +150,13 @@ defmodule PredictionAnalyzer.Filters do
 
   hour | prod total | prod accurate | dev-green total | dev-green accurate
   """
-  @spec stats_by_environment_and_chart_range(Ecto.Query.t(), String.t(), map()) :: Ecto.Query.t()
-  def stats_by_environment_and_chart_range(q, environment, %{
-        "chart_range" => "Hourly",
-        "timeframe_resolution" => tr
-      })
+  @spec stats_by_chart_range(Ecto.Query.t(), map()) :: Ecto.Query.t()
+  def stats_by_chart_range(q, %{"chart_range" => "Hourly", "timeframe_resolution" => tr})
       when tr != "60" do
     from(
       acc in q,
       group_by: [:hour_of_day, fragment("resolution_bucket")],
       order_by: [:hour_of_day, fragment("resolution_bucket")],
-      where: acc.environment == ^environment,
       select: [
         {acc.hour_of_day, resolution_bucket(acc.minute_of_hour, ^String.to_integer(tr))},
         sum(acc.num_predictions),
@@ -171,7 +167,7 @@ defmodule PredictionAnalyzer.Filters do
     )
   end
 
-  def stats_by_environment_and_chart_range(q, environment, filters) do
+  def stats_by_chart_range(q, filters) do
     scope =
       case filters["chart_range"] do
         "Daily" -> :service_date
@@ -183,7 +179,6 @@ defmodule PredictionAnalyzer.Filters do
       acc in q,
       group_by: ^scope,
       order_by: ^scope,
-      where: acc.environment == ^environment,
       select: [
         field(acc, ^scope),
         sum(acc.num_predictions),
