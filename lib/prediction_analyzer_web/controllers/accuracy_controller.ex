@@ -20,13 +20,9 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         } = params
       )
       when not is_nil(route_ids) and not is_nil(direction_id) and byte_size(bin) > 0 do
-    mode_atom = PredictionAnalyzer.Utilities.string_to_mode(mode)
-    routes = PredictionAnalyzer.Utilities.routes_for_mode(mode_atom)
-
-    request_uri = conn |> current_url(params) |> URI.parse()
-    params_string = request_uri.query
-
     if time_filters_present?(filter_params) do
+      %{query: params_string} = conn |> current_url(params) |> URI.parse()
+
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
 
       [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
@@ -38,7 +34,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             aggregate_mean_error(acc.mean_error, acc.num_predictions),
             aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
           ],
-          where: acc.environment == "prod" and acc.route_id in ^routes
+          where: acc.environment == "prod"
         )
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
@@ -54,7 +50,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             aggregate_mean_error(acc.mean_error, acc.num_predictions),
             aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
           ],
-          where: acc.environment == "dev-green" and acc.route_id in ^routes
+          where: acc.environment == "dev-green"
         )
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
@@ -74,7 +70,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
             aggregate_mean_error(acc.mean_error, acc.num_predictions),
             aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
           ],
-          where: acc.environment == "dev-blue" and acc.route_id in ^routes
+          where: acc.environment == "dev-blue"
         )
         |> PredictionAnalyzer.Repo.one!(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
@@ -159,7 +155,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         dev_blue_mean_error: dev_blue_mean_error,
         dev_blue_rmse: dev_blue_rmse,
         error_msg: error_msg,
-        mode: mode_atom,
+        mode: PredictionAnalyzer.Utilities.string_to_mode(mode),
         bins:
           Filters.bins()
           |> Enum.map(fn {bin, {bin_min, _bin_max, bin_error_min, bin_error_max}} ->
