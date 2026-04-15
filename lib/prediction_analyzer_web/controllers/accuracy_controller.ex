@@ -24,6 +24,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       %{query: params_string} = conn |> current_url(params) |> URI.parse()
 
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
+      accuracies_by_chart_range = Filters.stats_by_chart_range(relevant_accuracies, filter_params)
 
       [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
         from(
@@ -82,8 +83,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         )
 
       prod_accuracies =
-        relevant_accuracies
-        |> Filters.stats_by_chart_range(filter_params)
+        accuracies_by_chart_range
         |> where(environment: "prod")
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
@@ -94,8 +94,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         end)
 
       dev_green_accuracies =
-        relevant_accuracies
-        |> Filters.stats_by_chart_range(filter_params)
+        accuracies_by_chart_range
         |> where(environment: "dev-green")
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
@@ -106,8 +105,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         end)
 
       dev_blue_accuracies =
-        relevant_accuracies
-        |> Filters.stats_by_chart_range(filter_params)
+        accuracies_by_chart_range
         |> where(environment: "dev-blue")
         |> PredictionAnalyzer.Repo.all(
           telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
