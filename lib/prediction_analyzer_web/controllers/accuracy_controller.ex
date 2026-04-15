@@ -6,6 +6,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   import Ecto.Query, only: [from: 2]
   import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
 
+  @envs ["prod", "dev-green", "dev-blue"]
+
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(
         conn,
@@ -26,18 +28,30 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
       accuracies_by_chart_range = Filters.stats_by_chart_range(relevant_accuracies, filter_params)
 
-      [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse] =
-        get_accuracy_context(relevant_accuracies, params_string, "prod")
+      accuracy_context_tasks =
+        for env <- @envs do
+          Task.Supervisor.async(
+            PredictionAnalyzer.TaskSupervisor,
+            fn -> get_accuracy_context(relevant_accuracies, params_string, env) end
+          )
+        end
 
-      [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse] =
-        get_accuracy_context(relevant_accuracies, params_string, "dev-green")
+      accuracy_tasks =
+        for env <- @envs do
+          Task.Supervisor.async(
+            PredictionAnalyzer.TaskSupervisor,
+            fn -> get_accuracies(accuracies_by_chart_range, params_string, env) end
+          )
+        end
 
-      [dev_blue_num_accurate, dev_blue_num_predictions, dev_blue_mean_error, dev_blue_rmse] =
-        get_accuracy_context(relevant_accuracies, params_string, "dev-blue")
-
-      prod_accuracies = get_accuracies(accuracies_by_chart_range, params_string, "prod")
-      dev_green_accuracies = get_accuracies(accuracies_by_chart_range, params_string, "dev-green")
-      dev_blue_accuracies = get_accuracies(accuracies_by_chart_range, params_string, "dev-blue")
+      [
+        [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse],
+        [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse],
+        [dev_blue_num_accurate, dev_blue_num_predictions, dev_blue_mean_error, dev_blue_rmse],
+        prod_accuracies,
+        dev_green_accuracies,
+        dev_blue_accuracies
+      ] = Task.await_many(accuracy_context_tasks ++ accuracy_tasks, :timer.minutes(5))
 
       sort_function =
         if filter_params["chart_range"] == "Daily" do
