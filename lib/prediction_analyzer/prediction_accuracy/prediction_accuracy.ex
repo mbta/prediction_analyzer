@@ -47,13 +47,12 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy do
   def filter(params) do
     q = from(acc in __MODULE__, [])
 
-    with {:ok, q} <- filter_by_route(q, params["route_ids"]),
+    with {:ok, q} <- filter_by_route(q, params["route_ids"], params["mode"]),
          {:ok, q} <- filter_by_stop(q, params["stop_ids"]),
          {:ok, q} <- filter_by_direction(q, params["direction_id"]),
          {:ok, q} <- filter_by_bin(q, params["bin"]),
          {:ok, q} <- filter_by_kind(q, params["kinds"]),
          {:ok, q} <- filter_by_in_next_two(q, params["in_next_two"]),
-         {:ok, q} <- filter_by_mode(q, params["mode"]),
          {:ok, q} <-
            filter_by_timeframe(
              q,

@@ -3,6 +3,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
   alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
   alias PredictionAnalyzer.Filters
+  import Ecto.Query, only: [where: 2]
   require Logger
 
   @drop_threshold 0.1
@@ -41,9 +42,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     yesterday_accs =
       yesterday_query
-      |> Filters.stats_by_environment_and_chart_range("prod", %{
-        "chart_range" => "Hourly"
-      })
+      |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+      |> where(environment: "prod")
       |> PredictionAnalyzer.Repo.all()
 
     {previous_day_query, _} =
@@ -55,9 +55,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     previous_day_accs =
       previous_day_query
-      |> Filters.stats_by_environment_and_chart_range("prod", %{
-        "chart_range" => "Hourly"
-      })
+      |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+      |> where(environment: "prod")
       |> PredictionAnalyzer.Repo.all()
 
     yesterday_accuracy = get_accuracy(yesterday_accs)

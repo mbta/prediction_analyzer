@@ -4,7 +4,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
   alias PredictionAnalyzer.Filters
   alias PredictionAnalyzer.Repo
 
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query, only: [from: 2, where: 2]
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
@@ -255,7 +255,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     end
   end
 
-  describe "stats_by_environment_and_chart_range/3" do
+  describe "stats_by_chart_range/3" do
     test "groups by environment and hour and sums" do
       insert_accuracy("prod", 10, 0, 101, 99)
       insert_accuracy("prod", 10, 0, 108, 102)
@@ -268,16 +268,14 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       prod_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_environment_and_chart_range("prod", %{
-          "chart_range" => "Hourly"
-        })
+        |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+        |> where(environment: "prod")
         |> Repo.all()
 
       dev_green_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_environment_and_chart_range("dev-green", %{
-          "chart_range" => "Hourly"
-        })
+        |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+        |> where(environment: "dev-green")
         |> Repo.all()
 
       assert prod_stats == [
@@ -306,16 +304,14 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       prod_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_environment_and_chart_range("prod", %{
-          "chart_range" => "Daily"
-        })
+        |> Filters.stats_by_chart_range(%{"chart_range" => "Daily"})
+        |> where(environment: "prod")
         |> Repo.all()
 
       dev_green_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_environment_and_chart_range("dev-green", %{
-          "chart_range" => "Daily"
-        })
+        |> Filters.stats_by_chart_range(%{"chart_range" => "Daily"})
+        |> where(environment: "dev-green")
         |> Repo.all()
 
       assert prod_stats == [
@@ -359,9 +355,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       prod_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_environment_and_chart_range("prod", %{
-          "chart_range" => "Hourly"
-        })
+        |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+        |> where(environment: "prod")
         |> Repo.all()
 
       assert prod_stats == [

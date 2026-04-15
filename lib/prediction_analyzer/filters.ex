@@ -38,29 +38,44 @@ defmodule PredictionAnalyzer.Filters do
   @spec kind_labels() :: [{String.t(), String.t()}]
   def kind_labels, do: @kind_labels
 
-  @spec filter_by_route(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
-  def filter_by_route(q, route_ids) when is_binary(route_ids) and route_ids != "" do
-    route_id_list = String.split(route_ids, ",")
-    {:ok, from(acc in q, where: acc.route_id in ^route_id_list)}
+  @spec filter_by_route(Ecto.Query.t(), any(), any()) ::
+          {:ok, Ecto.Query.t()} | {:error, String.t()}
+  def filter_by_route(q, route_ids, mode) do
+    # The "route_ids" and "mode" filters both translate to checks on the DB column prediction_accuracy.route_id.
+    # We can improve query performance by simplifying to a single membership check against the intersection of the two.
+    route_ids_from_route_ids_filter =
+      if is_binary(route_ids) and route_ids != "" do
+        route_ids
+        |> String.split(",")
+        |> MapSet.new()
+      else
+        nil
+      end
+
+    route_ids_from_mode_filter =
+      if is_binary(mode) and mode != "" do
+        mode
+        |> PredictionAnalyzer.Utilities.string_to_mode()
+        |> PredictionAnalyzer.Utilities.routes_for_mode()
+        |> MapSet.new()
+      else
+        nil
+      end
+
+    filter_sets = [route_ids_from_route_ids_filter, route_ids_from_mode_filter]
+
+    if Enum.all?(filter_sets, &is_nil/1) do
+      {:ok, q}
+    else
+      route_id_list =
+        filter_sets
+        |> Enum.reject(&is_nil/1)
+        |> Enum.reduce(&MapSet.intersection/2)
+        |> Enum.sort()
+
+      {:ok, from(acc in q, where: acc.route_id in ^route_id_list)}
+    end
   end
-
-  def filter_by_route(q, _), do: {:ok, q}
-
-  @spec filter_by_mode(Ecto.Query.t(), any()) :: {:ok, Ecto.Query.t()} | {:error, String.t()}
-  def filter_by_mode(q, mode) when is_binary(mode) and mode != "" do
-    routes =
-      mode
-      |> PredictionAnalyzer.Utilities.string_to_mode()
-      |> PredictionAnalyzer.Utilities.routes_for_mode()
-
-    {:ok,
-     from(
-       acc in q,
-       where: acc.route_id in ^routes
-     )}
-  end
-
-  def filter_by_mode(q, _), do: {:ok, q}
 
   @spec filter_by_stop(Ecto.Query.t(), [String.t()]) ::
           {:ok, Ecto.Query.t()} | {:error, String.t()}
@@ -150,17 +165,13 @@ defmodule PredictionAnalyzer.Filters do
 
   hour | prod total | prod accurate | dev-green total | dev-green accurate
   """
-  @spec stats_by_environment_and_chart_range(Ecto.Query.t(), String.t(), map()) :: Ecto.Query.t()
-  def stats_by_environment_and_chart_range(q, environment, %{
-        "chart_range" => "Hourly",
-        "timeframe_resolution" => tr
-      })
+  @spec stats_by_chart_range(Ecto.Query.t(), map()) :: Ecto.Query.t()
+  def stats_by_chart_range(q, %{"chart_range" => "Hourly", "timeframe_resolution" => tr})
       when tr != "60" do
     from(
       acc in q,
       group_by: [:hour_of_day, fragment("resolution_bucket")],
       order_by: [:hour_of_day, fragment("resolution_bucket")],
-      where: acc.environment == ^environment,
       select: [
         {acc.hour_of_day, resolution_bucket(acc.minute_of_hour, ^String.to_integer(tr))},
         sum(acc.num_predictions),
@@ -171,7 +182,7 @@ defmodule PredictionAnalyzer.Filters do
     )
   end
 
-  def stats_by_environment_and_chart_range(q, environment, filters) do
+  def stats_by_chart_range(q, filters) do
     scope =
       case filters["chart_range"] do
         "Daily" -> :service_date
@@ -183,7 +194,6 @@ defmodule PredictionAnalyzer.Filters do
       acc in q,
       group_by: ^scope,
       order_by: ^scope,
-      where: acc.environment == ^environment,
       select: [
         field(acc, ^scope),
         sum(acc.num_predictions),

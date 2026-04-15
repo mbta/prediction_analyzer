@@ -13,7 +13,8 @@ defmodule PredictionAnalyzer.Application do
       PredictionAnalyzer.Repo,
       {Oban, Application.fetch_env!(:prediction_analyzer, Oban)},
       {Phoenix.PubSub, name: PredictionAnalyzerWeb.PubSub},
-      PredictionAnalyzerWeb.Endpoint
+      PredictionAnalyzerWeb.Endpoint,
+      {Task.Supervisor, name: PredictionAnalyzer.TaskSupervisor}
     ]
 
     workers =
