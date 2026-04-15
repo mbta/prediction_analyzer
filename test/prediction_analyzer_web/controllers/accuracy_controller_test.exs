@@ -42,11 +42,11 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
 
     Logger.configure(level: old_level)
     assert log =~ "accuracy_context_query_time env=prod"
-    assert log =~ "accuracy_context_query_time env=dev_green"
-    assert log =~ "accuracy_context_query_time env=dev_blue"
+    assert log =~ "accuracy_context_query_time env=dev-green"
+    assert log =~ "accuracy_context_query_time env=dev-blue"
     assert log =~ "accuracies_query_time env=prod"
-    assert log =~ "accuracies_query_time env=dev_green"
-    assert log =~ "accuracies_query_time env=dev_blue"
+    assert log =~ "accuracies_query_time env=dev-green"
+    assert log =~ "accuracies_query_time env=dev-blue"
 
     assert response =~ "From 150 accurate out of 200 total predictions"
     assert response =~ "75.0"
