@@ -26,7 +26,6 @@ defmodule PredictionAnalyzerWeb.Router do
 
   scope "/accuracy", PredictionAnalyzerWeb do
     pipe_through(:browser)
-    get("/debug", AccuracyController, :debug)
     get("/subway", AccuracyController, :subway)
     get("/csv", AccuracyController, :csv)
     get("/commuter_rail", AccuracyController, :commuter_rail)

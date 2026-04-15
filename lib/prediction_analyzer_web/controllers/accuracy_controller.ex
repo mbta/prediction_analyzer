@@ -108,39 +108,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     redirect_with_default_filters(conn, params)
   end
 
-  @spec debug(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def debug(
-        conn,
-        %{
-          "filters" =>
-            %{
-              "route_ids" => route_ids,
-              "direction_id" => direction_id,
-              "bin" => bin
-            } = filter_params
-        } = params
-      )
-      when not is_nil(route_ids) and not is_nil(direction_id) and byte_size(bin) > 0 do
-    if time_filters_present?(filter_params) do
-      {relevant_accuracies, _} = PredictionAccuracy.filter(filter_params)
-      accuracies_by_chart_range = Filters.stats_by_chart_range(relevant_accuracies, filter_params)
-
-      json(
-        conn,
-        Map.merge(
-          explain_accuracy_context(relevant_accuracies),
-          explain_accuracies(accuracies_by_chart_range)
-        )
-      )
-    else
-      redirect_with_default_filters(conn, params, :debug)
-    end
-  end
-
-  def debug(conn, params) do
-    redirect_with_default_filters(conn, params, :debug)
-  end
-
   defp get_accuracy_context(relevant_accuracies, params_string, env) do
     from(
       acc in relevant_accuracies,
@@ -158,34 +125,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     )
   end
 
-  defp explain_accuracy_context(relevant_accuracies) do
-    q =
-      from(
-        acc in relevant_accuracies,
-        select: [
-          sum(acc.num_accurate_predictions),
-          sum(acc.num_predictions),
-          aggregate_mean_error(acc.mean_error, acc.num_predictions),
-          aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
-        ],
-        where: acc.environment == "prod"
-      )
-
-    explain = PredictionAnalyzer.Repo.explain(:all, q, format: :map, timeout: :timer.minutes(5))
-
-    explain_analyze =
-      PredictionAnalyzer.Repo.explain(:all, q,
-        format: :map,
-        timeout: :timer.minutes(5),
-        analyze: true
-      )
-
-    %{
-      accuracy_context_explain: explain,
-      accuracy_context_explain_analyze: explain_analyze
-    }
-  end
-
   defp get_accuracies(accuracies_by_chart_range, params_string, env) do
     from(acc in accuracies_by_chart_range, where: acc.environment == ^env)
     |> PredictionAnalyzer.Repo.all(
@@ -195,21 +134,6 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
       {scope, accuracy}
     end)
-  end
-
-  defp explain_accuracies(accuracies_by_chart_range) do
-    q = from(acc in accuracies_by_chart_range, where: acc.environment == "prod")
-
-    explain = PredictionAnalyzer.Repo.explain(:all, q, format: :map, timeout: :timer.minutes(5))
-
-    explain_analyze =
-      PredictionAnalyzer.Repo.explain(:all, q,
-        format: :map,
-        timeout: :timer.minutes(5),
-        analyze: true
-      )
-
-    %{accuracies_explain: explain, accuracies_explain_analyze: explain_analyze}
   end
 
   def subway(conn, params) do
