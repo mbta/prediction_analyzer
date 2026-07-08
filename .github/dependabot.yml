@@ -22,6 +22,8 @@ updates:
   - dependency-name: plug
     versions:
     - 1.11.1
+  cooldown:
+    default-days: 7
 - package-ecosystem: npm
   directory: "/assets"
   schedule:
@@ -88,3 +90,5 @@ updates:
   - dependency-name: sass-loader
     versions:
     - 10.1.1
+  cooldown:
+    default-days: 7
