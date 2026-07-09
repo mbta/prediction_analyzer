@@ -24,3 +24,6 @@ jobs:
       aws-role-arn: ${{ secrets.AWS_ROLE_ARN }}
       docker-repo: ${{ secrets.DOCKER_REPO }}
       slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+    permissions:
+      contents: read
+      id-token: write # Needed to communicate with AWS
