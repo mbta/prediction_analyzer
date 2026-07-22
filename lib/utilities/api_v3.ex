@@ -3,9 +3,12 @@ defmodule PredictionAnalyzer.Utilities.APIv3 do
 
   @spec request(String.t(), [{String.t(), String.t()}], Keyword.t()) ::
           {:error, any()} | {:ok, map()}
-  def request(path, extra_headers \\ [], opts) do
-    base_url = Application.get_env(:prediction_analyzer, :api_base_url)
-
+  def request(
+        path,
+        extra_headers \\ [],
+        base_url \\ Application.get_env(:prediction_analyzer, :api_base_url),
+        opts
+      ) do
     headers =
       extra_headers ++ api_key_headers(Application.get_env(:prediction_analyzer, :api_v3_key))
 
