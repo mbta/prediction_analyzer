@@ -128,7 +128,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
             body
             |> Jason.decode!()
             |> Map.get("data")
-            |> parse_commuter_rail(state.environmnt)
+            |> parse_commuter_rail(state.environment)
             |> Enum.into(%{}, fn v -> {v.id, v} end)
             |> Comparator.compare(state.commuter_rail_vehicles)
 
