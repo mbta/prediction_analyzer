@@ -189,9 +189,9 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     []
   end
 
-  defp parse_commuter_rail(data, _env) do
+  defp parse_commuter_rail(data, env) do
     Enum.flat_map(data, fn d ->
-      case Vehicle.parse_commuter_rail(d) do
+      case Vehicle.parse_commuter_rail(d, env) do
         {:ok, vehicle} -> [vehicle]
         _ -> []
       end
