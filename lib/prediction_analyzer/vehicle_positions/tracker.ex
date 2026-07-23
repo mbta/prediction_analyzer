@@ -96,10 +96,6 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     end
   end
 
-  def handle_info(:track_commuter_rail_vehicles, %{environment: "dev-green"} = state) do
-    {:noreply, state}
-  end
-
   def handle_info(:track_commuter_rail_vehicles, %{environment: "dev-blue"} = state) do
     {:noreply, state}
   end
@@ -114,18 +110,25 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
     schedule_commuter_rail_fetch(self())
 
+    env =
+      case state.environment do
+        "dev-green" -> :dev_green
+        _ -> :prod
+      end
+
     state =
       case PredictionAnalyzer.Utilities.APIv3.request(
              url_path,
              [{"If-Modified-Since", state.commuter_rail_last_modified}],
-             params: params
+             params: params,
+             env: env
            ) do
         {:ok, %{body: body, headers: headers}} ->
           new_vehicles =
             body
             |> Jason.decode!()
             |> Map.get("data")
-            |> parse_commuter_rail("prod")
+            |> parse_commuter_rail(state.environmnt)
             |> Enum.into(%{}, fn v -> {v.id, v} end)
             |> Comparator.compare(state.commuter_rail_vehicles)
 
