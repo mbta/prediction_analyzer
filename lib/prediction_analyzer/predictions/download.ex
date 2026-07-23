@@ -52,7 +52,8 @@ defmodule PredictionAnalyzer.Predictions.Download do
 
     base_url = Application.get_env(:prediction_analyzer, base_url_var)
 
-    case PredictionAnalyzer.Utilities.APIv3.request(url_path, [params: params],
+    case PredictionAnalyzer.Utilities.APIv3.request(url_path,
+           params: params,
            base_url: base_url
          ) do
       {:ok, %{body: body, headers: headers}} ->
