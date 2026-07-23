@@ -135,7 +135,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
   end
 
   def handle_info(:get_commuter_rail_dev_green_predictions, _state) do
-    schedule_commuter_rail_fetch(self(), 60_000)
+    schedule_commuter_rail_dev_green_fetch(self(), 60_000)
     predictions = get_commuter_rail_predictions(:dev_green)
     {:noreply, predictions}
   end

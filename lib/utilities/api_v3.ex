@@ -14,7 +14,7 @@ defmodule PredictionAnalyzer.Utilities.APIv3 do
     http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
 
     base_url =
-      Keyword.get(opts, :base_url) || Application.get_env(:prediction_analzer, :api_base_url)
+      Keyword.get(opts, :base_url) || Application.get_env(:prediction_analyzer, :api_base_url)
 
     opts = Keyword.delete(opts, :base_url)
 
