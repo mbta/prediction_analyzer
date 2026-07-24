@@ -127,7 +127,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Vehicle do
      }}
   end
 
-  def parse_commuter_rail(_, env), do: :error
+  def parse_commuter_rail(_, _env), do: :error
 
   defp status_atom("INCOMING_AT"), do: :INCOMING_AT
   defp status_atom("IN_TRANSIT_TO"), do: :IN_TRANSIT_TO
