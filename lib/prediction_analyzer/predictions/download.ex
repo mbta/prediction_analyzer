@@ -33,7 +33,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     |> store_subway_predictions(env)
   end
 
-  @spec get_commuter_rail_predictions(String.t()) ::
+  @spec get_commuter_rail_predictions(:prod | :dev_green) ::
           {integer(), nil | [term()]} | no_return()
   def get_commuter_rail_predictions(env) do
     url_path = "predictions"
