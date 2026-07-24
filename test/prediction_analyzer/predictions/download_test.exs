@@ -99,16 +99,18 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
       assert log =~ "Could not download commuter rail predictions"
     end
 
-    test "downloads and stores prod predictions" do
-      Download.get_commuter_rail_predictions(:prod)
-      query = from(p in Prediction, select: [p.stop_id, p.direction_id, p.vehicle_id])
+    for env <- [:dev_green, :prod] do
+      test "downloads and stores #{env} predictions" do
+        Download.get_commuter_rail_predictions(unquote(env))
+        query = from(p in Prediction, select: [p.stop_id, p.direction_id, p.vehicle_id])
 
-      preds = PredictionAnalyzer.Repo.all(query)
+        preds = PredictionAnalyzer.Repo.all(query)
 
-      assert preds == [
-               ["North Station", 0, "vehicle_id"],
-               ["North Station", 0, "vehicle_id"]
-             ]
+        assert preds == [
+                 ["North Station", 0, "vehicle_id"],
+                 ["North Station", 0, "vehicle_id"]
+               ]
+      end
     end
   end
 
