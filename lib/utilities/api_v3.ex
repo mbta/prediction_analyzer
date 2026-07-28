@@ -3,13 +3,29 @@ defmodule PredictionAnalyzer.Utilities.APIv3 do
 
   @spec request(String.t(), [{String.t(), String.t()}], Keyword.t()) ::
           {:error, any()} | {:ok, map()}
-  def request(path, extra_headers \\ [], opts) do
-    base_url = Application.get_env(:prediction_analyzer, :api_base_url)
+  def request(
+        path,
+        extra_headers \\ [],
+        opts
+      ) do
+    env = Keyword.get(opts, :env)
+
+    {base_url, api_key_headers} =
+      case env do
+        :dev_green ->
+          {Application.get_env(:prediction_analyzer, :api_dev_green_base_url), []}
+
+        _ ->
+          {Application.get_env(:prediction_analyzer, :api_base_url),
+           api_key_headers(Application.get_env(:prediction_analyzer, :api_v3_key))}
+      end
 
     headers =
-      extra_headers ++ api_key_headers(Application.get_env(:prediction_analyzer, :api_v3_key))
+      extra_headers ++ api_key_headers
 
     http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
+
+    opts = Keyword.delete(opts, :base_url)
 
     with {:ok, req} <-
            http_fetcher.get(

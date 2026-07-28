@@ -18,6 +18,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     schedule_dev_green_fetch(self(), initial_dev_green_fetch_ms)
     schedule_dev_blue_fetch(self(), initial_dev_blue_fetch_ms)
     schedule_commuter_rail_fetch(self(), initial_commuter_rail_fetch_ms)
+    schedule_commuter_rail_dev_green_fetch(self(), initial_commuter_rail_fetch_ms)
 
     {:ok, %{}}
   end
@@ -32,8 +33,9 @@ defmodule PredictionAnalyzer.Predictions.Download do
     |> store_subway_predictions(env)
   end
 
-  @spec get_commuter_rail_predictions() :: {integer(), nil | [term()]} | no_return()
-  def get_commuter_rail_predictions() do
+  @spec get_commuter_rail_predictions(:prod | :dev_green) ::
+          {integer(), nil | [term()]} | no_return()
+  def get_commuter_rail_predictions(env) do
     url_path = "predictions"
 
     params = %{
@@ -42,13 +44,24 @@ defmodule PredictionAnalyzer.Predictions.Download do
       "include" => "vehicle"
     }
 
-    case PredictionAnalyzer.Utilities.APIv3.request(url_path, params: params) do
+    base_url_var =
+      case env do
+        :prod -> :api_base_url
+        :dev_green -> :api_dev_green_base_url
+      end
+
+    base_url = Application.get_env(:prediction_analyzer, base_url_var)
+
+    case PredictionAnalyzer.Utilities.APIv3.request(url_path,
+           params: params,
+           base_url: base_url
+         ) do
       {:ok, %{body: body, headers: headers}} ->
         last_modified = headers |> Enum.into(%{}) |> Map.get("last-modified")
 
         body
         |> Jason.decode!()
-        |> store_commuter_rail_predictions(last_modified)
+        |> store_commuter_rail_predictions(env, last_modified)
 
       {:error, e} ->
         Logger.warning("Could not download commuter rail predictions; received: #{inspect(e)}")
@@ -91,7 +104,11 @@ defmodule PredictionAnalyzer.Predictions.Download do
   end
 
   defp schedule_commuter_rail_fetch(pid, ms) do
-    Process.send_after(pid, :get_commuter_rail_predictions, ms)
+    Process.send_after(pid, :get_commuter_rail_prod_predictions, ms)
+  end
+
+  defp schedule_commuter_rail_dev_green_fetch(pid, ms) do
+    Process.send_after(pid, :get_commuter_rail_dev_green_predictions, ms)
   end
 
   def handle_info(:get_prod_predictions, _state) do
@@ -112,9 +129,15 @@ defmodule PredictionAnalyzer.Predictions.Download do
     {:noreply, predictions}
   end
 
-  def handle_info(:get_commuter_rail_predictions, _state) do
+  def handle_info(:get_commuter_rail_prod_predictions, _state) do
     schedule_commuter_rail_fetch(self(), 60_000)
-    predictions = get_commuter_rail_predictions()
+    predictions = get_commuter_rail_predictions(:prod)
+    {:noreply, predictions}
+  end
+
+  def handle_info(:get_commuter_rail_dev_green_predictions, _state) do
+    schedule_commuter_rail_dev_green_fetch(self(), 60_000)
+    predictions = get_commuter_rail_predictions(:dev_green)
     {:noreply, predictions}
   end
 
@@ -214,7 +237,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     Filters.kinds() |> Map.get(arrival["uncertainty"] || departure["uncertainty"])
   end
 
-  defp store_commuter_rail_predictions(%{"data" => data}, last_modified) do
+  defp store_commuter_rail_predictions(%{"data" => data}, env, last_modified) do
     {:ok, timestamp} = last_modified |> Timex.parse("{RFC1123}")
     timestamp = DateTime.to_unix(timestamp)
 
@@ -246,7 +269,11 @@ defmodule PredictionAnalyzer.Predictions.Download do
 
           vehicle_id ->
             %{
-              environment: "prod",
+              environment:
+                case env do
+                  :prod -> "prod"
+                  :dev_green -> "dev-green"
+                end,
               file_timestamp: timestamp,
               vehicle_id: vehicle_id,
               trip_id: prediction["relationships"]["trip"]["data"]["id"],
@@ -266,7 +293,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
     {_, _} = PredictionAnalyzer.Repo.insert_all(Prediction, predictions)
   end
 
-  defp store_commuter_rail_predictions(_, _) do
+  defp store_commuter_rail_predictions(_, _, _) do
     nil
   end
 end

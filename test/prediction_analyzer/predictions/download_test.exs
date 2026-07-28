@@ -31,7 +31,8 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
 
       assert_received :get_prod_predictions
       assert_received :get_dev_green_predictions
-      assert_received :get_commuter_rail_predictions
+      assert_received :get_commuter_rail_prod_predictions
+      assert_received :get_commuter_rail_dev_green_predictions
     end
   end
 
@@ -81,13 +82,13 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
     end
   end
 
-  describe "get_commuter_rail_predictions/0" do
+  describe "get_commuter_rail_predictions/1" do
     test "when theres an error, gets no predictions" do
       reassign_env(:http_fetcher, FailedHTTPFetcher)
 
       log =
         capture_log([level: :warning], fn ->
-          Download.get_commuter_rail_predictions()
+          Download.get_commuter_rail_predictions(:prod)
         end)
 
       query = from(p in Prediction, select: [p.stop_id, p.direction_id, p.vehicle_id])
@@ -98,16 +99,18 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
       assert log =~ "Could not download commuter rail predictions"
     end
 
-    test "downloads and stores prod predictions" do
-      Download.get_commuter_rail_predictions()
-      query = from(p in Prediction, select: [p.stop_id, p.direction_id, p.vehicle_id])
+    for env <- [:dev_green, :prod] do
+      test "downloads and stores #{env} predictions" do
+        Download.get_commuter_rail_predictions(unquote(env))
+        query = from(p in Prediction, select: [p.stop_id, p.direction_id, p.vehicle_id])
 
-      preds = PredictionAnalyzer.Repo.all(query)
+        preds = PredictionAnalyzer.Repo.all(query)
 
-      assert preds == [
-               ["North Station", 0, "vehicle_id"],
-               ["North Station", 0, "vehicle_id"]
-             ]
+        assert preds == [
+                 ["North Station", 0, "vehicle_id"],
+                 ["North Station", 0, "vehicle_id"]
+               ]
+      end
     end
   end
 

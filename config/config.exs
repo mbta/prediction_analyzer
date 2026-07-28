@@ -28,6 +28,7 @@ config :prediction_analyzer, aws_rds_mod: ExAws.RDS
 config :prediction_analyzer, ecto_repos: [PredictionAnalyzer.Repo]
 config :prediction_analyzer, http_fetcher: HTTPoison
 config :prediction_analyzer, :api_base_url, "https://api-v3.mbta.com/"
+config :prediction_analyzer, :api_dev_green_base_url, "https://api-dev-green.mbtace.com/"
 config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks.NoOp
 config :prediction_analyzer, :stop_name_fetcher, PredictionAnalyzer.StopNameFetcher
 config :prediction_analyzer, :timezone, "America/New_York"

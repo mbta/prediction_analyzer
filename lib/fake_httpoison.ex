@@ -108,15 +108,21 @@ defmodule FakeHTTPoison do
   end
 
   def get(
-        "https://api-v3.mbta.com/vehicles",
+        url,
         _,
         timeout: 2000,
         recv_timeout: 2000,
         params: %{
           "filter[route]" =>
             "CR-Fitchburg,CR-Lowell,CR-Haverhill,CR-Newburyport,CR-Worcester,CR-Needham,CR-Franklin,CR-Providence,CR-Fairmount,CR-Middleborough,CR-Kingston,CR-Greenbush,CR-Foxboro"
-        }
-      ) do
+        },
+        env: env
+      )
+      when env in [:prod, :dev_green] and
+             url in [
+               "https://api-v3.mbta.com/vehicles",
+               "https://api-dev-green.mbtace.com/vehicles"
+             ] do
     body = %{
       "data" => [
         %{

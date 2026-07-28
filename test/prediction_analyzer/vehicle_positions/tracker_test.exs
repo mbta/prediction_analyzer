@@ -204,35 +204,37 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   end
 
   describe "handle_info :track_commuter_rail_vehicles" do
-    test "updates the state with new vehicles and a new last-modified time" do
-      state = %{
-        aws_vehicle_positions_url: "vehiclepositions",
-        environment: "prod",
-        subway_vehicles: %{},
-        commuter_rail_vehicles: %{},
-        commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
-      }
+    for env <- ["dev-green", "prod"] do
+      test "updates the #{env} state with new vehicles and a new last-modified time" do
+        state = %{
+          aws_vehicle_positions_url: "vehiclepositions",
+          environment: unquote(env),
+          subway_vehicles: %{},
+          commuter_rail_vehicles: %{},
+          commuter_rail_last_modified: "Thu, 01 Jan 1970 00:00:00 GMT"
+        }
 
-      assert {
-               :noreply,
-               %{
-                 commuter_rail_vehicles: %{
-                   "1629" => %PredictionAnalyzer.VehiclePositions.Vehicle{
-                     current_status: :IN_TRANSIT_TO,
-                     direction_id: 1,
-                     environment: "prod",
-                     id: "1629",
-                     is_deleted: false,
-                     label: "1629",
-                     route_id: "CR-Lowell",
-                     stop_id: "North Station",
-                     timestamp: 1_553_795_877,
-                     trip_id: "CR-Weekday-Fall-18-324"
-                   }
-                 },
-                 commuter_rail_last_modified: "Sat, 10 Sep 1977 08:25:00 GMT"
-               }
-             } = Tracker.handle_info(:track_commuter_rail_vehicles, state)
+        assert {
+                 :noreply,
+                 %{
+                   commuter_rail_vehicles: %{
+                     "1629" => %PredictionAnalyzer.VehiclePositions.Vehicle{
+                       current_status: :IN_TRANSIT_TO,
+                       direction_id: 1,
+                       environment: unquote(env),
+                       id: "1629",
+                       is_deleted: false,
+                       label: "1629",
+                       route_id: "CR-Lowell",
+                       stop_id: "North Station",
+                       timestamp: 1_553_795_877,
+                       trip_id: "CR-Weekday-Fall-18-324"
+                     }
+                   },
+                   commuter_rail_last_modified: "Sat, 10 Sep 1977 08:25:00 GMT"
+                 }
+               } = Tracker.handle_info(:track_commuter_rail_vehicles, state)
+      end
     end
 
     test "handles 304s (Not Modified) gracefully" do
@@ -293,10 +295,10 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
       assert log =~ "Could not download commuter rail vehicles"
     end
 
-    test "does nothing on dev-green" do
+    test "does nothing on dev-blue" do
       state = %{
         aws_vehicle_positions_url: "vehiclepositions",
-        environment: "dev-green",
+        environment: "dev-blue",
         subway_vehicles: %{},
         commuter_rail_vehicles: %{}
       }
