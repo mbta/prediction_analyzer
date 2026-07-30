@@ -58,7 +58,9 @@ def ms_to_next_hour(local_now: datetime | None = None) -> int:
 
 def ms_to_next_week(local_now: datetime | None = None) -> int:
     local_now = _ensure_tz(local_now or datetime.now(TZ))
-    days_to_end_of_week = (6 - local_now.weekday()) % 7
+    # Mirrors Timex.days_to_end_of_week(:sun), where week starts on Sunday
+    # and ends on Saturday.
+    days_to_end_of_week = (5 - local_now.weekday()) % 7
     if days_to_end_of_week == 0:
         days_to_end_of_week = 7
     target = (local_now + timedelta(days=days_to_end_of_week)).replace(hour=1, minute=0, second=0, microsecond=0)
