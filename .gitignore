@@ -28,3 +28,9 @@ npm-debug.log
 
 # Local environment configuration
 .envrc
+
+# Python artifacts
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
