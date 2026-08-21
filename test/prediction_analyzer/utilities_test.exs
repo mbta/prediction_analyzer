@@ -102,5 +102,11 @@ defmodule PredictionAnalyzer.UtilitiesTest do
     test "maps non-terminal stop ID to itself" do
       assert Utilities.generic_stop_id("70063") == "70063"
     end
+
+    test "associates all things Union Square with 70504" do
+      assert Utilities.generic_stop_id("Union Square-01") == "70504"
+      assert Utilities.generic_stop_id("Union Square-02") == "70504"
+      assert Utilities.generic_stop_id("70503") == "70504"
+    end
   end
 end

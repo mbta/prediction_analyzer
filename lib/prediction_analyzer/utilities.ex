@@ -99,7 +99,9 @@ defmodule PredictionAnalyzer.Utilities do
   def generic_stop_id("Forest Hills-02"), do: "70001"
   def generic_stop_id("Oak Grove-01"), do: "70036"
   def generic_stop_id("Oak Grove-02"), do: "70036"
-  def generic_stop_id("Union Square-" <> _), do: "70503"
+  # Associate everything having to do with Union Square with 70504
+  def generic_stop_id("Union Square-" <> _), do: "70504"
+  def generic_stop_id("70503"), do: "70504"
   # Trains incoming at 70511 will later show up as stopped at 70512
   def generic_stop_id("70511"), do: "70512"
   def generic_stop_id(stop_id), do: stop_id
