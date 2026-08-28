@@ -45,7 +45,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.0"},
       {:oban, "~> 2.19"},
-      {:phoenix, "~> 1.6.0"},
+      {:phoenix, "~> 1.8.8"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.4", only: :dev},
