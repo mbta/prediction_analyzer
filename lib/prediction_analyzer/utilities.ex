@@ -122,7 +122,7 @@ defmodule PredictionAnalyzer.Utilities do
       "CR-Franklin",
       "CR-Providence",
       "CR-Fairmount",
-      "CR-Middleborough",
+      "CR-NewBedford",
       "CR-Kingston",
       "CR-Greenbush",
       "CR-Foxboro"
