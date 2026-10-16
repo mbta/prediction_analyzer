@@ -114,7 +114,7 @@ defmodule FakeHTTPoison do
         recv_timeout: 2000,
         params: %{
           "filter[route]" =>
-            "CR-Fitchburg,CR-Lowell,CR-Haverhill,CR-Newburyport,CR-Worcester,CR-Needham,CR-Franklin,CR-Providence,CR-Fairmount,CR-Middleborough,CR-Kingston,CR-Greenbush,CR-Foxboro"
+            "CR-Fitchburg,CR-Lowell,CR-Haverhill,CR-Newburyport,CR-Worcester,CR-Needham,CR-Franklin,CR-Providence,CR-Fairmount,CR-NewBedford,CR-Kingston,CR-Greenbush,CR-Foxboro"
         },
         env: env
       )
