@@ -72,6 +72,9 @@ config :prediction_analyzer, :prediction_accuracy_migration,
   # the window that ends after (today - min_days_in_past_for_finalize).
   min_days_in_past_for_finalize: 3
 
+config :sentry,
+  client: Sentry.HackneyClient
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
