@@ -41,8 +41,8 @@ defmodule PredictionAnalyzer.Mixfile do
       {:ecto_sql, "~> 3.13"},
       {:lcov_ex, "~> 0.2", only: :test, runtime: false},
       {:gettext, "~> 0.11"},
-      {:hackney, "~> 1.17.0"},
-      {:httpoison, "~> 1.8.0"},
+      {:hackney, "~> 4.9"},
+      {:httpoison, "~> 3.0"},
       {:jason, "~> 1.0"},
       {:oban, "~> 2.19"},
       {:phoenix, "~> 1.6.0"},
@@ -53,8 +53,8 @@ defmodule PredictionAnalyzer.Mixfile do
       {:plug_cowboy, "~> 2.1"},
       {:plug, "~> 1.10"},
       {:postgrex, ">= 0.0.0"},
-      {:timex, "~> 3.1"},
-      {:sentry, "~> 11.0"},
+      {:timex, "~> 3.7"},
+      {:sentry, "~> 14.0"},
       {:csv, "~> 3.0"}
     ]
   end
