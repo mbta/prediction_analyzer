@@ -26,9 +26,9 @@ defmodule PredictionAnalyzer.Predictions.Download do
   def get_subway_predictions(env) do
     {aws_predictions_url, http_fetcher} = get_vars(env)
     Logger.info("Downloading subway predictions from #{aws_predictions_url}")
-    %{body: body} = http_fetcher.get!(aws_predictions_url)
+    %{body: json_body} = http_fetcher.get!(aws_predictions_url)
 
-    body
+    json_body
     |> Jason.decode!()
     |> store_subway_predictions(env)
   end
@@ -56,12 +56,10 @@ defmodule PredictionAnalyzer.Predictions.Download do
            params: params,
            base_url: base_url
          ) do
-      {:ok, %{body: body, headers: headers}} ->
+      {:ok, %{body: json_decoded_body, headers: headers}} ->
         last_modified = get_in(headers, ["last-modified", Access.at(0)])
 
-        body
-        |> Jason.decode!()
-        |> store_commuter_rail_predictions(env, last_modified)
+        store_commuter_rail_predictions(json_decoded_body, env, last_modified)
 
       {:error, e} ->
         Logger.warning("Could not download commuter rail predictions; received: #{inspect(e)}")

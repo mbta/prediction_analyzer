@@ -315,7 +315,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   end
 
   defmodule SubwayVehicle do
-    def get(_url, _headers) do
+    def get(_url, _opts) do
       data = %{
         "entity" => [
           %{
@@ -392,8 +392,8 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   end
 
   defmodule SubwayVehicleNoStopIDHTTPFetcher do
-    def get(url, headers) do
-      {:ok, %Req.Response{body: body} = response} = SubwayVehicle.get(url, headers)
+    def get(url, opts) do
+      {:ok, %Req.Response{body: body} = response} = SubwayVehicle.get(url, opts)
 
       new_body =
         body

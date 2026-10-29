@@ -57,10 +57,10 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     case state.http_fetcher.get(state.aws_vehicle_positions_url,
            headers: %{"If-Modified-Since" => state.subway_last_modified}
          ) do
-      {:ok, %Req.Response{status: 200, body: body, headers: headers}} ->
+      {:ok, %Req.Response{status: 200, body: json_body, headers: headers}} ->
         {time, new_vehicles} =
           :timer.tc(fn ->
-            body
+            json_body
             |> Jason.decode!()
             |> parse_vehicles(state.environment)
             |> Enum.into(%{}, fn v -> {v.id, v} end)
