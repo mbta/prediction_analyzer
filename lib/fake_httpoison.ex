@@ -1,4 +1,12 @@
 defmodule FakeReq do
+  @doc """
+  Note that Req auto-decodes JSON body when the response a content-type header indicating as such.
+
+  The V3 API _does_ include that header in its responses, so mock responses to V3 API requests have "decoded" bodies.
+
+  S3 _does not_, for the files we usually fetch. So, mock responses to S3 requests have string bodies.
+  """
+
   require Logger
 
   def get(
@@ -8,7 +16,7 @@ defmodule FakeReq do
         receive_timeout: _,
         params: %{"filter[route_type]" => "0,1"}
       ) do
-    body = %{
+    auto_decoded_body = %{
       "data" => [
         %{
           "id" => "70197",
@@ -69,7 +77,7 @@ defmodule FakeReq do
       ]
     }
 
-    {:ok, %Req.Response{status: 200, body: Jason.encode!(body)}}
+    {:ok, %Req.Response{status: 200, body: auto_decoded_body}}
   end
 
   def get(
@@ -79,7 +87,7 @@ defmodule FakeReq do
         receive_timeout: _,
         params: %{"filter[route_type]" => "2"}
       ) do
-    body = %{
+    auto_decoded_body = %{
       "data" => [
         %{
           "id" => "Andover",
@@ -92,7 +100,7 @@ defmodule FakeReq do
       ]
     }
 
-    {:ok, %Req.Response{status: 200, body: Jason.encode!(body)}}
+    {:ok, %Req.Response{status: 200, body: auto_decoded_body}}
   end
 
   def get("https://bad-api-v3.mbta.com/stops", _opts) do
@@ -173,15 +181,15 @@ defmodule FakeReq do
   end
 
   def get!("https://prod.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" = url) do
-    prediction_response_body(url)
+    json_encoded_prediction_response_body(url)
   end
 
   def get!("https://dev_green.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" = url) do
-    prediction_response_body(url)
+    json_encoded_prediction_response_body(url)
   end
 
   def get!("https://dev_blue.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" = url) do
-    prediction_response_body(url)
+    json_encoded_prediction_response_body(url)
   end
 
   def get!(url) do
@@ -189,8 +197,13 @@ defmodule FakeReq do
     %{body: "{}"}
   end
 
+  defp json_encoded_prediction_response_body(url) do
+    resp = prediction_response_body(url)
+    %Req.Response{resp | body: Jason.encode!(resp.body)}
+  end
+
   defp prediction_response_body("https://api-v3.mbta.com/predictions") do
-    body = %{
+    auto_decoded_body = %{
       "data" => [
         %{
           "attributes" => %{
@@ -304,26 +317,19 @@ defmodule FakeReq do
     }
 
     %Req.Response{
-      body: Jason.encode!(body),
+      body: auto_decoded_body,
       headers: %{
-        "x-amz-id-2" => [
-          "MMXRCAYRX5tKu1Yx0n5yWk3l+rk76RvWd3jz9wmqDl4Wud+G+t0PE5ZRqGJUzgkFEAzmTAE9kx0="
-        ],
-        "x-amz-request-id" => ["B96B029654DDF30A"],
         "date" => ["Tue, 30 Oct 2018 17:33:16 GMT"],
         "last-modified" => ["Tue, 30 Oct 2018 17:33:15 GMT"],
-        "etag" => ["\"78891d89780b999f2854e782a5fe5d24\""],
-        "accept-ranges" => ["bytes"],
-        "content-type" => ["application/octet-stream"],
-        "content-length" => ["513838"],
-        "server" => ["AmazonS3"]
+        "content-type" => ["application/vnd.api+json; charset=utf-8"],
+        "content-length" => ["513838"]
       },
       status: 200
     }
   end
 
   defp prediction_response_body(_url) do
-    body = %{
+    auto_decoded_body = %{
       "entity" => [
         %{
           "alert" => nil,
@@ -519,19 +525,12 @@ defmodule FakeReq do
     }
 
     %Req.Response{
-      body: Jason.encode!(body),
+      body: auto_decoded_body,
       headers: %{
-        "x-amz-id-2" => [
-          "MMXRCAYRX5tKu1Yx0n5yWk3l+rk76RvWd3jz9wmqDl4Wud+G+t0PE5ZRqGJUzgkFEAzmTAE9kx0="
-        ],
-        "x-amz-request-id" => ["B96B029654DDF30A"],
-        "date" => ["tue => 30 Oct 2018 17:33:16 GMT"],
+        "date" => ["Tue, 30 Oct 2018 17:33:16 GMT"],
         "last-modified" => ["Tue, 30 Oct 2018 17:33:15 GMT"],
-        "etag" => ["\"78891d89780b999f2854e782a5fe5d24\""],
-        "accept-ranges" => ["bytes"],
-        "content-type" => ["application/octet-stream"],
-        "content-length" => ["513838"],
-        "server" => ["AmazonS3"]
+        "content-type" => ["application/vnd.api+json; charset=utf-8"],
+        "content-length" => ["513838"]
       },
       status: 200
     }
