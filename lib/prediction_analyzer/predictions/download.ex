@@ -57,7 +57,7 @@ defmodule PredictionAnalyzer.Predictions.Download do
            base_url: base_url
          ) do
       {:ok, %{body: body, headers: headers}} ->
-        last_modified = headers |> Enum.into(%{}) |> Map.get("last-modified")
+        last_modified = get_in(headers, ["last-modified", Access.at(0)])
 
         body
         |> Jason.decode!()

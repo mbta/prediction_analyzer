@@ -308,14 +308,9 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
   end
 
   defmodule NotifyGet do
-    def get(url, _headers) do
+    def get(url, _opts) do
       send(:tracker_test_listener, {:get, url})
-      {:ok, %{status_code: 200, body: Jason.encode!(%{"entity" => []}), headers: []}}
-    end
-
-    def get(url, _, _) do
-      send(:tracker_test_listener, {:get, url})
-      {:ok, %{status_code: 200, body: Jason.encode!(%{"entity" => []}), headers: []}}
+      {:ok, %Req.Response{status: 200, body: Jason.encode!(%{"entity" => []}), headers: %{}}}
     end
   end
 
@@ -360,7 +355,7 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         ]
       }
 
-      {:ok, %{status_code: 200, body: Jason.encode!(data), headers: []}}
+      {:ok, %Req.Response{status: 200, body: Jason.encode!(data), headers: %{}}}
     end
   end
 
@@ -368,29 +363,17 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
     def get(_, _) do
       {:error, "something"}
     end
-
-    def get(_, _, _) do
-      {:error, "something"}
-    end
   end
 
   defmodule NotModifiedHTTPFetcher do
     def get(_, _) do
-      {:ok, %{status_code: 304}}
-    end
-
-    def get(_, _, _) do
-      %{status_code: 304}
+      {:ok, %Req.Response{status: 304}}
     end
   end
 
   defmodule ServerErrorHTTPFetcher do
     def get(_, _) do
-      {:ok, %{status_code: 500}}
-    end
-
-    def get(_, _, _) do
-      %{status_code: 500}
+      {:ok, %Req.Response{status: 500}}
     end
   end
 
@@ -404,20 +387,20 @@ defmodule PredictionAnalyzer.VehiclePositions.TrackerTest do
         ]
       }
 
-      {:ok, %{status_code: 200, body: Jason.encode!(data), headers: []}}
+      {:ok, %Req.Response{status: 200, body: Jason.encode!(data), headers: %{}}}
     end
   end
 
   defmodule SubwayVehicleNoStopIDHTTPFetcher do
     def get(url, headers) do
-      {:ok, %{body: body} = response} = SubwayVehicle.get(url, headers)
+      {:ok, %Req.Response{body: body} = response} = SubwayVehicle.get(url, headers)
 
       new_body =
         body
         |> Jason.decode!()
         |> put_in(["entity", Access.all(), "vehicle", "stop_id"], nil)
 
-      {:ok, %{response | body: Jason.encode!(new_body)}}
+      {:ok, %Req.Response{response | body: Jason.encode!(new_body)}}
     end
   end
 end

@@ -1,11 +1,11 @@
-defmodule FakeHTTPoison do
+defmodule FakeReq do
   require Logger
 
   def get(
         "https://api-v3.mbta.com/stops",
-        [],
-        timeout: _,
-        recv_timeout: _,
+        headers: %{},
+        request_timeout: _,
+        receive_timeout: _,
         params: %{"filter[route_type]" => "0,1"}
       ) do
     body = %{
@@ -69,14 +69,14 @@ defmodule FakeHTTPoison do
       ]
     }
 
-    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(body)}}
+    {:ok, %Req.Response{status: 200, body: Jason.encode!(body)}}
   end
 
   def get(
         "https://api-v3.mbta.com/stops",
-        [],
-        timeout: _,
-        recv_timeout: _,
+        headers: %{},
+        request_timeout: _,
+        receive_timeout: _,
         params: %{"filter[route_type]" => "2"}
       ) do
     body = %{
@@ -92,38 +92,36 @@ defmodule FakeHTTPoison do
       ]
     }
 
-    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(body)}}
+    {:ok, %Req.Response{status: 200, body: Jason.encode!(body)}}
   end
 
-  def get("https://bad-api-v3.mbta.com/stops", _headers, _params) do
-    {:error, %HTTPoison.Error{}}
+  def get("https://bad-api-v3.mbta.com/stops", _opts) do
+    {:error, %Req.TransportError{}}
   end
 
-  def get("https://bad-api-v3.mbta.com/predictions", _, _) do
-    {:error, %HTTPoison.Error{}}
+  def get("https://bad-api-v3.mbta.com/predictions", _opts) do
+    {:error, %Req.TransportError{}}
   end
 
-  def get("https://api-v3.mbta.com/predictions" = url, _, _) do
+  def get("https://api-v3.mbta.com/predictions" = url, _) do
     {:ok, prediction_response_body(url)}
   end
 
   def get(
         url,
-        _,
-        timeout: 2000,
-        recv_timeout: 2000,
+        headers: %{},
+        request_timeout: 2000,
+        receive_timeout: 2000,
         params: %{
           "filter[route]" =>
             "CR-Fitchburg,CR-Lowell,CR-Haverhill,CR-Newburyport,CR-Worcester,CR-Needham,CR-Franklin,CR-Providence,CR-Fairmount,CR-NewBedford,CR-Kingston,CR-Greenbush,CR-Foxboro"
-        },
-        env: env
+        }
       )
-      when env in [:prod, :dev_green] and
-             url in [
-               "https://api-v3.mbta.com/vehicles",
-               "https://api-dev-green.mbtace.com/vehicles"
-             ] do
-    body = %{
+      when url in [
+             "https://api-v3.mbta.com/vehicles",
+             "https://api-dev-green.mbtace.com/vehicles"
+           ] do
+    auto_decoded_body = %{
       "data" => [
         %{
           "attributes" => %{
@@ -166,11 +164,12 @@ defmodule FakeHTTPoison do
       ]
     }
 
-    headers = [
-      {"last-modified", "Sat, 10 Sep 1977 08:25:00 GMT"}
-    ]
+    headers = %{
+      "last-modified" => ["Sat, 10 Sep 1977 08:25:00 GMT"],
+      "content-type" => "application/json"
+    }
 
-    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(body), headers: headers}}
+    {:ok, %Req.Response{status: 200, body: auto_decoded_body, headers: headers}}
   end
 
   def get!("https://prod.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json" = url) do
@@ -190,7 +189,7 @@ defmodule FakeHTTPoison do
     %{body: "{}"}
   end
 
-  defp prediction_response_body("https://api-v3.mbta.com/predictions" = url) do
+  defp prediction_response_body("https://api-v3.mbta.com/predictions") do
     body = %{
       "data" => [
         %{
@@ -304,34 +303,26 @@ defmodule FakeHTTPoison do
       ]
     }
 
-    %HTTPoison.Response{
+    %Req.Response{
       body: Jason.encode!(body),
-      headers: [
-        {"x-amz-id-2",
-         "MMXRCAYRX5tKu1Yx0n5yWk3l+rk76RvWd3jz9wmqDl4Wud+G+t0PE5ZRqGJUzgkFEAzmTAE9kx0="},
-        {"x-amz-request-id", "B96B029654DDF30A"},
-        {"Date", "Tue, 30 Oct 2018 17:33:16 GMT"},
-        {"last-modified", "Tue, 30 Oct 2018 17:33:15 GMT"},
-        {"ETag", "\"78891d89780b999f2854e782a5fe5d24\""},
-        {"Accept-Ranges", "bytes"},
-        {"Content-Type", "application/octet-stream"},
-        {"Content-Length", "513838"},
-        {"Server", "AmazonS3"}
-      ],
-      request: %HTTPoison.Request{
-        body: "",
-        headers: [],
-        method: :get,
-        options: [],
-        params: %{},
-        url: url
+      headers: %{
+        "x-amz-id-2" => [
+          "MMXRCAYRX5tKu1Yx0n5yWk3l+rk76RvWd3jz9wmqDl4Wud+G+t0PE5ZRqGJUzgkFEAzmTAE9kx0="
+        ],
+        "x-amz-request-id" => ["B96B029654DDF30A"],
+        "date" => ["Tue, 30 Oct 2018 17:33:16 GMT"],
+        "last-modified" => ["Tue, 30 Oct 2018 17:33:15 GMT"],
+        "etag" => ["\"78891d89780b999f2854e782a5fe5d24\""],
+        "accept-ranges" => ["bytes"],
+        "content-type" => ["application/octet-stream"],
+        "content-length" => ["513838"],
+        "server" => ["AmazonS3"]
       },
-      request_url: "https://api-v3.mbta.com/predictions",
-      status_code: 200
+      status: 200
     }
   end
 
-  defp prediction_response_body(url) do
+  defp prediction_response_body(_url) do
     body = %{
       "entity" => [
         %{
@@ -527,30 +518,22 @@ defmodule FakeHTTPoison do
       "header" => %{"timestamp" => 123_345_532}
     }
 
-    %HTTPoison.Response{
+    %Req.Response{
       body: Jason.encode!(body),
-      headers: [
-        {"x-amz-id-2",
-         "MMXRCAYRX5tKu1Yx0n5yWk3l+rk76RvWd3jz9wmqDl4Wud+G+t0PE5ZRqGJUzgkFEAzmTAE9kx0="},
-        {"x-amz-request-id", "B96B029654DDF30A"},
-        {"Date", "Tue, 30 Oct 2018 17:33:16 GMT"},
-        {"Last-Modified", "Tue, 30 Oct 2018 17:33:15 GMT"},
-        {"ETag", "\"78891d89780b999f2854e782a5fe5d24\""},
-        {"Accept-Ranges", "bytes"},
-        {"Content-Type", "application/octet-stream"},
-        {"Content-Length", "513838"},
-        {"Server", "AmazonS3"}
-      ],
-      request: %HTTPoison.Request{
-        body: "",
-        headers: [],
-        method: :get,
-        options: [],
-        params: %{},
-        url: url
+      headers: %{
+        "x-amz-id-2" => [
+          "MMXRCAYRX5tKu1Yx0n5yWk3l+rk76RvWd3jz9wmqDl4Wud+G+t0PE5ZRqGJUzgkFEAzmTAE9kx0="
+        ],
+        "x-amz-request-id" => ["B96B029654DDF30A"],
+        "date" => ["tue => 30 Oct 2018 17:33:16 GMT"],
+        "last-modified" => ["Tue, 30 Oct 2018 17:33:15 GMT"],
+        "etag" => ["\"78891d89780b999f2854e782a5fe5d24\""],
+        "accept-ranges" => ["bytes"],
+        "content-type" => ["application/octet-stream"],
+        "content-length" => ["513838"],
+        "server" => ["AmazonS3"]
       },
-      request_url: "https://s3.amazonaws.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json",
-      status_code: 200
+      status: 200
     }
   end
 end

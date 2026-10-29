@@ -26,7 +26,7 @@ config :logger, :console,
 
 config :prediction_analyzer, aws_rds_mod: ExAws.RDS
 config :prediction_analyzer, ecto_repos: [PredictionAnalyzer.Repo]
-config :prediction_analyzer, http_fetcher: HTTPoison
+config :prediction_analyzer, http_fetcher: Req
 config :prediction_analyzer, :api_base_url, "https://api-v3.mbta.com/"
 config :prediction_analyzer, :api_dev_green_base_url, "https://api-dev-green.mbtace.com/"
 config :prediction_analyzer, :migration_task, Predictions.ReleaseTasks.NoOp
@@ -71,9 +71,6 @@ config :prediction_analyzer, :prediction_accuracy_migration,
   # The migration can be finalized once data has been copied up to, but not including,
   # the window that ends after (today - min_days_in_past_for_finalize).
   min_days_in_past_for_finalize: 3
-
-config :sentry,
-  client: Sentry.HackneyClient
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
