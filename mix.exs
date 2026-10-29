@@ -37,8 +37,8 @@ defmodule PredictionAnalyzer.Mixfile do
     [
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_aws_rds, "~> 2.0"},
-      {:ecto, "~> 3.13"},
-      {:ecto_sql, "~> 3.13"},
+      {:ecto, "~> 3.14"},
+      {:ecto_sql, "~> 3.14"},
       {:lcov_ex, "~> 0.2", only: :test, runtime: false},
       {:gettext, "~> 0.11"},
       # {:hackney, "~> 4.9"},
@@ -47,7 +47,7 @@ defmodule PredictionAnalyzer.Mixfile do
       {:jason, "~> 1.0"},
       {:oban, "~> 2.19"},
       {:phoenix, "~> 1.6.0"},
-      {:phoenix_ecto, "~> 4.4"},
+      {:phoenix_ecto, "~> 4.7"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.4", only: :dev},
       {:phoenix_pubsub, "~> 2.0"},
@@ -56,7 +56,9 @@ defmodule PredictionAnalyzer.Mixfile do
       {:postgrex, ">= 0.0.0"},
       {:timex, "~> 3.7"},
       {:sentry, "~> 14.0"},
-      {:csv, "~> 3.0"}
+      {:csv, "~> 3.0"},
+      # provides :ssl_verify_hostname module, used by PredictionAnalyzer.Repo
+      {:ssl_verify_fun, "~> 1.1.7"}
     ]
   end
 
