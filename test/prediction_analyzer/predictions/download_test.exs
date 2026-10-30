@@ -14,7 +14,7 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
   end
 
   defmodule FailedHTTPFetcher do
-    def get(_, _, _) do
+    def get(_, _) do
       {:error, "something"}
     end
   end
@@ -61,7 +61,7 @@ defmodule PredictionAnalyzer.Predictions.DownloadTest do
 
       preds = PredictionAnalyzer.Repo.all(query)
 
-      # See FakeHTTPoison
+      # See FakeReq
       assert preds == [
                ["prod", "TEST_TRIP_4", nil, 1, "mid_trip", nil],
                ["prod", "TEST_TRIP_2", "70061", 1, "mid_trip", 1],
