@@ -5,7 +5,7 @@ defmodule PredictionAnalyzer.Mixfile do
     [
       app: :prediction_analyzer,
       version: "0.0.1",
-      elixir: "~> 1.9",
+      elixir: "~> 1.20",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
