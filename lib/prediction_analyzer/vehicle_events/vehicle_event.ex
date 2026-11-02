@@ -3,8 +3,6 @@ defmodule PredictionAnalyzer.VehicleEvents.VehicleEvent do
 
   import Ecto.Changeset
 
-  require Logger
-
   @type t :: %__MODULE__{
           vehicle_id: String.t(),
           environment: String.t(),
