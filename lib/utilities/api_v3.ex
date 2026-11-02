@@ -1,45 +1,47 @@
 defmodule PredictionAnalyzer.Utilities.APIv3 do
-  @default_opts [timeout: 2000, recv_timeout: 2000]
+  @default_opts [request_timeout: 2000, receive_timeout: 2000]
 
-  @spec request(String.t(), [{String.t(), String.t()}], Keyword.t()) ::
-          {:error, any()} | {:ok, map()}
+  @doc """
+  Makes a request to the V3 API and returns the response, if successful.
+
+  Note that Req will automatically JSON-decode the response body, due to the V3 API including the "content-type: application/json` header!
+  """
+  @spec request(String.t(), %{String.t() => String.t()}, Keyword.t()) ::
+          {:error, any()} | {:ok, Req.Response.t()}
   def request(
         path,
-        extra_headers \\ [],
+        extra_headers \\ %{},
         opts
       ) do
-    env = Keyword.get(opts, :env)
+    {env, opts} = Keyword.pop(opts, :env)
 
     {base_url, api_key_headers} =
       case env do
         :dev_green ->
-          {Application.get_env(:prediction_analyzer, :api_dev_green_base_url), []}
+          {Application.get_env(:prediction_analyzer, :api_dev_green_base_url), %{}}
 
         _ ->
           {Application.get_env(:prediction_analyzer, :api_base_url),
            api_key_headers(Application.get_env(:prediction_analyzer, :api_v3_key))}
       end
 
-    headers =
-      extra_headers ++ api_key_headers
+    headers = Map.merge(api_key_headers, extra_headers)
 
     http_fetcher = Application.get_env(:prediction_analyzer, :http_fetcher)
 
-    opts = Keyword.delete(opts, :base_url)
+    opts =
+      @default_opts
+      |> Keyword.merge(opts)
+      |> Keyword.delete(:base_url)
+      |> Keyword.put(:headers, headers)
 
-    with {:ok, req} <-
-           http_fetcher.get(
-             base_url <> path,
-             headers,
-             Keyword.merge(@default_opts, opts)
-           ),
-         %{status_code: 200} <- req do
-      {:ok, req}
+    with {:ok, %{status: 200} = resp} <- http_fetcher.get(base_url <> path, opts) do
+      {:ok, resp}
     else
-      e -> {:error, e}
+      other -> {:error, other}
     end
   end
 
-  defp api_key_headers(nil), do: []
-  defp api_key_headers(key), do: [{"x-api-key", key}]
+  defp api_key_headers(nil), do: %{}
+  defp api_key_headers(key), do: %{"x-api-key" => key}
 end

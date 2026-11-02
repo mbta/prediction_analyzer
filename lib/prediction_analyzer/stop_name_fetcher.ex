@@ -95,12 +95,10 @@ defmodule PredictionAnalyzer.StopNameFetcher do
   defp get_params(:subway), do: %{"filter[route_type]" => "0,1"}
   defp get_params(:commuter_rail), do: %{"filter[route_type]" => "2"}
 
-  @spec parse_response(%HTTPoison.Response{}) :: %{String.t() => stop_info()}
+  @spec parse_response(%Req.Response{}) :: %{String.t() => stop_info()}
   defp parse_response(http_response) do
-    {:ok, body} = Jason.decode(http_response.body)
-
     unique_info_map =
-      body["data"]
+      http_response.body["data"]
       |> Enum.reduce(%{}, fn stop, acc ->
         Map.update(
           acc,
@@ -114,7 +112,7 @@ defmodule PredictionAnalyzer.StopNameFetcher do
         )
       end)
 
-    body["data"]
+    http_response.body["data"]
     |> Enum.map(fn stop ->
       stop_info = %{
         description: stop["attributes"]["description"],

@@ -20,7 +20,7 @@ config :prediction_analyzer, PredictionAnalyzer.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :prediction_analyzer,
-  http_fetcher: FakeHTTPoison,
+  http_fetcher: FakeReq,
   aws_predictions_url: "https://prod.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json",
   dev_blue_aws_predictions_url:
     "https://dev_blue.example.com/mbta-gtfs-s3/rtr/TripUpdates_enhanced.json",

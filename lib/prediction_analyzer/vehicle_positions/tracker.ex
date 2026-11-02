@@ -54,13 +54,13 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
 
     schedule_subway_fetch(self())
 
-    case state.http_fetcher.get(state.aws_vehicle_positions_url, [
-           {"If-Modified-Since", state.subway_last_modified}
-         ]) do
-      {:ok, %{status_code: 200, body: body, headers: headers}} ->
+    case state.http_fetcher.get(state.aws_vehicle_positions_url,
+           headers: %{"If-Modified-Since" => state.subway_last_modified}
+         ) do
+      {:ok, %Req.Response{status: 200, body: json_body, headers: headers}} ->
         {time, new_vehicles} =
           :timer.tc(fn ->
-            body
+            json_body
             |> Jason.decode!()
             |> parse_vehicles(state.environment)
             |> Enum.into(%{}, fn v -> {v.id, v} end)
@@ -78,14 +78,14 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
              subway_last_modified: new_last_modified_timestamp
          }}
 
-      {:ok, %{status_code: 304}} ->
+      {:ok, %Req.Response{status: 304}} ->
         Logger.info(
           "Subway vehicle positions not modified since last request at #{state.subway_last_modified}"
         )
 
         {:noreply, state}
 
-      {:ok, %{status_code: code}} ->
+      {:ok, %Req.Response{status: code}} ->
         :ok = Logger.warning(["Could not download subway vehicles. status_code=", inspect(code)])
 
         {:noreply, state}
@@ -119,14 +119,13 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     state =
       case PredictionAnalyzer.Utilities.APIv3.request(
              url_path,
-             [{"If-Modified-Since", state.commuter_rail_last_modified}],
+             %{"If-Modified-Since" => state.commuter_rail_last_modified},
              params: params,
              env: env
            ) do
-        {:ok, %{body: body, headers: headers}} ->
+        {:ok, %Req.Response{body: json_decoded_body, headers: headers}} ->
           new_vehicles =
-            body
-            |> Jason.decode!()
+            json_decoded_body
             |> Map.get("data")
             |> parse_commuter_rail(state.environment)
             |> Enum.into(%{}, fn v -> {v.id, v} end)
@@ -141,7 +140,7 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
               commuter_rail_last_modified: new_last_modified_timestamp
           }
 
-        {:error, %{status_code: 304}} ->
+        {:error, {:ok, %Req.Response{status: 304}}} ->
           Logger.info(
             "Commuter rail vehicle positions not modified since last request at #{state.commuter_rail_last_modified}"
           )
@@ -185,7 +184,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     end)
   end
 
-  defp parse_vehicles(_, _) do
+  # Fail if HTTP client did not detect the body as JSON and decode it.
+  defp parse_vehicles(val, _) when not is_binary(val) do
     []
   end
 
@@ -220,11 +220,8 @@ defmodule PredictionAnalyzer.VehiclePositions.Tracker do
     Process.send_after(pid, :track_commuter_rail_vehicles, 10_500)
   end
 
-  @spec extract_last_modified([{String.t(), String.t()}]) :: String.t() | nil
+  @spec extract_last_modified(%{String.t() => [String.t()]}) :: String.t() | nil
   defp extract_last_modified(headers) do
-    case Enum.find(headers, fn {key, _value} -> String.downcase(key) == "last-modified" end) do
-      {_key, value} -> value
-      nil -> nil
-    end
+    get_in(headers, ["last-modified", Access.at(0)])
   end
 end
