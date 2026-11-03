@@ -16,7 +16,7 @@ concurrency:
 jobs:
   asdf:
     name: ASDF
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -35,7 +35,7 @@ jobs:
 
   build:
     name: Build Elixir
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     needs: asdf
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
