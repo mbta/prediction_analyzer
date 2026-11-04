@@ -1,5 +1,5 @@
 # First, get the elixir dependencies within an elixir container
-FROM hexpm/elixir:1.18.4-erlang-28.0.2-alpine-3.22.1 AS elixir-builder
+FROM hexpm/elixir:1.20.5-erlang-29.0.6-alpine-3.22.7 AS elixir-builder
 
 ENV LANG="C.UTF-8" MIX_ENV=prod
 
@@ -15,7 +15,7 @@ ADD config config
 RUN mix do deps.get --only prod
 
 # Next, build the frontend assets within a node.js container
-FROM node:18.15-alpine as assets-builder
+FROM node:24.22.1-alpine as assets-builder
 
 WORKDIR /root
 # Copy in elixir deps required to build node modules for phoenix
