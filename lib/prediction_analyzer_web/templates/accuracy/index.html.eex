@@ -201,7 +201,7 @@
         <th class="prod-text">Count</th>
       </tr>
 
-      <%= for {[row_scope, prod_total, prod_accurate, prod_err, prod_rmse], _dg, _db} <- @accuracies do %>
+      <%= for {%{scope: row_scope, num_predictions: prod_total, num_accurate: prod_accurate, mean_error: prod_err, rmse: prod_rmse }, _dg, _db} <- @accuracies do %>
         <tr>
           <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
           <td class="prod-text">
@@ -226,7 +226,7 @@
         <th class="dev-green-text">Count</th>
       </tr>
 
-      <%= for {_prod, [row_scope, dg_total, dg_accurate, dg_err, dg_rmse], _db} <- @accuracies do %>
+      <%= for {_prod, %{scope: row_scope, num_predictions: dg_total, num_accurate: dg_accurate, mean_error: dg_err, rmse: dg_rmse }, _db} <- @accuracies do %>
         <tr>
           <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
           <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
@@ -249,7 +249,7 @@
         <th class="dev-blue-text">Count</th>
       </tr>
 
-      <%= for {_prod, _dev_green, [row_scope, db_total, db_accurate, db_err, db_rmse]} <- @accuracies do %>
+      <%= for {_prod, _dev_green, %{scope: row_scope, num_predictions: db_total, num_accurate: db_accurate, mean_error: db_err, rmse: db_rmse}} <- @accuracies do %>
         <tr>
           <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
           <td class="dev-blue-text"><%= accuracy_percentage(db_accurate, db_total) %>%</td>

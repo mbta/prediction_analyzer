@@ -48,23 +48,10 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport do
 
       _prod_accuracies =
         relevant_accuracies
-        |> Filters.stats_by_chart_range(params)
+        |> Filters.select_stats()
         |> Ecto.Query.where(environment: "prod")
-        |> repo.all()
-        |> Enum.map(fn [row_scope, prod_total, prod_accurate, prod_err, prod_rmse] ->
-          %{
-            params["chart_range"] => row_scope,
-            "Prod Accuracy" =>
-              PredictionAnalyzerWeb.AccuracyView.accuracy_percentage(
-                prod_accurate,
-                prod_total
-              ),
-            "Err" => Float.round(prod_err || 0.0, 0),
-            "RMSE" => Float.round(prod_rmse || 0.0, 0),
-            "Count" => prod_total
-          }
-        end)
-        |> CSV.encode(headers: [params["chart_range"], "Prod Accuracy", "Err", "RMSE", "Count"])
+        |> repo.one()
+        |> CSV.encode(headers: ["Daily", "Prod Accuracy", "Err", "RMSE", "Count"])
         |> Enum.join()
     end
 

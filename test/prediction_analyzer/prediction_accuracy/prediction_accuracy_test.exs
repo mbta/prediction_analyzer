@@ -255,7 +255,7 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
     end
   end
 
-  describe "stats_by_chart_range/3" do
+  describe "group_by_chart_range/3" do
     test "groups by environment and hour and sums" do
       insert_accuracy("prod", 10, 0, 101, 99)
       insert_accuracy("prod", 10, 0, 108, 102)
@@ -268,24 +268,26 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       prod_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+        |> Filters.select_stats()
+        |> Filters.group_by_chart_range(%{"chart_range" => "Hourly"})
         |> where(environment: "prod")
         |> Repo.all()
 
       dev_green_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+        |> Filters.select_stats()
+        |> Filters.group_by_chart_range(%{"chart_range" => "Hourly"})
         |> where(environment: "dev-green")
         |> Repo.all()
 
       assert prod_stats == [
-               [10, 209, 201, 0.0, 0.0],
-               [11, 495, 472, 0.0, 0.0]
+               %{scope: 10, num_predictions: 209, num_accurate: 201, mean_error: 0.0, rmse: 0.0},
+               %{scope: 11, num_predictions: 495, num_accurate: 472, mean_error: 0.0, rmse: 0.0}
              ]
 
       assert dev_green_stats == [
-               [10, 809, 701, 0.0, 0.0],
-               [11, 1095, 872, 0.0, 0.0]
+               %{scope: 10, num_predictions: 809, num_accurate: 701, mean_error: 0.0, rmse: 0.0},
+               %{scope: 11, num_predictions: 1095, num_accurate: 872, mean_error: 0.0, rmse: 0.0}
              ]
     end
 
@@ -304,24 +306,50 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       prod_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_chart_range(%{"chart_range" => "Daily"})
+        |> Filters.select_stats()
+        |> Filters.group_by_chart_range(%{"chart_range" => "Daily"})
         |> where(environment: "prod")
         |> Repo.all()
 
       dev_green_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_chart_range(%{"chart_range" => "Daily"})
+        |> Filters.select_stats()
+        |> Filters.group_by_chart_range(%{"chart_range" => "Daily"})
         |> where(environment: "dev-green")
         |> Repo.all()
 
       assert prod_stats == [
-               [yesterday, 209, 201, 0.0, 0.0],
-               [today, 495, 472, 0.0, 0.0]
+               %{
+                 scope: yesterday,
+                 num_predictions: 209,
+                 num_accurate: 201,
+                 mean_error: 0.0,
+                 rmse: 0.0
+               },
+               %{
+                 scope: today,
+                 num_predictions: 495,
+                 num_accurate: 472,
+                 mean_error: 0.0,
+                 rmse: 0.0
+               }
              ]
 
       assert dev_green_stats == [
-               [yesterday, 809, 701, 0.0, 0.0],
-               [today, 1095, 872, 0.0, 0.0]
+               %{
+                 scope: yesterday,
+                 num_predictions: 809,
+                 num_accurate: 701,
+                 mean_error: 0.0,
+                 rmse: 0.0
+               },
+               %{
+                 scope: today,
+                 num_predictions: 1095,
+                 num_accurate: 872,
+                 mean_error: 0.0,
+                 rmse: 0.0
+               }
              ]
     end
 
@@ -355,13 +383,20 @@ defmodule PredictionAnalyzer.PredictionAccuracy.PredictionAccuracyTest do
 
       prod_stats =
         from(acc in PredictionAccuracy, [])
-        |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+        |> Filters.select_stats()
+        |> Filters.group_by_chart_range(%{"chart_range" => "Hourly"})
         |> where(environment: "prod")
         |> Repo.all()
 
       assert prod_stats == [
-               [10, 4224, 4038, 0.0, 0.0],
-               [11, 4224, 4038, 0.0, 0.0]
+               %{
+                 scope: 10,
+                 num_predictions: 4224,
+                 num_accurate: 4038,
+                 mean_error: 0.0,
+                 rmse: 0.0
+               },
+               %{scope: 11, num_predictions: 4224, num_accurate: 4038, mean_error: 0.0, rmse: 0.0}
              ]
     end
   end

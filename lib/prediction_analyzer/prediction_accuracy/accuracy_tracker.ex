@@ -42,9 +42,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     yesterday_accs =
       yesterday_query
-      |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+      |> Filters.select_stats()
       |> where(environment: "prod")
-      |> PredictionAnalyzer.Repo.all()
+      |> PredictionAnalyzer.Repo.one()
 
     {previous_day_query, _} =
       PredictionAccuracy.filter(%{
@@ -55,9 +55,9 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
 
     previous_day_accs =
       previous_day_query
-      |> Filters.stats_by_chart_range(%{"chart_range" => "Hourly"})
+      |> Filters.select_stats()
       |> where(environment: "prod")
-      |> PredictionAnalyzer.Repo.all()
+      |> PredictionAnalyzer.Repo.one()
 
     yesterday_accuracy = get_accuracy(yesterday_accs)
     previous_day_accuracy = get_accuracy(previous_day_accs)
@@ -84,20 +84,8 @@ defmodule PredictionAnalyzer.PredictionAccuracy.AccuracyTracker do
     :ok
   end
 
-  defp get_accuracy(query) do
-    {total, accurate} =
-      Enum.reduce(query, {0, 0}, fn [_, prod_total, prod_accurate, _mean_err, _rmse],
-                                    {total, accurate} ->
-        {total + prod_total, accurate + prod_accurate}
-      end)
+  defp get_accuracy(%{num_predictions: total, num_accurate: accurate})
+       when not is_nil(total) and not is_nil(accurate) and total > 0, do: accurate / total
 
-    accuracy =
-      if total > 0 do
-        accurate / total
-      else
-        0
-      end
-
-    accuracy
-  end
+  defp get_accuracy(_), do: 0
 end
