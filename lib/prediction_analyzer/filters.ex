@@ -47,6 +47,11 @@ defmodule PredictionAnalyzer.Filters do
       if is_binary(route_ids) and route_ids != "" do
         route_ids
         |> String.split(",")
+        |> Enum.flat_map(fn
+          "_light_rail" -> ~w(Green-B Green-C Green-D Green-E Mattapan)
+          "_heavy_rail" -> ~w(Red Orange Blue)
+          route -> [route]
+        end)
         |> MapSet.new()
       else
         nil
@@ -159,7 +164,6 @@ defmodule PredictionAnalyzer.Filters do
   def filter_by_timeframe(_q, "Daily", _, _, _), do: {:error, "No start or end date given."}
   def filter_by_timeframe(_q, "By Station", _, _, _), do: {:error, "No start or end date given."}
 
-
   @doc """
   Takes a Queryable and produces the following aggregates:
   - num_predictions
@@ -178,7 +182,6 @@ defmodule PredictionAnalyzer.Filters do
       }
     )
   end
-
 
   @doc """
   Takes a Queryable and groups by the chart_range and (if applicable)

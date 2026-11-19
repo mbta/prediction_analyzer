@@ -9,8 +9,10 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport do
     max_attempts: 3,
     unique: [states: :incomplete]
 
-  @light_rail "Green-B,Green-C,Green-D,Green-E,Mattapan"
-  @heavy_rail "Red,Blue,Orange"
+  config =
+    Application.compile_env!(:prediction_analyzer, :monthly_report) |> Map.new()
+
+  @queries config.queries
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do
@@ -23,37 +25,31 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport do
     base_params = %{
       "chart_range" => "Daily",
       "date_start" => Date.to_string(date_start),
-      "date_end" => Date.to_string(date_end),
-      "mode" => "subway"
+      "date_end" => Date.to_string(date_end)
     }
 
-    additional_queries = [
-      %{"stop_ids" => ["_terminal"]},
-      %{"bin" => "0-3 min"},
-      %{"bin" => "3-6 min"},
-      %{"bin" => "6-12 min"},
-      %{"bin" => "12-30 min"}
-    ]
+    for {query_name, params} <- @queries do
+      {relevant_accuracies, nil} = base_params |> Map.merge(params) |> PredictionAccuracy.filter()
 
-    queries = [
-      base_params
-      | for route_ids <- [@light_rail, @heavy_rail],
-            extra_params <- additional_queries do
-          base_params |> Map.merge(extra_params) |> Map.put("route_ids", route_ids)
-        end
-    ]
-
-    for params <- queries do
-      {relevant_accuracies, nil} = PredictionAccuracy.filter(params)
-
-      _prod_accuracies =
+      stats =
         relevant_accuracies
         |> Filters.select_stats()
         |> Ecto.Query.where(environment: "prod")
         |> repo.one()
-        |> CSV.encode(headers: ["Daily", "Prod Accuracy", "Err", "RMSE", "Count"])
-        |> Enum.join()
+
+      %{
+        "Query" => query_name,
+        "Prod Accuracy" =>
+          PredictionAnalyzerWeb.AccuracyView.accuracy_percentage(
+            stats.num_accurate,
+            stats.num_predictions
+          ),
+        "Err" => Float.round(stats.mean_error || 0.0, 0),
+        "RMSE" => Float.round(stats.rmse || 0.0, 0),
+        "Count" => stats.num_predictions
+      }
     end
+    |> CSV.encode(headers: ["Query", "Prod Accuracy", "Err", "RMSE", "Count"])
 
     :ok
   end
