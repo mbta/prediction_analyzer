@@ -31,25 +31,13 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport do
     for {query_name, params} <- @queries do
       {relevant_accuracies, nil} = base_params |> Map.merge(params) |> PredictionAccuracy.filter()
 
-      stats =
-        relevant_accuracies
-        |> Filters.select_stats()
-        |> Ecto.Query.where(environment: "prod")
-        |> repo.one()
+      to_insert = relevant_accuracies
+      |> Filters.select_stats()
+      |> Ecto.Query.where(environment: "prod")
+      |> Ecto.Query.select_merge(%{query: ^query_name, date_start: ^date_start, date_end: ^date_end})
 
-      %{
-        "Query" => query_name,
-        "Prod Accuracy" =>
-          PredictionAnalyzerWeb.AccuracyView.accuracy_percentage(
-            stats.num_accurate,
-            stats.num_predictions
-          ),
-        "Err" => Float.round(stats.mean_error || 0.0, 0),
-        "RMSE" => Float.round(stats.rmse || 0.0, 0),
-        "Count" => stats.num_predictions
-      }
+      repo.insert_all("prediction_accuracy_monthly_summary", to_insert)
     end
-    |> CSV.encode(headers: ["Query", "Prod Accuracy", "Err", "RMSE", "Count"])
 
     :ok
   end

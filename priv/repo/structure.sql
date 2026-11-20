@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict mHmBTkObZkZfea8dyzSy3dpfvMP2BG2micnAhrQ2OritCbojw9HsE0EKMigpGbo
+\restrict ZIbWKV9G6OliGJ8AYscCqyLsRJlr4gf8a4FnIsWcSkBnk1Sal0FfkTdK3awdtIF
 
--- Dumped from database version 15.14 (Homebrew)
--- Dumped by pg_dump version 15.14 (Homebrew)
+-- Dumped from database version 15.19 (Homebrew)
+-- Dumped by pg_dump version 15.19 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -45,6 +45,7 @@ CREATE TYPE public.environment AS ENUM (
 
 CREATE TYPE public.oban_job_state AS ENUM (
     'available',
+    'suspended',
     'scheduled',
     'executing',
     'retryable',
@@ -118,7 +119,7 @@ CREATE TABLE public.oban_jobs (
 -- Name: TABLE oban_jobs; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.oban_jobs IS '12';
+COMMENT ON TABLE public.oban_jobs IS '14';
 
 
 --
@@ -199,6 +200,41 @@ CREATE VIEW public.prediction_accuracy AS
     prediction_accuracy_partitioned.in_next_two,
     prediction_accuracy_partitioned.minute_of_hour
    FROM public.prediction_accuracy_partitioned;
+
+
+--
+-- Name: prediction_accuracy_monthly_summary; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.prediction_accuracy_monthly_summary (
+    id bigint NOT NULL,
+    date_start date NOT NULL,
+    date_end date NOT NULL,
+    query character varying(255) NOT NULL,
+    num_predictions integer NOT NULL,
+    num_accurate integer NOT NULL,
+    mean_error real NOT NULL,
+    root_mean_squared_error real NOT NULL
+);
+
+
+--
+-- Name: prediction_accuracy_monthly_summary_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.prediction_accuracy_monthly_summary_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: prediction_accuracy_monthly_summary_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.prediction_accuracy_monthly_summary_id_seq OWNED BY public.prediction_accuracy_monthly_summary.id;
 
 
 --
@@ -12505,6 +12541,13 @@ ALTER TABLE ONLY public.oban_jobs ALTER COLUMN id SET DEFAULT nextval('public.ob
 
 
 --
+-- Name: prediction_accuracy_monthly_summary id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_monthly_summary ALTER COLUMN id SET DEFAULT nextval('public.prediction_accuracy_monthly_summary_id_seq'::regclass);
+
+
+--
 -- Name: prediction_accuracy_partitioned id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -12547,6 +12590,14 @@ ALTER TABLE ONLY public.oban_jobs
 
 ALTER TABLE ONLY public.oban_peers
     ADD CONSTRAINT oban_peers_pkey PRIMARY KEY (name);
+
+
+--
+-- Name: prediction_accuracy_monthly_summary prediction_accuracy_monthly_summary_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.prediction_accuracy_monthly_summary
+    ADD CONSTRAINT prediction_accuracy_monthly_summary_pkey PRIMARY KEY (id);
 
 
 --
@@ -15737,6 +15788,20 @@ CREATE INDEX oban_jobs_args_index ON public.oban_jobs USING gin (args);
 --
 
 CREATE INDEX oban_jobs_meta_index ON public.oban_jobs USING gin (meta);
+
+
+--
+-- Name: oban_jobs_state_cancelled_at_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX oban_jobs_state_cancelled_at_index ON public.oban_jobs USING btree (state, cancelled_at);
+
+
+--
+-- Name: oban_jobs_state_discarded_at_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX oban_jobs_state_discarded_at_index ON public.oban_jobs USING btree (state, discarded_at);
 
 
 --
@@ -35099,7 +35164,7 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict mHmBTkObZkZfea8dyzSy3dpfvMP2BG2micnAhrQ2OritCbojw9HsE0EKMigpGbo
+\unrestrict ZIbWKV9G6OliGJ8AYscCqyLsRJlr4gf8a4FnIsWcSkBnk1Sal0FfkTdK3awdtIF
 
 INSERT INTO public."schema_migrations" (version) VALUES (20181017190602);
 INSERT INTO public."schema_migrations" (version) VALUES (20181022210113);
@@ -35134,3 +35199,5 @@ INSERT INTO public."schema_migrations" (version) VALUES (20260218204958);
 INSERT INTO public."schema_migrations" (version) VALUES (20260218204959);
 INSERT INTO public."schema_migrations" (version) VALUES (20260318195242);
 INSERT INTO public."schema_migrations" (version) VALUES (20260410160505);
+INSERT INTO public."schema_migrations" (version) VALUES (20261026194152);
+INSERT INTO public."schema_migrations" (version) VALUES (20261120193857);
