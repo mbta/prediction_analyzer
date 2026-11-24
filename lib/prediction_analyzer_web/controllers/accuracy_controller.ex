@@ -1,6 +1,6 @@
 defmodule PredictionAnalyzerWeb.AccuracyController do
   use PredictionAnalyzerWeb, :controller
-  alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.PredictionAccuracy.{PredictionAccuracy, MonthlyReport}
   alias PredictionAnalyzer.Filters
 
   import Ecto.Query, only: [from: 2]
@@ -74,6 +74,11 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
           {prod_accuracy, dev_green_accuracy, dev_blue_accuracy}
         end)
 
+      months =
+        MonthlyReport.months()
+        |> PredictionAnalyzer.Repo.all()
+        |> Enum.map(&{Timex.format!(&1, "%Y-%m", :strftime), Date.to_string(&1)})
+
       render(
         conn,
         "index.html",
@@ -92,6 +97,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         dev_blue_mean_error: dev_blue_context.mean_error,
         dev_blue_rmse: dev_blue_context.rmse,
         error_msg: error_msg,
+        months: months,
         mode: PredictionAnalyzer.Utilities.string_to_mode(mode),
         bins:
           Filters.bins()
@@ -211,6 +217,10 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     conn
     |> assign(:mode, :commuter_rail)
     |> index(params)
+  end
+
+  def monthly_csv(conn, %{"month" => month}) do
+    conn
   end
 
   @spec redirect_with_default_filters(Plug.Conn.t(), map(), atom) :: Plug.Conn.t()

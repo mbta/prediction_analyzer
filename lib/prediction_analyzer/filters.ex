@@ -175,8 +175,8 @@ defmodule PredictionAnalyzer.Filters do
   def select_stats(q) do
     from(acc in q,
       select: %{
-        num_predictions: sum(acc.num_predictions),
-        num_accurate: sum(acc.num_accurate_predictions),
+        num_predictions: coalesce(sum(acc.num_predictions), 0),
+        num_accurate: coalesce(sum(acc.num_accurate_predictions), 0),
         mean_error: aggregate_mean_error(acc.mean_error, acc.num_predictions),
         rmse: aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
       }

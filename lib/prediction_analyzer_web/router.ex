@@ -28,6 +28,7 @@ defmodule PredictionAnalyzerWeb.Router do
     pipe_through(:browser)
     get("/subway", AccuracyController, :subway)
     get("/csv", AccuracyController, :csv)
+    get("/monthly_csv", AccuracyController, :monthly_csv)
     get("/commuter_rail", AccuracyController, :commuter_rail)
   end
 

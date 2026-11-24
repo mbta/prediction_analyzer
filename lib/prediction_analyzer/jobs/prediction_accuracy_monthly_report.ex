@@ -1,5 +1,5 @@
 defmodule PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport do
-  alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.PredictionAccuracy.{PredictionAccuracy, MonthlyReport}
   alias PredictionAnalyzer.Filters
 
   require Ecto.Query
@@ -37,11 +37,10 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport do
         |> Ecto.Query.where(environment: "prod")
         |> Ecto.Query.select_merge(%{
           query: ^query_name,
-          date_start: ^date_start,
-          date_end: ^date_end
+          month: ^date_start
         })
 
-      repo.insert_all("prediction_accuracy_monthly_summary", to_insert)
+      repo.insert_all(MonthlyReport, to_insert)
     end
 
     :ok
