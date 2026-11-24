@@ -31,10 +31,15 @@ defmodule PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport do
     for {query_name, params} <- @queries do
       {relevant_accuracies, nil} = base_params |> Map.merge(params) |> PredictionAccuracy.filter()
 
-      to_insert = relevant_accuracies
-      |> Filters.select_stats()
-      |> Ecto.Query.where(environment: "prod")
-      |> Ecto.Query.select_merge(%{query: ^query_name, date_start: ^date_start, date_end: ^date_end})
+      to_insert =
+        relevant_accuracies
+        |> Filters.select_stats()
+        |> Ecto.Query.where(environment: "prod")
+        |> Ecto.Query.select_merge(%{
+          query: ^query_name,
+          date_start: ^date_start,
+          date_end: ^date_end
+        })
 
       repo.insert_all("prediction_accuracy_monthly_summary", to_insert)
     end
