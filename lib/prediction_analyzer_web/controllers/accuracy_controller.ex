@@ -220,7 +220,42 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
   end
 
   def monthly_csv(conn, %{"month" => month}) do
-    conn
+    month = Date.from_iso8601!(month)
+
+    report =
+      from(acc in MonthlyReport, where: acc.month == ^month)
+      |> PredictionAnalyzer.Repo.all()
+      |> Enum.map(
+        &Map.put(
+          &1,
+          :accuracy,
+          PredictionAnalyzerWeb.AccuracyView.accuracy_percentage(
+            &1.num_accurate,
+            &1.num_predictions
+          )
+        )
+      )
+
+    filename = "monthly_summary_#{Timex.format!(month, "%Y-%m", :strftime)}.csv"
+
+    send_download(
+      conn,
+      {:binary,
+       report
+       |> CSV.encode(
+         headers: [
+           query: "Query",
+           accuracy: "Prod Accuracy",
+           mean_error: "Err",
+           rmse: "RMSE",
+           num_predictions: "Count"
+         ]
+       )
+       |> Enum.to_list()
+       |> Enum.join()},
+      content_type: "application/csv",
+      filename: filename
+    )
   end
 
   @spec redirect_with_default_filters(Plug.Conn.t(), map(), atom) :: Plug.Conn.t()
