@@ -66,7 +66,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         |> Enum.uniq()
         |> Enum.sort(sort_function)
         |> Enum.map(fn scope ->
-          empty = %{scope: scope, num_predictions: 0, num_accurate: 0, mean_error: nil, rmse: nil}
+          empty = %{scope: scope, num_predictions: 0, num_accurate: 0, mean_error: 0, rmse: 0}
           prod_accuracy = prod_accuracies[scope] || empty
           dev_green_accuracy = dev_green_accuracies[scope] || empty
           dev_blue_accuracy = dev_blue_accuracies[scope] || empty
