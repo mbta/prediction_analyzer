@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict Z4c0FQY1vd2KJW6aPtfJHpgQWsa0IU3s726V44arYCBUrH67OaDf6slwkxXazgK
+\restrict qVxocALVrfmXv8JeZI13q7MV8Bb1LM8bnjdx9ZlMZomQr7RWLqskMwQWz7ZYczV
 
 -- Dumped from database version 15.19 (Homebrew)
 -- Dumped by pg_dump version 15.19 (Homebrew)
@@ -212,8 +212,8 @@ CREATE TABLE public.prediction_accuracy_monthly_summary (
     query character varying(255) NOT NULL,
     num_predictions integer NOT NULL,
     num_accurate integer NOT NULL,
-    mean_error real,
-    rmse real
+    mean_error real NOT NULL,
+    rmse real NOT NULL
 );
 
 
@@ -35163,7 +35163,7 @@ ALTER TABLE ONLY public.predictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict Z4c0FQY1vd2KJW6aPtfJHpgQWsa0IU3s726V44arYCBUrH67OaDf6slwkxXazgK
+\unrestrict qVxocALVrfmXv8JeZI13q7MV8Bb1LM8bnjdx9ZlMZomQr7RWLqskMwQWz7ZYczV
 
 INSERT INTO public."schema_migrations" (version) VALUES (20181017190602);
 INSERT INTO public."schema_migrations" (version) VALUES (20181022210113);

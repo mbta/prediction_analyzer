@@ -11,7 +11,7 @@
       </span>
     </div>
     <div class="prod-text">
-      <em>Err: <%= Float.round(@prod_mean_error || 0.0, 2) %>, RMSE: <%= Float.round(@prod_rmse || 0.0, 2) %></em> <br>
+      <em>Err: <%= Float.round(@prod_mean_error, 2) %>, RMSE: <%= Float.round(@prod_rmse, 2) %></em> <br>
       From <%= @prod_num_accurate %> accurate out of <%= @prod_num_predictions %> total predictions
     </div>
     <div id='reminder-text'>
@@ -62,7 +62,7 @@
       </span>
     </div>
     <div class="dev-green-text">
-      <em>Err: <%= Float.round(@dev_green_mean_error || 0.0, 2) %>, RMSE: <%= Float.round(@dev_green_rmse || 0.0, 2) %></em> <br>
+      <em>Err: <%= Float.round(@dev_green_mean_error, 2) %>, RMSE: <%= Float.round(@dev_green_rmse, 2) %></em> <br>
       From <%= @dev_green_num_accurate %> accurate out of <%= @dev_green_num_predictions %> total predictions
     </div>
   </div>
@@ -78,7 +78,7 @@
       </span>
     </div>
     <div class="dev-blue-text">
-      <em>Err: <%= Float.round(@dev_blue_mean_error || 0.0, 2) %>, RMSE: <%= Float.round(@dev_blue_rmse || 0.0, 2) %></em> <br>
+      <em>Err: <%= Float.round(@dev_blue_mean_error, 2) %>, RMSE: <%= Float.round(@dev_blue_rmse, 2) %></em> <br>
       From <%= @dev_blue_num_accurate %> accurate out of <%= @dev_blue_num_predictions %> total predictions
     </div>
   </div>
@@ -215,8 +215,8 @@
           <td class="prod-text">
             <%= accuracy_percentage(prod_accurate, prod_total) %>%
           </td>
-          <td class="prod-text"><%= Float.round(prod_err || 0.0, 0) %></td>
-          <td class="prod-text"><%= Float.round(prod_rmse || 0.0, 0) %></td>
+          <td class="prod-text"><%= Float.round(prod_err, 0) %></td>
+          <td class="prod-text"><%= Float.round(prod_rmse, 0) %></td>
           <td class="prod-text"><%= prod_total %></td>
         </tr>
       <% end %>
@@ -238,8 +238,8 @@
         <tr>
           <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
           <td class="dev-green-text"><%= accuracy_percentage(dg_accurate, dg_total) %>%</td>
-          <td class="dev-green-text"><%= Float.round(dg_err || 0.0, 0) %></td>
-          <td class="dev-green-text"><%= Float.round(dg_rmse || 0.0, 0) %></td>
+          <td class="dev-green-text"><%= Float.round(dg_err, 0) %></td>
+          <td class="dev-green-text"><%= Float.round(dg_rmse, 0) %></td>
           <td class="dev-green-text"><%= dg_total %></td>
         </tr>
       <% end %>
@@ -261,8 +261,8 @@
         <tr>
           <td><%= formatted_row_scope(@conn.params["filters"], row_scope) %></td>
           <td class="dev-blue-text"><%= accuracy_percentage(db_accurate, db_total) %>%</td>
-          <td class="dev-blue-text"><%= Float.round(db_err || 0.0, 0) %></td>
-          <td class="dev-blue-text"><%= Float.round(db_rmse || 0.0, 0) %></td>
+          <td class="dev-blue-text"><%= Float.round(db_err, 0) %></td>
+          <td class="dev-blue-text"><%= Float.round(db_rmse, 0) %></td>
           <td class="dev-blue-text"><%= db_total %></td>
         </tr>
       <% end %>

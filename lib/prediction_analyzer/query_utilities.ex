@@ -2,7 +2,7 @@ defmodule PredictionAnalyzer.QueryUtilities do
   defmacro aggregate_mean_error(mean_error, num_predictions) do
     quote do
       fragment(
-        "sum(? * ?) / sum(?)",
+        "coalesce(sum(? * ?) / sum(?), 0)",
         unquote(mean_error),
         unquote(num_predictions),
         unquote(num_predictions)
@@ -13,7 +13,7 @@ defmodule PredictionAnalyzer.QueryUtilities do
   defmacro aggregate_rmse(rmse, num_predictions) do
     quote do
       fragment(
-        "sqrt(sum(?^2 * ?) / sum(?))",
+        "sqrt(coalesce(sum(?^2 * ?) / sum(?), 0))",
         unquote(rmse),
         unquote(num_predictions),
         unquote(num_predictions)

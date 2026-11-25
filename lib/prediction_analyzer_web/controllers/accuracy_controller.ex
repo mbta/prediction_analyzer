@@ -178,8 +178,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
                 prod_accurate,
                 prod_total
               ),
-            "Err" => Float.round(prod_err || 0.0, 0),
-            "RMSE" => Float.round(prod_rmse || 0.0, 0),
+            "Err" => Float.round(prod_err, 0),
+            "RMSE" => Float.round(prod_rmse, 0),
             "Count" => prod_total
           }
         end)
