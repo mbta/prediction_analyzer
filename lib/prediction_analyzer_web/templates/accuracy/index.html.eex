@@ -91,13 +91,16 @@
   </div>
 <hr class="accuracy-separator">
 
+<details>
+<summary><a>Download monthly summary</a></summary>
 <%= form_for @conn, Routes.accuracy_path(@conn, :monthly_csv), [method: :get, id: "monthly-summary-form"], fn f -> %>
   <div class="form-group">
     <%= label(f, :month, "Month") %>
     <%= select(f, :month, @months, class: "form-control") %>
-    <%= submit "Download monthly summary as CSV", class: "btn btn-default" %>
+    <%= submit "Download as CSV", class: "btn btn-default" %>
   </div>
 <% end %>
+</details>
 
 <%= form_for @conn, Routes.accuracy_path(@conn, :index), [as: :filters, method: :get, class: "accuracy-form", id: "accuracy-form"], fn f -> %>
   <%= hidden_input(f, :mode) %>
