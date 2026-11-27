@@ -60,7 +60,8 @@ config :prediction_analyzer, Oban,
        # At 04:00 Eastern every Monday.
        {"0 4 * * MON", PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorker},
        # At 04:00 Eastern on the 2nd of each month
-       {"0 4 2 * *", PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport}
+       # TEST: setting this to run on the 28th so it runs this weekend
+       {"0 4 28 * *", PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport}
      ]}
   ]
 
