@@ -1,6 +1,6 @@
 defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
   use PredictionAnalyzerWeb.ConnCase
-  alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.PredictionAccuracy.{PredictionAccuracy, MonthlyReport}
 
   @today DateTime.to_date(Timex.local())
   @today_str Date.to_string(@today)
@@ -290,6 +290,17 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
              "Hourly,Prod Accuracy,Err,RMSE,Count"
   end
 
+  test "GET /accuracy/monthly_csv provides a valid csv", %{conn: conn} do
+    insert_monthly_accuracy(~D[2026-11-01], "Subway Prediction Accuracy (Overall)", 101, 99)
+    insert_monthly_accuracy(~D[2026-10-01], "Subway Prediction Accuracy (Overall)", 108, 102)
+    conn = get(conn, "/accuracy/monthly_csv", %{"month" => "2026-11-01"})
+    headers = Enum.into(conn.resp_headers, %{})
+    assert headers["content-type"] == "application/csv"
+
+    assert conn.resp_body =~
+             "Query,Prod Accuracy,Err,RMSE,Count"
+  end
+
   def insert_hourly_accuracy(env, hour, total, accurate, service_date \\ nil) do
     accuracy = %PredictionAccuracy{
       @prediction_accuracy
@@ -307,5 +318,16 @@ defmodule PredictionAnalyzerWeb.AccuracyControllerTest do
       end
 
     PredictionAnalyzer.Repo.insert!(accuracy)
+  end
+
+  def insert_monthly_accuracy(month, query, total, accurate, mean_error \\ 0.0, rmse \\ 0.0) do
+    PredictionAnalyzer.Repo.insert!(%MonthlyReport{
+      month: Date.beginning_of_month(month),
+      query: query,
+      num_predictions: total,
+      num_accurate: accurate,
+      mean_error: mean_error,
+      rmse: rmse
+    })
   end
 end

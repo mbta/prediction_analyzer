@@ -58,7 +58,10 @@ config :prediction_analyzer, Oban,
      timezone: "America/New_York",
      crontab: [
        # At 04:00 Eastern every Monday.
-       {"0 4 * * MON", PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorker}
+       {"0 4 * * MON", PredictionAnalyzer.Jobs.PredictionAccuracyPartitionWorker},
+       # At 04:00 Eastern on the 2nd of each month
+       # TEST: setting this to run on the 28th so it runs this weekend
+       {"0 4 28 * *", PredictionAnalyzer.Jobs.PredictionAccuracyMonthlyReport}
      ]}
   ]
 
@@ -74,6 +77,34 @@ config :prediction_analyzer, :prediction_accuracy_migration,
   # The migration can be finalized once data has been copied up to, but not including,
   # the window that ends after (today - min_days_in_past_for_finalize).
   min_days_in_past_for_finalize: 3
+
+# Config for monthly accuracy reports
+config :prediction_analyzer, :monthly_report,
+  queries: [
+    {"Subway Prediction Accuracy (Overall)", %{"mode" => "subway"}},
+    {"Light Rail Prediction Accuracy (Overall)", %{"route_ids" => "_light_rail"}},
+    {"Light Rail Prediction Accuracy (0-3 min)",
+     %{"route_ids" => "_light_rail", "bin" => "0-3 min"}},
+    {"Light Rail Prediction Accuracy (3-6 min)",
+     %{"route_ids" => "_light_rail", "bin" => "3-6 min"}},
+    {"Light Rail Prediction Accuracy (6-12 min)",
+     %{"route_ids" => "_light_rail", "bin" => "6-12 min"}},
+    {"Light Rail Prediction Accuracy (12-30 min)",
+     %{"route_ids" => "_light_rail", "bin" => "12-30 min"}},
+    {"Light Rail Prediction Accuracy (Terminals)",
+     %{"route_ids" => "_light_rail", "stop_ids" => ["_terminal"]}},
+    {"Heavy Rail Prediction Accuracy (Overall)", %{"route_ids" => "_heavy_rail"}},
+    {"Heavy Rail Prediction Accuracy (0-3 min)",
+     %{"route_ids" => "_heavy_rail", "bin" => "0-3 min"}},
+    {"Heavy Rail Prediction Accuracy (3-6 min)",
+     %{"route_ids" => "_heavy_rail", "bin" => "3-6 min"}},
+    {"Heavy Rail Prediction Accuracy (6-12 min)",
+     %{"route_ids" => "_heavy_rail", "bin" => "6-12 min"}},
+    {"Heavy Rail Prediction Accuracy (12-30 min)",
+     %{"route_ids" => "_heavy_rail", "bin" => "12-30 min"}},
+    {"Heavy Rail Prediction Accuracy (Terminals)",
+     %{"route_ids" => "_heavy_rail", "stop_ids" => ["_terminal"]}}
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

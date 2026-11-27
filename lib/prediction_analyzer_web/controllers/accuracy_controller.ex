@@ -1,10 +1,9 @@
 defmodule PredictionAnalyzerWeb.AccuracyController do
   use PredictionAnalyzerWeb, :controller
-  alias PredictionAnalyzer.PredictionAccuracy.PredictionAccuracy
+  alias PredictionAnalyzer.PredictionAccuracy.{PredictionAccuracy, MonthlyReport}
   alias PredictionAnalyzer.Filters
 
   import Ecto.Query, only: [from: 2]
-  import PredictionAnalyzer.QueryUtilities, only: [aggregate_mean_error: 2, aggregate_rmse: 2]
 
   @envs ["prod", "dev-green", "dev-blue"]
 
@@ -26,13 +25,14 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       %{query: params_string} = conn |> current_url(params) |> URI.parse()
 
       {relevant_accuracies, error_msg} = PredictionAccuracy.filter(filter_params)
-      accuracies_by_chart_range = Filters.stats_by_chart_range(relevant_accuracies, filter_params)
+      stats_query = Filters.select_stats(relevant_accuracies)
+      accuracies_by_chart_range = stats_query |> Filters.group_by_chart_range(filter_params)
 
       accuracy_context_tasks =
         for env <- @envs do
           Task.Supervisor.async(
             PredictionAnalyzer.TaskSupervisor,
-            fn -> get_accuracy_context(relevant_accuracies, params_string, env) end
+            fn -> get_accuracy_context(stats_query, params_string, env) end
           )
         end
 
@@ -45,9 +45,9 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         end
 
       [
-        [prod_num_accurate, prod_num_predictions, prod_mean_error, prod_rmse],
-        [dev_green_num_accurate, dev_green_num_predictions, dev_green_mean_error, dev_green_rmse],
-        [dev_blue_num_accurate, dev_blue_num_predictions, dev_blue_mean_error, dev_blue_rmse],
+        prod_context,
+        dev_green_context,
+        dev_blue_context,
         prod_accuracies,
         dev_green_accuracies,
         dev_blue_accuracies
@@ -66,31 +66,38 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
         |> Enum.uniq()
         |> Enum.sort(sort_function)
         |> Enum.map(fn scope ->
-          prod_accuracy = prod_accuracies[scope] || [scope, 0, 0, nil, nil]
-          dev_green_accuracy = dev_green_accuracies[scope] || [scope, 0, 0, nil, nil]
-          dev_blue_accuracy = dev_blue_accuracies[scope] || [scope, 0, 0, nil, nil]
+          empty = %{scope: scope, num_predictions: 0, num_accurate: 0, mean_error: 0, rmse: 0}
+          prod_accuracy = prod_accuracies[scope] || empty
+          dev_green_accuracy = dev_green_accuracies[scope] || empty
+          dev_blue_accuracy = dev_blue_accuracies[scope] || empty
 
           {prod_accuracy, dev_green_accuracy, dev_blue_accuracy}
         end)
+
+      months =
+        MonthlyReport.months()
+        |> PredictionAnalyzer.Repo.all()
+        |> Enum.map(&{Timex.format!(&1, "%Y-%m", :strftime), Date.to_string(&1)})
 
       render(
         conn,
         "index.html",
         accuracies: accuracies,
         chart_data: Jason.encode!(set_up_accuracy_chart(accuracies, filter_params)),
-        prod_num_accurate: prod_num_accurate,
-        prod_num_predictions: prod_num_predictions,
-        prod_mean_error: prod_mean_error,
-        prod_rmse: prod_rmse,
-        dev_green_num_accurate: dev_green_num_accurate,
-        dev_green_num_predictions: dev_green_num_predictions,
-        dev_green_mean_error: dev_green_mean_error,
-        dev_green_rmse: dev_green_rmse,
-        dev_blue_num_accurate: dev_blue_num_accurate,
-        dev_blue_num_predictions: dev_blue_num_predictions,
-        dev_blue_mean_error: dev_blue_mean_error,
-        dev_blue_rmse: dev_blue_rmse,
+        prod_num_accurate: prod_context.num_accurate,
+        prod_num_predictions: prod_context.num_predictions,
+        prod_mean_error: prod_context.mean_error,
+        prod_rmse: prod_context.rmse,
+        dev_green_num_accurate: dev_green_context.num_accurate,
+        dev_green_num_predictions: dev_green_context.num_predictions,
+        dev_green_mean_error: dev_green_context.mean_error,
+        dev_green_rmse: dev_green_context.rmse,
+        dev_blue_num_accurate: dev_blue_context.num_accurate,
+        dev_blue_num_predictions: dev_blue_context.num_predictions,
+        dev_blue_mean_error: dev_blue_context.mean_error,
+        dev_blue_rmse: dev_blue_context.rmse,
         error_msg: error_msg,
+        months: months,
         mode: PredictionAnalyzer.Utilities.string_to_mode(mode),
         bins:
           Filters.bins()
@@ -108,15 +115,9 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     redirect_with_default_filters(conn, params)
   end
 
-  defp get_accuracy_context(relevant_accuracies, params_string, env) do
+  defp get_accuracy_context(stats_query, params_string, env) do
     from(
-      acc in relevant_accuracies,
-      select: [
-        sum(acc.num_accurate_predictions),
-        sum(acc.num_predictions),
-        aggregate_mean_error(acc.mean_error, acc.num_predictions),
-        aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
-      ],
+      acc in stats_query,
       where: acc.environment == ^env
     )
     |> PredictionAnalyzer.Repo.one!(
@@ -131,7 +132,7 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
       telemetry_event: PredictionAnalyzer.Repo.config()[:telemetry_prefix] ++ [:named_query],
       telemetry_options: [name: :accuracies, env: env, request_params: params_string]
     )
-    |> Map.new(fn [scope, _num_predictions, _num_accurate, _mean_error, _rmse] = accuracy ->
+    |> Map.new(fn %{scope: scope} = accuracy ->
       {scope, accuracy}
     end)
   end
@@ -151,12 +152,21 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     if time_filters_present?(filter_params) do
       {relevant_accuracies, _} = PredictionAccuracy.filter(filter_params)
 
-      accuracies_by_chart_range = Filters.stats_by_chart_range(relevant_accuracies, filter_params)
+      accuracies_by_chart_range =
+        relevant_accuracies
+        |> Filters.select_stats()
+        |> Filters.group_by_chart_range(filter_params)
 
       prod_accuracies =
         from(acc in accuracies_by_chart_range, where: acc.environment == "prod")
         |> PredictionAnalyzer.Repo.all()
-        |> Enum.map(fn [row_scope, prod_total, prod_accurate, prod_err, prod_rmse] ->
+        |> Enum.map(fn %{
+                         scope: row_scope,
+                         num_predictions: prod_total,
+                         num_accurate: prod_accurate,
+                         mean_error: prod_err,
+                         rmse: prod_rmse
+                       } ->
           %{
             filter_params["chart_range"] =>
               PredictionAnalyzerWeb.AccuracyView.formatted_row_scope(
@@ -168,8 +178,8 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
                 prod_accurate,
                 prod_total
               ),
-            "Err" => Float.round(prod_err || 0.0, 0),
-            "RMSE" => Float.round(prod_rmse || 0.0, 0),
+            "Err" => Float.round(prod_err, 0),
+            "RMSE" => Float.round(prod_rmse, 0),
             "Count" => prod_total
           }
         end)
@@ -207,6 +217,45 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
     conn
     |> assign(:mode, :commuter_rail)
     |> index(params)
+  end
+
+  def monthly_csv(conn, %{"month" => month}) do
+    month = Date.from_iso8601!(month)
+
+    report =
+      from(acc in MonthlyReport, where: acc.month == ^month)
+      |> PredictionAnalyzer.Repo.all()
+      |> Enum.map(
+        &Map.put(
+          &1,
+          :accuracy,
+          PredictionAnalyzerWeb.AccuracyView.accuracy_percentage(
+            &1.num_accurate,
+            &1.num_predictions
+          )
+        )
+      )
+
+    filename = "monthly_summary_#{Timex.format!(month, "%Y-%m", :strftime)}.csv"
+
+    send_download(
+      conn,
+      {:binary,
+       report
+       |> CSV.encode(
+         headers: [
+           query: "Query",
+           accuracy: "Prod Accuracy",
+           mean_error: "Err",
+           rmse: "RMSE",
+           num_predictions: "Count"
+         ]
+       )
+       |> Enum.to_list()
+       |> Enum.join()},
+      content_type: "application/csv",
+      filename: filename
+    )
   end
 
   @spec redirect_with_default_filters(Plug.Conn.t(), map(), atom) :: Plug.Conn.t()
@@ -255,42 +304,28 @@ defmodule PredictionAnalyzerWeb.AccuracyController do
 
   @spec set_up_accuracy_chart(list(), map()) :: map()
   defp set_up_accuracy_chart(accuracies, filter_params) do
-    Enum.reduce(accuracies, %{buckets: [], prod_accs: [], dg_accs: [], db_accs: []}, fn {[
-                                                                                           bucket,
-                                                                                           prod_total,
-                                                                                           prod_accurate,
-                                                                                           _prod_mean_error,
-                                                                                           _prod_rmse
-                                                                                         ],
-                                                                                         [
-                                                                                           _bucket,
-                                                                                           dg_total,
-                                                                                           dg_accurate,
-                                                                                           _dg_mean_error,
-                                                                                           _dg_rmse
-                                                                                         ],
-                                                                                         [
-                                                                                           _bucket_db,
-                                                                                           db_total,
-                                                                                           db_accurate,
-                                                                                           _db_mean_error,
-                                                                                           _db_rmse
-                                                                                         ]},
-                                                                                        acc ->
-      prod_accuracy = if prod_total == 0, do: [0], else: [prod_accurate / prod_total]
-      dg_accuracy = if dg_total == 0, do: [0], else: [dg_accurate / dg_total]
-      db_accuracy = if db_total == 0, do: [0], else: [db_accurate / db_total]
+    Enum.reduce(
+      accuracies,
+      %{buckets: [], prod_accs: [], dg_accs: [], db_accs: []},
+      fn {%{scope: bucket, num_predictions: prod_total, num_accurate: prod_accurate},
+          %{num_predictions: dg_total, num_accurate: dg_accurate},
+          %{num_predictions: db_total, num_accurate: db_accurate}},
+         acc ->
+        prod_accuracy = if prod_total == 0, do: [0], else: [prod_accurate / prod_total]
+        dg_accuracy = if dg_total == 0, do: [0], else: [dg_accurate / dg_total]
+        db_accuracy = if db_total == 0, do: [0], else: [db_accurate / db_total]
 
-      acc
-      |> Map.put(
-        :buckets,
-        acc[:buckets] ++
-          [PredictionAnalyzerWeb.AccuracyView.formatted_row_scope(filter_params, bucket)]
-      )
-      |> Map.put(:prod_accs, acc[:prod_accs] ++ prod_accuracy)
-      |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
-      |> Map.put(:db_accs, acc[:db_accs] ++ db_accuracy)
-    end)
+        acc
+        |> Map.put(
+          :buckets,
+          acc[:buckets] ++
+            [PredictionAnalyzerWeb.AccuracyView.formatted_row_scope(filter_params, bucket)]
+        )
+        |> Map.put(:prod_accs, acc[:prod_accs] ++ prod_accuracy)
+        |> Map.put(:dg_accs, acc[:dg_accs] ++ dg_accuracy)
+        |> Map.put(:db_accs, acc[:db_accs] ++ db_accuracy)
+      end
+    )
     |> Map.put(:chart_type, filter_params["chart_range"] || "Hourly")
     |> Map.put(:timeframe_resolution, filter_params["timeframe_resolution"] || "60")
   end

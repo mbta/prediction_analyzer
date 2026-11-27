@@ -47,6 +47,11 @@ defmodule PredictionAnalyzer.Filters do
       if is_binary(route_ids) and route_ids != "" do
         route_ids
         |> String.split(",")
+        |> Enum.flat_map(fn
+          "_light_rail" -> ~w(Green-B Green-C Green-D Green-E Mattapan)
+          "_heavy_rail" -> ~w(Red Orange Blue)
+          route -> [route]
+        end)
         |> MapSet.new()
       else
         nil
@@ -160,31 +165,44 @@ defmodule PredictionAnalyzer.Filters do
   def filter_by_timeframe(_q, "By Station", _, _, _), do: {:error, "No start or end date given."}
 
   @doc """
-  Takes a Queryable and groups and sums the results into
-  a table like:
-
-  hour | prod total | prod accurate | dev-green total | dev-green accurate
+  Takes a Queryable and produces the following aggregates:
+  - num_predictions
+  - num_accurate
+  - mean_error
+  - rmse
   """
-  @spec stats_by_chart_range(Ecto.Query.t(), map()) :: Ecto.Query.t()
-  def stats_by_chart_range(q, %{"chart_range" => "Hourly", "timeframe_resolution" => tr})
-      when tr != "60" do
-    from(
-      acc in q,
-      group_by: [:hour_of_day, fragment("resolution_bucket")],
-      order_by: [:hour_of_day, fragment("resolution_bucket")],
-      select: [
-        {acc.hour_of_day, resolution_bucket(acc.minute_of_hour, ^String.to_integer(tr))},
-        sum(acc.num_predictions),
-        sum(acc.num_accurate_predictions),
-        aggregate_mean_error(acc.mean_error, acc.num_predictions),
-        aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
-      ]
+  @spec select_stats(Ecto.Query.t()) :: Ecto.Query.t()
+  def select_stats(q) do
+    from(acc in q,
+      select: %{
+        num_predictions: coalesce(sum(acc.num_predictions), 0),
+        num_accurate: coalesce(sum(acc.num_accurate_predictions), 0),
+        mean_error: aggregate_mean_error(acc.mean_error, acc.num_predictions),
+        rmse: aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
+      }
     )
   end
 
-  def stats_by_chart_range(q, filters) do
+  @doc """
+  Takes a Queryable and groups by the chart_range and (if applicable)
+  timeframe_resolution parameters.
+  """
+  @spec group_by_chart_range(Ecto.Query.t(), map()) :: Ecto.Query.t()
+  def group_by_chart_range(q, %{"chart_range" => "Hourly", "timeframe_resolution" => tr})
+      when tr != "60" do
+    from(acc in q,
+      group_by: [:hour_of_day, fragment("resolution_bucket")],
+      order_by: [:hour_of_day, fragment("resolution_bucket")],
+      select_merge: %{
+        scope: {acc.hour_of_day, resolution_bucket(acc.minute_of_hour, ^String.to_integer(tr))}
+      }
+    )
+  end
+
+  @spec group_by_chart_range(Ecto.Query.t(), map()) :: Ecto.Query.t()
+  def group_by_chart_range(q, %{"chart_range" => chart_range}) do
     scope =
-      case filters["chart_range"] do
+      case chart_range do
         "Daily" -> :service_date
         "By Station" -> :stop_id
         "Hourly" -> :hour_of_day
@@ -194,13 +212,9 @@ defmodule PredictionAnalyzer.Filters do
       acc in q,
       group_by: ^scope,
       order_by: ^scope,
-      select: [
-        field(acc, ^scope),
-        sum(acc.num_predictions),
-        sum(acc.num_accurate_predictions),
-        aggregate_mean_error(acc.mean_error, acc.num_predictions),
-        aggregate_rmse(acc.root_mean_squared_error, acc.num_predictions)
-      ]
+      select_merge: %{
+        scope: field(acc, ^scope)
+      }
     )
   end
 end
